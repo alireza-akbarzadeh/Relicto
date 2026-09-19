@@ -17,7 +17,7 @@ export function SteamGatewayButton() {
         <div className="absolute inset-0 bg-linear-to-r/srgb from-primary-container/10 via-transparent to-status-upcoming/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <div className="relative z-10 flex items-center gap-3.5">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black/60 shadow-inner backdrop-blur-md transition-colors group-hover:border-[#22d3ee]/50">
-            <SteamLogo className="h-7 w-7 fill-white drop-shadow-sm" />
+            <SteamLogo className="size-7 fill-white drop-shadow-sm" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">

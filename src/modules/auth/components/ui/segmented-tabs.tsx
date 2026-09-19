@@ -21,9 +21,9 @@ type SegmentedTabsProps<T extends string> = {
 export function SegmentedTabs<T extends string>({ tabs, value, onChange, label, listClassName, tabClassName }: SegmentedTabsProps<T>) {
   return (
     <Tabs value={value} onValueChange={(v) => onChange(v as T)} className="gap-0">
-      <TabsList aria-label={label} className={cn("h-auto w-full", listClassName)}>
+      <TabsList aria-label={label} className={cn("h-auto w-full group-data-horizontal/tabs:h-auto", listClassName)}>
         {tabs.map((tab) => (
-          <TabsTrigger key={tab.value} value={tab.value} className={cn("h-auto", tabClassName)}>
+          <TabsTrigger key={tab.value} value={tab.value} className={cn("h-auto group-data-[variant=default]/tabs-list:data-active:shadow-xs", tabClassName)}>
             {tab.content}
           </TabsTrigger>
         ))}

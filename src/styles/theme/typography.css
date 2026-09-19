@@ -1,0 +1,101 @@
+/*
+ * Type, spacing and radius tokens from the Stitch design system.
+ * Each `--text-*` token carries its own line-height, tracking and weight,
+ * so `font-<role> text-<role>` reproduces the design exactly.
+ */
+@theme inline {
+  --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-label-caps: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-headline-sm: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-headline-md: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-headline-lg: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-headline-xl: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-headline-lg-mobile: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-headline-xl-mobile: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-display-hero: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-display-hero-mobile: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-label-badge: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-data-mono-md: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-data-mono-lg: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+@theme {
+  --text-body-sm: 13px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--letter-spacing: 0.005em;
+  --text-body-sm--font-weight: 400;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 22px;
+  --text-body-md--letter-spacing: 0em;
+  --text-body-md--font-weight: 400;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 26px;
+  --text-body-lg--letter-spacing: 0em;
+  --text-body-lg--font-weight: 400;
+  --text-label-badge: 11px;
+  --text-label-badge--line-height: 14px;
+  --text-label-badge--letter-spacing: 0.08em;
+  --text-label-badge--font-weight: 600;
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 16px;
+  --text-label-caps--letter-spacing: 0.06em;
+  --text-label-caps--font-weight: 700;
+  --text-data-mono-md: 14px;
+  --text-data-mono-md--line-height: 18px;
+  --text-data-mono-md--letter-spacing: 0em;
+  --text-data-mono-md--font-weight: 500;
+  --text-data-mono-lg: 20px;
+  --text-data-mono-lg--line-height: 24px;
+  --text-data-mono-lg--letter-spacing: -0.02em;
+  --text-data-mono-lg--font-weight: 700;
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 24px;
+  --text-headline-sm--letter-spacing: 0em;
+  --text-headline-sm--font-weight: 600;
+  --text-headline-md: 22px;
+  --text-headline-md--line-height: 28px;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 600;
+  --text-headline-lg: 30px;
+  --text-headline-lg--line-height: 38px;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 600;
+  --text-headline-lg-mobile: 22px;
+  --text-headline-lg-mobile--line-height: 30px;
+  --text-headline-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-lg-mobile--font-weight: 600;
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.025em;
+  --text-headline-xl--font-weight: 700;
+  --text-headline-xl-mobile: 28px;
+  --text-headline-xl-mobile--line-height: 36px;
+  --text-headline-xl-mobile--letter-spacing: -0.02em;
+  --text-headline-xl-mobile--font-weight: 700;
+  --text-display-hero: 56px;
+  --text-display-hero--line-height: 64px;
+  --text-display-hero--letter-spacing: -0.03em;
+  --text-display-hero--font-weight: 700;
+  --text-display-hero-mobile: 36px;
+  --text-display-hero-mobile--line-height: 44px;
+  --text-display-hero-mobile--letter-spacing: -0.02em;
+  --text-display-hero-mobile--font-weight: 700;
+
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-margin: 1rem;
+  --spacing-margin-desktop: 2.5rem;
+  --spacing-gutter: 1.25rem;
+  --spacing-gutter-desktop: 1.5rem;
+
+  /* Stitch overrides Tailwind's radius scale; `rounded-full` is 12px, not a pill. */
+  --radius: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+}

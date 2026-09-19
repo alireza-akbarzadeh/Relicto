@@ -48,11 +48,9 @@ export function UserMenu({ trigger }: UserMenuProps) {
         </div>
         <DropdownMenuLabel className="mt-1">Account</DropdownMenuLabel>
         {ACCOUNT_LINKS.map((link) => (
-          <DropdownMenuItem key={link.href} asChild>
-            <Link href={link.href}>
-              <Icon name={link.icon} className="text-[18px] text-text-muted" />
-              {link.label}
-            </Link>
+          <DropdownMenuItem key={link.href} render={<Link href={link.href} />}>
+            <Icon name={link.icon} className="text-[18px] text-text-muted" />
+            {link.label}
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />

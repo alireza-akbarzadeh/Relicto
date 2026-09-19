@@ -1,4 +1,4 @@
-import { Geist, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Geist, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
 export const geist = Geist({
   subsets: ["latin"],
@@ -18,4 +18,11 @@ export const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-export const fontVariables = [geist.variable, spaceGrotesk.variable, jetbrainsMono.variable].join(" ");
+/** Body face of the auth screens (sign in, sign up, 2FA, recovery). */
+export const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+export const fontVariables = [geist, spaceGrotesk, jetbrainsMono, inter].map((f) => f.variable).join(" ");

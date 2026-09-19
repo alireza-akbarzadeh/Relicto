@@ -16,13 +16,13 @@ export default async function TournamentsPage() {
   const [desktop, mobile] = await Promise.all([getArenaDesktop(), getArenaMobile()]);
 
   return (
-    <>
+    <div className="min-h-screen bg-surface font-body-md text-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container md:bg-canvas-base">
       <div className="md:hidden">
         <ArenaMobile data={mobile} />
       </div>
       <div className="hidden md:block">
         <ArenaDesktop data={desktop} />
       </div>
-    </>
+    </div>
   );
 }

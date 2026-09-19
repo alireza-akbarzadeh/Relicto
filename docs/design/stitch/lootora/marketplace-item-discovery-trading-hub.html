@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#10131a","surface-card":"#151b2b","glow-indigo":"rgba(99, 102, 241, 0.25)","secondary":"#c0c1ff","on-primary-fixed":"#40000d","text-muted":"#64748b","glow-crimson":"rgba(244, 63, 94, 0.25)","surface-container-lowest":"#0b0e15","surface-container":"#1d1f27","secondary-container":"#3131c0","surface-container-high":"#272a32","status-upcoming":"#06b6d4","status-live":"#ef4444","secondary-fixed-dim":"#c0c1ff","text-primary":"#f8fafc","border-subtle":"rgba(255, 255, 255, 0.08)","error-container":"#93000a","surface-glass":"rgba(21, 27, 43, 0.72)","on-tertiary":"#472a00","surface-variant":"#32353d","background":"#10131a","on-secondary":"#1000a9","primary":"#ffb2b7","tertiary-fixed":"#ffddb8","inverse-surface":"#e1e2ec","outline":"#aa888a","tertiary-fixed-dim":"#ffb95f","surface-bright":"#363941","surface-overlay":"rgba(10, 13, 20, 0.85)","surface":"#10131a","error":"#ffb4ab","inverse-on-surface":"#2d3038","tertiary":"#ffb95f","surface-deep":"#0f1420","on-secondary-fixed":"#07006c","glow-amber":"rgba(245, 158, 11, 0.25)","canvas-base":"#0a0d14","inverse-primary":"#bc0b3b","primary-container":"#ff516a","on-primary-fixed-variant":"#92002a","surface-container-highest":"#32353d","border-tactical":"rgba(245, 158, 11, 0.4)","on-primary-container":"#5b0017","secondary-fixed":"#e1e0ff","on-error-container":"#ffdad6","on-error":"#690005","tertiary-container":"#ca8100","border-focus":"rgba(244, 63, 94, 0.5)","on-primary":"#67001b","surface-container-low":"#191b23","on-tertiary-fixed-variant":"#653e00","outline-variant":"#5b4041","on-tertiary-container":"#3e2400","primary-fixed":"#ffdadb","on-surface":"#e1e2ec","surface-tint":"#ffb2b7","on-surface-variant":"#e3bdbf","on-secondary-container":"#b0b2ff","on-tertiary-fixed":"#2a1700","on-secondary-fixed-variant":"#2f2ebe","text-secondary":"#94a3b8","on-background":"#e1e2ec","primary-fixed-dim":"#ffb2b7"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xs":"0.25rem","gutter-desktop":"1.5rem","gutter":"1.25rem","space-lg":"1.5rem","margin-desktop":"2.5rem","space-xl":"2.5rem","margin":"1rem","space-md":"1rem","space-sm":"0.5rem"},"fontFamily":{"display-hero-mobile":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"body-sm":["Geist"],"headline-lg":["Space Grotesk"],"data-mono-lg":["JetBrains Mono"],"headline-xl-mobile":["Space Grotesk"],"display-hero":["Space Grotesk"],"label-caps":["Space Grotesk"],"data-mono-md":["JetBrains Mono"],"body-lg":["Geist"],"label-badge":["JetBrains Mono"],"headline-md":["Space Grotesk"],"headline-xl":["Space Grotesk"],"headline-sm":["Space Grotesk"],"body-md":["Geist"]},"fontSize":{"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.005em","fontWeight":"400"}],"headline-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"data-mono-lg":["20px",{"lineHeight":"24px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"700"}],"data-mono-md":["14px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"0em","fontWeight":"400"}],"label-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.025em","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}]}}}}</script></head><body class="bg-canvas-base text-on-surface font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-deep/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.5)]"><div class="h-16 w-full px-gutter-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="marketplace" href="#"><div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center shadow-[0_0_12px_rgba(244,63,94,0.3)]"><span class="material-symbols-outlined text-on-primary-container text-[20px]">swords</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm tracking-tight font-bold text-text-primary group-hover:text-primary transition-colors">LOOTORA<span class="text-primary font-light ml-1">PRO</span></span><span class="font-label-badge text-label-badge uppercase tracking-wider text-tertiary">Steam Intel Exchange</span></div></a><div class="h-6 w-[1px] bg-border-subtle hidden xl:block"></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container text-text-primary font-bold"><a aria-current="page" class="px-space-sm py-1.5 rounded tracking-wider uppercase transition-all bg-surface-container text-text-primary font-bold" data-path="marketplace" href="#">Marketplace</a><a class="px-space-sm py-1.5 rounded font-label-caps text-label-caps tracking-wider uppercase text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="wiki" href="#">Wiki</a><a class="px-space-sm py-1.5 rounded font-label-caps text-label-caps tracking-wider uppercase text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="tracker" href="#">Tracker</a><a class="px-space-sm py-1.5 rounded font-label-caps text-label-caps tracking-wider uppercase text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="portfolio-inventory" href="#">Portfolio / Inventory</a><a class="px-space-sm py-1.5 rounded font-label-caps text-label-caps tracking-wider uppercase text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="community" href="#">Community</a><a class="px-space-sm py-1.5 rounded font-label-caps text-label-caps tracking-wider uppercase text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="price-alerts" href="#">Price Alerts</a></nav></div><div class="flex-1 max-w-md mx-space-md hidden lg:block"><div class="relative flex items-center bg-surface-container-lowest rounded px-space-md py-1.5"><span class="material-symbols-outlined text-text-muted text-[18px] mr-space-sm">search</span><input class="w-full bg-transparent text-text-primary placeholder:text-text-muted font-body-sm text-body-sm focus:outline-none" placeholder="Search skins, weapon tiers, floats or pattern ID..." type="text"/><kbd class="ml-space-sm px-1.5 py-0.5 rounded bg-surface-container-high text-text-secondary font-label-badge text-label-badge">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><div class="hidden 2xl:flex items-center gap-space-sm"><div class="flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-lowest"><span class="w-2 h-2 rounded-full bg-status-upcoming animate-pulse"></span><span class="font-label-badge text-label-badge text-status-upcoming">STEAM SYNCED</span><span class="font-data-mono-md text-data-mono-md text-text-muted">14ms</span></div><div class="flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-lowest"><span class="material-symbols-outlined text-secondary text-[14px]">verified_user</span><span class="font-label-badge text-label-badge text-secondary">VAC CLEAN</span></div></div><div class="flex items-center gap-space-xs bg-surface-container-lowest rounded px-space-sm py-1"><div class="flex flex-col text-right"><span class="font-label-badge text-label-badge text-text-muted uppercase">Steam Wallet</span><span class="font-data-mono-md text-data-mono-md font-bold text-tertiary">$142.50</span></div><button class="p-1 rounded bg-tertiary-container hover:bg-tertiary hover:text-on-tertiary transition-colors flex items-center justify-center text-on-tertiary-container"><span class="material-symbols-outlined text-[16px]">add</span></button></div><button class="relative p-2 rounded bg-surface-container hover:bg-surface-container-high transition-colors text-text-secondary hover:text-text-primary"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary-container text-on-primary-container font-label-badge text-label-badge flex items-center justify-center">2</span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute -bottom-1 -right-1 px-1 rounded bg-secondary-container text-on-secondary-container font-label-badge text-[9px] leading-tight font-bold">94</span></div><div class="hidden md:flex flex-col"><div class="flex items-center gap-1"><span class="font-headline-sm text-headline-sm font-bold text-text-primary">S1mple_CS</span><span class="material-symbols-outlined text-status-upcoming text-[14px]">verified</span></div><span class="font-label-badge text-label-badge text-text-muted">PRO SELLER</span></div></div></div></div></header><main class="w-full pt-16 bg-canvas-base min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Ambient Glow Aura -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-32 left-1/4 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -top-20 right-1/4 w-[500px] h-80 bg-glow-amber/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-48 left-10 w-72 h-72 bg-glow-indigo/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- 1. HERO HEADER & GLOBAL ITEM SEARCH -->
+<div class="w-full px-margin-desktop py-space-xl relative z-10">
+<div class="max-w-6xl mx-auto flex flex-col items-center text-center">
+<!-- Live Market Status Pill -->
+<div class="flex items-center gap-space-sm px-space-md py-1 rounded-full bg-surface-container-low mb-space-md shadow-sm">
+<span class="w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="font-label-badge text-label-badge tracking-wider text-text-primary uppercase">Valve Steam Engine Live Telemetry</span>
+<span class="text-text-muted">·</span>
+<span class="font-data-mono-md text-data-mono-md text-tertiary">142,890 Active Drops</span>
+</div>
+<h1 class="font-display-hero text-display-hero uppercase tracking-tight text-text-primary mb-space-sm">
+          Discover Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-tertiary to-secondary">Next Drop</span>
+</h1>
+<p class="font-body-lg text-body-lg text-text-secondary max-w-3xl mb-space-lg">
+          Explore 48,000+ verified Steam cosmetics, compare real-time pricing telemetry, and execute zero-escrow trades across Valve ecosystems with sub-second order fulfillment.
+        </p>
+<!-- Command Search Bar -->
+<div class="w-full max-w-4xl relative mb-space-md shadow-xl group">
+<div class="relative flex items-center bg-surface-card rounded-xl p-space-xs transition-all duration-300">
+<span class="material-symbols-outlined text-text-muted text-[24px] ml-space-md">search</span>
+<input class="w-full bg-transparent px-space-md py-3 text-text-primary placeholder:text-text-muted font-body-lg text-body-lg focus:outline-none" id="mainSearchInput" placeholder="Search skins, Arcanas, Doppler knives, stickers, heroes, or weapon slots..." type="text"/>
+<button class="p-2 text-text-muted hover:text-text-primary transition-colors hidden" id="clearSearchBtn" title="Clear search">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<div class="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container text-text-secondary font-label-badge text-label-badge mr-space-xs select-none">
+<span>⌘</span><span>K</span>
+</div>
+<button class="flex items-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-headline-sm px-space-lg py-3 rounded-lg transition-all shadow-md active:scale-95">
+<span>EXPLORE</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Ecosystem Filter Pills -->
+<div class="flex flex-wrap items-center justify-center gap-space-sm mb-space-md">
+<button class="game-selector-btn flex items-center gap-space-xs px-space-md py-2 rounded bg-surface-container text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-all" data-game="all">
+<span class="material-symbols-outlined text-[16px]">apps</span>
+<span class="font-label-caps text-label-caps uppercase">All Ecosystems</span>
+<span class="font-data-mono-md text-data-mono-md px-1.5 py-0.5 rounded bg-surface-container-lowest text-text-muted ml-1">142,890</span>
+</button>
+<button class="game-selector-btn flex items-center gap-space-xs px-space-md py-2 rounded bg-primary-container/20 text-text-primary shadow-sm hover:bg-primary-container/30 transition-all" data-game="dota2">
+<span class="material-symbols-outlined text-primary-container text-[18px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-label-caps text-label-caps uppercase font-bold text-primary">Dota 2</span>
+<span class="font-data-mono-md text-data-mono-md px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container ml-1 font-bold">64,210</span>
+</button>
+<button class="game-selector-btn flex items-center gap-space-xs px-space-md py-2 rounded bg-surface-container text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-all" data-game="cs2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">target</span>
+<span class="font-label-caps text-label-caps uppercase">Counter-Strike 2</span>
+<span class="font-data-mono-md text-data-mono-md px-1.5 py-0.5 rounded bg-surface-container-lowest text-text-muted ml-1">58,420</span>
+</button>
+<button class="game-selector-btn flex items-center gap-space-xs px-space-md py-2 rounded bg-surface-container text-text-secondary hover:text-text-primary hover:bg-surface-container-high transition-all" data-game="tf2">
+<span class="material-symbols-outlined text-status-upcoming text-[18px]">military_tech</span>
+<span class="font-label-caps text-label-caps uppercase">Team Fortress 2</span>
+<span class="font-data-mono-md text-data-mono-md px-1.5 py-0.5 rounded bg-surface-container-lowest text-text-muted ml-1">20,260</span>
+</button>
+</div>
+<!-- Quick Trending Tags -->
+<div class="flex flex-wrap items-center justify-center gap-space-xs text-text-muted font-body-sm text-body-sm">
+<span class="uppercase tracking-wider font-label-badge text-label-badge text-text-secondary mr-1">Trending Hot:</span>
+<a class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-primary transition-colors" href="#">🔥 Crownfall Arcanas</a>
+<a class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-tertiary transition-colors" href="#">⚡ Doppler Phase 2</a>
+<a class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary transition-colors" href="#">🗡️ Phantom Assassin Paradox</a>
+<a class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-status-upcoming transition-colors" href="#">💎 Souvenir Dragon Lore</a>
+<a class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-secondary transition-colors" href="#">🎯 Kato 2014 Holo</a>
+</div>
+</div>
+</div>
+<!-- 2. TRENDING ITEMS BAROMETER -->
+<div class="w-full px-margin-desktop py-space-md">
+<div class="w-full max-w-7xl mx-auto bg-surface-card/60 backdrop-blur-md rounded-xl p-space-md shadow-lg">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-status-live animate-pulse"></span>
+<h2 class="font-headline-sm text-headline-sm uppercase tracking-tight text-text-primary flex items-center gap-2">
+              High Volatility & Trending Movers
+            </h2>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/30 text-tertiary font-label-badge text-label-badge uppercase">Live Spikes</span>
+</div>
+<div class="flex items-center gap-space-md">
+<!-- Time Window Selector -->
+<div class="flex items-center bg-surface-container-lowest rounded p-1">
+<button class="px-2.5 py-1 rounded font-label-badge text-label-badge uppercase text-text-muted hover:text-text-primary transition-colors">1H</button>
+<button class="px-2.5 py-1 rounded font-label-badge text-label-badge uppercase bg-surface-container text-tertiary font-bold transition-colors">24H</button>
+<button class="px-2.5 py-1 rounded font-label-badge text-label-badge uppercase text-text-muted hover:text-text-primary transition-colors">7D</button>
+</div>
+<a class="font-label-caps text-label-caps uppercase text-tertiary hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span>View 24h Leaderboard</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- 4 Horizontal Trending Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Card 1 -->
+<div class="group flex flex-col bg-surface-container-lowest hover:bg-surface-container-low rounded-lg p-space-md transition-all duration-200 cursor-pointer relative overflow-hidden shadow-sm">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-xl pointer-events-none group-hover:bg-primary/10 transition-all"></div>
+<div class="flex items-start justify-between mb-space-xs">
+<span class="px-2 py-0.5 rounded bg-primary-container/20 text-primary font-label-badge text-label-badge uppercase font-bold">DOTA 2 ARCANA</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +8.6%
+              </span>
+</div>
+<div class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate mb-1">
+              Manifold Paradox
+            </div>
+<div class="font-body-sm text-body-sm text-text-muted mb-space-sm flex items-center gap-2">
+<span>Phantom Assassin</span>
+<span>·</span>
+<span class="text-tertiary">Style 3 Molten</span>
+</div>
+<div class="mt-auto pt-space-xs flex items-baseline justify-between">
+<div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Floor</span>
+<span class="font-data-mono-lg text-data-mono-lg font-bold text-tertiary">$118.50</span>
+</div>
+<div class="text-right">
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Patch 7.38c Surge</span>
+<span class="font-body-sm text-body-sm text-text-secondary">124 Offers</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group flex flex-col bg-surface-container-lowest hover:bg-surface-container-low rounded-lg p-space-md transition-all duration-200 cursor-pointer relative overflow-hidden shadow-sm">
+<div class="absolute top-0 right-0 w-24 h-24 bg-tertiary/5 rounded-full blur-xl pointer-events-none group-hover:bg-tertiary/10 transition-all"></div>
+<div class="flex items-start justify-between mb-space-xs">
+<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-badge text-label-badge uppercase font-bold">CS2 COVERT</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +14.2%
+              </span>
+</div>
+<div class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-tertiary transition-colors truncate mb-1">
+              AK-47 | Case Hardened
+            </div>
+<div class="font-body-sm text-body-sm text-text-muted mb-space-sm flex items-center gap-2">
+<span>Tier 1 Blue Gem</span>
+<span>·</span>
+<span class="text-secondary">#661 Scar</span>
+</div>
+<div class="mt-auto pt-space-xs flex items-baseline justify-between">
+<div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Floor</span>
+<span class="font-data-mono-lg text-data-mono-lg font-bold text-tertiary">$2,450.00</span>
+</div>
+<div class="text-right">
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Rare Pattern</span>
+<span class="font-body-sm text-body-sm text-text-secondary">6 Offers</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group flex flex-col bg-surface-container-lowest hover:bg-surface-container-low rounded-lg p-space-md transition-all duration-200 cursor-pointer relative overflow-hidden shadow-sm">
+<div class="absolute top-0 right-0 w-24 h-24 bg-status-upcoming/5 rounded-full blur-xl pointer-events-none group-hover:bg-status-upcoming/10 transition-all"></div>
+<div class="flex items-start justify-between mb-space-xs">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-text-secondary font-label-badge text-label-badge uppercase font-bold">CS2 COVERT</span>
+<span class="font-label-badge text-label-badge text-error flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_down</span> -2.1%
+              </span>
+</div>
+<div class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate mb-1">
+              M4A1-S | Printstream
+            </div>
+<div class="font-body-sm text-body-sm text-text-muted mb-space-sm flex items-center gap-2">
+<span>Factory New</span>
+<span>·</span>
+<span class="text-text-secondary">Pearlescent</span>
+</div>
+<div class="mt-auto pt-space-xs flex items-baseline justify-between">
+<div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Floor</span>
+<span class="font-data-mono-lg text-data-mono-lg font-bold text-tertiary">$412.00</span>
+</div>
+<div class="text-right">
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">High Liquidity</span>
+<span class="font-body-sm text-body-sm text-text-secondary">88 Offers</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group flex flex-col bg-surface-container-lowest hover:bg-surface-container-low rounded-lg p-space-md transition-all duration-200 cursor-pointer relative overflow-hidden shadow-sm">
+<div class="absolute top-0 right-0 w-24 h-24 bg-secondary/5 rounded-full blur-xl pointer-events-none group-hover:bg-secondary/10 transition-all"></div>
+<div class="flex items-start justify-between mb-space-xs">
+<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-badge text-label-badge uppercase font-bold">DOTA 2 IMMORTAL</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +3.4%
+              </span>
+</div>
+<div class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate mb-1">
+              Dragonclaw Hook
+            </div>
+<div class="font-body-sm text-body-sm text-text-muted mb-space-sm flex items-center gap-2">
+<span>Pudge Weapon</span>
+<span>·</span>
+<span class="text-secondary">Clean Vintage</span>
+</div>
+<div class="mt-auto pt-space-xs flex items-baseline justify-between">
+<div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Floor</span>
+<span class="font-data-mono-lg text-data-mono-lg font-bold text-tertiary">$164.00</span>
+</div>
+<div class="text-right">
+<span class="font-label-badge text-label-badge text-text-muted uppercase block">Blue Chip</span>
+<span class="font-body-sm text-body-sm text-text-secondary">41 Offers</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. MAIN MARKETPLACE DUAL COLUMN LAYOUT -->
+<div class="w-full px-margin-desktop py-space-lg">
+<div class="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-space-lg">
+<!-- ================= LEFT COLUMN: ADAPTIVE FILTERS SIDEBAR ================= -->
+<aside class="w-full lg:w-72 lg:shrink-0 bg-surface-card rounded-xl p-space-md shadow-lg sticky top-20">
+<!-- Sidebar Header -->
+<div class="flex items-center justify-between pb-space-sm mb-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+<h3 class="font-headline-sm text-headline-sm text-text-primary uppercase tracking-tight">Filter Catalog</h3>
+</div>
+<button class="font-label-badge text-label-badge uppercase text-text-muted hover:text-primary transition-colors" id="resetAllFilters">
+              Reset All
+            </button>
+</div>
+<!-- Active Filter Badge Counter -->
+<div class="flex items-center justify-between px-space-sm py-1.5 rounded bg-surface-container-low mb-space-md">
+<span class="font-label-badge text-label-badge text-text-secondary uppercase">Active Criteria</span>
+<span class="font-label-badge text-label-badge font-bold px-2 py-0.5 rounded bg-primary-container text-on-primary-container">3 Active</span>
+</div>
+<!-- Game Context Switching Switcher -->
+<div class="mb-space-md">
+<label class="block font-label-badge text-label-badge text-text-muted uppercase mb-1.5">Game Context Engine</label>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest text-text-primary">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-headline-sm text-[13px] font-bold">Dota 2 Economy</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted">v7.38c</span>
+</div>
+<button class="w-full mt-1.5 text-left text-text-muted hover:text-tertiary font-label-badge text-label-badge transition-colors flex items-center justify-between px-1">
+<span>Switch to CS2 Wear & Pattern ID Mode</span>
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span>
+</button>
+</div>
+<!-- FACET 1: Hero Selector (Dota 2) -->
+<div class="mb-space-md">
+<div class="flex items-center justify-between mb-1.5">
+<label class="font-label-badge text-label-badge text-text-muted uppercase">Dota 2 Hero</label>
+<span class="font-label-badge text-label-badge text-tertiary">124 Heroes</span>
+</div>
+<div class="relative mb-2">
+<input class="w-full bg-surface-container-lowest px-2.5 py-1.5 text-text-primary placeholder:text-text-muted font-body-sm text-body-sm rounded focus:outline-none" placeholder="Filter hero..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[16px] text-text-muted">filter_list</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2 py-1 rounded bg-primary-container text-on-primary-container font-label-badge text-label-badge font-bold">Phantom Assassin</button>
+<button class="px-2 py-1 rounded bg-surface-container-low text-text-secondary hover:text-text-primary font-label-badge text-label-badge">Invoker</button>
+<button class="px-2 py-1 rounded bg-surface-container-low text-text-secondary hover:text-text-primary font-label-badge text-label-badge">Pudge</button>
+<button class="px-2 py-1 rounded bg-surface-container-low text-text-secondary hover:text-text-primary font-label-badge text-label-badge">Juggernaut</button>
+<button class="px-2 py-1 rounded bg-surface-container-low text-text-secondary hover:text-text-primary font-label-badge text-label-badge">Anti-Mage</button>
+<button class="px-2 py-1 rounded bg-surface-container-low text-text-secondary hover:text-text-primary font-label-badge text-label-badge">Shadow Fiend</button>
+</div>
+</div>
+<!-- FACET 2: Quality & Rarity -->
+<div class="mb-space-md">
+<label class="block font-label-badge text-label-badge text-text-muted uppercase mb-2">Item Rarity / Tier</label>
+<div class="space-y-1.5">
+<label class="flex items-center justify-between p-1.5 rounded hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded bg-primary-container flex items-center justify-center text-on-primary-container text-[11px] font-bold">✓</span>
+<span class="font-body-sm text-body-sm text-text-primary font-bold">Arcana</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-text-muted">218</span>
+</label>
+<label class="flex items-center justify-between p-1.5 rounded hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded bg-tertiary flex items-center justify-center text-on-tertiary text-[11px] font-bold">✓</span>
+<span class="font-body-sm text-body-sm text-text-primary font-bold">Immortal</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-text-muted">1,842</span>
+</label>
+<label class="flex items-center justify-between p-1.5 rounded hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-2">
+<div class="w-3.5 h-3.5 rounded bg-surface-container-high"></div>
+<span class="font-body-sm text-body-sm text-text-secondary group-hover:text-text-primary">Ancient</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-text-muted">94</span>
+</label>
+<label class="flex items-center justify-between p-1.5 rounded hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-2">
+<div class="w-3.5 h-3.5 rounded bg-surface-container-high"></div>
+<span class="font-body-sm text-body-sm text-text-secondary group-hover:text-text-primary">Mythical</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-text-muted">6,430</span>
+</label>
+<label class="flex items-center justify-between p-1.5 rounded hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex items-center gap-2">
+<div class="w-3.5 h-3.5 rounded bg-surface-container-high"></div>
+<span class="font-body-sm text-body-sm text-text-secondary group-hover:text-text-primary">Rare & Exalted</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-text-muted">14,102</span>
+</label>
+</div>
+</div>
+<!-- FACET 3: Equipment Slot -->
+<div class="mb-space-md">
+<label class="block font-label-badge text-label-badge text-text-muted uppercase mb-2">Slot Allocation</label>
+<div class="grid grid-cols-2 gap-1.5">
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-body-sm text-body-sm text-left">Weapon (482)</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-body-sm text-body-sm text-left">Head (312)</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-body-sm text-body-sm text-left">Armor (240)</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-body-sm text-body-sm text-left">Back (198)</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-body-sm text-body-sm text-left">Taunts (64)</button>
+<button class="px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-body-sm text-body-sm text-left">Couriers (115)</button>
+</div>
+</div>
+<!-- FACET 4: Price Range Filter -->
+<div class="mb-space-md">
+<div class="flex items-center justify-between mb-2">
+<label class="font-label-badge text-label-badge text-text-muted uppercase">Price Band (USD)</label>
+<span class="font-data-mono-md text-data-mono-md text-tertiary">$0 — $1,000+</span>
+</div>
+<!-- Interactive Price inputs -->
+<div class="grid grid-cols-2 gap-2 mb-2">
+<div class="bg-surface-container-lowest p-1.5 rounded flex items-center">
+<span class="text-text-muted mr-1 text-[13px]">$</span>
+<input class="w-full bg-transparent text-text-primary font-data-mono-md text-data-mono-md focus:outline-none" type="number" value="0"/>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded flex items-center">
+<span class="text-text-muted mr-1 text-[13px]">$</span>
+<input class="w-full bg-transparent text-text-primary font-data-mono-md text-data-mono-md focus:outline-none" type="number" value="1000"/>
+</div>
+</div>
+<!-- Quick Chips -->
+<div class="flex flex-wrap gap-1">
+<button class="px-2 py-0.5 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-label-badge text-label-badge"><$25</button>
+<button class="px-2 py-0.5 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-label-badge text-label-badge">$25-$100</button>
+<button class="px-2 py-0.5 rounded bg-tertiary-container/30 text-tertiary font-label-badge text-label-badge font-bold">$100-$500</button>
+<button class="px-2 py-0.5 rounded bg-surface-container-low hover:bg-surface-container text-text-secondary hover:text-text-primary font-label-badge text-label-badge">$500+</button>
+</div>
+</div>
+<!-- FACET 5: Market Attributes & Escrow -->
+<div class="mb-space-md pt-space-xs">
+<label class="block font-label-badge text-label-badge text-text-muted uppercase mb-2">Trading Safeguards</label>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<span class="w-4 h-4 rounded bg-primary-container flex items-center justify-center text-on-primary-container text-[11px] font-bold">✓</span>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Instant Bot Escrow (<60s)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none">
+<span class="w-4 h-4 rounded bg-primary-container flex items-center justify-center text-on-primary-container text-[11px] font-bold">✓</span>
+<span class="font-body-sm text-body-sm text-text-primary font-medium">Verified Sellers (98%+)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none opacity-75 hover:opacity-100">
+<div class="w-4 h-4 rounded bg-surface-container-high"></div>
+<span class="font-body-sm text-body-sm text-text-secondary">With Kinetic / Prismatic Gems</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer select-none opacity-75 hover:opacity-100">
+<div class="w-4 h-4 rounded bg-surface-container-high"></div>
+<span class="font-body-sm text-body-sm text-text-secondary">Unlocked All Styles</span>
+</label>
+</div>
+</div>
+<!-- CS2 Switcher Teaser Box -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-tertiary uppercase font-bold">CS2 Engine Ready</span>
+<span class="material-symbols-outlined text-tertiary text-[16px]">bolt</span>
+</div>
+<p class="font-body-sm text-[12px] text-text-muted">
+              Toggle Wear (FN, MW, FT, WW, BS), Float <0.01, and StatTrak™ telemetry.
+            </p>
+</div>
+</aside>
+<!-- ================= RIGHT COLUMN: TOOLBAR & ITEMS GRID ================= -->
+<section class="flex-1 w-full min-w-0 flex flex-col">
+<!-- B. Marketplace Toolbar -->
+<div class="w-full bg-surface-card rounded-xl p-space-md mb-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-text-primary uppercase tracking-tight">Active Marketplace Listings</h3>
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-label-badge text-label-badge font-bold">1,248 Items</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-muted">Telemetry updated 3 seconds ago via Steam Trading Node #8</p>
+</div>
+<!-- View switch & Sort dropdown -->
+<div class="flex items-center gap-space-sm">
+<!-- View Toggles -->
+<div class="flex items-center bg-surface-container-lowest rounded p-1">
+<button class="p-1.5 rounded bg-surface-container text-text-primary hover:text-primary transition-colors" id="viewGridBtn" title="Grid View">
+<span class="material-symbols-outlined text-[18px]">grid_view</span>
+</button>
+<button class="p-1.5 rounded text-text-muted hover:text-text-primary transition-colors" id="viewListBtn" title="Compact Table View">
+<span class="material-symbols-outlined text-[18px]">view_list</span>
+</button>
+</div>
+<!-- Sort dropdown -->
+<div class="relative">
+<select class="appearance-none bg-surface-container-lowest text-text-primary font-headline-sm text-[13px] px-space-md py-2 pr-8 rounded focus:outline-none cursor-pointer">
+<option>Sort: Lowest Price</option>
+<option>Sort: Highest Price</option>
+<option selected="">Sort: 24h Price Change %</option>
+<option>Sort: Most Active (Volume)</option>
+<option>Sort: Recently Listed</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-[16px] text-text-muted pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Active Applied Filters Chips Row -->
+<div class="flex flex-wrap items-center gap-1.5 pt-space-xs">
+<span class="font-label-badge text-label-badge text-text-muted uppercase mr-1">Active Criteria:</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-low text-text-primary font-label-badge text-label-badge">
+<span>Dota 2</span>
+<button class="hover:text-primary text-text-muted ml-0.5"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-low text-primary font-label-badge text-label-badge font-bold">
+<span>Arcana / Immortal Quality</span>
+<button class="hover:text-primary text-text-muted ml-0.5"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-low text-status-upcoming font-label-badge text-label-badge">
+<span>Instant Escrow Only</span>
+<button class="hover:text-primary text-text-muted ml-0.5"><span class="material-symbols-outlined text-[12px]">close</span></button>
+</span>
+<button class="text-tertiary hover:underline font-label-badge text-label-badge ml-2">Clear All (3)</button>
+</div>
+</div>
+<!-- C. High-Fidelity Item Cards Grid (8 items) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md mb-space-lg" id="marketplaceGrid">
+<!-- Card 1: Manifold Paradox -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-badge text-label-badge font-bold uppercase tracking-wider">Arcana</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-text-secondary font-label-badge text-[10px] uppercase">Exalted</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon / Skin Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(244,63,94,0.3)]" data-alt="Dota 2 Phantom Assassin dual glowing spectral cyan and molten blades Manifold Paradox Arcana resting on dark tactical gaming pedestal with dark volumetric neon glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAw6kk1X0qflbGVaghL-cLREvHbEeP5FMn4jq4WeHPhFYlm8FU7J-Cm3AC5T3FtZhPyF-qBxG4cySnagJCNO4_99ogCp4TyZlfp0NVsBXZ_6KY-zeFQWxAyirEicO6YA6MTFWicDp69PX3SyCRDmZXoQPtHDMq5DCpq8TuxsSqAUNWirRvEHaogPAypg-qZa0A3k2EVw_A0mepfOhW2Y6p2pYnsUTzc22XZPs0CuMQ8-N8mF0CPIbweA"/>
+<!-- Escrow Tag Badge -->
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-status-upcoming font-label-badge text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+<span>Instant Escrow</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Manifold Paradox
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Phantom Assassin</span>
+<span>·</span>
+<span class="text-tertiary">Style 3 Molten</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$118.50</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +1.8%
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Floor: $118.50</span>
+<span>Median: $122.00</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(124)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 2: Dragonclaw Hook -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-secondary/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-label-badge text-label-badge font-bold uppercase tracking-wider">Immortal</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-secondary font-label-badge text-[10px] uppercase">Corrupted</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(245,158,11,0.2)]" data-alt="Dota 2 Pudge legendary Dragonclaw Hook sculpted bone claw weapon on deep obsidian surface with sinister chains and dark atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhrHgbNvPK8nnHM41mT4J7e2Xf_JpD3nP3whrNg6G4FWSVdUSHcd0GdleSwj4VPehGh-MfibM2Yi29qFIUBt0P50Ta60tGwRSKhtpEP9YpDens1Th12fQskDRjE4KTih6lYi1eT8GQnZ1HQNIb8EayLIyqQlB-waExvFIXQd8I4FhyvEQEU2opDGSRU6yGAa0UMfxYts4NUFL0ez9d_a4eMjid63YM5-zTZQdToFCCOzUagqJCbcquag"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-status-upcoming font-label-badge text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+<span>Instant Escrow</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Dragonclaw Hook
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Pudge</span>
+<span>·</span>
+<span class="text-secondary">Clean Vintage</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$164.00</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +3.4%
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Floor: $162.50</span>
+<span>Vol: 41 trades/24h</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(41)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 3: AWP | Fade -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-badge text-label-badge font-bold uppercase tracking-wider">Covert</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-tertiary font-label-badge text-[10px] uppercase font-bold">CS2</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(244,63,94,0.2)]" data-alt="Counter-Strike 2 AWP sniper rifle featuring dynamic 99.4 percent Fade chromatic gradient purple pink amber paint job on obsidian tactical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh7BNcf4qPPTtaoCFn0biaMR-Ibu_dZwaXwQNP_EMGZs2TdpCzNxR0rRMAmMspwQ5gIhcw1AD_9Q-fEn3LXaEe6PZpyrzW-EbeIchbcDtfU4Py0v-vh07O3to4eZcS2riqBsP9M6equrehd0ntSDjETSi1O3ejEmv-Mn7dno41M43KxzYHzqPcon_9wzkf7ybeiaiIOKBEm5-5c-03924Hmd9GOuimVH47OsrUA33DI0A6HXQ2OCLE5g"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-text-primary font-label-badge text-[10px]">
+<span class="font-data-mono-md">Float: 0.014</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    AWP | Fade
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Factory New</span>
+<span>·</span>
+<span class="text-tertiary">99.4% Fade</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$1,280.00</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +5.6% 7d
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Direct Trade</span>
+<span>19 active offers</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(19)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 4: Bladeform Legacy -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-badge text-label-badge font-bold uppercase tracking-wider">Arcana</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-text-secondary font-label-badge text-[10px] uppercase">Origins</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(6,182,212,0.2)]" data-alt="Dota 2 Juggernaut glowing ancient dragon mask Bladeform Legacy Arcana with crackling emerald and teal spirit energy aura" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC20wX0at96SvCkaknGVhtNk3NpPI94Jl08Z6adXGiEdqryzkcuTtuiKvGxg5pstZnYiaeqPGTx-4x7EuEZzc4c_XDwZJvYza6c9FYwmzL05w4feYFMdwWNv5Gua4iSoyi9g7zPsbBuPCCAXSxnIB84yDwuyK7RayZb751Jhf5_yQP9DF1n6_fYO1VNB7pei4dzs3XO6qRSr3d4BVQ49OxEvVXh5L-TBDVT50sAUTWTE7DFrVxm4E2l9w"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-status-upcoming font-label-badge text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+<span>Style 2 Unlocked</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Bladeform Legacy
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Juggernaut</span>
+<span>·</span>
+<span class="text-tertiary">Mask Slot</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$34.50</span>
+<span class="font-label-badge text-label-badge text-error flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_down</span> -1.2%
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Floor: $34.50</span>
+<span>High Volume</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(210)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 5: Butterfly Knife | Doppler Phase 4 -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-secondary/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-tertiary text-on-tertiary font-label-badge text-label-badge font-bold uppercase tracking-wider">★ Melee</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-text-secondary font-label-badge text-[10px] uppercase">Covert</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(99,102,241,0.3)]" data-alt="Counter-Strike 2 curved Butterfly Knife Doppler Phase 4 sapphire blue smoke blade finish gleaming on dark gunmetal tactical showcase background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOdIPvzQpjTBouDlzQOBOgOfZ0LXNc34_XO7yAjusmpVcJKDhGtDcOdUYVvC-fHcZ7CUzgooG1DKbRDOTve78e6qW8iq_sOOjPakyu8JOpHUqN46NMGeMbJ-6QmEas2PGmCPZdxQo5oGAbk1DLgvM_t1ey-R5Uloi5mBIDESR8qe5mcZ-3UaO-vqlZo4GL0x0S09ezV83R4k9Pmb_pWEElaKRQ8n69-qxD5Vfwm0GjCqmjz-BMcJl9HA"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-status-upcoming font-label-badge text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+<span>Instant Steam Trade</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Butterfly Knife | Doppler
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Phase 4</span>
+<span>·</span>
+<span class="text-secondary">Sapphire Blue</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$3,150.00</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +11.2% 30d
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Verified Escrow</span>
+<span>8 offers</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(8)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 6: Codicil of the Veiled Ones -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-glow-amber/10 rounded-full blur-2xl pointer-events-none group-hover:bg-glow-amber/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-label-badge text-label-badge font-bold uppercase tracking-wider">Immortal</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-tertiary font-label-badge text-[10px] uppercase font-bold">Golden</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(245,158,11,0.25)]" data-alt="Dota 2 Phantom Assassin Codicil of the Veiled Ones golden cowl helmet with glowing translucent ethereal veil and dark mystical energy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2jUou_VlUZQTOnQ9zCzZFSGoTJCwRSBSg8JbRp2-_KyFtE_1h9DWslyifvpZo9u0W9taCDzn5N5xdmZgnHeIHfIXAqjKvMR41E_LpOuL9DgTvz7CjEyfdpJ58VkEl1_h4OC7qXVihmub5yU9lO2MqnELvzcLo15_-vomq47U1RYaRVLk3x82h_bA4awIteXT-V-zY6htwQLMGblOLRYOyOMRkifKAd_RO-jsciOHm11C8Stm24as-4w"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-tertiary font-label-badge text-[10px]">
+<span class="material-symbols-outlined text-[12px]">auto_awesome</span>
+<span>Custom Stifling FX</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Codicil of the Veiled Ones
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Phantom Assassin</span>
+<span>·</span>
+<span class="text-tertiary">Head Slot</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$34.90</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +4.1%
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Floor: $34.90</span>
+<span>76 active offers</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(76)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 7: Dark Artistry Cape -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-glow-indigo/10 rounded-full blur-2xl pointer-events-none group-hover:bg-glow-indigo/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-label-badge text-label-badge font-bold uppercase tracking-wider">Immortal</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-secondary font-label-badge text-[10px] uppercase">Exalted</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(99,102,241,0.25)]" data-alt="Dota 2 Invoker legendary Dark Artistry velvet and gold high-collared cape with cosmic spell runes and dark purple ambient particles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwZkWSpjLlCfX9PvwT1V_3_G0czhsRFKC5vjLLn_tnKTtbHnY5zjcyZwohpyg7Ny-PckcHA0OxAbEbfJaFSklmsh6gMuGAvmW-axzBeQAcO53XtaGOmFY1DkcPerapxghky9iDA1aTlpOIVxNOBXmJKMc50-j60Y1LG6r3IU2rl0vhC6b36QigZYI1A-I1woOf2-8Ln8iGHN2mtQ-tDSjUpAIN65n3_fz4QoNFftbTtK9pLWb8HQWEsw"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-secondary font-label-badge text-[10px]">
+<span class="material-symbols-outlined text-[12px]">flare</span>
+<span>Custom Sunstrike</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Dark Artistry Cape
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Invoker</span>
+<span>·</span>
+<span class="text-secondary">Back / Collar</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$89.00</span>
+<span class="font-label-badge text-label-badge text-text-muted flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_flat</span> -0.5%
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Floor: $89.00</span>
+<span>52 active offers</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(52)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+<!-- Card 8: Sport Gloves | Vice -->
+<div class="group bg-surface-card hover:bg-surface-container transition-all duration-200 rounded-xl p-space-md flex flex-col justify-between relative shadow-md overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none group-hover:bg-primary/20 transition-all"></div>
+<div>
+<!-- Card Header -->
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-badge text-label-badge font-bold uppercase tracking-wider">★ Gloves</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-tertiary font-label-badge text-[10px] uppercase font-bold">CS2</span>
+</div>
+<button class="wishlist-btn p-1 text-text-muted hover:text-primary transition-colors" title="Save to Watchlist">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+</button>
+</div>
+<!-- Weapon Visual Image -->
+<div class="relative w-full h-40 bg-surface-container-lowest rounded-lg mb-space-sm flex items-center justify-center overflow-hidden p-2 group-hover:scale-[1.02] transition-transform">
+<img class="w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(244,63,94,0.3)]" data-alt="Counter-Strike 2 Sport Gloves Vice model hot neon pink and cyan blue synthetic fabric with clean knuckles on dark obsidian gaming background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYOq9E_Ai8s4fmaSFwHDpyuYgJYJIPNYU2bSdBVYZXtpCaSIJpcCy2MB1Y3SSyfO4jXRkvql75y4g8E2oF76t9ybjJTnH9GVkO-Ufa9ITqvYhzEr8OfImyF7Z521r04Pon4fLxBtpV1EZI9J9vmKpoTiXU--DDRbt6PF309tnVpyhvtdabpdiLWWQAGHNguG8yOL44NK1FkysxsSITGgFd6u8aHAhLoVkepsCNc5lEYw2dV3uM_pLY6A"/>
+<div class="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded bg-surface-deep/90 backdrop-blur-md text-text-primary font-label-badge text-[10px]">
+<span class="font-data-mono-md">Float: 0.18</span>
+</div>
+</div>
+<!-- Details -->
+<div class="mb-space-xs">
+<h4 class="font-headline-sm text-headline-sm font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                    Sport Gloves | Vice
+                  </h4>
+<div class="font-body-sm text-body-sm text-text-muted flex items-center gap-1.5">
+<span>Field-Tested</span>
+<span>·</span>
+<span class="text-primary">Neon Vice Tier</span>
+</div>
+</div>
+<!-- Price Breakdown Telemetry -->
+<div class="bg-surface-container-lowest/80 p-space-xs rounded-lg mb-space-sm space-y-1">
+<div class="flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-tertiary">$1,420.00</span>
+<span class="font-label-badge text-label-badge text-status-upcoming flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_up</span> +2.9% 7d
+                    </span>
+</div>
+<div class="flex items-center justify-between text-[11px] font-data-mono-md text-text-muted">
+<span>Instant Bot</span>
+<span>14 active offers</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-1.5">
+<button class="w-full py-2 px-space-sm rounded bg-surface-container-high hover:bg-surface-bright text-text-primary font-headline-sm text-[13px] font-bold uppercase transition-colors flex items-center justify-center gap-1">
+<span>View Offers</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">(14)</span>
+</button>
+<button class="w-full py-2 px-space-sm rounded bg-primary-container hover:bg-primary text-on-primary-container font-headline-sm text-[13px] font-bold uppercase transition-all shadow-sm">
+                  Quick Buy Now
+                </button>
+</div>
+</div>
+</div>
+<!-- 4. PAGINATION COMPONENT -->
+<div class="w-full bg-surface-card rounded-xl p-space-md mb-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-center gap-space-sm">
+<span class="font-body-sm text-body-sm text-text-muted">Showing 1 - 8 of 1,248 items</span>
+<span class="text-text-muted">·</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2 py-1 rounded">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">Per page:</span>
+<select class="bg-transparent text-text-primary font-data-mono-md text-[12px] focus:outline-none cursor-pointer">
+<option selected="">24</option>
+<option>48</option>
+<option>96</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-3 py-1.5 rounded bg-surface-container-lowest hover:bg-surface-container text-text-muted hover:text-text-primary transition-colors flex items-center gap-1 font-label-badge text-label-badge uppercase">
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span>Prev</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary-container text-on-primary-container font-data-mono-md text-data-mono-md font-bold">1</button>
+<button class="w-8 h-8 rounded bg-surface-container-lowest hover:bg-surface-container text-text-secondary hover:text-text-primary font-data-mono-md text-data-mono-md transition-colors">2</button>
+<button class="w-8 h-8 rounded bg-surface-container-lowest hover:bg-surface-container text-text-secondary hover:text-text-primary font-data-mono-md text-data-mono-md transition-colors">3</button>
+<span class="px-2 text-text-muted font-data-mono-md">...</span>
+<button class="w-8 h-8 rounded bg-surface-container-lowest hover:bg-surface-container text-text-secondary hover:text-text-primary font-data-mono-md text-data-mono-md transition-colors">64</button>
+<button class="px-3 py-1.5 rounded bg-surface-container-lowest hover:bg-surface-container text-text-muted hover:text-text-primary transition-colors flex items-center gap-1 font-label-badge text-label-badge uppercase">
+<span>Next</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- SELL TEASER & STEAM INVENTORY CTA BANNER -->
+<div class="w-full relative rounded-2xl bg-gradient-to-r from-surface-card via-surface-container-high to-surface-card p-space-lg shadow-xl overflow-hidden mb-space-lg">
+<div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-primary/10 to-transparent pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-space-lg">
+<div class="flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-xl bg-tertiary-container flex items-center justify-center text-on-tertiary-container shadow-lg shrink-0">
+<span class="material-symbols-outlined text-[32px]">sync_alt</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="font-headline-md text-headline-md font-bold text-text-primary uppercase tracking-tight">Have items to liquidate?</h3>
+<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-badge text-label-badge font-bold uppercase">0% Listing Fee</span>
+</div>
+<p class="font-body-md text-body-md text-text-secondary max-w-xl">
+                    Connect your Steam Inventory to auto-price your duplicates and list instantly with automated bot escrow settlements.
+                  </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 w-full md:w-auto">
+<button class="w-full md:w-auto flex items-center justify-center gap-space-xs px-space-lg py-3 rounded-lg bg-tertiary hover:bg-tertiary-fixed text-on-tertiary font-headline-sm text-headline-sm uppercase font-bold transition-all shadow-md">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span>Connect Inventory & Sell</span>
+</button>
+</div>
+</div>
+</div>
+<!-- RECENTLY VIEWED ITEMS MINI-CAROUSEL STRIP -->
+<div class="w-full bg-surface-card/60 backdrop-blur-md rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-muted text-[18px]">history</span>
+<span class="font-label-caps text-label-caps uppercase text-text-muted">Recently Viewed Drops</span>
+</div>
+<button class="font-label-badge text-label-badge text-text-muted hover:text-text-primary transition-colors">Clear History</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-space-sm">
+<a class="flex items-center gap-space-sm p-2 rounded bg-surface-container-lowest hover:bg-surface-container transition-colors group" href="#">
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center overflow-hidden shrink-0">
+<img class="w-8 h-8 object-contain" data-alt="Small thumbnail preview of Dota 2 Manifold Paradox Arcana blade" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7YpUc4mpAx6nosXS7LdKI7lmkLs_Bv-DDhuX-2if4SbdPFm20YImdMlbMZdNq8pfjw5fnw4wYO4wktpvk9gc2_jgwzTqlTyYdkVG_x0LYXizeFokxoTeXXtGgtN_3Y3HR71HArHC_xBJwg5WHTu8-MWi26awWt_MFtZWparBmMnikh5lbUKasgqtLppxhc-wUoW0QUljfxtY6h_Ilc14bAeg77hyBQVMkCYfIWvhA5tZ6Ybx6sJiXdA"/>
+</div>
+<div class="min-w-0 flex-1">
+<div class="font-headline-sm text-[12px] font-bold text-text-primary group-hover:text-primary transition-colors truncate">Manifold Paradox</div>
+<div class="font-data-mono-md text-[11px] text-tertiary font-bold">$118.50</div>
+</div>
+</a>
+<a class="flex items-center gap-space-sm p-2 rounded bg-surface-container-lowest hover:bg-surface-container transition-colors group" href="#">
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center overflow-hidden shrink-0">
+<img class="w-8 h-8 object-contain" data-alt="Small thumbnail preview of Dota 2 Asan Exile Unveiled persona skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVThlX6uXU83fCERxOhB1HWE9cTUzKPAyj5Ig24hehKRx9MnUJ8z8Qz6jkWT6s2sUW_ZxuT71mtQ40AEJH20rn1szrS7HtD3VKPHOEWOab6U-13Fx_5bW3V3rJDZA2CzaS-LaHedZ-v_dQUKWGJrWLajRLw-Lrpo4PCKKiM3zsAxBdhD1mPUV_gRBwAgP2i7_tO1o1fTuG-IQwtdd0sF0y6vld9QjQ6zOc9KY2b6y7qH8XaMinHDFJ3w"/>
+</div>
+<div class="min-w-0 flex-1">
+<div class="font-headline-sm text-[12px] font-bold text-text-primary group-hover:text-primary transition-colors truncate">Asan - Exile Unveiled</div>
+<div class="font-data-mono-md text-[11px] text-secondary font-bold">Unmarketable (Gift)</div>
+</div>
+</a>
+<a class="flex items-center gap-space-sm p-2 rounded bg-surface-container-lowest hover:bg-surface-container transition-colors group" href="#">
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center overflow-hidden shrink-0">
+<img class="w-8 h-8 object-contain" data-alt="Small thumbnail preview of Butterfly Knife Doppler Phase 4 skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSIurc1D5hZn7mr1S2q2DUFh04vhA4NQ_CCABtw6wEzxvmvlwgUqIMiJbNQ_luh22z8xmfn3ari9FxXvv-pNr50e26EGjA_KNjCsBAfoecmNy7MBv34aqi1esTkFthQVnrZskgIpuWIx9nAl5yQiTfVVMlEDlMtDskGszDdxOEIIdwjJsZc8f8oEfSNDd0wLePzjcMn2AWPTUnmlls_cVO_OwhKo_gUcqC0HLTqa1pUahDNepUmeraGQ"/>
+</div>
+<div class="min-w-0 flex-1">
+<div class="font-headline-sm text-[12px] font-bold text-text-primary group-hover:text-primary transition-colors truncate">Butterfly Knife | Doppler</div>
+<div class="font-data-mono-md text-[11px] text-tertiary font-bold">$3,150.00</div>
+</div>
+</a>
+<a class="flex items-center gap-space-sm p-2 rounded bg-surface-container-lowest hover:bg-surface-container transition-colors group" href="#">
+<div class="w-10 h-10 rounded bg-surface-container-low flex items-center justify-center overflow-hidden shrink-0">
+<img class="w-8 h-8 object-contain" data-alt="Small thumbnail preview of CS2 AWP Fade sniper rifle skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACeF5yI7PQS77QVH_CbPKCuBdQkrh_PcMWsfDm5SpWOnobRP6qtGp8LlMmket5UOG-XafBoGvXgDCHAf_-SP7laNIpgxlOmNmCHJNREXSh_43UPZmi69gtFvaZRGG7Nl-KfkhASwGyWoERVFC2gT6S8Qr3cv2z4HdCLKimPbs_yjw8naROk0xsiplyAstpMfo__VG9rZnK8C24omb6oUDLBtHORXPeROmIT_Xb1kL89W2gQXb42Ar7QQ"/>
+</div>
+<div class="min-w-0 flex-1">
+<div class="font-headline-sm text-[12px] font-bold text-text-primary group-hover:text-primary transition-colors truncate">AWP | Fade</div>
+<div class="font-data-mono-md text-[11px] text-tertiary font-bold">$1,280.00</div>
+</div>
+</a>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<!-- Inline Interaction Scripts -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Search clear button interactive state
+      const searchInput = document.getElementById('mainSearchInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+
+      if (searchInput && clearBtn) {
+        searchInput.addEventListener('input', (e) => {
+          if (e.target.value.trim().length > 0) {
+            clearBtn.classList.remove('hidden');
+          } else {
+            clearBtn.classList.add('hidden');
+          }
+        });
+
+        clearBtn.addEventListener('click', () => {
+          searchInput.value = '';
+          clearBtn.classList.add('hidden');
+          searchInput.focus();
+        });
+      }
+
+      // Wishlist toggle
+      const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+      wishlistBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const icon = btn.querySelector('.material-symbols-outlined');
+          if (icon) {
+            if (icon.getAttribute('style')?.includes('FILL')) {
+              icon.removeAttribute('style');
+              btn.classList.remove('text-primary');
+              btn.classList.add('text-text-muted');
+            } else {
+              icon.setAttribute('style', "font-variation-settings: 'FILL' 1;");
+              btn.classList.add('text-primary');
+              btn.classList.remove('text-text-muted');
+            }
+          }
+        });
+      });
+
+      // View switcher (Grid vs Compact)
+      const gridBtn = document.getElementById('viewGridBtn');
+      const listBtn = document.getElementById('viewListBtn');
+      const itemsGrid = document.getElementById('marketplaceGrid');
+
+      if (gridBtn && listBtn && itemsGrid) {
+        gridBtn.addEventListener('click', () => {
+          gridBtn.classList.add('bg-surface-container', 'text-text-primary');
+          gridBtn.classList.remove('text-text-muted');
+          listBtn.classList.remove('bg-surface-container', 'text-text-primary');
+          listBtn.classList.add('text-text-muted');
+
+          itemsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md mb-space-lg';
+        });
+
+        listBtn.addEventListener('click', () => {
+          listBtn.classList.add('bg-surface-container', 'text-text-primary');
+          listBtn.classList.remove('text-text-muted');
+          gridBtn.classList.remove('bg-surface-container', 'text-text-primary');
+          gridBtn.classList.add('text-text-muted');
+
+          itemsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-space-md mb-space-lg';
+        });
+      }
+    });
+  </script>
+</div></main><footer class="w-full bg-surface-deep text-text-secondary mt-space-xl"><div class="w-full px-gutter-desktop py-space-lg"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg py-space-md mb-space-lg"><div class="flex items-center gap-space-md bg-surface-container-lowest p-space-md rounded"><span class="material-symbols-outlined text-primary text-[28px]">smart_toy</span><div><div class="font-headline-sm text-headline-sm text-text-primary font-bold">Secure Bot Engine</div><div class="font-body-sm text-body-sm text-text-muted">1,248 Trading Nodes Active</div></div></div><div class="flex items-center gap-space-md bg-surface-container-lowest p-space-md rounded"><span class="material-symbols-outlined text-status-upcoming text-[28px]">dns</span><div><div class="font-headline-sm text-headline-sm text-text-primary font-bold">Steam API 99.99%</div><div class="font-body-sm text-body-sm text-text-muted">Instant Inventory Sync</div></div></div><div class="flex items-center gap-space-md bg-surface-container-lowest p-space-md rounded"><span class="material-symbols-outlined text-tertiary text-[28px]">bolt</span><div><div class="font-headline-sm text-headline-sm text-text-primary font-bold">Escrow 0-sec</div><div class="font-body-sm text-body-sm text-text-muted">Automated Instant Settlement</div></div></div><div class="flex items-center gap-space-md bg-surface-container-lowest p-space-md rounded"><span class="material-symbols-outlined text-secondary text-[28px]">military_tech</span><div><div class="font-headline-sm text-headline-sm text-text-primary font-bold">Tier-1 Insured</div><div class="font-body-sm text-body-sm text-text-muted">$10M Liquidity Protection</div></div></div></div><div class="flex flex-col md:flex-row items-center justify-between gap-space-md pt-space-md"><div class="flex items-center gap-space-md"><span class="font-headline-sm text-headline-sm font-bold text-text-primary">LOOTORA PRO</span><span class="font-body-sm text-body-sm text-text-muted">© 2025 Lootora Global Esports Exchange. Not affiliated with Valve Corp.</span></div><div class="flex items-center gap-space-lg font-label-caps text-label-caps uppercase tracking-wider"><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="marketplace" href="#">Terms of Service</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="marketplace" href="#">Privacy Policy</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="marketplace" href="#">Steam Web API Policy</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="marketplace" href="#">Bug Bounty</a></div></div></div></footer></body></html>

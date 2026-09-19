@@ -2,8 +2,9 @@
  * Type, spacing and radius tokens from the Stitch design system.
  * Each `--text-*` token carries its own line-height, tracking and weight,
  * so `font-<role> text-<role>` reproduces the design exactly.
+ * Font roles are real CSS variables (not inlined) so page scopes can swap faces.
  */
-@theme inline {
+@theme {
   --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;

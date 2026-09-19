@@ -49,5 +49,3 @@ next-env.d.ts
 .claude/settings.local.json
 .idea/
 
-# raw Stitch ports used for pixel comparison only
-/src/app/dev-raw/

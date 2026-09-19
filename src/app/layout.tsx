@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: { default: "Lootora — Steam Intel Exchange", template: "%s | Lootora" },
+  title: { default: "Relicto — Steam Intel Exchange", template: "%s | Relicto" },
   description: "Discover, trade and track Dota 2 and CS2 items with instant bot escrow.",
 };
 

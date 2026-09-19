@@ -1,0 +1,64 @@
+/*
+ * shadcn/ui semantic tokens, mapped onto the Stitch palette so installed
+ * components render in the design language. The app is dark-only.
+ *
+ * Stitch owns `primary`, `secondary`, `background` and the radius scale
+ * (colors.css / typography.css) — never redefine those here, or every
+ * converted design drifts. Only shadcn's *extra* names are mapped below.
+ */
+@theme inline {
+  --color-foreground: var(--color-on-surface);
+  --color-card: var(--color-surface-card);
+  --color-card-foreground: var(--color-on-surface);
+  --color-popover: var(--color-surface-card);
+  --color-popover-foreground: var(--color-on-surface);
+  --color-primary-foreground: var(--color-on-primary);
+  --color-secondary-foreground: var(--color-on-secondary);
+  --color-muted: var(--color-surface-container);
+  --color-muted-foreground: var(--color-text-secondary);
+  --color-accent: var(--color-surface-container-high);
+  --color-accent-foreground: var(--color-text-primary);
+  --color-destructive: var(--color-status-live);
+  --color-border: var(--color-border-subtle);
+  --color-input: var(--color-border-subtle);
+  --color-ring: var(--color-border-focus);
+
+  --color-chart-1: var(--color-primary-container);
+  --color-chart-2: var(--color-tertiary);
+  --color-chart-3: var(--color-status-upcoming);
+  --color-chart-4: var(--color-secondary);
+  --color-chart-5: var(--color-error);
+
+  --color-sidebar: var(--color-surface-deep);
+  --color-sidebar-foreground: var(--color-on-surface);
+  --color-sidebar-primary: var(--color-primary-container);
+  --color-sidebar-primary-foreground: var(--color-on-primary-container);
+  --color-sidebar-accent: var(--color-surface-container-high);
+  --color-sidebar-accent-foreground: var(--color-text-primary);
+  --color-sidebar-border: var(--color-border-subtle);
+  --color-sidebar-ring: var(--color-border-focus);
+}
+
+/* Raw variables for components that read them directly (e.g. sonner, charts). */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-on-surface);
+  --card: var(--color-surface-card);
+  --card-foreground: var(--color-on-surface);
+  --popover: var(--color-surface-card);
+  --popover-foreground: var(--color-on-surface);
+  --primary-foreground: var(--color-on-primary);
+  --muted: var(--color-surface-container);
+  --muted-foreground: var(--color-text-secondary);
+  --accent: var(--color-surface-container-high);
+  --accent-foreground: var(--color-text-primary);
+  --destructive: var(--color-status-live);
+  --border: var(--color-border-subtle);
+  --input: var(--color-border-subtle);
+  --ring: var(--color-border-focus);
+  --chart-1: var(--color-primary-container);
+  --chart-2: var(--color-tertiary);
+  --chart-3: var(--color-status-upcoming);
+  --chart-4: var(--color-secondary);
+  --chart-5: var(--color-error);
+}

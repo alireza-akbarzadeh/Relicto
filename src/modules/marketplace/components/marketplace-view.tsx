@@ -1,5 +1,5 @@
-import { MarketFooter } from "@/modules/lootora/components/shell/footers";
-import { MarketHeader } from "@/modules/lootora/components/shell/market-header";
+import { MarketFooter } from "@/modules/relicto/components/shell/footers";
+import { MarketHeader } from "@/modules/relicto/components/shell/market-header";
 import { LISTINGS_ANCHOR } from "../lib/scroll";
 import { MarketplaceProvider } from "../state/marketplace-provider";
 import type { Listing } from "../types";
@@ -14,7 +14,7 @@ import { ResultsToolbar } from "./results/results-toolbar";
 
 type MarketplaceViewProps = { catalog: Listing[]; query: string };
 
-/** Stitch: "Lootora — Marketplace Item Discovery & Trading Hub". */
+/** Stitch: "Relicto — Marketplace Item Discovery & Trading Hub". */
 export function MarketplaceView({ catalog, query }: MarketplaceViewProps) {
   return (
     <MarketplaceProvider key={query} catalog={catalog} initialQuery={query}>

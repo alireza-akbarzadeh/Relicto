@@ -130,6 +130,7 @@ export const ICON_NAMES = [
   "verified_user",
   "view_list",
   "visibility",
+  "visibility_off",
   "vpn_key",
   "warning",
   "workspace_premium",

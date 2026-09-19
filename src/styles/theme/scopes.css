@@ -11,6 +11,11 @@
   --font-body-md: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
   --font-body-lg: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
   font-family: var(--font-sans);
+  /* Auth designs use stock Tailwind corners, not the Stitch radius scale. */
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
 }
 
 .theme-auth-signin {

@@ -52,7 +52,7 @@ export function RecoveryCard() {
         value={channel}
         onChange={setChannel}
         listClassName="grid grid-cols-2 gap-1.5 rounded-xl border border-white/5 bg-surface-container-lowest p-1"
-        tabClassName="justify-start rounded-lg border-transparent px-3 py-2.5 text-text-secondary hover:bg-white/5 hover:text-white data-active:border-white/10 data-active:bg-[#1e2538] data-active:text-white data-active:shadow-xs"
+        tabClassName="justify-start rounded-lg border-transparent px-3 py-2.5 text-text-secondary hover:bg-white/5 hover:text-white data-active:border-white/10 data-active:bg-auth-tab-active data-active:text-white data-active:shadow-xs"
       />
       {channel === "email" ? (
         <EmailRecovery onDispatch={(value) => setTarget(maskIdentifier(value))} />

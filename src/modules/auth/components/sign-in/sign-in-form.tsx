@@ -9,9 +9,9 @@ import { Icon } from "@/components/ui/icon";
 import { Label } from "@/components/ui/label";
 import { AuthField } from "../ui/auth-field";
 
-const LABEL = "font-mono text-xs font-semibold tracking-wider text-[#cbd5e1] uppercase";
+const LABEL = "font-mono text-xs font-semibold tracking-wider text-slate-300 uppercase";
 const INPUT =
-  "rounded-xl border-white/10 bg-surface-container-lowest pl-10 py-3 text-sm text-white shadow-inner placeholder:text-[#475569] focus-visible:border-primary-container focus-visible:ring-1 focus-visible:ring-primary-container";
+  "rounded-xl border-white/10 bg-surface-container-lowest pl-10 py-3 text-sm text-white shadow-inner placeholder:text-slate-600 focus-visible:border-primary-container focus-visible:ring-1 focus-visible:ring-primary-container";
 
 /** Relicto credentials form (identity + password + remember me). */
 export function SignInForm() {
@@ -40,7 +40,7 @@ export function SignInForm() {
         name="password"
         label="Security Key / Password"
         aside={
-          <Link href="/reset-password" className="text-xs font-medium text-primary-container transition-colors hover:text-[#ff8093]">
+          <Link href="/reset-password" className="text-xs font-medium text-primary-container transition-colors hover:text-brand-rose-hover">
             Forgot password?
           </Link>
         }
@@ -52,7 +52,7 @@ export function SignInForm() {
         inputClassName={`${INPUT} pr-12`}
       />
       <div className="flex items-center justify-between pt-1">
-        <Label className="cursor-pointer gap-2 text-xs font-medium text-[#cbd5e1]">
+        <Label className="cursor-pointer gap-2 text-xs font-medium text-slate-300">
           <Checkbox
             checked={remember}
             onCheckedChange={setRemember}
@@ -67,7 +67,7 @@ export function SignInForm() {
       </div>
       <Button
         type="submit"
-        className="mt-2 h-auto w-full gap-2 rounded-xl bg-primary-container py-3.5 font-display text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] duration-200 hover:bg-[#f43f5e] hover:shadow-[0_0_32px_rgba(244,63,94,0.6)] active:scale-[0.99]"
+        className="mt-2 h-auto w-full gap-2 rounded-xl bg-primary-container py-3.5 font-display text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] duration-200 hover:bg-rose-500 hover:shadow-[0_0_32px_rgba(244,63,94,0.6)] active:scale-[0.99]"
       >
         <span>Authenticate Session</span>
         <Icon name="lock_open" className="text-[18px]" />

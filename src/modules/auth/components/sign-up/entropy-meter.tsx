@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 import type { PasswordStrength } from "../../lib/password-strength";
 
 /** Four-segment bar filled by score; the fourth segment glows emerald once strong. */
-const SEGMENTS = ["bg-status-upcoming", "bg-primary-container", "bg-tertiary", "bg-[#34d399] shadow-[0_0_8px_rgba(52,211,153,0.5)]"];
+const SEGMENTS = ["bg-status-upcoming", "bg-primary-container", "bg-tertiary", "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"];
 
 export function EntropyMeter({ strength }: { strength: PasswordStrength }) {
   const filled = strength.score / 25;
@@ -30,7 +30,7 @@ export function EntropyMeter({ strength }: { strength: PasswordStrength }) {
             key={rule.id}
             className={cn(
               "flex items-center gap-1 rounded border px-2 py-0.5 font-label-badge text-[10px] font-semibold",
-              rule.passed ? "border-[#10b981]/30 bg-[#022c22]/40 text-[#34d399]" : "border-white/10 bg-surface-container text-text-muted",
+              rule.passed ? "border-emerald-500/30 bg-emerald-950/40 text-emerald-400" : "border-white/10 bg-surface-container text-text-muted",
             )}
           >
             <Icon name={rule.passed ? "done" : "close"} className="text-[11px]" /> {rule.label}

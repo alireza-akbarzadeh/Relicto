@@ -33,7 +33,7 @@ export function ResetView() {
       backdrop={
         <>
           <div className="pointer-events-none fixed top-0 left-1/2 -z-10 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-brand-crimson/10 blur-[140px]" />
-          <div className="pointer-events-none fixed right-1/4 bottom-0 -z-10 h-[350px] w-[500px] rounded-full bg-[#4f46e5]/10 blur-[130px]" />
+          <div className="pointer-events-none fixed right-1/4 bottom-0 -z-10 h-[350px] w-[500px] rounded-full bg-indigo-600/10 blur-[130px]" />
         </>
       }
     >

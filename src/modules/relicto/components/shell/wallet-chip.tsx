@@ -20,7 +20,7 @@ export function WalletChip({ variant }: { variant: "market" | "ledger" | "studio
         </div>
         <LinkButton
           href="/wallet#deposit"
-          className="rounded border-0 bg-tertiary-container px-2 py-1 text-[10px] font-bold text-black uppercase transition-colors hover:bg-[#fbbf24]"
+          className="rounded border-0 bg-tertiary-container px-2 py-1 text-[10px] font-bold text-black uppercase transition-colors hover:bg-amber-400"
         >
           +Deposit
         </LinkButton>

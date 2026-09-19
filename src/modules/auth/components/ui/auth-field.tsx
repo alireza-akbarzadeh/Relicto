@@ -61,7 +61,7 @@ export function AuthField({
             size="icon-sm"
             aria-label={revealed ? "Hide password" : "Show password"}
             onClick={() => setRevealed((r) => !r)}
-            className="absolute right-2 text-text-muted hover:bg-transparent hover:text-[#cbd5e1]"
+            className="absolute right-2 text-text-muted hover:bg-transparent hover:text-slate-300"
           >
             <Icon name={revealed ? "visibility_off" : "visibility"} className="text-[18px]" />
           </Button>

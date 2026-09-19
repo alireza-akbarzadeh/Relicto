@@ -47,7 +47,7 @@ export function AltProviders() {
             type="button"
             variant="outline"
             onClick={() => toast(`${p.label} sign-in`, { description: "Social providers are enabled in the logic phase." })}
-            className="group h-auto gap-2 rounded-xl border-white/10 bg-surface-container-lowest px-3 py-2.5 text-[#cbd5e1] transition-all hover:border-white/20 hover:bg-surface-container hover:text-white"
+            className="group h-auto gap-2 rounded-xl border-white/10 bg-surface-container-lowest px-3 py-2.5 text-slate-300 transition-all hover:border-white/20 hover:bg-surface-container hover:text-white"
           >
             {p.mark}
             <span className="font-display text-xs font-medium">{p.label}</span>

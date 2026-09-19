@@ -28,7 +28,7 @@ function LiquidityBanner({ pulse }: { pulse: HubPulse }) {
 /** Breadcrumbs, live event status, game switcher and the liquidity index. */
 export function HubSubbar({ pulse, switcher }: { pulse: HubPulse; switcher: ReactNode }) {
   return (
-    <div className="border-b border-border-dark bg-[#12151e]/80 px-4 py-3.5 backdrop-blur-md sm:px-8">
+    <div className="border-b border-border-dark bg-surface-band/80 px-4 py-3.5 backdrop-blur-md sm:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs leading-4">
           <HubBreadcrumbs />

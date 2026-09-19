@@ -8,7 +8,7 @@ import { useCodeCells } from "../../hooks/use-code-cells";
 import { useCodeCycle } from "../../hooks/use-code-cycle";
 
 const CELL =
-  "h-14 rounded-xl border-white/15 bg-surface-container-lowest text-center font-mono text-xl font-bold text-white uppercase shadow-inner transition-all focus-visible:border-[#f43f5e] focus-visible:bg-[#131929] focus-visible:ring-2 focus-visible:ring-[#f43f5e]/20 sm:h-16 sm:text-2xl";
+  "h-14 rounded-xl border-white/15 bg-surface-container-lowest text-center font-mono text-xl font-bold text-white uppercase shadow-inner transition-all focus-visible:border-rose-500 focus-visible:bg-auth-field-focus focus-visible:ring-2 focus-visible:ring-rose-500/20 sm:h-16 sm:text-2xl";
 
 /** Steam Guard 5-character code with its rotating 30s window. */
 export function CodePanel() {
@@ -19,7 +19,7 @@ export function CodePanel() {
     <div className="flex flex-col gap-3.5">
       <div className="flex items-center justify-between">
         <span className="font-display text-[11px] font-bold tracking-wider text-text-secondary uppercase">ENTER 5-CHARACTER STEAM GUARD CODE</span>
-        <div className="flex items-center gap-1.5 text-[#fbbf24]">
+        <div className="flex items-center gap-1.5 text-amber-400">
           <Icon name="sync" className="animate-spin text-[15px] [animation-duration:3s]" />
           <span className="font-mono text-xs font-bold">{left}s</span>
         </div>
@@ -43,7 +43,7 @@ export function CodePanel() {
       <div className="flex flex-col gap-1.5 pt-1">
         <div className="h-1.5 w-full overflow-hidden rounded-full border border-white/5 bg-surface-container-lowest">
           <div
-            className="h-full rounded-full bg-linear-to-r/srgb from-[#f59e0b] via-[#f43f5e] to-[#e11d48] transition-all duration-1000"
+            className="h-full rounded-full bg-linear-to-r/srgb from-amber-500 via-rose-500 to-rose-600 transition-all duration-1000"
             style={{ width: `${progress * 100}%` }}
           />
         </div>
@@ -60,7 +60,7 @@ export function PushPanel() {
   return (
     <div className="flex flex-col items-center gap-3 py-4 text-center">
       <div className="flex h-14 w-14 items-center justify-center rounded-full border border-status-upcoming/25 bg-status-upcoming/10 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
-        <Icon name="notifications_active" className="animate-bounce text-[28px] text-[#22d3ee]" />
+        <Icon name="notifications_active" className="animate-bounce text-[28px] text-cyan-400" />
       </div>
       <div className="flex flex-col gap-1">
         <h3 className="font-display text-base font-bold text-white">App Notification Dispatched</h3>
@@ -72,7 +72,7 @@ export function PushPanel() {
         type="button"
         variant="outline"
         onClick={() => toast("Push notification re-sent")}
-        className="mt-1 h-auto rounded-lg border-white/10 bg-[#1b2234] px-4 py-2 text-xs font-semibold text-white hover:bg-[#232c42]"
+        className="mt-1 h-auto rounded-lg border-white/10 bg-auth-raised px-4 py-2 text-xs font-semibold text-white hover:bg-auth-raised-hover"
       >
         Resend Push Notification
       </Button>
@@ -89,7 +89,7 @@ export function BackupPanel() {
         <Input
           id="r-code"
           placeholder="XXXXX-XXXXX"
-          className="h-auto rounded-lg border-white/10 bg-surface-container-lowest px-4 py-3 font-mono text-sm text-white uppercase placeholder:text-text-muted focus-visible:border-[#f43f5e] focus-visible:bg-[#131929] focus-visible:ring-0"
+          className="h-auto rounded-lg border-white/10 bg-surface-container-lowest px-4 py-3 font-mono text-sm text-white uppercase placeholder:text-text-muted focus-visible:border-rose-500 focus-visible:bg-auth-field-focus focus-visible:ring-0"
         />
       </div>
       <span className="text-xs text-text-muted">SMS was dispatched to +1 (***) ***-8842. Standard carrier rates may apply.</span>

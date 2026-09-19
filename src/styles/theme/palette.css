@@ -1,0 +1,60 @@
+/*
+ * Stitch renders its exports with Tailwind v3, whose palette is hex; v4's
+ * default palette is oklch and drifts slightly. Pin the v3 values for every
+ * shade the designs use so classes like `text-amber-400` port 1:1 and match
+ * the Stitch screenshots exactly. Add a shade here (v3 hex) before using it.
+ */
+@theme {
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+
+  --color-gray-200: #e5e7eb;
+  --color-gray-400: #9ca3af;
+
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+
+  --color-red-400: #f87171;
+  --color-red-600: #dc2626;
+
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-950: #022c22;
+
+  --color-cyan-200: #a5f3fc;
+  --color-cyan-300: #67e8f9;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-cyan-950: #083344;
+
+  --color-blue-400: #60a5fa;
+  --color-blue-600: #2563eb;
+  --color-blue-900: #1e3a8a;
+
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+  --color-indigo-700: #4338ca;
+  --color-indigo-900: #312e81;
+
+  --color-purple-400: #c084fc;
+
+  /* Steam client brand colours (gateway buttons, OpenID badges). */
+  --color-steam-ink: #171a21;
+  --color-steam-navy: #1b2838;
+  --color-steam-slate: #2a475e;
+  --color-steam-steel: #3b6282;
+  --color-steam-blue: #66c0f4;
+}

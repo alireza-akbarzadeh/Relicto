@@ -21,7 +21,7 @@ export function SpotlightHero({ spotlight }: { spotlight: Spotlight }) {
   return (
     <section className="relative w-full overflow-hidden rounded-xl border border-border-dark bg-surface-card p-6 shadow-2xl lg:p-8">
       <div className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-[#4f46e5]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-indigo-600/10 blur-3xl" />
       <div className="relative z-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
         <div className="flex flex-col gap-4 lg:col-span-7">
           <div className="flex flex-wrap items-center gap-2">
@@ -45,7 +45,7 @@ export function SpotlightHero({ spotlight }: { spotlight: Spotlight }) {
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <LinkButton
               href={primaryCta.href}
-              className="gap-2 rounded-md border-0 bg-primary px-5 py-3 text-xs font-bold tracking-wider text-white uppercase shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:bg-[#e11d48]"
+              className="gap-2 rounded-md border-0 bg-primary px-5 py-3 text-xs font-bold tracking-wider text-white uppercase shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:bg-rose-600"
             >
               <Gem className="size-4" />
               {primaryCta.label}

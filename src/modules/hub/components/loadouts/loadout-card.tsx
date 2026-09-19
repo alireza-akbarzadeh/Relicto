@@ -8,7 +8,7 @@ import type { Loadout } from "../../types";
 const CTA = {
   buy: {
     icon: ShoppingBag,
-    className: "border-0 bg-primary shadow-xs hover:bg-[#e11d48]",
+    className: "border-0 bg-primary shadow-xs hover:bg-rose-600",
     iconClassName: "",
     notice: (l: Loadout) => ({ title: `${l.player} bundle reserved`, description: "Checkout opens once escrow payments are wired." }),
   },

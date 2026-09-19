@@ -90,6 +90,8 @@
   --color-border-glow: rgba(244, 63, 94, 0.3);
   --color-border-highlight: rgba(255, 255, 255, 0.14);
   --color-border-dark: #282d3d;
+  /* Game hub sub-bar band. */
+  --color-surface-band: #12151e;
 
   /* Auth screen extras */
   --color-surface-base: #0a0d14;
@@ -98,4 +100,16 @@
   --color-brand-rose: #ff859b;
   --color-status-cyan: #06b6d4;
   --color-status-amber: #f59e0b;
+  --color-brand-crimson-deep: #e02447;
+  --color-brand-crimson-hover: #ff3b57;
+  --color-brand-rose-hover: #ff8093;
+  --color-brand-signup-end: #ff2b4e;
+  /* Auth card surfaces: vault, recovery and 2FA method panels. */
+  --color-auth-vault: #131826;
+  --color-auth-notice: #0e1626;
+  --color-auth-field-focus: #131929;
+  --color-auth-tab-active: #1e2538;
+  --color-auth-raised: #1b2234;
+  --color-auth-raised-hover: #232c42;
+  --color-auth-steam-hover: #20283d;
 }

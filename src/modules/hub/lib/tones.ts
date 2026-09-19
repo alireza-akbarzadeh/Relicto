@@ -19,9 +19,9 @@ export const TONE_DOT: Record<SignalTone, string> = {
 
 /** Tinted status pill (table "Intel Status"). */
 export const STATUS_PILL: Record<SignalTone, string> = {
-  crimson: "border-primary/30 bg-primary/20 text-[#fb7185]",
-  cyan: "border-status-upcoming/30 bg-status-upcoming/20 text-[#22d3ee]",
-  amber: "border-tertiary/30 bg-tertiary/20 text-[#fbbf24]",
+  crimson: "border-primary/30 bg-primary/20 text-rose-400",
+  cyan: "border-status-upcoming/30 bg-status-upcoming/20 text-cyan-400",
+  amber: "border-tertiary/30 bg-tertiary/20 text-amber-400",
 };
 
 /** Outlined label: 30% border in the text colour. */
@@ -53,13 +53,13 @@ export const ACCENT: Record<Accent, { tier: string; card: string; cta: string }>
     cta: "hover:bg-primary",
   },
   indigo: {
-    tier: "bg-[#4f46e5] text-white",
-    card: "hover:border-[#6366f1]/50 hover:shadow-[0_0_24px_rgba(99,102,241,0.25)]",
-    cta: "hover:bg-[#4f46e5]",
+    tier: "bg-indigo-600 text-white",
+    card: "hover:border-indigo-500/50 hover:shadow-[0_0_24px_rgba(99,102,241,0.25)]",
+    cta: "hover:bg-indigo-600",
   },
   amber: {
     tier: "bg-tertiary-container text-black",
     card: "hover:border-tertiary/50 hover:shadow-[0_0_24px_rgba(245,158,11,0.25)]",
-    cta: "hover:bg-[#d97706]",
+    cta: "hover:bg-amber-600",
   },
 };

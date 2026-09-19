@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/icon";
 import { AuthField } from "../ui/auth-field";
 
 const CTA =
-  "group h-auto w-full gap-2 rounded-xl border border-brand-rose/30 bg-linear-to-r/srgb from-brand-crimson to-[#e02447] px-4 py-3.5 font-display text-xs font-bold tracking-widest text-white uppercase shadow-[0_0_24px_rgba(255,59,92,0.4)] hover:shadow-[0_0_32px_rgba(255,59,92,0.6)] hover:brightness-110 active:scale-[0.99]";
+  "group h-auto w-full gap-2 rounded-xl border border-brand-rose/30 bg-linear-to-r/srgb from-brand-crimson to-brand-crimson-deep px-4 py-3.5 font-display text-xs font-bold tracking-widest text-white uppercase shadow-[0_0_24px_rgba(255,59,92,0.4)] hover:shadow-[0_0_32px_rgba(255,59,92,0.6)] hover:brightness-110 active:scale-[0.99]";
 
 /** Email channel: identifier + Turnstile badge + send. */
 export function EmailRecovery({ onDispatch }: { onDispatch: (target: string) => void }) {
@@ -67,7 +67,7 @@ export function SteamRecovery({ onDispatch }: { onDispatch: () => void }) {
       <Button
         type="button"
         onClick={onDispatch}
-        className="h-auto w-full gap-2.5 rounded-xl border border-status-cyan/40 bg-surface-container px-4 py-3.5 font-display text-xs font-bold tracking-wider text-white uppercase shadow-[0_0_18px_rgba(6,182,212,0.2)] hover:bg-[#20283d]"
+        className="h-auto w-full gap-2.5 rounded-xl border border-status-cyan/40 bg-surface-container px-4 py-3.5 font-display text-xs font-bold tracking-wider text-white uppercase shadow-[0_0_18px_rgba(6,182,212,0.2)] hover:bg-auth-steam-hover"
       >
         <Icon name="vpn_key" className="text-[18px] text-status-cyan" />
         <span>Authenticate via Steam Community</span>
@@ -79,7 +79,7 @@ export function SteamRecovery({ onDispatch }: { onDispatch: () => void }) {
 /** Confirmation shown after a reset token is dispatched. */
 export function DispatchedNotice({ target, onResend }: { target: string; onResend: () => void }) {
   return (
-    <div className="relative flex flex-col gap-2 overflow-hidden rounded-xl border border-brand-crimson/40 bg-[#0e1626] p-3.5" role="status">
+    <div className="relative flex flex-col gap-2 overflow-hidden rounded-xl border border-brand-crimson/40 bg-auth-notice p-3.5" role="status">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Icon name="mark_email_read" className="text-[18px] text-brand-crimson" />

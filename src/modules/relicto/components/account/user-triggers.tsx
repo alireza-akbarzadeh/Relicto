@@ -79,7 +79,7 @@ export function HubUserTrigger({ user }: { user: SessionUser }) {
   return (
     <span className="flex items-center gap-2.5 rounded-md border border-border-dark bg-surface-card p-1.5 pr-3 text-left">
       <span className="relative">
-        <span className="flex h-8 w-8 items-center justify-center rounded bg-linear-to-tr/srgb from-[#e11d48] to-[#4f46e5] text-xs font-bold text-white">
+        <span className="flex h-8 w-8 items-center justify-center rounded bg-linear-to-tr/srgb from-rose-600 to-indigo-600 text-xs font-bold text-white">
           {user.handle.slice(0, 2).toUpperCase()}
         </span>
         <span className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full bg-status-live ring-2 ring-surface-card" />
@@ -87,7 +87,7 @@ export function HubUserTrigger({ user }: { user: SessionUser }) {
       <span className="flex flex-col">
         <span className="flex items-center gap-1.5">
           <span className="text-xs leading-none font-bold text-white">{user.handle}</span>
-          <span className="rounded border border-[#4338ca]/40 bg-[#312e81]/60 px-1 font-mono text-[9px] text-secondary">LVL {user.level}</span>
+          <span className="rounded border border-indigo-700/40 bg-indigo-900/60 px-1 font-mono text-[9px] text-secondary">LVL {user.level}</span>
         </span>
         <span className="mt-1 flex items-center gap-2">
           <span className="font-mono text-[9px] font-semibold tracking-wider text-tertiary uppercase">{user.role}</span>

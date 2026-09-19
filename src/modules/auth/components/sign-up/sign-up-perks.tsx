@@ -29,7 +29,7 @@ export function SignUpPerks() {
               </div>
               <h3 className="mt-1 font-headline-sm text-sm font-bold tracking-tight text-text-primary uppercase">{perk.title}</h3>
               <p className="font-body-sm text-xs leading-relaxed text-text-secondary">{perk.body}</p>
-              <div className="mt-1 flex items-center gap-1 font-data-mono-md text-[10px] text-[#34d399]">
+              <div className="mt-1 flex items-center gap-1 font-data-mono-md text-[10px] text-emerald-400">
                 <Icon name="check" className="text-[13px]" /> {perk.check}
               </div>
             </div>

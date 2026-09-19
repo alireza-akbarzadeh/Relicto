@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../styles/theme/palette.css";
 @import "../styles/theme/colors.css";
 @import "../styles/theme/typography.css";
 @import "../styles/theme/scopes.css";

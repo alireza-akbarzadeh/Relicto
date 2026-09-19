@@ -13,7 +13,7 @@ import { EntropyMeter } from "./entropy-meter";
 
 const LABEL = "font-label-caps text-xs font-semibold tracking-wider text-text-secondary uppercase";
 const INPUT =
-  "rounded-lg border-white/10 bg-surface-container-lowest px-3.5 py-2.5 font-body-md text-sm text-text-primary placeholder:text-[#9ca3af] focus-visible:border-primary-container focus-visible:ring-0";
+  "rounded-lg border-white/10 bg-surface-container-lowest px-3.5 py-2.5 font-body-md text-sm text-text-primary placeholder:text-gray-400 focus-visible:border-primary-container focus-visible:ring-0";
 
 export function SignUpForm() {
   const [form, setForm] = useState(SIGN_UP_DEFAULTS);
@@ -54,7 +54,7 @@ export function SignUpForm() {
       <ArenaPicker value={form.arena} onChange={set("arena") as (v: Arena) => void} />
       <AuthField
         id="referral" label="Trader Referral Code (Optional)" labelClassName={LABEL}
-        inputClassName="rounded-lg border-white/10 bg-surface-container-lowest px-3.5 py-2.5 font-data-mono-md text-sm tracking-wider text-text-primary uppercase placeholder:text-[#9ca3af] focus-visible:border-tertiary focus-visible:ring-0"
+        inputClassName="rounded-lg border-white/10 bg-surface-container-lowest px-3.5 py-2.5 font-data-mono-md text-sm tracking-wider text-text-primary uppercase placeholder:text-gray-400 focus-visible:border-tertiary focus-visible:ring-0"
         value={form.referral} onChange={(e) => set("referral")(e.target.value)} placeholder="e.g. RADIANT-PRO"
         icon="verified" iconPosition="right" iconClassName="text-tertiary"
         aside={<span className="flex items-center gap-1 rounded border border-tertiary/20 bg-tertiary/10 px-2 py-0.5 font-label-badge text-[10px] font-semibold text-tertiary shadow-xs"><Icon name="stars" className="text-[13px]" /> +500 AEGIS BONUS POINTS</span>}
@@ -62,7 +62,7 @@ export function SignUpForm() {
       <ConsentChecks terms={form.acceptTerms} webhooks={form.webhooks} onTerms={set("acceptTerms")} onWebhooks={set("webhooks")} />
       <Button
         type="submit"
-        className="mt-2 h-auto w-full gap-2 rounded-xl bg-linear-to-r/srgb from-primary-container to-[#ff2b4e] px-6 py-3 font-headline-sm text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(255,81,106,0.45)] hover:shadow-[0_0_36px_rgba(255,81,106,0.7)] hover:brightness-110 active:scale-[0.99]"
+        className="mt-2 h-auto w-full gap-2 rounded-xl bg-linear-to-r/srgb from-primary-container to-brand-signup-end px-6 py-3 font-headline-sm text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(255,81,106,0.45)] hover:shadow-[0_0_36px_rgba(255,81,106,0.7)] hover:brightness-110 active:scale-[0.99]"
       >
         <span>Create Relicto Trader Account</span>
         <Icon name="arrow_forward" className="text-[18px]" />

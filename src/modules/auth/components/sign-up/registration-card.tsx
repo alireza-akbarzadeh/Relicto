@@ -50,9 +50,9 @@ function FastTrackBanner() {
       <Button
         type="button"
         onClick={() => toast("Steam OpenID", { description: "The Steam gateway connects in the backend phase." })}
-        className="h-auto w-full shrink-0 gap-2 rounded-lg border border-[#66c0f4]/40 bg-linear-to-r/srgb from-[#171a21] to-[#2a475e] px-4 py-2.5 font-headline-sm text-xs tracking-wider text-white uppercase shadow-[0_0_15px_rgba(102,192,244,0.25)] hover:from-[#2a475e] hover:to-[#3b6282] active:scale-[0.98] sm:w-auto"
+        className="h-auto w-full shrink-0 gap-2 rounded-lg border border-steam-blue/40 bg-linear-to-r/srgb from-steam-ink to-steam-slate px-4 py-2.5 font-headline-sm text-xs tracking-wider text-white uppercase shadow-[0_0_15px_rgba(102,192,244,0.25)] hover:from-steam-slate hover:to-steam-steel active:scale-[0.98] sm:w-auto"
       >
-        <Icon name="bolt" className="text-[18px] text-[#66c0f4]" />
+        <Icon name="bolt" className="text-[18px] text-steam-blue" />
         <span className="font-bold">Connect with Steam</span>
       </Button>
     </div>

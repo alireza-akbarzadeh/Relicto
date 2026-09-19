@@ -29,7 +29,7 @@ export function SellerIncentiveCard({ incentive }: { incentive: SellerIncentive 
       <div className="pt-4">
         <LinkButton
           href="/sell"
-          className="w-full gap-2 rounded-md border-0 bg-tertiary-container py-3 text-xs font-bold tracking-wider text-black uppercase shadow-md transition-colors hover:bg-[#fbbf24]"
+          className="w-full gap-2 rounded-md border-0 bg-tertiary-container py-3 text-xs font-bold tracking-wider text-black uppercase shadow-md transition-colors hover:bg-amber-400"
         >
           <span>Go to Seller Studio</span>
           <ArrowRight className="size-4" />

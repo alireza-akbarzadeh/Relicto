@@ -57,14 +57,14 @@ export function AuthHeader({ active }: { active: AuthNavId }) {
           ))}
         </nav>
         <div className="flex items-center gap-4">
-          <div className="hidden items-center gap-2 rounded border border-white/5 bg-surface-card/50 px-2.5 py-1 text-[#cbd5e1] sm:flex">
+          <div className="hidden items-center gap-2 rounded border border-white/5 bg-surface-card/50 px-2.5 py-1 text-slate-300 sm:flex">
             <Icon name="lock" className="text-[18px] text-tertiary" />
-            <span className="font-mono text-xs font-medium tracking-wider text-[#cbd5e1]">256-BIT ESCROW</span>
+            <span className="font-mono text-xs font-medium tracking-wider text-slate-300">256-BIT ESCROW</span>
           </div>
           <Link
             href="/sign-in"
             aria-label="Account"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-container text-white shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-transform hover:scale-105 hover:bg-[#ff3b57]"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-container text-white shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-transform hover:scale-105 hover:bg-brand-crimson-hover"
           >
             <Icon name="person" className="text-[20px]" />
           </Link>

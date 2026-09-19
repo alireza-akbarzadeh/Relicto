@@ -61,7 +61,7 @@ export function StudioBrand() {
 export function HubBrand() {
   return (
     <Link href="/" className="group flex items-center gap-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-container shadow-[0_0_16px_rgba(244,63,94,0.4)] transition-colors group-hover:bg-[#fb7185]">
+      <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-container shadow-[0_0_16px_rgba(244,63,94,0.4)] transition-colors group-hover:bg-rose-400">
         <ShieldAlert className="size-5 text-white" />
       </div>
       <div className="flex flex-col">

@@ -22,7 +22,7 @@ export function EmailRecovery({ onDispatch }: { onDispatch: (target: string) => 
       <AuthField
         id="recovery-credential"
         label="Account Recovery Identifier"
-        aside={<span className="text-[10px] text-text-muted normal-case">Steam / Intel ID</span>}
+        aside={<span className="font-mono text-[10px] tracking-wider text-text-muted normal-case">Steam / Intel ID</span>}
         labelClassName="font-mono text-[11px] font-normal tracking-wider text-text-secondary uppercase"
         icon="alternate_email"
         placeholder="trader@example.com"

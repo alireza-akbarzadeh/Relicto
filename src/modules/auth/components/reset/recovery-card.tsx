@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { maskIdentifier } from "../../lib/mask";
-import { SegmentedTabs } from "../ui/segmented-tabs";
+import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import { DispatchedNotice, EmailRecovery, SteamRecovery } from "./recovery-panels";
 
 type Channel = "email" | "steam";

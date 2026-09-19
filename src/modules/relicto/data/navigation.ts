@@ -28,6 +28,18 @@ export const STUDIO_NAV: NavItem[] = [
   { id: "community", label: "Community", href: "/community", comingSoon: true },
 ];
 
+/** Game hub (home). */
+export const HUB_NAV: NavItem[] = [
+  { id: "marketplace", label: "Marketplace", href: "/marketplace" },
+  { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
+  { id: "tracker", label: "Tracker", href: "/tracker", comingSoon: true },
+  { id: "inventory", label: "Inventory", href: "/profile" },
+  { id: "sell", label: "Sell Items", href: "/sell" },
+  { id: "wallet", label: "Wallet & Income", href: "/wallet" },
+  { id: "hub", label: "Game Hub", href: "/" },
+  { id: "community", label: "Community", href: "/community", comingSoon: true },
+];
+
 /** Account menu shared by every header. */
 export const ACCOUNT_LINKS = [
   { href: "/profile", label: "Trader Profile", icon: "person" },

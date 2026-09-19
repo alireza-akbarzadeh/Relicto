@@ -3,7 +3,7 @@ import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { TEXT_TONE } from "../../../lib/tones";
 import type { BracketCardData, BracketSchedule } from "../../../mobile.types";
-import { CountdownText } from "../../shared/countdown-text";
+import { CountdownText } from "@/components/countdown-text";
 
 const TAG_DOT = { dota2: "bg-status-live", cs2: "bg-tertiary" } as const;
 const CHIP = "absolute top-2.5 flex items-center rounded bg-surface-deep/90 px-2 py-0.5 backdrop-blur-md";

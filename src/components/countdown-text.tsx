@@ -1,7 +1,7 @@
 "use client";
 
-import { formatClock, formatCountdown } from "../../lib/format";
-import { useCountdown } from "../../hooks/use-countdown";
+import { formatClock, formatCountdown } from "@/lib/format";
+import { useCountdown } from "@/hooks/use-countdown";
 
 const FORMATS = { clock: formatClock, verbose: formatCountdown } as const;
 

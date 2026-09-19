@@ -4,6 +4,15 @@
  * instead of forking the whole theme.
  */
 
+/* Screens Stitch drew with stock Tailwind corners instead of the Stitch radius scale. */
+.theme-auth,
+.theme-hub {
+  --radius: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+}
+
 /* All auth screens: Inter body copy on the deep canvas. */
 .theme-auth {
   --font-sans: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
@@ -11,11 +20,29 @@
   --font-body-md: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
   --font-body-lg: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
   font-family: var(--font-sans);
-  /* Auth designs use stock Tailwind corners, not the Stitch radius scale. */
-  --radius: 0.25rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-full: 9999px;
+}
+
+/* Game hub: Space Grotesk throughout and a brighter crimson / amber palette. */
+.theme-hub {
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-body-sm: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-body-md: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-body-lg: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  font-family: var(--font-sans);
+  --color-primary: #f43f5e;
+  --color-primary-container: #f43f5e;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ffffff;
+  --color-tertiary: #f59e0b;
+  --color-on-tertiary: #1a0f00;
+  --color-surface-card: #151821;
+  --color-surface-container-low: #151821;
+  --color-surface-container: #191b24;
+  --color-surface-container-high: #202433;
+  --color-surface-container-highest: #282d3d;
+  --color-surface-bright: #363d52;
+  --color-on-surface-variant: #94a3b8;
+  --color-border-tactical: rgba(245, 158, 11, 0.35);
 }
 
 .theme-auth-signin {

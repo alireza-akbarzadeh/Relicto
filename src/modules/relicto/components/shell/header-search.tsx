@@ -1,6 +1,8 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { useCommandSearch } from "../../hooks/use-command-search";
 
 /** Header search fields per family. All support ⌘K and search the marketplace on Enter. */
@@ -61,6 +63,21 @@ export function StudioHeaderSearch() {
           <span>K</span>
         </div>
       </div>
+    </div>
+  );
+}
+
+export function HubHeaderSearch() {
+  const input = useCommandSearch("slash");
+  return (
+    <div className="relative hidden items-center md:flex">
+      <Search className="absolute left-3 size-4 text-text-muted" />
+      <Input
+        {...input}
+        placeholder="Search skins, floats, seeds..."
+        className="h-9 w-56 rounded-md border-border-dark bg-surface-card pr-8 pl-9 text-xs text-white placeholder:text-text-muted focus-visible:border-primary/50 focus-visible:ring-0 md:text-xs lg:w-64"
+      />
+      <kbd className="absolute right-2.5 rounded border border-border-dark bg-surface-container-high px-1 font-mono text-[10px] text-text-muted">/</kbd>
     </div>
   );
 }

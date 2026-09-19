@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ShieldAlert } from "lucide-react";
 import { Icon } from "@/components/ui/icon";
 
 /** Relicto wordmarks as drawn in each header family. All link home to the marketplace. */
@@ -52,6 +53,25 @@ export function StudioBrand() {
           </span>
         </div>
         <span className="font-label-badge text-label-badge tracking-widest text-text-muted uppercase">STEAM INTEL EXCHANGE</span>
+      </div>
+    </Link>
+  );
+}
+
+export function HubBrand() {
+  return (
+    <Link href="/" className="group flex items-center gap-3">
+      <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-container shadow-[0_0_16px_rgba(244,63,94,0.4)] transition-colors group-hover:bg-[#fb7185]">
+        <ShieldAlert className="size-5 text-white" />
+      </div>
+      <div className="flex flex-col">
+        <span className="flex items-center gap-1.5 text-lg leading-none font-bold tracking-tight text-white uppercase">
+          Relicto
+          <span className="rounded border border-primary/30 bg-surface-container-high px-1.5 py-0.5 font-mono text-[10px] tracking-wider text-primary">
+            PRO
+          </span>
+        </span>
+        <span className="mt-1 font-mono text-[9px] tracking-widest text-text-muted uppercase">Intel Exchange</span>
       </div>
     </Link>
   );

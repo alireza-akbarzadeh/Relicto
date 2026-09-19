@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Select as SelectPrimitive } from "radix-ui";
 import { cn } from "@/lib/cn";
 import { Icon } from "./icon";
@@ -15,6 +16,8 @@ type SelectProps<T extends string> = {
   /** Classes for the chevron; omit `icon` to render none (native-looking inline selects). */
   iconClassName?: string;
   icon?: boolean;
+  /** Custom chevron element (e.g. a Lucide icon); replaces the default icon. */
+  indicator?: ReactNode;
   label: string;
 };
 
@@ -29,6 +32,7 @@ export function Select<T extends string>({
   triggerClassName,
   iconClassName,
   icon = true,
+  indicator,
   label,
 }: SelectProps<T>) {
   return (
@@ -37,7 +41,7 @@ export function Select<T extends string>({
         <SelectPrimitive.Value />
         {icon && (
           <SelectPrimitive.Icon asChild>
-            <Icon name="expand_more" className={cn("pointer-events-none", iconClassName)} />
+            {indicator ?? <Icon name="expand_more" className={cn("pointer-events-none", iconClassName)} />}
           </SelectPrimitive.Icon>
         )}
       </SelectPrimitive.Trigger>

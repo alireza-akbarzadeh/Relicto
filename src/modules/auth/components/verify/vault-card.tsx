@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { SegmentedTabs } from "../ui/segmented-tabs";
+import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import { BackupPanel, CodePanel, PushPanel } from "./method-panels";
 import { useConfirmState } from "../../hooks/use-confirm-state";
 

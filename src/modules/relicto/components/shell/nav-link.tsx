@@ -7,6 +7,8 @@ import { cn } from "@/lib/cn";
 import type { NavItem } from "../../session-types";
 
 /** Link styles per header family; `active` is each design's `data-active-classes`. */
+type LinkStyle = { base: string; idle: string; active: string; dot?: string };
+
 const STYLES = {
   market: {
     base: "px-space-sm py-1.5 rounded tracking-wider uppercase transition-all",
@@ -23,7 +25,14 @@ const STYLES = {
     idle: "text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface",
     active: "bg-primary-container text-on-primary-container font-headline-sm text-label-caps",
   },
-} as const;
+  hub: {
+    base: "px-3 py-1.5 rounded transition-all",
+    idle: "text-text-secondary hover:text-white hover:bg-surface-container",
+    active: "text-white bg-surface-container-high border border-surface-bright shadow-xs flex items-center gap-1.5",
+    /** Pulsing marker drawn before the active label. */
+    dot: "w-1.5 h-1.5 rounded-full bg-primary animate-pulse",
+  },
+} satisfies Record<string, LinkStyle>;
 
 export type NavStyle = keyof typeof STYLES;
 
@@ -33,7 +42,7 @@ export function isActivePath(pathname: string, href: string) {
 
 export function NavLinks({ items, variant }: { items: NavItem[]; variant: NavStyle }) {
   const pathname = usePathname();
-  const style = STYLES[variant];
+  const style: LinkStyle = STYLES[variant];
 
   return items.map((item) => {
     const active = !item.comingSoon && isActivePath(pathname, item.href);
@@ -53,6 +62,7 @@ export function NavLinks({ items, variant }: { items: NavItem[]; variant: NavSty
     }
     return (
       <Link key={item.id} href={item.href} aria-current={active ? "page" : undefined} className={className}>
+        {active && style.dot && <span className={style.dot} />}
         {item.label}
       </Link>
     );

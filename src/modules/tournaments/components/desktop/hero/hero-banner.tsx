@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { GAME_THEME } from "../../../lib/game-theme";
 import type { HeroEvent } from "../../../types";
-import { CountdownText } from "../../shared/countdown-text";
+import { CountdownText } from "@/components/countdown-text";
 import { HeroBannerFooter } from "./hero-banner-footer";
 
 export function HeroBanner({ event }: { event: HeroEvent }) {

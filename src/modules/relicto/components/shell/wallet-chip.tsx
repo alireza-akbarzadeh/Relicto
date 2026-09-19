@@ -2,13 +2,31 @@
 
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
+import { LinkButton } from "@/components/ui/link-button";
 import { formatMoney } from "@/lib/format";
 import { useSession } from "../../state/session-provider";
 
 /** Steam wallet balance with a top-up shortcut, per header family. */
-export function WalletChip({ variant }: { variant: "market" | "ledger" | "studio" }) {
+export function WalletChip({ variant }: { variant: "market" | "ledger" | "studio" | "hub" }) {
   const { user } = useSession();
   const balance = formatMoney(user.walletUsd);
+
+  if (variant === "hub") {
+    return (
+      <div className="hidden items-center gap-3 rounded-md border border-border-dark bg-surface-card px-3 py-1.5 sm:flex">
+        <div className="flex flex-col">
+          <span className="font-mono text-[9px] leading-tight text-text-muted uppercase">Steam Balance</span>
+          <span className="font-mono text-xs leading-tight font-bold text-tertiary">{balance}</span>
+        </div>
+        <LinkButton
+          href="/wallet#deposit"
+          className="rounded border-0 bg-tertiary-container px-2 py-1 text-[10px] font-bold text-black uppercase transition-colors hover:bg-[#fbbf24]"
+        >
+          +Deposit
+        </LinkButton>
+      </div>
+    );
+  }
 
   if (variant === "ledger") {
     return (

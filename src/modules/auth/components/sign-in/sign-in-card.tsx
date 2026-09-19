@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { DividerLabel } from "../ui/divider-label";
-import { SegmentedTabs } from "../ui/segmented-tabs";
+import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import { AltProviders } from "./alt-providers";
 import { SignInForm } from "./sign-in-form";
 import { SteamGatewayButton } from "./steam-gateway-button";

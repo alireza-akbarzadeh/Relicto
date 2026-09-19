@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Bell } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { Icon } from "@/components/ui/icon";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/cn";
 import { useSession } from "../../state/session-provider";
 import { NotificationItem } from "./notification-item";
+
+type TriggerStyle = { button: string; badge: string; icon?: ReactNode; ping?: boolean };
 
 /** Trigger styles per header family, straight from each Stitch header. */
 const TRIGGERS = {
@@ -25,14 +28,21 @@ const TRIGGERS = {
     button: "relative p-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors",
     badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live animate-pulse",
   },
-} as const;
+  /** Game hub: bordered button, Lucide bell, pinging dot. */
+  hub: {
+    button: "relative p-2 rounded-md bg-surface-card border border-border-dark text-text-secondary hover:text-white hover:border-surface-bright transition-colors",
+    badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live",
+    icon: <Bell className="size-4" />,
+    ping: true,
+  },
+} satisfies Record<string, TriggerStyle>;
 
 export type NotificationsTrigger = keyof typeof TRIGGERS;
 
 export function NotificationsMenu({ trigger }: { trigger: NotificationsTrigger }) {
   const { notifications, unreadCount, markRead, markAllRead } = useSession();
   const [open, setOpen] = useState(false);
-  const style = TRIGGERS[trigger];
+  const style: TriggerStyle = TRIGGERS[trigger];
   const openItem = (id: string) => {
     markRead(id);
     setOpen(false);
@@ -45,7 +55,8 @@ export function NotificationsMenu({ trigger }: { trigger: NotificationsTrigger }
         aria-label={unreadCount ? `Notifications, ${unreadCount} unread` : "Notifications"}
         className={style.button}
       >
-        <Icon name="notifications" className="text-[20px]" />
+        {style.icon ?? <Icon name="notifications" className="text-[20px]" />}
+        {unreadCount > 0 && style.ping && <span className={cn(style.badge, "animate-ping")} />}
         {unreadCount > 0 && <span className={style.badge}>{trigger === "count" ? unreadCount : null}</span>}
       </PopoverTrigger>
       <PopoverContent className="w-[380px] p-2">

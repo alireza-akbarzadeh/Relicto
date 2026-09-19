@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lootora — Steam Intel Exchange &amp; Esports Trading Platform</title>
+<!-- Google Fonts: Space Grotesk, JetBrains Mono, Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            obsidian: "#0b0e15",
+            surface: "#10131a",
+            "panel-bg": "#151822",
+            "panel-card": "#191b24",
+            "panel-hover": "#1e2230",
+            "border-dark": "#282d3d",
+            "border-subtle": "rgba(255, 255, 255, 0.08)",
+            "crimson-accent": "#f43f5e",
+            "crimson-hover": "#e11d48",
+            "emerald-bull": "#10b981",
+            "cyan-glow": "#06b6d4",
+            "amber-gold": "#f59e0b",
+            "text-primary": "#f8fafc",
+            "text-secondary": "#94a3b8",
+            "text-muted": "#64748b"
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      background-color: #0b0e15;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      height: 4px;
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #282d3d;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-obsidian text-text-primary min-h-screen selection:bg-crimson-accent selection:text-white">
+<!-- TOP HEADER NAVIGATION -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#0b0e15]/95 backdrop-blur-md border-b border-border-dark">
+<!-- Row 1: Primary Navigation Bar -->
+<div class="h-16 px-4 md:px-6 flex items-center justify-between gap-4">
+<!-- Left: Logo & Navigation Links -->
+<div class="flex items-center gap-6 lg:gap-8 shrink-0">
+<!-- Logo -->
+<div class="flex items-center gap-2.5 cursor-pointer">
+<div class="w-9 h-9 rounded-lg bg-gradient-to-br from-crimson-accent to-[#be123c] flex items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.4)]">
+<i class="w-5 h-5 text-white" data-lucide="shield-alert"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg tracking-wider text-white uppercase leading-none">LOOTORA</span>
+<span class="font-mono text-[9px] font-semibold text-amber-gold tracking-widest mt-0.5">INTEL EXCHANGE</span>
+</div>
+</div>
+<!-- Nav Links -->
+<nav class="hidden xl:flex items-center gap-1.5 font-display text-[12px] font-medium uppercase tracking-wider text-text-secondary">
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Marketplace</a>
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Wiki</a>
+<a class="px-3 py-1.5 rounded bg-crimson-accent text-white font-bold shadow-[0_0_12px_rgba(244,63,94,0.35)] flex items-center gap-2" href="#">
+<span>Tracker</span>
+<span class="w-2 h-2 rounded-full bg-emerald-bull animate-pulse"></span>
+</a>
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Inventory</a>
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Sell Items</a>
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Wallet &amp; Income</a>
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Game Hub</a>
+<a class="px-3 py-1.5 rounded hover:text-white hover:bg-panel-hover transition-colors" href="#">Community</a>
+</nav>
+</div>
+<!-- Right: Search, Balance & User Profile -->
+<div class="flex items-center gap-3 md:gap-4 shrink-0">
+<!-- Search -->
+<div class="hidden md:flex items-center bg-panel-card border border-border-dark rounded-lg px-3 py-1.5 gap-2 w-52 lg:w-64 focus-within:border-cyan-glow transition-all">
+<i class="w-4 h-4 text-text-muted" data-lucide="search"></i>
+<input class="bg-transparent text-xs text-text-primary placeholder:text-text-muted w-full outline-none" placeholder="Search skins, floats, seeds..." type="text"/>
+<kbd class="font-mono text-[10px] bg-panel-hover px-1.5 py-0.5 rounded text-text-muted border border-border-dark">/</kbd>
+</div>
+<!-- Steam Balance -->
+<div class="flex items-center bg-panel-card border border-border-dark rounded-lg p-1.5 gap-2.5">
+<div class="flex flex-col px-1.5">
+<span class="font-mono text-[9px] uppercase tracking-wider text-text-muted">Steam Balance</span>
+<span class="font-mono text-xs font-bold text-amber-gold">$4,289.50</span>
+</div>
+<button class="bg-amber-gold hover:bg-amber-500 text-black font-mono font-bold text-[11px] px-2.5 py-1 rounded flex items-center gap-1 transition-colors">
+<i class="w-3.5 h-3.5" data-lucide="plus"></i>
+<span>Deposit</span>
+</button>
+</div>
+<!-- Notification Bell -->
+<button class="relative p-2 rounded-lg bg-panel-card border border-border-dark hover:bg-panel-hover text-text-secondary hover:text-white transition-colors">
+<i class="w-4 h-4" data-lucide="bell"></i>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-crimson-accent ring-2 ring-panel-card"></span>
+</button>
+<!-- User Profile Pill -->
+<div class="flex items-center bg-panel-card border border-border-dark rounded-lg px-2.5 py-1 gap-2.5">
+<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xs text-white">
+            S1
+          </div>
+<div class="flex flex-col leading-tight">
+<div class="flex items-center gap-1.5">
+<span class="font-display text-xs font-bold text-white">S1mple_CS</span>
+<span class="bg-blue-900/60 text-cyan-300 font-mono text-[9px] px-1 rounded font-bold">LVL 94</span>
+</div>
+<div class="flex items-center gap-1 font-mono text-[9px]">
+<span class="text-cyan-400 font-medium">PRO SELLER</span>
+<span class="text-text-muted">•</span>
+<span class="text-emerald-bull font-medium uppercase">SYNCED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 2: Sub-Header Telemetry Strip -->
+<div class="h-10 bg-[#07090e] border-t border-border-dark px-4 md:px-6 flex items-center justify-between text-xs font-mono">
+<div class="flex items-center gap-2 text-text-muted text-[11px]">
+<i class="w-3.5 h-3.5 text-text-muted" data-lucide="terminal"></i>
+<span class="text-text-secondary">PORTAL</span>
+<span>/</span>
+<span class="text-text-secondary">MARKET TELEMETRY</span>
+<span>/</span>
+<span class="text-crimson-accent font-semibold tracking-wide">REAL-TIME ARBITRAGE TERMINAL</span>
+</div>
+<div class="hidden lg:flex items-center gap-6 text-[11px]">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-crimson-accent animate-ping"></span>
+<span class="text-text-muted">VALVE API SYNC:</span>
+<span class="text-text-primary font-bold">6s AGO</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-bull"></span>
+<span class="text-text-muted">STEAM WEB API:</span>
+<span class="text-emerald-bull font-bold">99.99%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-cyan-glow animate-pulse"></span>
+<span class="text-cyan-glow font-bold uppercase tracking-wider">CROSS-MARKET WEBSOCKET ACTIVE</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN TERMINAL CONTENT -->
+<main class="pt-[110px] pb-16 px-4 md:px-6 max-w-[1680px] mx-auto flex flex-col gap-6">
+<!-- TOP SECTION: TICKER TAPE & MACRO STATS -->
+<section class="flex flex-col gap-4 mt-3">
+<!-- Fast-Switch Pill Ticker Tape -->
+<div class="flex items-center justify-between gap-4 overflow-x-auto custom-scroll pb-1">
+<div class="flex items-center gap-2.5 shrink-0">
+<!-- Active Pill -->
+<button class="flex items-center gap-2.5 px-3.5 py-2 bg-crimson-accent/20 border border-crimson-accent rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.25)] text-left">
+<span class="w-2 h-2 rounded-full bg-crimson-accent animate-ping"></span>
+<span class="font-display text-xs font-bold text-white">★ Butterfly Knife | Doppler P4</span>
+<span class="font-mono text-xs font-bold text-white">$3,150.00</span>
+<span class="font-mono text-[11px] font-bold text-emerald-bull bg-emerald-500/10 px-1.5 py-0.5 rounded">+4.8%</span>
+</button>
+<!-- Inactive Pill 1 -->
+<button class="flex items-center gap-2.5 px-3.5 py-2 bg-panel-card hover:bg-panel-hover border border-border-dark rounded-lg text-left transition-all">
+<span class="font-display text-xs font-medium text-text-secondary">PA Manifold Paradox</span>
+<span class="font-mono text-xs font-semibold text-white">$118.50</span>
+<span class="font-mono text-[11px] font-bold text-emerald-bull bg-emerald-500/10 px-1.5 py-0.5 rounded">+12.4%</span>
+</button>
+<!-- Inactive Pill 2 -->
+<button class="flex items-center gap-2.5 px-3.5 py-2 bg-panel-card hover:bg-panel-hover border border-border-dark rounded-lg text-left transition-all">
+<span class="font-display text-xs font-medium text-text-secondary">AK-47 | Case Hardened T2</span>
+<span class="font-mono text-xs font-semibold text-white">$420.00</span>
+<span class="font-mono text-[11px] font-bold text-crimson-accent bg-crimson-accent/10 px-1.5 py-0.5 rounded">-1.2%</span>
+</button>
+<!-- Inactive Pill 3 -->
+<button class="flex items-center gap-2.5 px-3.5 py-2 bg-panel-card hover:bg-panel-hover border border-border-dark rounded-lg text-left transition-all">
+<span class="font-display text-xs font-medium text-text-secondary">AWP | Dragon Lore FN</span>
+<span class="font-mono text-xs font-semibold text-white">$5,200.00</span>
+<span class="font-mono text-[11px] font-bold text-emerald-bull bg-emerald-500/10 px-1.5 py-0.5 rounded">+0.6%</span>
+</button>
+<!-- Inactive Pill 4 -->
+<button class="hidden lg:flex items-center gap-2.5 px-3.5 py-2 bg-panel-card hover:bg-panel-hover border border-border-dark rounded-lg text-left transition-all">
+<span class="font-display text-xs font-medium text-text-secondary">M4A4 | Howl FT</span>
+<span class="font-mono text-xs font-semibold text-white">$3,850.00</span>
+<span class="font-mono text-[11px] font-bold text-emerald-bull bg-emerald-500/10 px-1.5 py-0.5 rounded">+8.2%</span>
+</button>
+</div>
+<button class="shrink-0 flex items-center gap-2 px-3.5 py-2 bg-panel-card hover:bg-panel-hover border border-border-dark rounded-lg font-mono text-xs text-text-secondary hover:text-white transition-all shadow-sm">
+<i class="w-4 h-4 text-amber-gold" data-lucide="bell-plus"></i>
+<span>Add Signal Watcher</span>
+</button>
+</div>
+<!-- Macro Stats Telemetry Bar -->
+<div class="bg-panel-bg border border-border-dark rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-lg">
+<div class="flex flex-wrap items-center gap-6 lg:gap-10">
+<!-- 24h Vol -->
+<div class="flex flex-col">
+<span class="font-mono text-[10px] uppercase tracking-wider text-text-muted">24H Aggregate Volume</span>
+<div class="flex items-baseline gap-1.5">
+<span class="font-mono text-lg font-bold text-white">$1,842,900.40</span>
+<span class="font-mono text-[10px] font-bold text-amber-gold">USD</span>
+</div>
+</div>
+<div class="h-8 w-px bg-border-dark hidden md:block"></div>
+<!-- Spread Index -->
+<div class="flex flex-col">
+<span class="font-mono text-[10px] uppercase tracking-wider text-text-muted">Cross-Exchange Spread Index</span>
+<div class="flex items-baseline gap-1.5">
+<span class="font-mono text-lg font-bold text-cyan-glow">+11.8%</span>
+<span class="font-mono text-[10px] text-text-secondary">Weighted Alpha</span>
+</div>
+</div>
+<div class="h-8 w-px bg-border-dark hidden md:block"></div>
+<!-- Monitored Pools -->
+<div class="flex flex-col">
+<span class="font-mono text-[10px] uppercase tracking-wider text-text-muted">Monitored Exchanges</span>
+<div class="flex items-center gap-2">
+<span class="font-mono text-lg font-bold text-white">6</span>
+<span class="font-mono text-[11px] text-text-muted uppercase">Pools Active (BUFF, DMARKET, SKINPORT, STEAM, CSFLOAT, LOOTORA)</span>
+</div>
+</div>
+</div>
+<!-- Latency Pill -->
+<div class="flex items-center gap-3 bg-[#0c0f17] border border-border-dark px-3 py-1.5 rounded-lg text-xs font-mono">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-bull animate-pulse"></span>
+<span class="text-text-muted">WEBSOCKET PING:</span>
+<span class="text-emerald-bull font-bold">9ms</span>
+</div>
+<span class="text-border-dark">•</span>
+<span class="text-cyan-glow font-semibold">0.00% PACKET LOSS</span>
+</div>
+</div>
+</section>
+<!-- SECTION 2: CANDLESTICK CHART & ORDER BOOK (MASTER-DETAIL) -->
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+<!-- LEFT / MAIN: CANDLESTICK CANVAS & RARITY MATRIX (8 COLS) -->
+<div class="xl:col-span-8 flex flex-col gap-6">
+<div class="bg-panel-bg border border-border-dark rounded-xl p-5 shadow-xl flex flex-col gap-4">
+<!-- Asset Header & Toolbar -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-border-dark/60">
+<!-- Asset Identity -->
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-lg bg-[#0f1422] border border-border-dark flex items-center justify-center text-crimson-accent shadow-[0_0_15px_rgba(244,63,94,0.2)]">
+<i class="w-6 h-6" data-lucide="sword"></i>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<h1 class="font-display font-bold text-lg md:text-xl text-white tracking-wide">★ Butterfly Knife | Doppler</h1>
+<span class="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-[10px] px-2 py-0.5 rounded font-bold">PHASE 4</span>
+<span class="bg-panel-hover border border-border-dark text-text-secondary font-mono text-[10px] px-1.5 py-0.5 rounded">#18 WORLD</span>
+</div>
+<div class="flex items-center gap-2 font-mono text-xs text-text-muted mt-0.5">
+<span>FLOAT: <strong class="text-cyan-glow">0.011248</strong></span>
+<span>•</span>
+<span>PATTERN TEMPLATE: <strong class="text-white">412</strong></span>
+<span>•</span>
+<span>EXTERIOR: FACTORY NEW</span>
+</div>
+</div>
+</div>
+<!-- Timeframe & Chart Style Selectors -->
+<div class="flex items-center gap-2">
+<div class="flex items-center bg-[#0d1017] border border-border-dark rounded-lg p-0.5 font-mono text-xs">
+<button class="px-2.5 py-1 text-text-muted hover:text-white rounded transition-colors">15M</button>
+<button class="px-2.5 py-1 text-text-muted hover:text-white rounded transition-colors">1H</button>
+<button class="px-2.5 py-1 bg-crimson-accent text-white font-bold rounded shadow-sm">4H</button>
+<button class="px-2.5 py-1 text-text-muted hover:text-white rounded transition-colors">1D</button>
+<button class="px-2.5 py-1 text-text-muted hover:text-white rounded transition-colors">1W</button>
+<button class="px-2.5 py-1 text-text-muted hover:text-white rounded transition-colors">ALL</button>
+</div>
+<div class="flex items-center bg-[#0d1017] border border-border-dark rounded-lg p-0.5">
+<button class="p-1.5 bg-panel-hover text-crimson-accent rounded" title="Candlesticks">
+<i class="w-4 h-4" data-lucide="candlestick-chart"></i>
+</button>
+<button class="p-1.5 text-text-muted hover:text-white rounded transition-colors" title="Market Depth">
+<i class="w-4 h-4" data-lucide="bar-chart-2"></i>
+</button>
+<button class="p-1.5 text-text-muted hover:text-white rounded transition-colors" title="Line View">
+<i class="w-4 h-4" data-lucide="activity"></i>
+</button>
+</div>
+</div>
+</div>
+<!-- Live Quotes Matrix -->
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-3 bg-[#0e111a] border border-border-dark/80 rounded-lg p-3 font-mono text-xs">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-text-muted font-bold">BID (BUY)</span>
+<span class="text-sm font-bold text-emerald-bull">$3,140.00</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-text-muted font-bold">ASK (SELL)</span>
+<span class="text-sm font-bold text-crimson-accent">$3,150.00</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-text-muted font-bold">24H HIGH</span>
+<span class="text-sm font-bold text-white">$3,220.00</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-text-muted font-bold">24H LOW</span>
+<span class="text-sm font-bold text-text-secondary">$2,980.00</span>
+</div>
+<div class="flex flex-col col-span-2 sm:col-span-1">
+<span class="text-[10px] uppercase text-text-muted font-bold">VOLATILITY (30D)</span>
+<span class="text-sm font-bold text-cyan-glow">3.4% <span class="text-[10px] font-normal text-text-muted">(Low)</span></span>
+</div>
+</div>
+<!-- SVG Candlestick & Volume Depth Chart Canvas -->
+<div class="relative w-full h-80 bg-[#0a0d14] border border-border-dark rounded-lg p-2 overflow-hidden">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20 p-4">
+<div class="w-full h-px bg-white/30"></div>
+<div class="w-full h-px bg-white/30"></div>
+<div class="w-full h-px bg-white/30"></div>
+<div class="w-full h-px bg-white/30"></div>
+<div class="w-full h-px bg-white/30"></div>
+</div>
+<!-- Price Axis Right -->
+<div class="absolute top-3 right-3 flex flex-col justify-between h-[80%] text-right font-mono text-[10px] text-text-muted pointer-events-none z-10">
+<span>$3,250.00</span>
+<span class="text-crimson-accent font-bold">$3,200.00</span>
+<span class="text-cyan-glow font-bold">$3,150.00</span>
+<span>$3,100.00</span>
+<span>$3,050.00</span>
+<span>$3,000.00</span>
+</div>
+<!-- SVG Graphic -->
+<div class="w-full h-full relative z-0">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 800 280">
+<!-- EMA 20 Line (Electric Cyan Accent) -->
+<path d="M 10,210 Q 70,195 130,205 T 250,170 T 370,150 T 490,130 T 610,115 T 730,95 L 780,90" fill="none" opacity="0.85" stroke="#06b6d4" stroke-dasharray="2,2" stroke-width="2"></path>
+<!-- EMA 50 Line (Tactical Amber) -->
+<path d="M 10,230 Q 80,225 150,220 T 300,190 T 450,175 T 600,145 T 750,120 L 780,115" fill="none" opacity="0.75" stroke="#f59e0b" stroke-width="1.5"></path>
+<!-- Candlesticks (Emerald Bull #10b981 & Crimson Bear #f43f5e) -->
+<!-- Candle 1 (Bull) -->
+<line stroke="#10b981" stroke-width="1.5" x1="40" x2="40" y1="210" y2="250"></line>
+<rect fill="#10b981" height="22" rx="1" width="12" x="34" y="220"></rect>
+<!-- Candle 2 (Bear) -->
+<line stroke="#f43f5e" stroke-width="1.5" x1="80" x2="80" y1="195" y2="240"></line>
+<rect fill="#f43f5e" height="26" rx="1" width="12" x="74" y="205"></rect>
+<!-- Candle 3 (Bull) -->
+<line stroke="#10b981" stroke-width="1.5" x1="120" x2="120" y1="180" y2="225"></line>
+<rect fill="#10b981" height="25" rx="1" width="12" x="114" y="190"></rect>
+<!-- Candle 4 (Bull) -->
+<line stroke="#10b981" stroke-width="1.5" x1="160" x2="160" y1="160" y2="205"></line>
+<rect fill="#10b981" height="30" rx="1" width="12" x="154" y="170"></rect>
+<!-- Candle 5 (Bear Pullback) -->
+<line stroke="#f43f5e" stroke-width="1.5" x1="200" x2="200" y1="165" y2="210"></line>
+<rect fill="#f43f5e" height="18" rx="1" width="12" x="194" y="175"></rect>
+<!-- Candle 6 (Bull Surge) -->
+<line stroke="#10b981" stroke-width="1.5" x1="240" x2="240" y1="140" y2="190"></line>
+<rect fill="#10b981" height="32" rx="1" width="12" x="234" y="150"></rect>
+<!-- Candle 7 (Consolidation) -->
+<line stroke="#94a3b8" stroke-width="1.5" x1="280" x2="280" y1="135" y2="175"></line>
+<rect fill="#94a3b8" height="6" rx="1" width="12" x="274" y="152"></rect>
+<!-- Candle 8 (Bull Breakout) -->
+<line stroke="#10b981" stroke-width="1.5" x1="320" x2="320" y1="120" y2="165"></line>
+<rect fill="#10b981" height="30" rx="1" width="12" x="314" y="130"></rect>
+<!-- Candle 9 (Bear Flush) -->
+<line stroke="#f43f5e" stroke-width="1.5" x1="360" x2="360" y1="125" y2="175"></line>
+<rect fill="#f43f5e" height="34" rx="1" width="12" x="354" y="135"></rect>
+<!-- Candle 10 (Hammer Reversal) -->
+<line stroke="#10b981" stroke-width="1.5" x1="400" x2="400" y1="130" y2="195"></line>
+<rect fill="#10b981" height="18" rx="1" width="12" x="394" y="140"></rect>
+<!-- Candle 11 (Bull) -->
+<line stroke="#10b981" stroke-width="1.5" x1="440" x2="440" y1="110" y2="155"></line>
+<rect fill="#10b981" height="28" rx="1" width="12" x="434" y="120"></rect>
+<!-- Candle 12 (Bear Dip) -->
+<line stroke="#f43f5e" stroke-width="1.5" x1="480" x2="480" y1="115" y2="160"></line>
+<rect fill="#f43f5e" height="20" rx="1" width="12" x="474" y="125"></rect>
+<!-- Candle 13 (Strong Bull) -->
+<line stroke="#10b981" stroke-width="1.5" x1="520" x2="520" y1="90" y2="140"></line>
+<rect fill="#10b981" height="35" rx="1" width="12" x="514" y="100"></rect>
+<!-- Candle 14 (Bull) -->
+<line stroke="#10b981" stroke-width="1.5" x1="560" x2="560" y1="85" y2="130"></line>
+<rect fill="#10b981" height="26" rx="1" width="12" x="554" y="92"></rect>
+<!-- Candle 15 (Bear) -->
+<line stroke="#f43f5e" stroke-width="1.5" x1="600" x2="600" y1="90" y2="135"></line>
+<rect fill="#f43f5e" height="18" rx="1" width="12" x="594" y="98"></rect>
+<!-- Candle 16 (Bull Continuation) -->
+<line stroke="#10b981" stroke-width="1.5" x1="640" x2="640" y1="75" y2="115"></line>
+<rect fill="#10b981" height="28" rx="1" width="12" x="634" y="82"></rect>
+<!-- Candle 17 (Bull Target Run) -->
+<line stroke="#10b981" stroke-width="1.5" x1="680" x2="680" y1="65" y2="105"></line>
+<rect fill="#10b981" height="24" rx="1" width="12" x="674" y="72"></rect>
+<!-- Candle 18 (Current Active Live Candle) -->
+<line stroke="#06b6d4" stroke-width="2" x1="720" x2="720" y1="58" y2="98"></line>
+<rect class="animate-pulse" fill="#06b6d4" height="26" rx="1" width="14" x="713" y="66"></rect>
+<!-- Dashed Target Tag Line -->
+<line stroke="#f43f5e" stroke-dasharray="4,4" stroke-width="1" x1="0" x2="780" y1="66" y2="66"></line>
+<rect fill="#f43f5e" height="20" rx="3" width="62" x="728" y="56"></rect>
+<text fill="#ffffff" font-family="JetBrains Mono" font-size="10" font-weight="bold" x="734" y="70">$3,150.00</text>
+<!-- Bottom Histogram: Trade Liquidity & Volume -->
+<rect fill="#10b981" height="30" opacity="0.35" width="10" x="35" y="240"></rect>
+<rect fill="#f43f5e" height="35" opacity="0.35" width="10" x="75" y="235"></rect>
+<rect fill="#10b981" height="25" opacity="0.35" width="10" x="115" y="245"></rect>
+<rect fill="#10b981" height="45" opacity="0.45" width="10" x="155" y="225"></rect>
+<rect fill="#f43f5e" height="20" opacity="0.35" width="10" x="195" y="250"></rect>
+<rect fill="#10b981" height="50" opacity="0.5" width="10" x="235" y="220"></rect>
+<rect fill="#94a3b8" height="15" opacity="0.25" width="10" x="275" y="255"></rect>
+<rect fill="#10b981" height="55" opacity="0.55" width="10" x="315" y="215"></rect>
+<rect fill="#f43f5e" height="45" opacity="0.45" width="10" x="355" y="225"></rect>
+<rect fill="#10b981" height="30" opacity="0.35" width="10" x="395" y="240"></rect>
+<rect fill="#10b981" height="60" opacity="0.6" width="10" x="435" y="210"></rect>
+<rect fill="#f43f5e" height="35" opacity="0.4" width="10" x="475" y="235"></rect>
+<rect fill="#10b981" height="70" opacity="0.65" width="10" x="515" y="200"></rect>
+<rect fill="#10b981" height="50" opacity="0.5" width="10" x="555" y="220"></rect>
+<rect fill="#f43f5e" height="25" opacity="0.3" width="10" x="595" y="245"></rect>
+<rect fill="#10b981" height="60" opacity="0.65" width="10" x="635" y="210"></rect>
+<rect fill="#10b981" height="75" opacity="0.75" width="10" x="675" y="195"></rect>
+<rect fill="#06b6d4" height="85" opacity="0.85" width="10" x="715" y="185"></rect>
+</svg>
+</div>
+<!-- Time Axis Labels -->
+<div class="flex items-center justify-between font-mono text-[10px] text-text-muted pt-2 border-t border-border-dark/60">
+<span>08:00 UTC</span>
+<span>12:00 UTC</span>
+<span>16:00 UTC</span>
+<span>20:00 UTC</span>
+<span>00:00 UTC</span>
+<span>04:00 UTC</span>
+<span class="text-amber-gold font-bold">LIVE NOW</span>
+</div>
+</div>
+<!-- Doppler Specification Matrix & Rarity Multipliers -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] uppercase text-text-muted font-bold tracking-wider">Doppler Specification Matrix &amp; Rarity Multipliers</span>
+<span class="font-mono text-[10px] text-amber-gold">GAMMA REFERENCE V2.4</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+<!-- Phase 1 -->
+<div class="bg-[#0e111a] border border-border-dark p-2 rounded-lg flex flex-col gap-0.5">
+<span class="font-mono text-[10px] text-text-muted">Phase 1</span>
+<span class="font-mono text-xs font-bold text-white">$2,850.00</span>
+<span class="font-mono text-[9px] text-text-muted">1.00x Base</span>
+</div>
+<!-- Phase 2 -->
+<div class="bg-[#0e111a] border border-border-dark p-2 rounded-lg flex flex-col gap-0.5">
+<span class="font-mono text-[10px] text-text-muted">Phase 2</span>
+<span class="font-mono text-xs font-bold text-white">$3,320.00</span>
+<span class="font-mono text-[9px] text-amber-gold">+16% Pink Band</span>
+</div>
+<!-- Phase 3 -->
+<div class="bg-[#0e111a] border border-border-dark p-2 rounded-lg flex flex-col gap-0.5">
+<span class="font-mono text-[10px] text-text-muted">Phase 3</span>
+<span class="font-mono text-xs font-bold text-white">$2,790.00</span>
+<span class="font-mono text-[9px] text-text-muted">-2% High Green</span>
+</div>
+<!-- Phase 4 (SELECTED ACTIVE) -->
+<div class="bg-crimson-accent/15 border-2 border-crimson-accent p-2 rounded-lg flex flex-col gap-0.5 shadow-[0_0_12px_rgba(244,63,94,0.3)] relative">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] text-crimson-accent font-bold">Phase 4</span>
+<span class="w-1.5 h-1.5 rounded-full bg-crimson-accent animate-ping"></span>
+</div>
+<span class="font-mono text-xs font-bold text-white">$3,150.00</span>
+<span class="font-mono text-[9px] text-cyan-glow font-semibold">+10.5% Deep Cyan</span>
+</div>
+<!-- Ruby -->
+<div class="bg-[#0e111a] border border-border-dark p-2 rounded-lg flex flex-col gap-0.5">
+<span class="font-mono text-[10px] text-crimson-accent font-semibold">Ruby</span>
+<span class="font-mono text-xs font-bold text-white">$9,400.00</span>
+<span class="font-mono text-[9px] text-crimson-accent">3.29x Gem Rarity</span>
+</div>
+<!-- Sapphire -->
+<div class="bg-[#0e111a] border border-border-dark p-2 rounded-lg flex flex-col gap-0.5">
+<span class="font-mono text-[10px] text-cyan-glow font-semibold">Sapphire</span>
+<span class="font-mono text-xs font-bold text-white">$12,800.00</span>
+<span class="font-mono text-[9px] text-cyan-glow">4.49x Tier 0 Gem</span>
+</div>
+<!-- Black Pearl -->
+<div class="bg-[#0e111a] border border-border-dark p-2 rounded-lg flex flex-col gap-0.5">
+<span class="font-mono text-[10px] text-purple-400 font-semibold">Black Pearl</span>
+<span class="font-mono text-xs font-bold text-white">$6,100.00</span>
+<span class="font-mono text-[9px] text-purple-400">2.14x Ultra Rare</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT: LIVE ORDER BOOK & DEPTH TERMINAL (4 COLS) -->
+<div class="xl:col-span-4 flex flex-col gap-6">
+<div class="bg-panel-bg border border-border-dark rounded-xl p-5 shadow-xl flex flex-col gap-4">
+<!-- Order Book Title & Spread Health -->
+<div class="flex items-center justify-between pb-2 border-b border-border-dark/60">
+<div class="flex items-center gap-2">
+<i class="w-5 h-5 text-crimson-accent" data-lucide="layers"></i>
+<h2 class="font-display font-bold text-base text-white">Order Book</h2>
+</div>
+<span class="font-mono text-[10px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-bull px-2 py-0.5 rounded font-bold uppercase">TIGHT SPREAD</span>
+</div>
+<!-- Table Header Grid -->
+<div class="grid grid-cols-3 font-mono text-[10px] uppercase text-text-muted tracking-wider pb-1">
+<span>Price (USD)</span>
+<span class="text-center">Depth / Source</span>
+<span class="text-right">Total ($)</span>
+</div>
+<!-- ASKS (Sell Orders) -->
+<div class="flex flex-col gap-1 font-mono text-xs">
+<div class="relative flex items-center justify-between py-1.5 px-2 rounded hover:bg-panel-hover overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-crimson-accent/10 w-[78%] pointer-events-none"></div>
+<span class="text-crimson-accent font-bold z-10">$3,190.00</span>
+<span class="text-text-muted text-[11px] z-10">3x Steam Market</span>
+<span class="text-text-secondary z-10">$9,570.00</span>
+</div>
+<div class="relative flex items-center justify-between py-1.5 px-2 rounded hover:bg-panel-hover overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-crimson-accent/15 w-[52%] pointer-events-none"></div>
+<span class="text-crimson-accent font-bold z-10">$3,175.00</span>
+<span class="text-text-muted text-[11px] z-10">1x Skinport</span>
+<span class="text-text-secondary z-10">$3,175.00</span>
+</div>
+<div class="relative flex items-center justify-between py-1.5 px-2 rounded hover:bg-panel-hover overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-crimson-accent/20 w-[42%] pointer-events-none"></div>
+<span class="text-crimson-accent font-bold z-10">$3,158.00</span>
+<span class="text-text-muted text-[11px] z-10">2x Buff163</span>
+<span class="text-text-secondary z-10">$6,316.00</span>
+</div>
+<!-- Ask 1 (Best Ask / Lowest) -->
+<div class="relative flex items-center justify-between py-2 px-2.5 rounded bg-crimson-accent/20 border border-crimson-accent/40 shadow-[0_0_10px_rgba(244,63,94,0.2)] overflow-hidden">
+<div class="absolute inset-y-0 right-0 bg-crimson-accent/30 w-[24%] pointer-events-none"></div>
+<span class="text-crimson-accent font-bold text-sm z-10 flex items-center gap-1">
+                $3,150.00
+                <i class="w-3.5 h-3.5" data-lucide="arrow-down-right"></i>
+</span>
+<span class="text-white font-semibold text-[11px] z-10">1x Lootora Floor</span>
+<span class="text-white font-bold z-10">$3,150.00</span>
+</div>
+</div>
+<!-- SPREAD STRIP -->
+<div class="bg-[#0a0d14] border border-border-dark py-2.5 px-3 rounded-lg flex items-center justify-between font-mono text-xs">
+<div class="flex items-center gap-1.5">
+<span class="text-text-muted text-[11px]">NET SPREAD:</span>
+<span class="text-amber-gold font-bold">$10.00 (0.32%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-text-muted text-[11px]">MARKET DEPTH:</span>
+<span class="text-cyan-glow font-bold">$34,891</span>
+</div>
+</div>
+<!-- BIDS (Buy Orders) -->
+<div class="flex flex-col gap-1 font-mono text-xs">
+<!-- Bid 1 (Best Bid / Highest) -->
+<div class="relative flex items-center justify-between py-2 px-2.5 rounded bg-emerald-500/15 border border-emerald-500/40 overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-emerald-500/20 w-[35%] pointer-events-none"></div>
+<span class="text-emerald-bull font-bold text-sm z-10 flex items-center gap-1">
+                $3,140.00
+                <i class="w-3.5 h-3.5" data-lucide="arrow-up-right"></i>
+</span>
+<span class="text-white font-semibold text-[11px] z-10">2x Lootora Bot</span>
+<span class="text-white font-bold z-10">$6,280.00</span>
+</div>
+<div class="relative flex items-center justify-between py-1.5 px-2 rounded hover:bg-panel-hover overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-emerald-500/15 w-[50%] pointer-events-none"></div>
+<span class="text-emerald-bull font-bold z-10">$3,125.00</span>
+<span class="text-text-muted text-[11px] z-10">1x DMarket</span>
+<span class="text-text-secondary z-10">$3,125.00</span>
+</div>
+<div class="relative flex items-center justify-between py-1.5 px-2 rounded hover:bg-panel-hover overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-emerald-500/15 w-[70%] pointer-events-none"></div>
+<span class="text-emerald-bull font-bold z-10">$3,110.00</span>
+<span class="text-text-muted text-[11px] z-10">4x CSFloat</span>
+<span class="text-text-secondary z-10">$12,440.00</span>
+</div>
+<div class="relative flex items-center justify-between py-1.5 px-2 rounded hover:bg-panel-hover overflow-hidden">
+<div class="absolute inset-y-0 left-0 bg-emerald-500/10 w-[20%] pointer-events-none"></div>
+<span class="text-emerald-bull font-bold z-10">$3,080.00</span>
+<span class="text-text-muted text-[11px] z-10">1x Private Escrow</span>
+<span class="text-text-secondary z-10">$3,080.00</span>
+</div>
+</div>
+<!-- Trade Execution Buttons -->
+<div class="flex flex-col gap-2 pt-2 border-t border-border-dark/60">
+<button class="w-full py-2.5 bg-crimson-accent hover:bg-crimson-hover text-white font-display font-bold text-xs uppercase tracking-wider rounded-lg shadow-[0_0_16px_rgba(244,63,94,0.35)] flex items-center justify-center gap-2 transition-all">
+<i class="w-4 h-4" data-lucide="zap"></i>
+<span>Snag Lowest Ask ($3,150.00)</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 bg-panel-card hover:bg-panel-hover border border-border-dark text-text-primary rounded-lg font-mono text-xs uppercase flex items-center justify-center gap-1.5 transition-colors">
+<i class="w-3.5 h-3.5 text-amber-gold" data-lucide="shopping-bag"></i>
+<span>Place Limit Bid</span>
+</button>
+<button class="py-2 bg-panel-card hover:bg-panel-hover border border-border-dark text-text-primary rounded-lg font-mono text-xs uppercase flex items-center justify-center gap-1.5 transition-colors">
+<i class="w-3.5 h-3.5 text-cyan-glow" data-lucide="refresh-cw"></i>
+<span>Counter Escrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: CROSS-MARKET ARBITRAGE TELEMETRY TABLE -->
+<section class="flex flex-col gap-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-panel-card border border-border-dark flex items-center justify-center text-amber-gold shadow-md">
+<i class="w-5 h-5" data-lucide="arrow-left-right"></i>
+</div>
+<div>
+<h3 class="font-display font-bold text-lg text-white">Cross-Market Arbitrage Telemetry</h3>
+<p class="text-xs text-text-muted">Real-time discrepancy detection computed post-Valve 15% marketplace withholding fee &amp; cross-currency forex conversions.</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-mono text-xs text-text-muted">POLLING INTERVAL: <strong class="text-amber-gold">300ms</strong></span>
+<button class="px-3 py-1.5 bg-panel-card hover:bg-panel-hover border border-border-dark text-white rounded-lg font-mono text-xs uppercase flex items-center gap-2 transition-colors">
+<i class="w-3.5 h-3.5 text-crimson-accent" data-lucide="filter"></i>
+<span>Spread &gt; 4% Only</span>
+</button>
+</div>
+</div>
+<!-- Financial Arbitrage Data Grid -->
+<div class="w-full bg-panel-bg border border-border-dark rounded-xl overflow-hidden shadow-xl">
+<div class="w-full overflow-x-auto custom-scroll">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-[#0c0f17] border-b border-border-dark font-mono text-[10px] uppercase text-text-muted tracking-wider">
+<th class="py-3 px-4">Item Name &amp; Quality</th>
+<th class="py-3 px-3">Lootora Floor</th>
+<th class="py-3 px-3">Steam Community (Net)</th>
+<th class="py-3 px-3">Secondary Exchange</th>
+<th class="py-3 px-3">Net Spread</th>
+<th class="py-3 px-3">Est. Flip Yield</th>
+<th class="py-3 px-4 text-right">Autonomous Bot Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-dark/60 font-mono">
+<!-- Row 1: Butterfly Knife Doppler -->
+<tr class="hover:bg-panel-hover/60 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-[#0e121c] border border-border-dark flex items-center justify-center shrink-0 text-crimson-accent">
+<i class="w-5 h-5" data-lucide="crosshair"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-sm text-white">★ Butterfly Knife | Doppler</span>
+<span class="text-[10px] text-text-muted">Phase 4 • Float 0.011 • Factory New</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold text-sm">$3,150.00</span>
+<span class="text-[10px] text-cyan-glow">Instant Escrow</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-text-muted line-through text-[10px]">$3,580.00</span>
+<span class="text-white font-medium">$3,043.00 <span class="text-text-muted text-[10px]">net</span></span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold">$3,280.00</span>
+<span class="text-[10px] text-amber-gold">Buff163 (¥23,616)</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 text-emerald-bull font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px]">
+<i class="w-3.5 h-3.5" data-lucide="trending-up"></i>
+                    +$130.00 (+4.1%)
+                  </span>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-emerald-bull font-bold">+$114.40</span>
+<span class="text-[10px] text-text-muted">After fees</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3.5 py-1.5 bg-crimson-accent hover:bg-crimson-hover text-white rounded-lg font-display font-bold text-[11px] uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 shadow-sm">
+<i class="w-3.5 h-3.5" data-lucide="bot"></i>
+<span>Instant Arb Bot</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Manifold Paradox -->
+<tr class="hover:bg-panel-hover/60 transition-colors bg-cyan-950/10">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-[#0e121c] border border-border-dark flex items-center justify-center shrink-0 text-cyan-glow">
+<i class="w-5 h-5" data-lucide="sparkles"></i>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-display font-bold text-sm text-white">Manifold Paradox</span>
+<span class="bg-crimson-accent text-white font-mono text-[9px] px-1.5 py-0.2 rounded font-bold uppercase animate-pulse">HOT ALPHA</span>
+</div>
+<span class="text-[10px] text-text-muted">Exalted Style 3 • Kills: 142 • Dota 2 Arcana</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold text-sm">$118.50</span>
+<span class="text-[10px] text-cyan-glow">Direct Peer</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-text-muted line-through text-[10px]">$148.00</span>
+<span class="text-white font-medium">$125.80 <span class="text-text-muted text-[10px]">net</span></span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold">$132.00</span>
+<span class="text-[10px] text-blue-400">Skinport (EU SEPA)</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 text-emerald-bull font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px]">
+<i class="w-3.5 h-3.5" data-lucide="trending-up"></i>
+                    +$13.50 (+11.4%)
+                  </span>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-emerald-bull font-bold">+$12.15</span>
+<span class="text-[10px] text-text-muted">After fees</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3.5 py-1.5 bg-crimson-accent hover:bg-crimson-hover text-white rounded-lg font-display font-bold text-[11px] uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 shadow-sm">
+<i class="w-3.5 h-3.5" data-lucide="bot"></i>
+<span>Instant Arb Bot</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: AK-47 Fire Serpent -->
+<tr class="hover:bg-panel-hover/60 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-[#0e121c] border border-border-dark flex items-center justify-center shrink-0 text-amber-gold">
+<i class="w-5 h-5" data-lucide="flame"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-sm text-white">AK-47 | Fire Serpent</span>
+<span class="text-[10px] text-text-muted">Field-Tested • Float 0.18 • Crown Foil On Wood</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold text-sm">$740.00</span>
+<span class="text-[10px] text-cyan-glow">Instant Escrow</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-text-muted line-through text-[10px]">$890.00</span>
+<span class="text-white font-medium">$756.50 <span class="text-text-muted text-[10px]">net</span></span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold">$785.00</span>
+<span class="text-[10px] text-text-muted">DMarket P2P</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 text-emerald-bull font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px]">
+<i class="w-3.5 h-3.5" data-lucide="trending-up"></i>
+                    +$45.00 (+6.1%)
+                  </span>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-emerald-bull font-bold">+$38.25</span>
+<span class="text-[10px] text-text-muted">After fees</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3.5 py-1.5 bg-crimson-accent hover:bg-crimson-hover text-white rounded-lg font-display font-bold text-[11px] uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 shadow-sm">
+<i class="w-3.5 h-3.5" data-lucide="bot"></i>
+<span>Instant Arb Bot</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: AWP Fade -->
+<tr class="hover:bg-panel-hover/60 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-[#0e121c] border border-border-dark flex items-center justify-center shrink-0 text-cyan-glow">
+<i class="w-5 h-5" data-lucide="target"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-sm text-white">AWP | Fade</span>
+<span class="text-[10px] text-text-muted">Factory New • 99.4% Fade Percentage • Float 0.008</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold text-sm">$1,420.00</span>
+<span class="text-[10px] text-cyan-glow">Instant Escrow</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-text-muted line-through text-[10px]">$1,650.00</span>
+<span class="text-white font-medium">$1,402.50 <span class="text-text-muted text-[10px]">net</span></span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-white font-bold">$1,495.00</span>
+<span class="text-[10px] text-cyan-glow">CSFloat Direct</span>
+</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 text-emerald-bull font-bold bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded text-[11px]">
+<i class="w-3.5 h-3.5" data-lucide="trending-up"></i>
+                    +$75.00 (+5.3%)
+                  </span>
+</td>
+<td class="py-3.5 px-3">
+<div class="flex flex-col">
+<span class="text-emerald-bull font-bold">+$64.10</span>
+<span class="text-[10px] text-text-muted">After fees</span>
+</div>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3.5 py-1.5 bg-crimson-accent hover:bg-crimson-hover text-white rounded-lg font-display font-bold text-[11px] uppercase tracking-wider transition-colors inline-flex items-center gap-1.5 shadow-sm">
+<i class="w-3.5 h-3.5" data-lucide="bot"></i>
+<span>Instant Arb Bot</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- SECTION 4: WEBHOOKS & ESCROW NODE & ALPHA SNIFFER DEPLOY -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Card 1: Active Webhook Alerts -->
+<div class="bg-panel-bg border border-border-dark rounded-xl p-5 shadow-xl flex flex-col justify-between gap-4">
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between pb-2 border-b border-border-dark/60">
+<div class="flex items-center gap-2">
+<i class="w-5 h-5 text-cyan-glow" data-lucide="radio"></i>
+<h4 class="font-display font-bold text-sm text-white">Live Webhooks</h4>
+</div>
+<span class="font-mono text-[10px] text-amber-gold font-bold">2 ARMED</span>
+</div>
+<div class="flex flex-col gap-2.5">
+<div class="bg-[#0e111a] border border-border-dark/80 p-3 rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-display font-semibold text-xs text-white">Manifold Paradox Dips &lt; $112.00</span>
+<span class="font-mono text-[10px] text-text-muted">Channel: Discord Bot #esports-alpha</span>
+</div>
+<span class="font-mono text-[9px] bg-emerald-500/20 text-emerald-bull border border-emerald-500/30 px-2 py-0.5 rounded font-bold uppercase">Active</span>
+</div>
+<div class="bg-[#0e111a] border border-border-dark/80 p-3 rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-display font-semibold text-xs text-white">Doppler P4 Float &lt; 0.015 &lt; $3,100</span>
+<span class="font-mono text-[10px] text-text-muted">Target: Auto-snag commit ($4k)</span>
+</div>
+<span class="font-mono text-[9px] bg-crimson-accent/20 text-crimson-accent border border-crimson-accent/30 px-2 py-0.5 rounded font-bold uppercase">Armed</span>
+</div>
+</div>
+</div>
+<button class="w-full py-2 bg-panel-card hover:bg-panel-hover border border-border-dark text-white rounded-lg font-mono text-xs uppercase flex items-center justify-center gap-2 transition-colors">
+<i class="w-4 h-4" data-lucide="sliders"></i>
+<span>Configure Webhook Dispatch</span>
+</button>
+</div>
+<!-- Card 2: Liquidity Pool & Steam Escrow Node -->
+<div class="bg-panel-bg border border-border-dark rounded-xl p-5 shadow-xl flex flex-col justify-between gap-4">
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between pb-2 border-b border-border-dark/60">
+<div class="flex items-center gap-2">
+<i class="w-5 h-5 text-crimson-accent" data-lucide="network"></i>
+<h4 class="font-display font-bold text-sm text-white">Steam Escrow Node</h4>
+</div>
+<span class="font-mono text-[10px] text-emerald-bull font-bold">HEALTH: OPTIMAL</span>
+</div>
+<div class="flex flex-col gap-2.5 font-mono text-xs">
+<div>
+<div class="flex items-center justify-between text-[11px] mb-1">
+<span class="text-text-muted">Valve API Token Pool</span>
+<span class="text-white font-bold">128/128 Nodes</span>
+</div>
+<div class="w-full h-1.5 bg-[#0b0e15] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-bull w-full"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between text-[11px] mb-1">
+<span class="text-text-muted">2FA Instant Confirmation Speed</span>
+<span class="text-amber-gold font-bold">1.4s Median</span>
+</div>
+<div class="w-full h-1.5 bg-[#0b0e15] rounded-full overflow-hidden">
+<div class="h-full bg-amber-gold w-[94%]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-[11px] pt-1">
+<span class="text-text-muted">Escrow Lock Risk Mitigation</span>
+<span class="text-emerald-bull font-bold">0 Active Holds</span>
+</div>
+</div>
+</div>
+<div class="p-2.5 bg-[#0e111a] border border-border-dark/80 rounded-lg flex items-center gap-2 text-text-muted font-mono text-[10px]">
+<i class="w-4 h-4 text-emerald-bull shrink-0" data-lucide="badge-check"></i>
+<span>Valve Trade Token Sync verified via RSA-4096 handshake</span>
+</div>
+</div>
+<!-- Card 3: Deploy Alpha Sniffer Bot -->
+<div class="bg-gradient-to-br from-panel-bg via-panel-card to-[#121622] border border-border-dark rounded-xl p-5 shadow-xl flex flex-col justify-between gap-4">
+<div class="flex flex-col gap-2">
+<span class="font-mono text-[10px] text-amber-gold tracking-widest uppercase font-bold">AUTOMATED FLIP ENGINE</span>
+<h4 class="font-display font-bold text-base text-white">Deploy Alpha Sniffer Bot</h4>
+<p class="text-xs text-text-muted leading-relaxed">Target arbitrary spread discrepancies across Buff, Steam, and Lootora with sub-second automated purchase authorization.</p>
+</div>
+<button class="w-full py-2.5 bg-crimson-accent hover:bg-crimson-hover text-white font-display font-bold text-xs uppercase tracking-wider rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.35)] flex items-center justify-center gap-2 transition-all">
+<i class="w-4 h-4" data-lucide="plus-circle"></i>
+<span>Create New Arbitrage Trigger</span>
+</button>
+</div>
+</section>
+</main>
+<!-- FOOTER -->
+<footer class="w-full bg-[#07090e] border-t border-border-dark py-10">
+<div class="max-w-[1680px] mx-auto px-4 md:px-6 flex flex-col gap-6">
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-border-dark/50">
+<div class="flex flex-wrap items-center gap-6 font-mono text-xs">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-emerald-bull" data-lucide="shield-check"></i>
+<span class="text-white font-semibold">Escrow Vault Active</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-bull"></span>
+<span class="text-text-secondary">99.99% Synced</span>
+</div>
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-text-muted" data-lucide="activity"></i>
+<span class="text-text-muted">Latency:</span>
+<span class="text-emerald-bull font-bold">12ms</span>
+</div>
+</div>
+<span class="font-mono text-[11px] text-text-muted uppercase tracking-wider bg-panel-card border border-border-dark px-3 py-1 rounded-md">
+          NODE ID: US-EAST-04A9
+        </span>
+</div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-muted">
+<p>© 2025 Lootora Intel Exchange. Steam® is a registered trademark of Valve Corporation. All rights reserved.</p>
+<div class="flex flex-wrap items-center gap-5 font-mono text-[11px]">
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Privacy Directive</a>
+<a class="hover:text-white transition-colors" href="#">Escrow Compliance</a>
+<a class="hover:text-white transition-colors" href="#">API Documentation</a>
+<a class="hover:text-white transition-colors" href="#">Network Status</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Initialize Lucide Icons -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+  </script>
+</body></html> 

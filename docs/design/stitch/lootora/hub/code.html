@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_standard" name="shell-type"/>
+<title>Lootora PRO - Game Hub &amp; Meta Intel</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#10131a",
+            "surface": "#10131a",
+            "surface-card": "#151821",
+            "surface-container-lowest": "#0b0e15",
+            "surface-container-low": "#151821",
+            "surface-container": "#191b24",
+            "surface-container-high": "#202433",
+            "surface-container-highest": "#282d3d",
+            "surface-bright": "#363d52",
+            "primary": "#f43f5e",
+            "primary-container": "#f43f5e",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#ffffff",
+            "secondary": "#c0c1ff",
+            "secondary-container": "#3131c0",
+            "tertiary": "#f59e0b",
+            "tertiary-container": "#ca8100",
+            "on-tertiary": "#1a0f00",
+            "status-live": "#ef4444",
+            "status-upcoming": "#06b6d4",
+            "status-success": "#10b981",
+            "on-surface": "#e1e2ec",
+            "on-surface-variant": "#94a3b8",
+            "text-primary": "#f8fafc",
+            "text-secondary": "#94a3b8",
+            "text-muted": "#64748b",
+            "border-subtle": "rgba(255, 255, 255, 0.08)",
+            "border-tactical": "rgba(245, 158, 11, 0.35)",
+            "border-dark": "#282d3d",
+            "glow-crimson": "rgba(244, 63, 94, 0.25)",
+            "glow-amber": "rgba(245, 158, 11, 0.25)"
+          },
+          fontFamily: {
+            sans: ["Space Grotesk", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"],
+            "headline-xl": ["Space Grotesk", "sans-serif"],
+            "headline-lg": ["Space Grotesk", "sans-serif"],
+            "headline-md": ["Space Grotesk", "sans-serif"],
+            "headline-sm": ["Space Grotesk", "sans-serif"],
+            "body-lg": ["Space Grotesk", "sans-serif"],
+            "body-md": ["Space Grotesk", "sans-serif"],
+            "body-sm": ["Space Grotesk", "sans-serif"],
+            "label-caps": ["Space Grotesk", "sans-serif"],
+            "label-badge": ["JetBrains Mono", "monospace"],
+            "data-mono-lg": ["JetBrains Mono", "monospace"],
+            "data-mono-md": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+    body {
+      background-color: #10131a;
+      color: #e1e2ec;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .tactical-border {
+      border: 1px solid #282d3d;
+    }
+    .tactical-border:hover {
+      border-color: #363d52;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-white">
+<!-- HEADER -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#10131a]/95 backdrop-blur-xl border-b border-[#282d3d] shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="h-20 w-full px-4 sm:px-8 max-w-7xl mx-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-3 group" href="#">
+<div class="w-10 h-10 rounded-md bg-primary-container flex items-center justify-center shadow-[0_0_16px_rgba(244,63,94,0.4)] group-hover:bg-rose-400 transition-colors">
+<i class="w-5 h-5 text-white" data-lucide="shield-alert"></i>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-lg text-white tracking-tight uppercase leading-none flex items-center gap-1.5">
+              Lootora
+              <span class="bg-[#202433] text-primary border border-rose-500/30 font-mono text-[10px] tracking-wider px-1.5 py-0.5 rounded">PRO</span>
+</span>
+<span class="font-mono text-text-muted uppercase tracking-widest text-[9px] mt-1">Intel Exchange</span>
+</div>
+</a>
+<nav class="hidden xl:flex items-center gap-1 font-semibold text-xs">
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Marketplace</a>
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Wiki</a>
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Tracker</a>
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Inventory</a>
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Sell Items</a>
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Wallet &amp; Income</a>
+<a class="text-white bg-[#202433] border border-[#363d52] px-3 py-1.5 rounded shadow-sm flex items-center gap-1.5" href="#">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Game Hub
+          </a>
+<a class="text-text-secondary hover:text-white hover:bg-[#191b24] px-3 py-1.5 rounded transition-all" href="#">Community</a>
+</nav>
+</div>
+<div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+<!-- Search Bar -->
+<div class="relative hidden md:flex items-center">
+<i class="w-4 h-4 text-text-muted absolute left-3" data-lucide="search"></i>
+<input class="w-56 lg:w-64 h-9 bg-[#151821] border border-[#282d3d] rounded-md pl-9 pr-8 text-xs text-white placeholder:text-text-muted focus:outline-none focus:border-rose-500/50 transition-colors" placeholder="Search skins, floats, seeds..." type="text"/>
+<span class="absolute right-2.5 font-mono text-[10px] text-text-muted px-1 rounded bg-[#202433] border border-[#282d3d]">/</span>
+</div>
+<!-- Steam Balance -->
+<div class="hidden sm:flex items-center gap-3 bg-[#151821] border border-[#282d3d] rounded-md px-3 py-1.5">
+<div class="flex flex-col">
+<span class="font-mono text-[9px] text-text-muted uppercase leading-tight">Steam Balance</span>
+<span class="font-mono text-xs font-bold text-tertiary leading-tight">$4,289.50</span>
+</div>
+<button class="bg-[#ca8100] hover:bg-amber-400 text-black font-bold text-[10px] px-2 py-1 rounded transition-colors uppercase" type="button">+Deposit</button>
+</div>
+<!-- Notification Bell -->
+<button aria-label="Notifications" class="relative p-2 rounded-md bg-[#151821] border border-[#282d3d] text-text-secondary hover:text-white hover:border-[#363d52] transition-colors" type="button">
+<i class="w-4 h-4" data-lucide="bell"></i>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live"></span>
+</button>
+<!-- Profile Badge -->
+<div class="flex items-center gap-2.5 bg-[#151821] border border-[#282d3d] p-1.5 rounded-md pr-3">
+<div class="relative">
+<div class="w-8 h-8 rounded bg-gradient-to-tr from-rose-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs">
+              S1
+            </div>
+<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-status-live ring-2 ring-[#151821]"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="text-xs font-bold text-white leading-none">S1mple_CS</span>
+<span class="font-mono px-1 py-0.2 rounded bg-indigo-900/60 text-secondary text-[9px] border border-indigo-700/40">LVL 94</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-mono text-[9px] text-tertiary uppercase tracking-wider font-semibold">PRO SELLER</span>
+<span class="font-mono text-[9px] text-status-upcoming uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>SYNCED
+              </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN WRAPPER -->
+<main class="w-full pt-20 bg-[#10131a] min-h-screen">
+<!-- Top Sub-Bar: Breadcrumbs & Telemetry Switchers -->
+<div class="border-b border-[#282d3d] bg-[#12151e]/80 backdrop-blur-md px-4 sm:px-8 py-3.5">
+<div class="max-w-7xl mx-auto flex flex-col gap-3">
+<!-- Breadcrumb & Heartbeat Valve Status -->
+<div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 font-mono text-[11px]">
+<a class="text-text-muted hover:text-white transition-colors flex items-center gap-1" href="#">
+<i class="w-3.5 h-3.5" data-lucide="home"></i> PORTAL
+            </a>
+<span class="text-text-muted">/</span>
+<a class="text-text-muted hover:text-white transition-colors" href="#">GAME HUB</a>
+<span class="text-text-muted">/</span>
+<span class="text-primary font-bold tracking-wider uppercase">META INTEL &amp; TOURNAMENT VAULT</span>
+</nav>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-[#151821] border border-[#282d3d] px-3 py-1 rounded-md">
+<span class="w-2 h-2 rounded-full bg-status-live animate-pulse"></span>
+<span class="font-mono text-[10px] text-white uppercase font-semibold tracking-wider">TI 2025 QUALIFIERS // PGL COPENHAGEN</span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#151821] border border-[#282d3d] px-3 py-1 rounded-md text-text-secondary">
+<i class="w-3 h-3 text-status-upcoming" data-lucide="refresh-cw"></i>
+<span class="font-mono text-[10px] text-text-secondary tracking-wider">VALVE SYNC: 8m AGO</span>
+</div>
+</div>
+</div>
+<!-- Main Game Switcher Tabs & Live Financial Vector -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1">
+<div class="inline-flex p-1 bg-[#0b0e15] border border-[#282d3d] rounded-lg shadow-inner" role="tablist">
+<button aria-selected="true" class="flex items-center gap-2.5 px-4 py-2 rounded-md bg-[#202433] border border-[#363d52] text-white shadow-md transition-all group" id="tab-dota" onclick="switchGameTab('dota')" role="tab">
+<i class="w-4 h-4 text-primary group-hover:scale-110 transition-transform" data-lucide="shield"></i>
+<div class="flex flex-col items-start leading-tight">
+<span class="font-bold text-xs uppercase tracking-tight">Dota 2 Meta Hub</span>
+<span class="font-mono text-[9px] text-tertiary font-semibold tracking-wider">PATCH 7.38c LIVE</span>
+</div>
+<span class="ml-1 w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+</button>
+<button aria-selected="false" class="flex items-center gap-2.5 px-4 py-2 rounded-md text-text-muted hover:text-white hover:bg-[#151821] transition-all group" id="tab-cs2" onclick="switchGameTab('cs2')" role="tab">
+<i class="w-4 h-4 text-status-upcoming group-hover:scale-110 transition-transform" data-lucide="swords"></i>
+<div class="flex flex-col items-start leading-tight">
+<span class="font-bold text-xs uppercase tracking-tight">CS2 Tactical Hub</span>
+<span class="font-mono text-[9px] text-text-muted tracking-wider">COPENHAGEN 128T</span>
+</div>
+</button>
+<button aria-selected="false" class="flex items-center gap-2.5 px-4 py-2 rounded-md text-text-muted hover:text-white hover:bg-[#151821] transition-all group" id="tab-cross" onclick="switchGameTab('cross')" role="tab">
+<i class="w-4 h-4 text-secondary group-hover:scale-110 transition-transform" data-lucide="git-branch"></i>
+<div class="flex flex-col items-start leading-tight">
+<span class="font-bold text-xs uppercase tracking-tight">Cross-Game Arbitrage</span>
+<span class="font-mono text-[9px] text-text-muted tracking-wider">SKIN CORRELATIONS</span>
+</div>
+</button>
+</div>
+<!-- Telemetry Index Banner -->
+<div class="flex items-center gap-6 bg-[#151821] border border-[#282d3d] px-4 py-2 rounded-lg">
+<div class="flex flex-col">
+<span class="font-mono text-[9px] text-text-muted uppercase">Tournament Economy Liquidity</span>
+<span class="font-mono text-sm font-bold text-tertiary tracking-tight">$3,250,000.00 USD</span>
+</div>
+<div class="h-6 w-px bg-[#282d3d]"></div>
+<div class="flex flex-col">
+<span class="font-mono text-[9px] text-text-muted uppercase">Volatility Vector</span>
+<span class="font-mono text-sm font-bold text-primary flex items-center gap-1">
+<i class="w-3.5 h-3.5" data-lucide="trending-up"></i> +14.2% (24H)
+              </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- MAIN BODY CONTENT -->
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-8 flex flex-col gap-10">
+<!-- SECTION 2: HERO SPOTLIGHT: TOURNAMENT META & MARKET CORRELATION -->
+<div class="relative w-full rounded-xl overflow-hidden bg-[#151821] border border-[#282d3d] p-6 lg:p-8 shadow-2xl">
+<!-- Glow ambient backdrop lights -->
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left: Narrative & Indicators -->
+<div class="lg:col-span-7 flex flex-col gap-4">
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-mono text-[10px] bg-primary text-white font-bold px-2.5 py-1 rounded uppercase tracking-wider shadow-sm">PATCH 7.38c DOMINANCE</span>
+<span class="font-mono text-[10px] bg-[#202433] text-tertiary border border-[#363d52] px-2.5 py-1 rounded uppercase font-semibold">CORRELATION: R=0.88</span>
+<span class="font-mono text-[10px] bg-[#151821] text-status-upcoming border border-cyan-500/30 px-2.5 py-1 rounded uppercase font-semibold">TI 2025 META</span>
+</div>
+<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight leading-tight">
+              Carry Resurgence: <span class="text-primary underline decoration-rose-500/40 underline-offset-4">Mortred &amp; Anti-Mage</span> Floor Surge
+            </h2>
+<p class="text-sm sm:text-base text-text-secondary leading-relaxed">
+              Following Valve’s recent +15% Coup de Grace lethal scaling and battlefury pacing buffs, tournament hard carries have witnessed an explosive +18.4% draft pick rate. This spike directly correlates with hyper-liquidity in signature cosmetics across the Lootora network.
+            </p>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-3 gap-3 pt-2">
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col">
+<span class="font-mono text-[9px] text-text-muted uppercase">Pick Frequency</span>
+<span class="font-mono text-lg font-bold text-white mt-0.5">+18.4%</span>
+<span class="text-[11px] text-primary font-medium">High contested</span>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col">
+<span class="font-mono text-[9px] text-text-muted uppercase">Winrate Ratio</span>
+<span class="font-mono text-lg font-bold text-status-upcoming mt-0.5">53.8%</span>
+<span class="text-[11px] text-text-muted">+4.1% post-patch</span>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col">
+<span class="font-mono text-[9px] text-text-muted uppercase">Arcana Floor Delta</span>
+<span class="font-mono text-lg font-bold text-tertiary mt-0.5">+12.4%</span>
+<span class="text-[11px] text-tertiary">30d historic high</span>
+</div>
+</div>
+<!-- CTAs -->
+<div class="flex flex-wrap items-center gap-3 pt-2">
+<a class="inline-flex items-center gap-2 bg-primary hover:bg-rose-600 text-white text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-md shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all" href="#">
+<i class="w-4 h-4" data-lucide="gem"></i>
+                Inspect Arcana Floor ($118.50)
+              </a>
+<a class="inline-flex items-center gap-2 bg-[#202433] hover:bg-[#282d3d] border border-[#363d52] text-white text-xs font-semibold px-4 py-3 rounded-md transition-colors" href="#">
+<i class="w-4 h-4 text-text-secondary" data-lucide="line-chart"></i>
+                Financial Delta Log
+              </a>
+</div>
+</div>
+<!-- Right: Interactive Chart & Visual Correlation -->
+<div class="lg:col-span-5 flex flex-col gap-2">
+<div class="bg-[#10131a] border border-[#282d3d] rounded-xl p-4 flex flex-col gap-3 shadow-inner">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded bg-primary"></span>
+<span class="font-bold text-sm text-white">PA Winrate vs Manifold Arcana</span>
+</div>
+<span class="font-mono text-[10px] text-tertiary font-bold px-2 py-0.5 rounded bg-[#202433] border border-amber-500/30">7-DAY LIVE</span>
+</div>
+<!-- SVG Chart -->
+<div class="w-full h-44 relative flex items-end">
+<svg class="w-full h-full overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 320 140">
+<defs>
+<lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#f43f5e" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#f43f5e" stop-opacity="0.0"></stop>
+</lineargradient>
+<lineargradient id="cyanLine" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0%" stop-color="#06b6d4"></stop>
+<stop offset="100%" stop-color="#f59e0b"></stop>
+</lineargradient>
+</defs>
+<!-- Horizontal Grid lines -->
+<line stroke="#282d3d" stroke-dasharray="3 3" x1="0" x2="320" y1="35" y2="35"></line>
+<line stroke="#282d3d" stroke-dasharray="3 3" x1="0" x2="320" y1="70" y2="70"></line>
+<line stroke="#282d3d" stroke-dasharray="3 3" x1="0" x2="320" y1="105" y2="105"></line>
+<!-- Floor Price Area Fill -->
+<path d="M0,120 Q 50,115 80,95 T 160,80 T 240,45 T 320,15 L 320,140 L 0,140 Z" fill="url(#areaGradient)"></path>
+<!-- Crimson Arcana Price Line -->
+<path d="M0,120 Q 50,115 80,95 T 160,80 T 240,45 T 320,15" stroke="#f43f5e" stroke-linecap="round" stroke-width="3"></path>
+<!-- Cyan Winrate Trend Line -->
+<path d="M0,130 Q 60,110 120,112 T 200,70 T 280,40 T 320,25" stroke="url(#cyanLine)" stroke-dasharray="4 2" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Data Point Dots -->
+<circle cx="240" cy="45" fill="#f59e0b" r="4"></circle>
+<circle cx="320" cy="15" fill="#f43f5e" r="5"></circle>
+</svg>
+<div class="absolute top-2 right-2 bg-[#151821]/90 border border-[#282d3d] px-2.5 py-1 rounded shadow text-right">
+<div class="font-mono text-primary font-bold text-xs">$118.50</div>
+<div class="font-mono text-[8px] text-text-muted uppercase">ALL-TIME HIGH V2</div>
+</div>
+</div>
+<!-- Legend and stats -->
+<div class="flex items-center justify-between text-xs text-text-secondary pt-1 border-t border-[#282d3d]">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-1 bg-primary rounded-full"></span>
+<span class="font-mono text-[10px] text-white uppercase">Market Floor</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-status-upcoming border border-dashed border-status-upcoming"></span>
+<span class="font-mono text-[10px] text-text-muted uppercase">Pro Winrate</span>
+</div>
+</div>
+<span class="font-mono text-[10px] text-text-muted">VOL: 3,420 TRADES/24H</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 3: HERO & WEAPON COSMETIC DIRECTORY (TIER LIST) -->
+<div class="flex flex-col gap-4">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
+<div>
+<div class="flex items-center gap-2 text-tertiary">
+<i class="w-4 h-4" data-lucide="award"></i>
+<span class="font-mono text-[10px] uppercase tracking-widest font-bold">TACTICAL WEAPON &amp; HERO AUDIT</span>
+</div>
+<h3 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Meta Cosmetic Index</h3>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap items-center gap-2">
+<div class="flex bg-[#151821] border border-[#282d3d] p-1 rounded-md">
+<button class="px-3 py-1 rounded bg-[#202433] text-white text-[11px] font-bold uppercase">ALL TIERS</button>
+<button class="px-3 py-1 rounded text-text-muted hover:text-white text-[11px] uppercase transition-colors">CARRY / RIFLES</button>
+<button class="px-3 py-1 rounded text-text-muted hover:text-white text-[11px] uppercase transition-colors">MID / SNIPER</button>
+<button class="px-3 py-1 rounded text-text-muted hover:text-white text-[11px] uppercase transition-colors">ARCANA &amp; COVERT</button>
+</div>
+<div class="relative">
+<select aria-label="Sort by metric" class="bg-[#151821] border border-[#282d3d] text-white text-xs px-3 py-1.5 rounded-md focus:outline-none focus:border-rose-500 cursor-pointer appearance-none pr-8">
+<option>Sort: Highest Meta Spike</option>
+<option>Sort: 24h Volume</option>
+<option>Sort: Lowest Float Value</option>
+</select>
+<i class="w-3.5 h-3.5 absolute right-2.5 top-2.5 pointer-events-none text-text-muted" data-lucide="chevron-down"></i>
+</div>
+</div>
+</div>
+<!-- 4 Top Meta Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- Card 1: Phantom Assassin -->
+<div class="group relative bg-[#151821] border border-[#282d3d] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg hover:border-rose-500/50 hover:shadow-[0_0_24px_rgba(244,63,94,0.25)] transition-all">
+<div class="relative h-48 w-full overflow-hidden bg-[#0b0e15]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dota 2 Phantom Assassin Mortred wearing the radiant dual blades of Manifold Paradox Arcana" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAHKGK8K00XIspkpKB6QCBHpCTTUxeSIFmIgxfMYAcDfo_Zl7EFT25p8YJvoVsTMnvITJNAUDexat4JcVr22JLLndiWw3yyFXHodP1ARf1gtUHB746jVKyh4V-a2HXBe_SqHFd_MFdDhBbMu4Z7Rrhmu83WKP_lfxNm5kNR3NcCrR6gmpT_BJ1KFGTBZE88OligruNBrXCLOp9FbIKXkLdqcjpnKJISM4cv8wkDt0Vx1IJ7_VfccjwVw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151821] via-transparent to-black/30"></div>
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="bg-primary text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded shadow">TIER S META</span>
+<span class="bg-black/70 backdrop-blur text-text-secondary font-mono text-[9px] px-2 py-0.5 rounded border border-white/10">DOTA 2</span>
+</div>
+<div class="absolute top-3 right-3 bg-black/70 backdrop-blur border border-amber-500/40 px-2 py-0.5 rounded font-mono text-[10px] text-tertiary font-bold">
+                +8.6% 7D
+              </div>
+</div>
+<div class="p-4 flex flex-col flex-1 justify-between gap-4">
+<div>
+<div class="flex items-baseline justify-between">
+<h4 class="font-bold text-base text-white">Phantom Assassin</h4>
+<span class="font-mono text-status-upcoming text-xs font-bold">54.2% WR</span>
+</div>
+<p class="text-xs text-text-muted mt-0.5">Item: Manifold Paradox (Style 3)</p>
+<div class="mt-2.5 flex items-center gap-1.5 p-2 rounded bg-[#10131a] border border-[#282d3d]">
+<i class="w-3.5 h-3.5 text-tertiary" data-lucide="check-circle-2"></i>
+<span class="text-xs text-text-secondary">Pro User: <strong class="text-white">Yatoro (Team Spirit)</strong></span>
+</div>
+</div>
+<div class="pt-2 border-t border-[#282d3d] flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] text-text-muted uppercase">Floor Valuation</span>
+<span class="font-mono text-base font-bold text-white">$118.50</span>
+</div>
+<a class="w-full py-2 bg-[#202433] hover:bg-primary text-white text-xs font-bold uppercase tracking-wider text-center rounded transition-all" href="#">
+                  Browse 124 Listings
+                </a>
+</div>
+</div>
+</div>
+<!-- Card 2: Invoker -->
+<div class="group relative bg-[#151821] border border-[#282d3d] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg hover:border-indigo-500/50 hover:shadow-[0_0_24px_rgba(99,102,241,0.25)] transition-all">
+<div class="relative h-48 w-full overflow-hidden bg-[#0b0e15]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dota 2 Invoker Kael conjuring celestial orbs with Dark Artistry Cape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4eVG5GGUsRyiKocypiRYpkShGkIYnOtXjoCdHWwQX8sOfWdJtT9GsDI-q8eWAgHkuHg6x6tG9iXUCxY9A_LjDirlGb2LQ1n2EDKZn0Js7vyARdcI7_5nW4IvWxHawaEUTPvNFxc4JBGsLCtjPaP-seL3BshVsLXnbAmGLMzZAg652fUzss4kJLZQq_KvOofmQXljMW7KnDTytsDTcT7Q2FnM2A48DP7Kys3Nx4vjNq7i_N3hzRVTdjA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151821] via-transparent to-black/30"></div>
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="bg-indigo-600 text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded shadow">TIER S META</span>
+<span class="bg-black/70 backdrop-blur text-text-secondary font-mono text-[9px] px-2 py-0.5 rounded border border-white/10">DOTA 2</span>
+</div>
+<div class="absolute top-3 right-3 bg-black/70 backdrop-blur border border-amber-500/40 px-2 py-0.5 rounded font-mono text-[10px] text-tertiary font-bold">
+                +5.2% 7D
+              </div>
+</div>
+<div class="p-4 flex flex-col flex-1 justify-between gap-4">
+<div>
+<div class="flex items-baseline justify-between">
+<h4 class="font-bold text-base text-white">Invoker</h4>
+<span class="font-mono text-status-upcoming text-xs font-bold">52.8% WR</span>
+</div>
+<p class="text-xs text-text-muted mt-0.5">Item: Dark Artistry Cape / Persona</p>
+<div class="mt-2.5 flex items-center gap-1.5 p-2 rounded bg-[#10131a] border border-[#282d3d]">
+<i class="w-3.5 h-3.5 text-secondary" data-lucide="check-circle-2"></i>
+<span class="text-xs text-text-secondary">Pro User: <strong class="text-white">bzm (OG Esports)</strong></span>
+</div>
+</div>
+<div class="pt-2 border-t border-[#282d3d] flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] text-text-muted uppercase">Floor Valuation</span>
+<span class="font-mono text-base font-bold text-white">$210.00</span>
+</div>
+<a class="w-full py-2 bg-[#202433] hover:bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider text-center rounded transition-all" href="#">
+                  View Loadout
+                </a>
+</div>
+</div>
+</div>
+<!-- Card 3: CS2 AK-47 Fire Serpent -->
+<div class="group relative bg-[#151821] border border-[#282d3d] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg hover:border-amber-500/50 hover:shadow-[0_0_24px_rgba(245,158,11,0.25)] transition-all">
+<div class="relative h-48 w-full overflow-hidden bg-[#0b0e15]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Counter Strike 2 AK-47 Fire Serpent assault rifle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADJK7XCGhrrECcX2VUTIki8jwengj9baBUM1VoKHLk3UZDeGvhh-Oio23LrkSrNdIELDtCK4DgICglCcQbDwQt94ZeEXpTVwJnHh-_neg2lpf7AStM0hPEJOVAYYVdNQv_lHGePhWDbuA2MiPm9go2vSLwa5g5kDXRBFofUw5B_nZCsF9SxESXsc5Cv8FUZmHWJvsVtSwqdWLf74pQFfGWEtpPZfHwFM_pMYxJW9r4C1w_LpaTKNVErw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151821] via-transparent to-black/30"></div>
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="bg-[#ca8100] text-black font-mono text-[9px] font-bold px-2 py-0.5 rounded shadow">TIER S RIFLE</span>
+<span class="bg-black/70 backdrop-blur text-text-secondary font-mono text-[9px] px-2 py-0.5 rounded border border-white/10">CS2</span>
+</div>
+<div class="absolute top-3 right-3 bg-black/70 backdrop-blur border border-amber-500/40 px-2 py-0.5 rounded font-mono text-[10px] text-tertiary font-bold">
+                42.1% PICK
+              </div>
+</div>
+<div class="p-4 flex flex-col flex-1 justify-between gap-4">
+<div>
+<div class="flex items-baseline justify-between">
+<h4 class="font-bold text-base text-white">AK-47 Fire Serpent</h4>
+<span class="font-mono text-tertiary text-xs font-bold">COVERT</span>
+</div>
+<p class="text-xs text-text-muted mt-0.5">Wear: Field-Tested (0.19 Float)</p>
+<div class="mt-2.5 flex items-center gap-1.5 p-2 rounded bg-[#10131a] border border-[#282d3d]">
+<i class="w-3.5 h-3.5 text-tertiary" data-lucide="check-circle-2"></i>
+<span class="text-xs text-text-secondary">Pro User: <strong class="text-white">NiKo (Falcons)</strong></span>
+</div>
+</div>
+<div class="pt-2 border-t border-[#282d3d] flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] text-text-muted uppercase">Floor Valuation</span>
+<span class="font-mono text-base font-bold text-white">$740.00</span>
+</div>
+<a class="w-full py-2 bg-[#202433] hover:bg-amber-600 text-white text-xs font-bold uppercase tracking-wider text-center rounded transition-all" href="#">
+                  Browse Skins
+                </a>
+</div>
+</div>
+</div>
+<!-- Card 4: CS2 AWP Dragon Lore -->
+<div class="group relative bg-[#151821] border border-[#282d3d] rounded-xl overflow-hidden flex flex-col justify-between shadow-lg hover:border-rose-500/50 hover:shadow-[0_0_24px_rgba(244,63,94,0.35)] transition-all">
+<div class="relative h-48 w-full overflow-hidden bg-[#0b0e15]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Counter Strike 2 AWP Dragon Lore sniper rifle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcX-KvUleAbaPuGCLUupKFmDHv2Dq25dpSwpZWxGeanWNM7Y_mfa-akRWbEw6plVeIGSmcguRWx2QhzpdEqS4OYw6MuQwR5yqA1rLIyHo96y67OMjNEo1NQ1fonEfnhJRpmrrcgvXKwm21sMZt7fdgrZ-CYZRq6s_H7pb3P_8aQAmzJBCi8PaplZcnNnK8q99dS0KtT_mPC7FnmA0AyUG51l0jacEa6BX0t6AS7y-RaNo1gCF10lKqyw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#151821] via-transparent to-black/30"></div>
+<div class="absolute top-3 left-3 flex items-center gap-1.5">
+<span class="bg-primary text-white font-mono text-[9px] font-bold px-2 py-0.5 rounded shadow">TIER S SNIPER</span>
+<span class="bg-black/70 backdrop-blur text-text-secondary font-mono text-[9px] px-2 py-0.5 rounded border border-white/10">CS2</span>
+</div>
+<div class="absolute top-3 right-3 bg-black/70 backdrop-blur border border-cyan-500/40 px-2 py-0.5 rounded font-mono text-[10px] text-status-upcoming font-bold">
+                88% PRO PICK
+              </div>
+</div>
+<div class="p-4 flex flex-col flex-1 justify-between gap-4">
+<div>
+<div class="flex items-baseline justify-between">
+<h4 class="font-bold text-base text-white">AWP Dragon Lore</h4>
+<span class="font-mono text-tertiary text-xs font-bold">SOUVENIR</span>
+</div>
+<p class="text-xs text-text-muted mt-0.5">Top Map Dominance: Mirage &amp; Dust2</p>
+<div class="mt-2.5 flex items-center gap-1.5 p-2 rounded bg-[#10131a] border border-[#282d3d]">
+<i class="w-3.5 h-3.5 text-primary" data-lucide="check-circle-2"></i>
+<span class="text-xs text-text-secondary">Pro User: <strong class="text-white">m0NESY (G2 Esports)</strong></span>
+</div>
+</div>
+<div class="pt-2 border-t border-[#282d3d] flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] text-text-muted uppercase">Floor Valuation</span>
+<span class="font-mono text-base font-bold text-tertiary">$5,200.00</span>
+</div>
+<a class="w-full py-2 bg-[#202433] hover:bg-primary text-white text-xs font-bold uppercase tracking-wider text-center rounded transition-all" href="#">
+                  Inspect Market
+                </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 4: REAL-TIME VALVE CORRELATION ENGINE (FINANCIAL DELTA TABLE) -->
+<div class="bg-[#151821] border border-[#282d3d] p-6 rounded-xl shadow-xl flex flex-col gap-4">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div>
+<div class="flex items-center gap-2 text-primary">
+<i class="w-4 h-4" data-lucide="activity"></i>
+<span class="font-mono text-[10px] uppercase tracking-wider font-bold">REAL-TIME VALVE CORRELATION ENGINE</span>
+</div>
+<h3 class="text-xl font-bold text-white tracking-tight">Patch Impact Financial Delta</h3>
+</div>
+<span class="font-mono text-[10px] text-text-muted bg-[#10131a] border border-[#282d3d] px-3 py-1.5 rounded-md self-start md:self-auto uppercase">
+            AUTO-SCRAPING 14 PRO MARKETS
+          </span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#10131a] text-text-muted font-mono text-[10px] uppercase border-b border-[#282d3d]">
+<th class="p-3.5">Patch &amp; Adjustment Note</th>
+<th class="p-3.5">Target Cosmetic Asset</th>
+<th class="p-3.5">Pre-Patch Floor</th>
+<th class="p-3.5">Current Floor</th>
+<th class="p-3.5">Delta Surge</th>
+<th class="p-3.5">24H Volume</th>
+<th class="p-3.5 text-right">Intel Status</th>
+</tr>
+</thead>
+<tbody class="text-xs divide-y divide-[#282d3d]/50">
+<!-- Row 1 -->
+<tr class="hover:bg-[#191b24] transition-colors">
+<td class="p-3.5">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs">Patch 7.38c: Coup de Grace</span>
+<span class="text-text-muted text-[11px]">+15% Critical scale multiplier</span>
+</div>
+</td>
+<td class="p-3.5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-semibold text-white">Manifold Paradox (Exalted)</span>
+</div>
+</td>
+<td class="p-3.5 font-mono text-text-secondary">$105.40</td>
+<td class="p-3.5 font-mono text-white font-bold">$118.50</td>
+<td class="p-3.5">
+<span class="font-mono text-primary font-bold flex items-center gap-1">
+<i class="w-3.5 h-3.5" data-lucide="arrow-up"></i> +12.4%
+                  </span>
+</td>
+<td class="p-3.5 font-mono text-text-secondary">142 units</td>
+<td class="p-3.5 text-right">
+<span class="font-mono text-[9px] bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded font-bold uppercase">PRICE SPIKE</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#191b24] transition-colors">
+<td class="p-3.5">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs">Patch 7.38c: Meat Hook Velocity</span>
+<span class="text-text-muted text-[11px]">+100 Hook Speed &amp; cast radius</span>
+</div>
+</td>
+<td class="p-3.5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-upcoming"></span>
+<span class="font-semibold text-white">Feast of Abscession Arcana</span>
+</div>
+</td>
+<td class="p-3.5 font-mono text-text-secondary">$42.80</td>
+<td class="p-3.5 font-mono text-white font-bold">$46.70</td>
+<td class="p-3.5">
+<span class="font-mono text-status-upcoming font-bold flex items-center gap-1">
+<i class="w-3.5 h-3.5" data-lucide="arrow-up"></i> +9.1%
+                  </span>
+</td>
+<td class="p-3.5 font-mono text-text-secondary">89 units</td>
+<td class="p-3.5 text-right">
+<span class="font-mono text-[9px] bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded font-bold uppercase">BUFFED META</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#191b24] transition-colors">
+<td class="p-3.5">
+<div class="flex flex-col">
+<span class="font-bold text-white text-xs">CS2 June 11 Update: M4A4 Falloff</span>
+<span class="text-text-muted text-[11px]">Lethal headshot range increased by 400u</span>
+</div>
+</td>
+<td class="p-3.5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-semibold text-white">M4A4 Howl &amp; Eye of Horus</span>
+</div>
+</td>
+<td class="p-3.5 font-mono text-text-secondary">$3,850.00</td>
+<td class="p-3.5 font-mono text-white font-bold">$4,420.00</td>
+<td class="p-3.5">
+<span class="font-mono text-tertiary font-bold flex items-center gap-1">
+<i class="w-3.5 h-3.5" data-lucide="arrow-up"></i> +14.8%
+                  </span>
+</td>
+<td class="p-3.5 font-mono text-text-secondary">37 units</td>
+<td class="p-3.5 text-right">
+<span class="font-mono text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-bold uppercase">HIGH LIQUIDITY</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- SECTION 5: CHAMPIONSHIP ARSENALS (PRO ESPORTS LOADOUT SHOWCASE) -->
+<div class="flex flex-col gap-4">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
+<div>
+<div class="flex items-center gap-2 text-status-upcoming">
+<i class="w-4 h-4" data-lucide="shield-check"></i>
+<span class="font-mono text-[10px] uppercase tracking-wider font-bold">CHAMPIONSHIP ARSENALS</span>
+</div>
+<h3 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Pro Esports Loadout Showcase</h3>
+</div>
+<p class="text-xs text-text-secondary max-w-md">
+            Verified skin combinations equipped by elite championship teams in sanctioned Valve Major tournament grand finals.
+          </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<!-- Loadout 1: Yatoro (Team Spirit) -->
+<div class="bg-[#151821] border border-[#282d3d] rounded-xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-[#202433] border border-[#363d52] flex items-center justify-center font-bold text-white text-base">
+                    TS
+                  </div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-bold text-base text-white">Yatoro</h4>
+<span class="font-mono text-[9px] px-2 py-0.5 rounded bg-[#202433] text-tertiary border border-amber-500/30">TI CHAMPION</span>
+</div>
+<span class="text-xs text-text-muted">Role: Hard Carry // Team Spirit</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-mono text-[9px] text-text-muted uppercase">Arsenal Appraisal</span>
+<div class="font-mono text-lg font-bold text-primary">$435.00</div>
+</div>
+</div>
+<!-- Items Breakdown -->
+<div class="grid grid-cols-3 gap-2.5 pt-1">
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col gap-1">
+<span class="font-mono text-[9px] text-primary uppercase font-bold">Weapon Arcana</span>
+<span class="font-bold text-xs text-white truncate">Manifold Paradox</span>
+<span class="font-mono text-[11px] text-text-secondary">$118.50</span>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col gap-1">
+<span class="font-mono text-[9px] text-secondary uppercase font-bold">Immortal Mace</span>
+<span class="font-bold text-xs text-white truncate">Voidhammer</span>
+<span class="font-mono text-[11px] text-text-secondary">$142.00</span>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col gap-1">
+<span class="font-mono text-[9px] text-tertiary uppercase font-bold">Dual Blades</span>
+<span class="font-bold text-xs text-white truncate">Golden Basher</span>
+<span class="font-mono text-[11px] text-text-secondary">$174.50</span>
+</div>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#282d3d] flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-tertiary" data-lucide="check-circle-2"></i>
+<span class="text-xs text-text-secondary">Instant 1-Click Vault Sync Guarantee</span>
+</div>
+<button class="bg-primary hover:bg-rose-600 text-white text-xs font-bold px-4 py-2 rounded-md transition-all uppercase flex items-center gap-2 shadow-sm">
+<i class="w-4 h-4" data-lucide="shopping-bag"></i>
+                Equip &amp; Buy Bundle (-10%)
+              </button>
+</div>
+</div>
+<!-- Loadout 2: m0NESY (G2 Esports) -->
+<div class="bg-[#151821] border border-[#282d3d] rounded-xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-[#202433] border border-[#363d52] flex items-center justify-center font-bold text-white text-base">
+                    G2
+                  </div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="font-bold text-base text-white">m0NESY</h4>
+<span class="font-mono text-[9px] px-2 py-0.5 rounded bg-[#202433] text-status-upcoming border border-cyan-500/30">AWP PRODIGY</span>
+</div>
+<span class="text-xs text-text-muted">Role: Primary Sniper // G2 Esports</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-mono text-[9px] text-text-muted uppercase">Arsenal Appraisal</span>
+<div class="font-mono text-lg font-bold text-tertiary">$12,800.00</div>
+</div>
+</div>
+<!-- Items Breakdown -->
+<div class="grid grid-cols-3 gap-2.5 pt-1">
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col gap-1">
+<span class="font-mono text-[9px] text-tertiary uppercase font-bold">Covert Sniper</span>
+<span class="font-bold text-xs text-white truncate">AWP Dragon Lore FN</span>
+<span class="font-mono text-[11px] text-text-secondary">$5,200.00</span>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col gap-1">
+<span class="font-mono text-[9px] text-status-upcoming uppercase font-bold">★ Knife</span>
+<span class="font-bold text-xs text-white truncate">Butterfly Doppler P4</span>
+<span class="font-mono text-[11px] text-text-secondary">$3,800.00</span>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-lg flex flex-col gap-1">
+<span class="font-mono text-[9px] text-primary uppercase font-bold">★ Specialist Gloves</span>
+<span class="font-bold text-xs text-white truncate">Crimson Kimono</span>
+<span class="font-mono text-[11px] text-text-secondary">$3,800.00</span>
+</div>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#282d3d] flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-status-upcoming" data-lucide="check-circle-2"></i>
+<span class="text-xs text-text-secondary">Official PGL Copenhagen Verified Float</span>
+</div>
+<button class="bg-[#202433] hover:bg-[#282d3d] border border-[#363d52] text-white text-xs font-bold px-4 py-2 rounded-md transition-all uppercase flex items-center gap-2">
+<i class="w-4 h-4 text-text-secondary" data-lucide="eye"></i>
+                Inspect Steam Inventory
+              </button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 6: COMMUNITY DISCUSSIONS & INCENTIVE CALLOUT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left: Discussions -->
+<div class="lg:col-span-8 bg-[#151821] border border-[#282d3d] p-6 rounded-xl shadow-xl flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<i class="w-5 h-5 text-tertiary" data-lucide="message-square"></i>
+<h4 class="text-lg font-bold text-white">Community Craft &amp; Meta Predictions</h4>
+</div>
+<span class="font-mono text-[10px] text-status-upcoming bg-[#10131a] border border-cyan-500/30 px-2 py-0.5 rounded font-bold uppercase">42 NEW THREADS</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Item 1 -->
+<div class="bg-[#10131a] border border-[#282d3d] p-4 rounded-lg flex items-center justify-between gap-4 hover:border-[#363d52] transition-colors cursor-pointer">
+<div class="flex items-start gap-3.5">
+<div class="flex flex-col items-center bg-[#151821] border border-[#282d3d] px-2.5 py-1.5 rounded-md">
+<i class="w-3.5 h-3.5 text-primary" data-lucide="thumbs-up"></i>
+<span class="font-mono text-xs font-bold text-white mt-1">382</span>
+</div>
+<div>
+<h5 class="text-sm font-bold text-white">4x Titan Katowice 2014 Holo on AK-47 Slate vs Case Hardened</h5>
+<p class="text-xs text-text-muted mt-1 leading-relaxed">Discussion on whether dark modern CS2 lighting favors jet black finishes for high-tier legacy stickers.</p>
+<div class="flex items-center gap-2 mt-2 font-mono text-[10px] text-text-secondary">
+<span>BY: @CHROMA_CRAFTER</span>
+<span>•</span>
+<span>18m AGO</span>
+<span>•</span>
+<span class="text-tertiary font-semibold">CS2 TACTICAL</span>
+</div>
+</div>
+</div>
+<i class="w-5 h-5 text-text-muted flex-shrink-0" data-lucide="chevron-right"></i>
+</div>
+<!-- Item 2 -->
+<div class="bg-[#10131a] border border-[#282d3d] p-4 rounded-lg flex items-center justify-between gap-4 hover:border-[#363d52] transition-colors cursor-pointer">
+<div class="flex items-start gap-3.5">
+<div class="flex flex-col items-center bg-[#151821] border border-[#282d3d] px-2.5 py-1.5 rounded-md">
+<i class="w-3.5 h-3.5 text-primary" data-lucide="thumbs-up"></i>
+<span class="font-mono text-xs font-bold text-white mt-1">219</span>
+</div>
+<div>
+<h5 class="text-sm font-bold text-white">Valve 7.39 Speculation: Sven &amp; Magnus Cleave overhaul cosmetic impact</h5>
+<p class="text-xs text-text-muted mt-1 leading-relaxed">Evaluating pre-emptive buy orders for Vigil Triumph and Shock of the Anvil before TI Qualifiers conclude.</p>
+<div class="flex items-center gap-2 mt-2 font-mono text-[10px] text-text-secondary">
+<span>BY: @AEGIS_BROKER</span>
+<span>•</span>
+<span>1h AGO</span>
+<span>•</span>
+<span class="text-primary font-semibold">DOTA 2 SPECULATION</span>
+</div>
+</div>
+</div>
+<i class="w-5 h-5 text-text-muted flex-shrink-0" data-lucide="chevron-right"></i>
+</div>
+</div>
+</div>
+<!-- Right: Seller Incentive Callout -->
+<div class="lg:col-span-4 bg-gradient-to-br from-[#151821] to-[#202433] border border-[#282d3d] p-6 rounded-xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+<div class="flex flex-col gap-4">
+<div class="w-10 h-10 rounded-md bg-amber-500/20 border border-amber-500/40 text-tertiary flex items-center justify-center">
+<i class="w-5 h-5" data-lucide="flame"></i>
+</div>
+<div>
+<span class="font-mono text-[10px] text-tertiary uppercase font-bold tracking-widest">PATCH SURGE INCENTIVE</span>
+<h4 class="text-lg font-bold text-white mt-1">Own an item buffed in Patch 7.38c?</h4>
+<p class="text-xs text-text-secondary mt-2 leading-relaxed">
+                Capitalize on high tournament liquidity. List any Mortred, Invoker, or AWP asset within the next 24 hours to enjoy <strong class="text-white">0% seller transaction fee</strong> and instant automated payout.
+              </p>
+</div>
+<div class="bg-[#10131a] border border-[#282d3d] p-3 rounded-md flex items-center justify-between">
+<span class="font-mono text-[10px] text-text-muted uppercase">Promotion Timer</span>
+<span class="font-mono text-xs text-status-live font-bold animate-pulse">18:42:10 REMAINING</span>
+</div>
+</div>
+<div class="pt-4">
+<a class="w-full inline-flex items-center justify-center gap-2 bg-[#ca8100] hover:bg-amber-400 text-black text-xs font-bold uppercase tracking-wider py-3 rounded-md transition-colors shadow-md" href="#">
+<span>Go to Seller Studio</span>
+<i class="w-4 h-4" data-lucide="arrow-right"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FOOTER -->
+<footer class="w-full bg-[#0b0e15] border-t border-[#282d3d] text-text-muted mt-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono">
+<div class="flex flex-wrap items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-live animate-pulse"></span>
+<span class="text-white uppercase font-bold text-[10px]">Escrow Vault Active</span>
+</div>
+<div class="flex items-center gap-1.5 text-text-secondary text-[11px]">
+<i class="w-3.5 h-3.5 text-status-upcoming" data-lucide="refresh-cw"></i>
+<span>Steam Web API 99.99% Synced</span>
+</div>
+<div class="flex items-center gap-1.5 text-tertiary text-[11px]">
+<i class="w-3.5 h-3.5" data-lucide="zap"></i>
+<span>14ms Response</span>
+</div>
+</div>
+<div class="flex items-center gap-4 text-[11px]">
+<a class="hover:text-white transition-colors" href="#">Security Proofs</a>
+<span>•</span>
+<a class="hover:text-white transition-colors" href="#">Steam Guard Rules</a>
+<span>•</span>
+<a class="hover:text-white transition-colors" href="#">Anti-Fraud Policy</a>
+</div>
+</div>
+<div class="w-full bg-[#10131a] border-t border-[#191b24] py-3.5 px-4 sm:px-8">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+<p class="text-text-muted text-[11px]">© 2024 Lootora Exchange. Powered by Steam OpenID. Valve Corporation unassociated.</p>
+<div class="flex items-center gap-3 font-mono text-[10px]">
+<span class="text-text-muted uppercase">NODE ID: ORD-901-PRO</span>
+<span class="px-1.5 py-0.5 rounded bg-[#202433] text-white border border-[#282d3d]">MAINNET v2.4</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+
+    function switchGameTab(game) {
+      const dotaBtn = document.getElementById('tab-dota');
+      const cs2Btn = document.getElementById('tab-cs2');
+      const crossBtn = document.getElementById('tab-cross');
+
+      [dotaBtn, cs2Btn, crossBtn].forEach(btn => {
+        btn.className = 'flex items-center gap-2.5 px-4 py-2 rounded-md text-text-muted hover:text-white hover:bg-[#151821] transition-all group';
+        btn.setAttribute('aria-selected', 'false');
+      });
+
+      if (game === 'dota') {
+        dotaBtn.className = 'flex items-center gap-2.5 px-4 py-2 rounded-md bg-[#202433] border border-[#363d52] text-white shadow-md transition-all group';
+        dotaBtn.setAttribute('aria-selected', 'true');
+      } else if (game === 'cs2') {
+        cs2Btn.className = 'flex items-center gap-2.5 px-4 py-2 rounded-md bg-[#202433] border border-[#363d52] text-white shadow-md transition-all group';
+        cs2Btn.setAttribute('aria-selected', 'true');
+      } else {
+        crossBtn.className = 'flex items-center gap-2.5 px-4 py-2 rounded-md bg-[#202433] border border-[#363d52] text-white shadow-md transition-all group';
+        crossBtn.setAttribute('aria-selected', 'true');
+      }
+    }
+  </script>
+</body></html>

@@ -59,8 +59,9 @@ export function NotificationsMenu({ trigger }: { trigger: NotificationsTrigger }
         type="button"
         aria-label={unreadCount ? `Notifications, ${unreadCount} unread` : "Notifications"}
         className={style.button}
+      
       >
-        {style.icon ?? <Icon name="notifications" className="text-[20px]" />}
+        {style.icon ?? <Icon name="notifications" className="text-[23px]" />}
         {unreadCount > 0 && style.ping && <span className={cn(style.badge, "animate-ping")} />}
         {unreadCount > 0 && <span className={style.badge}>{trigger === "count" ? unreadCount : null}</span>}
       </PopoverTrigger>

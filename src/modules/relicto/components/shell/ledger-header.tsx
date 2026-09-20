@@ -5,6 +5,7 @@ import { LedgerBrand } from "./brand";
 import { LedgerHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 import { WalletChip } from "./wallet-chip";
+import { CartButton } from "./cart-button";
 
 /** Header of the orders, order-tracking and profile screens. */
 export function LedgerHeader() {
@@ -20,6 +21,7 @@ export function LedgerHeader() {
         <LedgerHeaderSearch />
         <div className="flex items-center gap-space-md">
           <WalletChip variant="ledger" />
+          <CartButton />
           <NotificationsMenu trigger="dot" />
           <UserMenu trigger="ledger" />
         </div>

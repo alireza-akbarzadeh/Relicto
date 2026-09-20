@@ -5,6 +5,7 @@ import { StudioBrand } from "./brand";
 import { StudioHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 import { WalletChip } from "./wallet-chip";
+import { CartButton } from "./cart-button";
 
 /** Header of the sell studio and wallet screens. */
 export function StudioHeader() {
@@ -20,6 +21,7 @@ export function StudioHeader() {
         <div className="flex max-w-2xl flex-1 items-center justify-end gap-space-md">
           <StudioHeaderSearch />
           <WalletChip variant="studio" />
+          <CartButton />
           <NotificationsMenu trigger="square" />
           <UserMenu trigger="studio" />
         </div>

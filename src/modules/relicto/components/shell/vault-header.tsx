@@ -1,7 +1,5 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
-import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import { MARKET_NAV } from "../../data/navigation";
 import { useSession } from "../../state/session-provider";
@@ -11,9 +9,10 @@ import { NotificationsMenu } from "../notifications/notifications-menu";
 import { VaultBrand } from "./brand";
 import { VaultHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
+import { CartButton } from "./cart-button";
 
 /** Header of the item vault (detail) screens: Steam identity chip, cart and avatar. */
-export function VaultHeader({ steamId, cartCount = 2 }: { steamId: string; cartCount?: number }) {
+export function VaultHeader({ steamId }: { steamId: string }) {
   const { user } = useSession();
 
   return (
@@ -43,14 +42,7 @@ export function VaultHeader({ steamId, cartCount = 2 }: { steamId: string; cartC
             </div>
           </div>
           <NotificationsMenu trigger="vault" />
-          <NoticeButton
-            notice={{ title: "Cart", description: "The escrow checkout drawer ships with the cart API." }}
-            aria-label="Cart drawer"
-            className="group h-auto gap-1.5 rounded-lg border-border-subtle bg-surface-container-lowest px-3 py-2 text-on-surface transition-all hover:border-tertiary hover:bg-surface-container"
-          >
-            <Icon name="shopping_bag" className="text-[20px] text-text-muted transition-colors group-hover:text-tertiary" />
-            <span className="rounded-full bg-primary px-1.5 font-data-mono-md text-[11px] font-bold text-white">{cartCount}</span>
-          </NoticeButton>
+          <CartButton />
           <UserMenu trigger="vault" />
         </div>
       </div>

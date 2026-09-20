@@ -5,6 +5,7 @@ import { HubBrand } from "./brand";
 import { HubHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 import { WalletChip } from "./wallet-chip";
+import { CartButton } from "./cart-button";
 
 /** Header of the game hub (home). */
 export function HubHeader() {
@@ -20,6 +21,7 @@ export function HubHeader() {
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
           <HubHeaderSearch />
           <WalletChip variant="hub" />
+          <CartButton />
           <NotificationsMenu trigger="hub" />
           <UserMenu trigger="hub" />
         </div>

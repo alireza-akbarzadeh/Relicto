@@ -1,15 +1,40 @@
+"use client";
+
+import { toast } from "sonner";
 import { NoticeButton } from "@/components/notice-button";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { ESCROW_TONE, STAT_TONE } from "../../lib/tones";
 import type { ItemDetail } from "../../types";
+import { useCart } from "@/modules/relicto/state/cart-provider";
 
 const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3 font-headline-sm text-sm transition-all hover:bg-surface-container-high";
 
 /** Title, description, live valuation and the buy / watch actions. */
 export function PricePanel({ item }: { item: ItemDetail }) {
   const { price } = item;
+  const { addItem } = useCart();
+  const addToCart = () => {
+    addItem({
+      id: item.slug,
+      image: item.hero.image,
+      imageAlt: item.hero.imageAlt,
+      badge: "Arcana",
+      badgeTone: "bg-primary-container text-on-primary-container",
+      game: "Dota 2",
+      gameTone: "text-secondary",
+      name: item.name,
+      detail: "Phantom Assassin Weapon Artifact • Style 3 Unlocked",
+      intel: ["1,420 Recorded Kills Gem", "Vendor: KuroSkins (99.8% Trust)"],
+      bot: "Sentinel Bot #42",
+      price: price.lowestUsd,
+      marker: "Style 3",
+      markerTone: "text-text-primary",
+    });
+    toast.success("Added to cart", { description: `${item.name} is reserved for escrow checkout.` });
+  };
   return (
     <div className="flex flex-col justify-between gap-4 lg:col-span-6">
       <div>
@@ -65,14 +90,16 @@ export function PricePanel({ item }: { item: ItemDetail }) {
               <Icon name="bolt" className="text-[20px]" />
               <span>Instant Buy — {formatMoney(price.lowestUsd)}</span>
             </NoticeButton>
-            <NoticeButton
-              notice={{ title: "Added to cart", description: "The cart drawer arrives with the checkout screen." }}
+            <Button
+              variant={null}
+              size={null}
+              onClickCapture={addToCart}
               aria-label="Add to cart"
               className={cn(ACTION, "gap-2 px-4 font-semibold text-text-primary")}
             >
               <Icon name="add_shopping_cart" className="text-[20px]" />
               <span className="hidden sm:inline">Add</span>
-            </NoticeButton>
+            </Button>
             <NoticeButton
               notice={{ title: "Added to watchlist", description: "Watchlists sync with your account once auth is wired." }}
               aria-label="Add to watchlist"

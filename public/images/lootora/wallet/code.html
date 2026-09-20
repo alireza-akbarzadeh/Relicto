@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container-highest":"#32353d","surface-container-high":"#272a32","surface-deep":"#0f1420","primary-container":"#ff516a","secondary-fixed":"#e1e0ff","border-subtle":"rgba(255, 255, 255, 0.08)","on-secondary-fixed":"#07006c","secondary-container":"#3131c0","surface-container-lowest":"#0b0e15","on-background":"#e1e2ec","error":"#ffb4ab","on-error-container":"#ffdad6","text-primary":"#f8fafc","on-error":"#690005","surface-tint":"#ffb2b7","on-secondary":"#1000a9","surface-bright":"#363941","on-secondary-fixed-variant":"#2f2ebe","tertiary-fixed-dim":"#ffb95f","surface-variant":"#32353d","surface-overlay":"rgba(10, 13, 20, 0.85)","primary":"#ffb2b7","inverse-surface":"#e1e2ec","glow-crimson":"rgba(244, 63, 94, 0.25)","surface-glass":"rgba(21, 27, 43, 0.72)","tertiary-container":"#ca8100","on-surface":"#e1e2ec","surface-container-low":"#191b23","inverse-primary":"#bc0b3b","glow-indigo":"rgba(99, 102, 241, 0.25)","on-surface-variant":"#e3bdbf","on-tertiary":"#472a00","glow-amber":"rgba(245, 158, 11, 0.25)","surface":"#10131a","tertiary":"#ffb95f","text-muted":"#64748b","error-container":"#93000a","on-primary":"#67001b","background":"#10131a","primary-fixed":"#ffdadb","on-primary-fixed-variant":"#92002a","on-tertiary-fixed-variant":"#653e00","on-primary-container":"#5b0017","text-secondary":"#94a3b8","surface-card":"#151b2b","primary-fixed-dim":"#ffb2b7","on-primary-fixed":"#40000d","on-secondary-container":"#b0b2ff","on-tertiary-fixed":"#2a1700","secondary-fixed-dim":"#c0c1ff","outline-variant":"#5b4041","border-tactical":"rgba(245, 158, 11, 0.4)","surface-dim":"#10131a","secondary":"#c0c1ff","status-upcoming":"#06b6d4","status-live":"#ef4444","inverse-on-surface":"#2d3038","outline":"#aa888a","on-tertiary-container":"#3e2400","tertiary-fixed":"#ffddb8","surface-container":"#1d1f27","border-focus":"rgba(244, 63, 94, 0.5)","canvas-base":"#0a0d14"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xs":"0.25rem","gutter-desktop":"1.5rem","space-xl":"2.5rem","gutter":"1.25rem","space-sm":"0.5rem","space-lg":"1.5rem","margin-desktop":"2.5rem","space-md":"1rem","margin":"1rem"},"fontFamily":{"headline-md":["Space Grotesk"],"display-hero":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"headline-xl-mobile":["Space Grotesk"],"headline-xl":["Space Grotesk"],"body-md":["Geist"],"headline-sm":["Space Grotesk"],"data-mono-md":["JetBrains Mono"],"headline-lg":["Space Grotesk"],"label-caps":["Space Grotesk"],"label-badge":["JetBrains Mono"],"data-mono-lg":["JetBrains Mono"],"display-hero-mobile":["Space Grotesk"],"body-lg":["Geist"],"body-sm":["Geist"]},"fontSize":{"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.025em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"data-mono-md":["14px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"headline-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"700"}],"label-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"data-mono-lg":["20px",{"lineHeight":"24px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"0em","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.005em","fontWeight":"400"}]}}}}</script></head><body class="bg-canvas-base text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-deep/90 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.6)]"><div class="h-20 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="marketplace" href="#"><div class="w-9 h-9 rounded-lg bg-surface-card flex items-center justify-center text-primary group-hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[22px]">token</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-primary tracking-tight leading-none">LOOTORA<span class="text-primary ml-1">INTEL</span></span><span class="font-label-badge text-label-badge text-tertiary tracking-widest leading-none mt-1">STEAM TRADING PROTOCOL</span></div></a><div class="hidden xl:flex items-center bg-surface-container-lowest px-space-md py-space-xs rounded-lg w-72 gap-space-sm"><span class="material-symbols-outlined text-text-muted text-[18px]">search</span><input class="bg-transparent border-none outline-none text-text-primary font-body-sm text-body-sm placeholder:text-text-muted w-full focus:ring-0" placeholder="Search skins, floats, matches..." type="text"/><kbd class="font-data-mono-md text-[11px] px-1.5 py-0.5 rounded bg-surface-container-high text-text-secondary">⌘K</kbd></div></div><nav class="hidden 2xl:flex items-center gap-space-xs bg-surface-container-lowest/70 p-1 rounded-xl" data-active-classes="bg-surface-container-high text-text-primary font-semibold rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.15)]"><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="marketplace" href="#">Marketplace</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="wiki" href="#">Wiki</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tracker" href="#">Tracker</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="inventory" href="#">Inventory</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="trade-up-and-liquidation" href="#">Trade-Up &amp; Liquidation</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="match-center" href="#">Match Center</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="wallet-and-income" href="#">Wallet &amp; Income</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="community" href="#">Community</a></nav><div class="flex items-center gap-space-md"><div class="flex items-center bg-surface-container-lowest rounded-lg p-1 gap-space-sm pl-space-md"><div class="flex flex-col"><span class="font-label-badge text-label-badge text-text-muted leading-none uppercase">Steam Balance</span><span class="font-data-mono-md text-data-mono-md text-tertiary font-bold leading-none mt-1">$4,289.50</span></div><button class="bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg transition-all shadow-[0_0_12px_rgba(244,63,94,0.3)]">+ Deposit</button></div><button class="relative w-10 h-10 rounded-lg bg-surface-card hover:bg-surface-container-high flex items-center justify-center text-text-secondary hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-live ring-2 ring-surface-card"></span></button><div class="flex items-center gap-space-sm bg-surface-card hover:bg-surface-container-high px-space-sm py-1 rounded-xl transition-colors cursor-pointer"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-headline-sm text-[13px] text-text-primary leading-tight font-semibold">@s1mple_cs</span><span class="font-label-badge text-[10px] text-tertiary leading-tight font-semibold">LVL 94 PRO TRADER</span></div></div></div></div></header><main class="w-full pt-20 bg-canvas-base flex-1"><div class="flex flex-col w-full">
+<!-- Interactive Style Scaffolding for Dynamic Tabs & Modals -->
+<div class="w-full px-space-lg py-space-md space-y-space-lg">
+<!-- 1. Breadcrumbs & Solvency Security Telemetry Header -->
+<section class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md bg-surface-container-lowest p-space-md rounded-xl shadow-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-text-muted font-label-badge text-[11px] tracking-wider uppercase">
+<span class="hover:text-text-primary transition-colors cursor-pointer">PORTAL</span>
+<span>/</span>
+<span class="hover:text-text-primary transition-colors cursor-pointer">FINANCIAL OPERATIONS</span>
+<span>/</span>
+<span class="text-primary font-bold">ESCROW WALLET &amp; TREASURY</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="w-2.5 h-2.5 rounded-full bg-status-live animate-ping"></div>
+<h1 class="font-headline-md text-headline-md text-text-primary tracking-tight">Treasury Operations &amp; Audited Ledger</h1>
+<span class="bg-surface-container-high text-tertiary font-data-mono-md text-body-sm px-2 py-0.5 rounded">NODE #US-EAST-BOT-09</span>
+</div>
+</div>
+<!-- Live Security Badges -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-xs">
+<div class="bg-surface-card p-space-xs px-space-sm rounded-lg flex items-center gap-space-xs shadow-sm">
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified_user</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-[10px] text-text-muted leading-tight">SOLVENCY VAULT</span>
+<span class="font-data-mono-md text-body-sm text-text-primary font-bold leading-tight">$1,489,200.00</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-xs px-space-sm rounded-lg flex items-center gap-space-xs shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">phonelink_lock</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-[10px] text-text-muted leading-tight">STEAM GUARD 2FA</span>
+<span class="font-data-mono-md text-body-sm text-text-primary font-bold leading-tight">Armed (&gt;180d)</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-xs px-space-sm rounded-lg flex items-center gap-space-xs shadow-sm">
+<span class="material-symbols-outlined text-status-upcoming text-[18px]">ac_unit</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-[10px] text-text-muted leading-tight">COLD STORAGE</span>
+<span class="font-data-mono-md text-body-sm text-text-primary font-bold leading-tight">94.2% Secured</span>
+</div>
+</div>
+<div class="bg-surface-card p-space-xs px-space-sm rounded-lg flex items-center gap-space-xs shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-[18px]">bolt</span>
+<div class="flex flex-col">
+<span class="font-label-badge text-[10px] text-text-muted leading-tight">DISPATCH SLA</span>
+<span class="font-data-mono-md text-body-sm text-text-primary font-bold leading-tight">&lt; 120s Auto</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Core Net Equity & Asset Overview Matrix -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Main Net Equity Bento Tile -->
+<div class="lg:col-span-5 bg-surface-card rounded-xl p-space-lg flex flex-col justify-between shadow-xl relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps text-text-secondary uppercase">Total Platform Net Equity</span>
+</div>
+<span class="bg-surface-container-high text-primary font-label-badge text-[10px] px-2 py-0.5 rounded-full uppercase">Steam Connected</span>
+</div>
+<div class="flex items-baseline gap-space-sm pt-space-xs">
+<h2 class="font-display-hero text-display-hero text-text-primary tracking-tight">$4,289.50</h2>
+<span class="font-data-mono-md text-body-md text-text-muted font-medium">USD</span>
+</div>
+<div class="flex items-center gap-space-xs font-data-mono-md text-body-sm">
+<span class="text-tertiary flex items-center">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+              +14.8%
+            </span>
+<span class="text-text-muted">+$552.10 USD (Past 24h market &amp; trade-ups)</span>
+</div>
+</div>
+<!-- 1-Click Operations Trigger Bar -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-md">
+<button class="bg-primary hover:bg-primary/90 text-on-primary font-headline-sm text-[13px] py-space-sm px-space-xs rounded-lg flex items-center justify-center gap-1 transition-all shadow-[0_0_16px_rgba(244,63,94,0.3)]" onclick="switchTab('deposit')">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+            Deposit
+          </button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-text-primary font-headline-sm text-[13px] py-space-sm px-space-xs rounded-lg flex items-center justify-center gap-1 transition-all" onclick="switchTab('withdraw')">
+<span class="material-symbols-outlined text-[16px] text-tertiary">bolt</span>
+            Cashout
+          </button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-text-primary font-headline-sm text-[13px] py-space-sm px-space-xs rounded-lg flex items-center justify-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[16px] text-secondary">sync_alt</span>
+            To Steam
+          </button>
+</div>
+</div>
+<!-- Breakdown Matrices -->
+<div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<!-- Liquid Balance Card -->
+<div class="bg-surface-card rounded-xl p-space-md flex flex-col justify-between shadow-md hover:bg-surface-container-high/40 transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-secondary uppercase">Available Liquid Balance</span>
+<span class="w-2 h-2 rounded-full bg-status-live"></span>
+</div>
+<div class="my-space-xs">
+<div class="font-data-mono-lg text-data-mono-lg text-text-primary font-bold">$3,140.00 <span class="text-body-sm font-normal text-text-muted">USD</span></div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Immediately withdrawable via instant SEPA / Crypto rail.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-badge text-label-badge text-status-upcoming">UNRESTRICTED</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Tier: Whitelisted</span>
+</div>
+</div>
+<!-- Escrow Lock Card -->
+<div class="bg-surface-card rounded-xl p-space-md flex flex-col justify-between shadow-md hover:bg-surface-container-high/40 transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-secondary uppercase">Active Escrow Lock</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">lock_clock</span>
+</div>
+<div class="my-space-xs">
+<div class="font-data-mono-lg text-data-mono-lg text-tertiary font-bold">$868.50 <span class="text-body-sm font-normal text-text-muted">USD</span></div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Held across 2 pending Steam bot trade confirmations.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-badge text-label-badge text-tertiary">BOT #04 &amp; #12 HOLD</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Expires in 6h 34m</span>
+</div>
+</div>
+<!-- Pending Settlement Card -->
+<div class="bg-surface-card rounded-xl p-space-md flex flex-col justify-between shadow-md hover:bg-surface-container-high/40 transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-secondary uppercase">Trade-Up Settlements</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">hourglass_top</span>
+</div>
+<div class="my-space-xs">
+<div class="font-data-mono-lg text-data-mono-lg text-secondary font-bold">$281.00 <span class="text-body-sm font-normal text-text-muted">USD</span></div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Clearing from completed Classified contract liquidation.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-badge text-label-badge text-secondary">FINAL AUDIT STAGE</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Clearing in 4h 12m</span>
+</div>
+</div>
+<!-- Tier Cash Back & Rebate -->
+<div class="bg-surface-card rounded-xl p-space-md flex flex-col justify-between shadow-md hover:bg-surface-container-high/40 transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-secondary uppercase">Rebates &amp; Rewards</span>
+<span class="material-symbols-outlined text-primary text-[18px]">military_tech</span>
+</div>
+<div class="my-space-xs">
+<div class="font-data-mono-lg text-data-mono-lg text-primary font-bold">$42.20 <span class="text-body-sm font-normal text-text-muted">USD</span></div>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Gold Tier 0.5% fee discount credit applied automatically.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-badge text-label-badge text-primary">GOLD REBATE ACTIVE</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Next Tier at $10k Vol</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Dual Operations Interactive Workstations (Side-by-Side Command Console) -->
+<section class="grid grid-cols-1 xl:grid-cols-2 gap-space-lg">
+<!-- LEFT WORKSTATION: DEPOSIT & CHARGE WALLET -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-xl flex flex-col justify-between gap-space-md relative" id="deposit-panel">
+<div class="space-y-space-md">
+<!-- Station Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Deposit &amp; Influx Hub</h3>
+<span class="font-label-badge text-label-badge text-text-muted">ZERO INGRESS FEES ON CRYPTO &amp; STEAM LIQUIDATION</span>
+</div>
+</div>
+<span class="bg-primary-container/20 text-primary-container font-label-badge text-[11px] px-2 py-1 rounded">PROMO: +2.0% SKINS</span>
+</div>
+<!-- Influx Method Rail Selector -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs bg-surface-container-lowest p-1 rounded-lg">
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 bg-surface-container-high text-text-primary transition-all" id="btn-dep-crypto" onclick="setDepositMethod('crypto')">
+<span class="material-symbols-outlined text-[16px]">currency_bitcoin</span>
+<span>Web3 Crypto</span>
+</button>
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all" id="btn-dep-skins" onclick="setDepositMethod('skins')">
+<span class="material-symbols-outlined text-[16px] text-tertiary">inventory_2</span>
+<span>Steam Skins</span>
+</button>
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all" id="btn-dep-cards" onclick="setDepositMethod('cards')">
+<span class="material-symbols-outlined text-[16px]">credit_card</span>
+<span>Cards / Apple</span>
+</button>
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all" id="btn-dep-bank" onclick="setDepositMethod('bank')">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+<span>SEPA / Wire</span>
+</button>
+</div>
+<!-- Method 1: Web3 Crypto Rail Active View -->
+<div class="space-y-space-md" id="dep-crypto-container">
+<div class="flex items-center justify-between gap-space-sm">
+<span class="font-label-caps text-label-caps text-text-secondary">Network Asset</span>
+<div class="flex items-center gap-space-xs">
+<span class="bg-surface-container-lowest px-2 py-1 rounded text-text-primary font-data-mono-md text-[12px] cursor-pointer hover:bg-surface-container-high">USDT (TRC-20)</span>
+<span class="bg-surface-container-lowest px-2 py-1 rounded text-text-muted font-data-mono-md text-[12px] cursor-pointer hover:bg-surface-container-high">USDC (ERC-20)</span>
+<span class="bg-surface-container-lowest px-2 py-1 rounded text-text-muted font-data-mono-md text-[12px] cursor-pointer hover:bg-surface-container-high">BTC</span>
+<span class="bg-surface-container-lowest px-2 py-1 rounded text-text-muted font-data-mono-md text-[12px] cursor-pointer hover:bg-surface-container-high">SOL</span>
+</div>
+</div>
+<!-- Dynamic QR & Address Box -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl flex flex-col md:flex-row items-center gap-space-md">
+<!-- Inline SVG QR Code Mock for extreme crispness -->
+<div class="w-28 h-28 bg-text-primary p-2 rounded-lg flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full text-canvas-base" fill="currentColor" viewbox="0 0 100 100">
+<path d="M0 0h30v30H0zm6 6h18v18H6zM70 0h30v30H70zm6 6h18v18H76zM0 70h30v30H0zm6 6h18v18H6zM40 10h10v10H40zm20 0h10v10H60zm-20 20h10v10H40zm20 0h10v10H60zm-30 20h10v10H30zm20 0h10v10H50zm20 0h10v10H70zm-40 20h10v10H30zm20 0h10v10H50zm20 0h10v10H70zm-30 20h10v10H40zm20 0h10v10H60z"></path>
+</svg>
+</div>
+<div class="flex-1 space-y-space-xs w-full">
+<div class="flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-text-muted">TRC-20 DEPOSIT ADDRESS</span>
+<span class="font-data-mono-md text-[11px] text-tertiary">1/12 Confirmations</span>
+</div>
+<div class="flex items-center justify-between bg-surface-card px-space-md py-2 rounded-lg">
+<span class="font-data-mono-md text-body-sm text-text-primary select-all">0x71C92a46B9f76D2189CB91823B492</span>
+<button class="text-text-muted hover:text-text-primary" title="Copy Address">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs text-[11px] text-text-muted">
+<span class="material-symbols-outlined text-tertiary text-[14px]">info</span>
+<span>Minimum deposit: $10.00 USDT. Funds settle after 12 block validations.</span>
+</div>
+</div>
+</div>
+<!-- Amount Input & Quick Chips -->
+<div class="space-y-space-xs">
+<label class="font-label-caps text-label-caps text-text-secondary uppercase">Deposit Amount (USD)</label>
+<div class="relative bg-surface-container-lowest rounded-lg flex items-center px-space-md">
+<span class="font-data-mono-lg text-text-muted">$</span>
+<input class="w-full bg-transparent p-space-sm font-data-mono-lg text-data-mono-lg text-text-primary outline-none focus:ring-0" id="dep-amount-input" type="number" value="250.00"/>
+<span class="font-data-mono-md text-text-secondary">USD</span>
+</div>
+<div class="flex items-center gap-space-xs pt-1">
+<button class="px-2 py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setDepAmount(50)">+$50</button>
+<button class="px-2 py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setDepAmount(100)">+$100</button>
+<button class="px-2 py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setDepAmount(250)">+$250</button>
+<button class="px-2 py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setDepAmount(500)">+$500</button>
+<button class="px-2 py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setDepAmount(1000)">+$1000</button>
+</div>
+</div>
+<!-- Calculation Audit Card -->
+<div class="bg-surface-container-lowest/70 p-space-sm rounded-lg space-y-1 font-data-mono-md text-body-sm">
+<div class="flex justify-between text-text-muted">
+<span>Subtotal</span>
+<span id="dep-subtotal">$250.00 USD</span>
+</div>
+<div class="flex justify-between text-text-muted">
+<span>Network Protocol Ingress Fee</span>
+<span class="text-tertiary">0.00 USD (PROMO)</span>
+</div>
+<div class="flex justify-between text-text-muted">
+<span>Liquidation Booster Tier</span>
+<span class="text-primary">+2.0% ($5.00 USD)</span>
+</div>
+<div class="flex justify-between text-text-primary font-bold pt-1">
+<span>Total Balance Credited</span>
+<span class="text-tertiary text-data-mono-md" id="dep-total">$255.00 USD</span>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-space-md bg-primary hover:bg-primary/90 text-on-primary font-headline-sm text-[14px] uppercase py-space-md rounded-lg flex items-center justify-center gap-space-xs transition-all shadow-[0_0_20px_rgba(244,63,94,0.35)]">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+          Confirm &amp; Execute Ingress
+        </button>
+</div>
+<!-- RIGHT WORKSTATION: INSTANT WITHDRAWAL & CASHOUT -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-xl flex flex-col justify-between gap-space-md relative" id="withdraw-panel">
+<div class="space-y-space-md">
+<!-- Station Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Instant Egress &amp; Cashout</h3>
+<span class="font-label-badge text-label-badge text-text-muted">AUTOMATED DISPATCH VIA BOT ESCROW CLUSTER</span>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2 py-1 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live animate-pulse"></span>
+<span class="font-data-mono-md text-[11px] text-text-primary">SLA: &lt; 120s Guarantee</span>
+</div>
+</div>
+<!-- Cashout Rail Selector -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs bg-surface-container-lowest p-1 rounded-lg">
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 bg-surface-container-high text-text-primary">
+<span class="material-symbols-outlined text-[16px] text-tertiary">toll</span>
+<span>USDT (TRC20)</span>
+</button>
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+<span>SEPA Instant</span>
+</button>
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all">
+<span class="material-symbols-outlined text-[16px]">redeem</span>
+<span>Steam Keys</span>
+</button>
+<button class="font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all">
+<span class="material-symbols-outlined text-[16px]">credit_card</span>
+<span>Visa Direct</span>
+</button>
+</div>
+<!-- Saved Destination Book -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-secondary uppercase">Destination Vault / Address</span>
+<span class="font-label-badge text-label-badge text-primary cursor-pointer hover:underline">+ New Address</span>
+</div>
+<div class="relative bg-surface-container-lowest rounded-lg p-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">account_balance_wallet</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-text-primary">Binance Treasury Vault #1 (TRC-20)</span>
+<span class="font-data-mono-md text-[11px] text-text-muted truncate max-w-xs">TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La</span>
+</div>
+</div>
+<span class="font-label-badge text-[10px] bg-surface-container-high text-status-upcoming px-2 py-1 rounded uppercase">Verified Whitelist</span>
+</div>
+</div>
+<!-- Amount Input with Percentage Presets -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-caps text-label-caps text-text-secondary uppercase">Withdrawal Amount</label>
+<span class="font-data-mono-md text-[11px] text-text-muted">Max Withdrawable: <span class="text-text-primary font-bold">$3,140.00</span></span>
+</div>
+<div class="relative bg-surface-container-lowest rounded-lg flex items-center px-space-md">
+<span class="font-data-mono-lg text-text-muted">$</span>
+<input class="w-full bg-transparent p-space-sm font-data-mono-lg text-data-mono-lg text-text-primary outline-none focus:ring-0" id="with-amount-input" type="number" value="850.00"/>
+<span class="font-data-mono-md text-text-secondary">USD</span>
+</div>
+<!-- Percentage Sliders -->
+<div class="grid grid-cols-4 gap-space-xs pt-1">
+<button class="py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setWithPercent(0.25)">25%</button>
+<button class="py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setWithPercent(0.50)">50%</button>
+<button class="py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-text-secondary hover:text-text-primary hover:bg-surface-container-highest transition-colors" onclick="setWithPercent(0.75)">75%</button>
+<button class="py-1 rounded bg-surface-container-high font-data-mono-md text-[12px] text-primary hover:bg-surface-container-highest transition-colors font-bold" onclick="setWithPercent(1.00)">100% MAX</button>
+</div>
+</div>
+<!-- Security & 2FA Gate -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-text-primary">
+<span class="material-symbols-outlined text-primary text-[18px]">security</span>
+<span class="font-label-caps text-label-caps uppercase">Steam Guard Mobile 2FA Authentication</span>
+</div>
+<span class="font-label-badge text-[10px] text-primary uppercase">Required</span>
+</div>
+<p class="font-body-sm text-[12px] text-text-muted">Enter the 5-character alphanumeric token currently active in your Steam Mobile App.</p>
+<div class="flex items-center gap-space-sm pt-1">
+<input class="w-36 text-center tracking-widest uppercase bg-surface-card p-2 rounded-lg font-data-mono-lg text-data-mono-lg text-primary outline-none focus:bg-surface-container-high" maxlength="5" placeholder="R7X9K" type="text"/>
+<div class="flex items-center gap-space-xs text-[11px] text-text-secondary font-data-mono-md">
+<span class="material-symbols-outlined text-status-upcoming text-[16px]">schedule</span>
+<span>Tokens refresh every 30 seconds</span>
+</div>
+</div>
+</div>
+<!-- Limits & Execution Guarantee -->
+<div class="flex items-center justify-between text-[11px] text-text-muted font-data-mono-md">
+<span>24h Limit: <span class="text-text-primary">$16,860</span> / $20,000 USD remaining</span>
+<span>Network Mining Fee: <span class="text-tertiary">$1.00 USDT</span></span>
+</div>
+</div>
+<button class="w-full mt-space-md bg-surface-container-high hover:bg-primary text-text-primary hover:text-on-primary font-headline-sm text-[14px] uppercase py-space-md rounded-lg flex items-center justify-center gap-space-xs transition-all shadow-md">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+          Authorize Instant Cashout
+        </button>
+</div>
+</section>
+<!-- 4. Advanced Transaction History & Ledger Filter System -->
+<section class="bg-surface-card rounded-xl p-space-lg shadow-xl space-y-space-md">
+<!-- Section Header with Aggregated Volume Statistics -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-text-primary">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Cryptographic Treasury Audit Ledger</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Immutable log of peer-to-peer escrow transactions and fiat settlements.</p>
+</div>
+</div>
+<!-- Ledger Aggregate Stat Pills -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<div class="bg-surface-container-lowest px-space-md py-1.5 rounded-lg flex items-center gap-space-xs">
+<span class="font-label-badge text-[10px] text-text-muted">TOTAL DEPOSITED:</span>
+<span class="font-data-mono-md text-body-sm text-tertiary font-bold">$14,290.00</span>
+</div>
+<div class="bg-surface-container-lowest px-space-md py-1.5 rounded-lg flex items-center gap-space-xs">
+<span class="font-label-badge text-[10px] text-text-muted">TOTAL CASHED OUT:</span>
+<span class="font-data-mono-md text-body-sm text-primary font-bold">$9,850.00</span>
+</div>
+<div class="bg-surface-container-lowest px-space-md py-1.5 rounded-lg flex items-center gap-space-xs">
+<span class="font-label-badge text-[10px] text-text-muted">NET PROFIT / SURPLUS:</span>
+<span class="font-data-mono-md text-body-sm text-status-upcoming font-bold">+$4,440.00</span>
+</div>
+</div>
+</div>
+<!-- Filter & Search Toolbar -->
+<div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm bg-surface-container-lowest p-space-sm rounded-xl">
+<div class="flex flex-1 items-center gap-space-xs bg-surface-card px-space-sm py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-text-muted text-[18px]">search</span>
+<input class="bg-transparent border-none outline-none text-text-primary font-body-sm text-body-sm placeholder:text-text-muted w-full focus:ring-0" placeholder="Search by Tx Hash, Item Name, Steam Trade ID, or Counterparty..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<!-- Type Filter Selector -->
+<select class="bg-surface-card text-text-secondary font-label-caps text-[11px] uppercase py-2 px-space-sm rounded-lg outline-none cursor-pointer hover:text-text-primary">
+<option>All Transactions</option>
+<option>Deposits Only</option>
+<option>Withdrawals Only</option>
+<option>Marketplace Sales</option>
+<option>Marketplace Purchases</option>
+<option>Trade-Up Liquidation</option>
+<option>Escrow Hold Releases</option>
+</select>
+<!-- Date Filter Selector -->
+<select class="bg-surface-card text-text-secondary font-label-caps text-[11px] uppercase py-2 px-space-sm rounded-lg outline-none cursor-pointer hover:text-text-primary">
+<option>Last 30 Days</option>
+<option>This Quarter</option>
+<option>Year to Date</option>
+<option>All-Time Archive</option>
+</select>
+<!-- Export CSV Trigger -->
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-text-primary font-label-caps text-[11px] uppercase px-space-md py-2 rounded-lg flex items-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>CSV / Tax Audit</span>
+</button>
+</div>
+</div>
+<!-- High-Fidelity Ledger Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-md text-body-sm border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest text-text-muted font-label-caps text-[11px] uppercase">
+<th class="py-3 px-space-md rounded-l-lg">Transaction &amp; Hash</th>
+<th class="py-3 px-space-md">Asset Details / Counterparty</th>
+<th class="py-3 px-space-md">Execution Node</th>
+<th class="py-3 px-space-md">Amount (USD)</th>
+<th class="py-3 px-space-md">Audited Status</th>
+<th class="py-3 px-space-md rounded-r-lg text-right">Proof / Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-transparent space-y-1">
+<!-- Row 1: Instant Cashout -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary font-semibold">Instant Cashout (USDT TRC20)</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">#TX-9841209</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col font-data-mono-md text-[12px]">
+<span class="text-text-primary">0x71C92a46B9f76D...91823B492</span>
+<span class="text-text-muted text-[11px]">Tron Protocol Network</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-[11px] text-text-secondary">Dispatched in 42s</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-data-mono-md font-bold text-primary">-$850.00</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest text-tertiary font-label-badge text-[10px] px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+                  COMPLETED
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<a class="font-label-caps text-[11px] text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-0.5" href="#">
+                  TronScan
+                  <span class="material-symbols-outlined text-[14px]">launch</span>
+</a>
+</td>
+</tr>
+<!-- Row 2: Skin Sale Credit -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[16px]">call_received</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary font-semibold">P2P Skin Sale Credit</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">#TX-9840884</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="text-text-primary font-medium">★ Butterfly Knife | Doppler (Phase 4)</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Buyer: @Kuro_Vault (Verified)</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-[11px] text-status-upcoming">Steam Escrow Bot #14</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-data-mono-md font-bold text-tertiary">+$3,150.00</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest text-tertiary font-label-badge text-[10px] px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+                  SETTLED
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<a class="font-label-caps text-[11px] text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-0.5" href="#">
+                  Receipt
+                  <span class="material-symbols-outlined text-[14px]">receipt</span>
+</a>
+</td>
+</tr>
+<!-- Row 3: Card Deposit -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[16px]">credit_card</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary font-semibold">Instant Card Ingress</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">#TX-9839912</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="text-text-primary">Visa ending in 4092</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Stripe 3DS Escrow Engine</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-[11px] text-text-secondary">Direct Settlement Gateway</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-data-mono-md font-bold text-tertiary">+$500.00</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest text-tertiary font-label-badge text-[10px] px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+                  COMPLETED
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<a class="font-label-caps text-[11px] text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-0.5" href="#">
+                  Invoice
+                  <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</td>
+</tr>
+<!-- Row 4: Marketplace Purchase -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary font-semibold">Marketplace Item Acquire</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">#TX-9837102</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="text-text-primary font-medium">Manifold Paradox (Phantom Assassin Arcana)</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Exalted Level 3 Unlocked</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-[11px] text-status-upcoming">Steam Escrow Bot #03</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-data-mono-md font-bold text-primary">-$118.50</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest text-status-upcoming font-label-badge text-[10px] px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+                  DELIVERED
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<a class="font-label-caps text-[11px] text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-0.5" href="#">
+                  Inspect
+                  <span class="material-symbols-outlined text-[14px]">visibility</span>
+</a>
+</td>
+</tr>
+<!-- Row 5: Trade-Up Surplus Liquidation -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[16px]">science</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary font-semibold">Trade-Up Surplus Liquidation</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">#TX-9835210</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="text-text-primary">14 Mil-Spec Trade-Up Remains</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Instant Platform Liquidation Option</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-[11px] text-text-secondary">Internal Market Maker</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-data-mono-md font-bold text-tertiary">+$612.80</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest text-tertiary font-label-badge text-[10px] px-2 py-0.5 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+                  COMPLETED
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<a class="font-label-caps text-[11px] text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-0.5" href="#">
+                  Logs
+                  <span class="material-symbols-outlined text-[14px]">article</span>
+</a>
+</td>
+</tr>
+<!-- Row 6: Pending Withdrawal -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary font-semibold">SEPA Instant Clearing</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">#TX-9831004</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex flex-col">
+<span class="text-text-primary">IBAN ending in DE89</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Revolut Banking AG</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-[11px] text-status-upcoming">Escrow Bot Multi-Sig</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="font-data-mono-md text-data-mono-md font-bold text-tertiary">-$1,200.00</span>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest text-tertiary font-label-badge text-[10px] px-2 py-0.5 rounded animate-pulse">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+                  PROCESSING
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<a class="font-label-caps text-[11px] text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-0.5" href="#">
+                  Tracker
+                  <span class="material-symbols-outlined text-[14px]">radar</span>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination & Bottom Controls -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm pt-space-xs">
+<span class="font-data-mono-md text-body-sm text-text-muted">Showing records 1 - 6 of 148 verified entries</span>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-text-muted hover:text-text-primary transition-colors font-label-caps text-[11px] uppercase">Previous</button>
+<span class="px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-data-mono-md text-[12px] font-bold">1</span>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-text-secondary hover:text-text-primary transition-colors font-data-mono-md text-[12px]">2</button>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-text-secondary hover:text-text-primary transition-colors font-data-mono-md text-[12px]">3</button>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-text-muted hover:text-text-primary transition-colors font-label-caps text-[11px] uppercase">Next</button>
+</div>
+</div>
+</section>
+<!-- 5. Security Advisory & Financial Compliance Footer Card -->
+<section class="bg-surface-container-lowest p-space-lg rounded-xl shadow-md grid grid-cols-1 md:grid-cols-3 gap-space-md text-body-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-card flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">policy</span>
+</div>
+<div class="flex flex-col gap-1">
+<h4 class="font-headline-sm text-body-sm text-text-primary">Anti-Money Laundering Safeguard</h4>
+<p class="text-text-muted text-[12px] leading-relaxed">All transactions undergo real-time heuristic risk audits compliant with FinCEN and EU 5AMLD protocols. Trade holds prevent unverified rapid disbursement.</p>
+</div>
+</div>
+<div class="flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-card flex items-center justify-center text-status-upcoming flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">vpn_lock</span>
+</div>
+<div class="flex flex-col gap-1">
+<h4 class="font-headline-sm text-body-sm text-text-primary">Steam OpenID &amp; API Key Isolation</h4>
+<p class="text-text-muted text-[12px] leading-relaxed">Our bot fleet operates within zero-trust secure enclaves. Your proprietary Steam API credentials and trade URL tokens are salted with hardware-backed encryption keys.</p>
+</div>
+</div>
+<div class="flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-card flex items-center justify-center text-tertiary flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+</div>
+<div class="flex flex-col gap-1">
+<h4 class="font-headline-sm text-body-sm text-text-primary">24/7 Priority Treasury Dispatch</h4>
+<p class="text-text-muted text-[12px] leading-relaxed">Need custom OTC liquidity exceeding $50,000 USD? Our VIP Desk resolves inquiries and manual wire clearances in under 15 minutes.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Interactive Logic for Workstations -->
+<script>
+    function setDepAmount(val) {
+      const input = document.getElementById('dep-amount-input');
+      input.value = parseFloat(val).toFixed(2);
+      updateDepCalculations(val);
+    }
+
+    function updateDepCalculations(val) {
+      const num = parseFloat(val) || 0;
+      const bonus = num * 0.02;
+      const total = num + bonus;
+      document.getElementById('dep-subtotal').innerText = '$' + num.toFixed(2) + ' USD';
+      document.getElementById('dep-total').innerText = '$' + total.toFixed(2) + ' USD';
+    }
+
+    document.getElementById('dep-amount-input').addEventListener('input', function(e) {
+      updateDepCalculations(e.target.value);
+    });
+
+    function setWithPercent(pct) {
+      const maxWithdrawable = 3140.00;
+      const targetVal = maxWithdrawable * pct;
+      document.getElementById('with-amount-input').value = targetVal.toFixed(2);
+    }
+
+    function switchTab(action) {
+      if (action === 'deposit') {
+        document.getElementById('deposit-panel').scrollIntoView({ behavior: 'smooth' });
+      } else if (action === 'withdraw') {
+        document.getElementById('withdraw-panel').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function setDepositMethod(method) {
+      const btns = ['btn-dep-crypto', 'btn-dep-skins', 'btn-dep-cards', 'btn-dep-bank'];
+      btns.forEach(id => {
+        const el = document.getElementById(id);
+        el.className = "font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 transition-all";
+      });
+      const target = document.getElementById('btn-dep-' + method);
+      if (target) {
+        target.className = "font-label-caps text-[11px] uppercase py-2 px-1 rounded flex flex-col items-center gap-1 bg-surface-container-high text-text-primary transition-all";
+      }
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest py-space-lg"><div class="w-full px-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="font-data-mono-md text-body-sm text-text-secondary">Escrow Bot Network: <span class="text-text-primary font-semibold">99.98% Operational</span></span></div><span class="text-text-muted hidden md:inline">•</span><span class="font-label-badge text-label-badge text-text-muted uppercase">P2P Instant Settlement Protocol v3.4</span></div><div class="flex items-center gap-space-lg text-body-sm text-text-muted"><a class="hover:text-on-surface transition-colors font-body-sm" href="#">Steam OpenID Auth</a><a class="hover:text-on-surface transition-colors font-body-sm" href="#">API Key Safeguard</a><a class="hover:text-on-surface transition-colors font-body-sm" href="#">Anti-Fraud Escrow</a><a class="hover:text-on-surface transition-colors font-body-sm" href="#">Platform Telemetry</a><span class="font-data-mono-md text-[11px] text-text-muted">© 2025 LOOTORA INTEL</span></div></div></footer></body></html>

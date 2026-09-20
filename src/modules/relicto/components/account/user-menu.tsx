@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -52,15 +53,17 @@ export function UserMenu({ trigger }: UserMenuProps) {
             <span className="font-data-mono-md text-[13px] font-bold text-tertiary">{formatMoney(user.walletUsd)}</span>
           </div>
         </div>
-        <DropdownMenuLabel className="mt-1">Account</DropdownMenuLabel>
-        {ACCOUNT_LINKS.map((link) => (
-          <DropdownMenuItem key={link.href} render={<Link href={link.href} />}>
-            <Icon name={link.icon} className="text-[18px] text-text-muted" />
-            {link.label}
-          </DropdownMenuItem>
-        ))}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="mt-1">Account</DropdownMenuLabel>
+          {ACCOUNT_LINKS.map((link) => (
+            <DropdownMenuItem key={link.href} render={<Link href={link.href} />}>
+              <Icon name={link.icon} className="text-[18px] text-text-muted" />
+              {link.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={signOut} className="text-primary data-[highlighted]:text-primary">
+        <DropdownMenuItem onClick={signOut} className="text-primary data-highlighted:text-primary">
           <Icon name="login" className="rotate-180 text-[18px]" />
           Sign out
         </DropdownMenuItem>

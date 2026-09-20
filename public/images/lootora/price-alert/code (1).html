@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container-highest":"#32353d","surface-container-high":"#272a32","surface-deep":"#0f1420","primary-container":"#ff516a","secondary-fixed":"#e1e0ff","border-subtle":"rgba(255, 255, 255, 0.08)","on-secondary-fixed":"#07006c","secondary-container":"#3131c0","surface-container-lowest":"#0b0e15","on-background":"#e1e2ec","error":"#ffb4ab","on-error-container":"#ffdad6","text-primary":"#f8fafc","on-error":"#690005","surface-tint":"#ffb2b7","on-secondary":"#1000a9","surface-bright":"#363941","on-secondary-fixed-variant":"#2f2ebe","tertiary-fixed-dim":"#ffb95f","surface-variant":"#32353d","surface-overlay":"rgba(10, 13, 20, 0.85)","primary":"#ffb2b7","inverse-surface":"#e1e2ec","glow-crimson":"rgba(244, 63, 94, 0.25)","surface-glass":"rgba(21, 27, 43, 0.72)","tertiary-container":"#ca8100","on-surface":"#e1e2ec","surface-container-low":"#191b23","inverse-primary":"#bc0b3b","glow-indigo":"rgba(99, 102, 241, 0.25)","on-surface-variant":"#e3bdbf","on-tertiary":"#472a00","glow-amber":"rgba(245, 158, 11, 0.25)","surface":"#10131a","tertiary":"#ffb95f","text-muted":"#64748b","error-container":"#93000a","on-primary":"#67001b","background":"#10131a","primary-fixed":"#ffdadb","on-primary-fixed-variant":"#92002a","on-tertiary-fixed-variant":"#653e00","on-primary-container":"#5b0017","text-secondary":"#94a3b8","surface-card":"#151b2b","primary-fixed-dim":"#ffb2b7","on-primary-fixed":"#40000d","on-secondary-container":"#b0b2ff","on-tertiary-fixed":"#2a1700","secondary-fixed-dim":"#c0c1ff","outline-variant":"#5b4041","border-tactical":"rgba(245, 158, 11, 0.4)","surface-dim":"#10131a","secondary":"#c0c1ff","status-upcoming":"#06b6d4","status-live":"#ef4444","inverse-on-surface":"#2d3038","outline":"#aa888a","on-tertiary-container":"#3e2400","tertiary-fixed":"#ffddb8","surface-container":"#1d1f27","border-focus":"rgba(244, 63, 94, 0.5)","canvas-base":"#0a0d14"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xs":"0.25rem","gutter-desktop":"1.5rem","space-xl":"2.5rem","gutter":"1.25rem","space-sm":"0.5rem","space-lg":"1.5rem","margin-desktop":"2.5rem","space-md":"1rem","margin":"1rem"},"fontFamily":{"headline-md":["Space Grotesk"],"display-hero":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"headline-xl-mobile":["Space Grotesk"],"headline-xl":["Space Grotesk"],"body-md":["Geist"],"headline-sm":["Space Grotesk"],"data-mono-md":["JetBrains Mono"],"headline-lg":["Space Grotesk"],"label-caps":["Space Grotesk"],"label-badge":["JetBrains Mono"],"data-mono-lg":["JetBrains Mono"],"display-hero-mobile":["Space Grotesk"],"body-lg":["Geist"],"body-sm":["Geist"]},"fontSize":{"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.025em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"data-mono-md":["14px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"headline-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"700"}],"label-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"data-mono-lg":["20px",{"lineHeight":"24px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"0em","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.005em","fontWeight":"400"}]}}}}</script></head><body class="bg-canvas-base text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-deep/90 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.6)]"><div class="h-20 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="marketplace" href="#"><div class="w-9 h-9 rounded-lg bg-surface-card flex items-center justify-center text-primary group-hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[22px]">token</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-primary tracking-tight leading-none">LOOTORA<span class="text-primary ml-1">INTEL</span></span><span class="font-label-badge text-label-badge text-tertiary tracking-widest leading-none mt-1">STEAM TRADING PROTOCOL</span></div></a><div class="hidden xl:flex items-center bg-surface-container-lowest px-space-md py-space-xs rounded-lg w-72 gap-space-sm"><span class="material-symbols-outlined text-text-muted text-[18px]">search</span><input class="bg-transparent border-none outline-none text-text-primary font-body-sm text-body-sm placeholder:text-text-muted w-full focus:ring-0" placeholder="Search skins, floats, matches..." type="text"/><kbd class="font-data-mono-md text-[11px] px-1.5 py-0.5 rounded bg-surface-container-high text-text-secondary">⌘K</kbd></div></div><nav class="hidden 2xl:flex items-center gap-space-xs bg-surface-container-lowest/70 p-1 rounded-xl" data-active-classes="bg-surface-container-high text-text-primary font-semibold rounded-lg shadow-[0_0_12px_rgba(244,63,94,0.15)]"><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="marketplace" href="#">Marketplace</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="wiki" href="#">Wiki</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tracker" href="#">Tracker</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="inventory" href="#">Inventory</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="trade-up-and-liquidation" href="#">Trade-Up &amp; Liquidation</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="match-center" href="#">Match Center</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="wallet-and-income" href="#">Wallet &amp; Income</a><a class="font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="community" href="#">Community</a></nav><div class="flex items-center gap-space-md"><div class="flex items-center bg-surface-container-lowest rounded-lg p-1 gap-space-sm pl-space-md"><div class="flex flex-col"><span class="font-label-badge text-label-badge text-text-muted leading-none uppercase">Steam Balance</span><span class="font-data-mono-md text-data-mono-md text-tertiary font-bold leading-none mt-1">$4,289.50</span></div><button class="bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-caps text-label-caps uppercase px-space-md py-space-xs rounded-lg transition-all shadow-[0_0_12px_rgba(244,63,94,0.3)]">+ Deposit</button></div><button class="relative w-10 h-10 rounded-lg bg-surface-card hover:bg-surface-container-high flex items-center justify-center text-text-secondary hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-live ring-2 ring-surface-card"></span></button><div class="flex items-center gap-space-sm bg-surface-card hover:bg-surface-container-high px-space-sm py-1 rounded-xl transition-colors cursor-pointer"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-headline-sm text-[13px] text-text-primary leading-tight font-semibold">@s1mple_cs</span><span class="font-label-badge text-[10px] text-tertiary leading-tight font-semibold">LVL 94 PRO TRADER</span></div></div></div></div></header><main class="w-full pt-20 bg-canvas-base flex-1"><div class="flex flex-col w-full">
+<div class="w-full px-space-lg py-space-md flex flex-col gap-space-md">
+<!-- Telemetry & Breadcrumb HUD Top Strip -->
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-sm bg-surface-deep px-space-md py-space-xs rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs min-w-0">
+<span class="material-symbols-outlined text-primary text-[18px]">radar</span>
+<span class="font-data-mono-md text-[12px] text-text-muted tracking-wider uppercase">PORTAL / MARKET TELEMETRY /</span>
+<span class="font-label-caps text-label-caps text-text-primary tracking-wider uppercase">PRICE ALERTS &amp; BOT TRIGGERS</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-md">
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-0.5 rounded">
+<span class="w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="font-data-mono-md text-[12px] text-primary font-semibold">14 Armed</span>
+<span class="text-text-muted text-[11px]">•</span>
+<span class="font-data-mono-md text-[12px] text-text-secondary">3 Fired 24h</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-upcoming text-[15px]">sensors</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">WS Ping:</span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming font-semibold">9ms</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[15px]">sync</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Steam Sync:</span>
+<span class="font-data-mono-md text-[11px] text-text-primary">4s ago</span>
+</div>
+<div class="hidden 2xl:flex items-center gap-1.5 bg-surface-container-lowest px-space-sm py-0.5 rounded">
+<span class="material-symbols-outlined text-secondary text-[14px]">hub</span>
+<span class="font-label-badge text-label-badge text-text-secondary uppercase">Pipelines: Discord + Telegram + Steam App</span>
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+</div>
+</div>
+</div>
+<!-- Quick Summary / Metric Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Metric 1 -->
+<div class="bg-surface-glass backdrop-blur-xl p-space-md rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden group hover:shadow-glow-crimson transition-all">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-text-muted">Active Price Targets</span>
+<span class="p-1.5 rounded bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</span>
+</div>
+<div class="mt-space-sm flex flex-col">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-text-primary tracking-tight">14</span>
+<span class="font-headline-sm text-headline-sm text-text-muted">Items</span>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-data-mono-md text-[12px] text-text-secondary">Monitored Floor Exposure</span>
+<span class="font-data-mono-md text-[12px] text-tertiary font-bold">$48,250.00</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full mt-space-sm overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 70%"></div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-glass backdrop-blur-xl p-space-md rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden group hover:shadow-glow-indigo transition-all">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-secondary/5 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-text-muted">24H Triggers Fired</span>
+<span class="p-1.5 rounded bg-surface-container text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+</span>
+</div>
+<div class="mt-space-sm flex flex-col">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-text-primary tracking-tight">3</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase bg-secondary/10 px-2 py-0.5 rounded">100% Executed</span>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-data-mono-md text-[12px] text-text-secondary">1 Escrow Snipe • 2 Webhook</span>
+<span class="font-data-mono-md text-[12px] text-status-upcoming font-semibold">0.12s avg</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full mt-space-sm overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-glass backdrop-blur-xl p-space-md rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden group hover:shadow-glow-amber transition-all">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-tertiary/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-text-muted">Arbitrage Spread Captured</span>
+<span class="p-1.5 rounded bg-surface-container text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">query_stats</span>
+</span>
+</div>
+<div class="mt-space-sm flex flex-col">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-tertiary tracking-tight">+$342.80</span>
+<span class="font-data-mono-md text-[12px] text-text-muted">USD</span>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-data-mono-md text-[12px] text-text-secondary">Steam vs Buff163 Delta</span>
+<span class="font-data-mono-md text-[12px] text-primary font-bold">+14.2% yield</span>
+</div>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full mt-space-sm overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface-glass backdrop-blur-xl p-space-md rounded-xl flex flex-col justify-between shadow-md relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-text-muted">Pipeline Health</span>
+<span class="p-1.5 rounded bg-surface-container text-status-upcoming flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</span>
+</div>
+<div class="mt-space-sm flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-text-primary tracking-tight">99.98%</span>
+<span class="font-label-badge text-label-badge text-status-upcoming bg-status-upcoming/10 px-2 py-0.5 rounded">Operational</span>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="font-data-mono-md text-[12px] text-text-secondary">Fallback SMS Queue</span>
+<span class="font-data-mono-md text-[12px] text-text-primary font-semibold">0 Queued</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs mt-space-sm">
+<span class="w-2 h-2 rounded-full bg-primary" title="Discord Webhook: Ready"></span>
+<span class="w-2 h-2 rounded-full bg-secondary" title="Telegram Bot: Polling"></span>
+<span class="w-2 h-2 rounded-full bg-status-upcoming" title="Push API: Active"></span>
+<span class="w-2 h-2 rounded-full bg-tertiary" title="Steam Guard Sync: Paired"></span>
+<span class="font-data-mono-md text-[11px] text-text-muted ml-auto">4/4 Connected</span>
+</div>
+</div>
+</div>
+<!-- Main Content Grid: Alert Builder + Live Table -->
+<div class="grid grid-cols-1 2xl:grid-cols-12 gap-space-md items-start">
+<!-- Left Column: Interactive Alert & Trigger Builder Panel (4 cols on 2xl) -->
+<div class="2xl:col-span-4 flex flex-col gap-space-md bg-surface-card/90 backdrop-blur-xl p-space-md rounded-xl shadow-xl">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">add_alert</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary tracking-tight">Tactical Trigger Studio</h2>
+</div>
+<span class="font-label-badge text-label-badge text-tertiary bg-tertiary/10 px-2 py-0.5 rounded uppercase">Escrow Snipe V3</span>
+</div>
+<!-- Asset Search Input -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-text-secondary flex justify-between items-center">
+<span>Target Skin / Asset Spec</span>
+<span class="text-tertiary font-data-mono-md text-[10px]">TIER 1 ARBITRAGE</span>
+</label>
+<div class="relative flex items-center bg-surface-container-lowest rounded-lg px-space-md py-space-xs shadow-inner">
+<span class="material-symbols-outlined text-text-muted text-[18px] mr-2">search</span>
+<input class="w-full bg-transparent outline-none text-text-primary font-body-md text-body-md placeholder:text-text-muted" id="assetInput" placeholder="Type skin name, weapon, float seed..." type="text" value="★ Butterfly Knife | Doppler (Phase 4)"/>
+<button class="bg-surface-container hover:bg-surface-container-high text-text-secondary px-2 py-1 rounded text-body-sm flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">tune</span>
+<span class="font-data-mono-md text-[11px]">CS2</span>
+</button>
+</div>
+</div>
+<!-- Condition Type Selector Tabs -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-label-caps uppercase text-text-secondary">Execution Condition Rule</label>
+<div class="grid grid-cols-2 gap-1.5 bg-surface-container-lowest p-1 rounded-lg">
+<button class="rule-toggle-btn active-rule font-label-caps text-label-caps uppercase py-2 px-2 rounded-lg bg-surface-container-high text-primary flex items-center justify-center gap-1 shadow-sm transition-all text-left">
+<span class="material-symbols-outlined text-[15px]">trending_down</span>
+<span>Floor Drops Below</span>
+</button>
+<button class="rule-toggle-btn font-label-caps text-label-caps uppercase py-2 px-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 flex items-center justify-center gap-1 transition-all text-left">
+<span class="material-symbols-outlined text-[15px]">trending_up</span>
+<span>Take-Profit Spike</span>
+</button>
+<button class="rule-toggle-btn font-label-caps text-label-caps uppercase py-2 px-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 flex items-center justify-center gap-1 transition-all text-left">
+<span class="material-symbols-outlined text-[15px]">compare_arrows</span>
+<span>Cross-Market Arb</span>
+</button>
+<button class="rule-toggle-btn font-label-caps text-label-caps uppercase py-2 px-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-container-high/50 flex items-center justify-center gap-1 transition-all text-left">
+<span class="material-symbols-outlined text-[15px]">fingerprint</span>
+<span>Pattern / Float Seed</span>
+</button>
+</div>
+</div>
+<!-- Parameter Numeric Inputs -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="flex flex-col gap-1">
+<span class="font-data-mono-md text-[11px] text-text-muted uppercase">Target Value (USD)</span>
+<div class="flex items-center bg-surface-container-lowest rounded-lg px-space-sm py-2">
+<span class="font-data-mono-md text-[14px] text-tertiary mr-1">$</span>
+<input class="w-full bg-transparent outline-none font-data-mono-md text-data-mono-md text-text-primary" step="10" type="number" value="3050.00"/>
+</div>
+<span class="font-data-mono-md text-[10px] text-primary">-3.1% below current floor</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-data-mono-md text-[11px] text-text-muted uppercase">Max Wear Float Ceiling</span>
+<div class="flex items-center bg-surface-container-lowest rounded-lg px-space-sm py-2">
+<span class="material-symbols-outlined text-text-muted text-[14px] mr-1">speed</span>
+<input class="w-full bg-transparent outline-none font-data-mono-md text-data-mono-md text-text-primary" type="text" value="&lt; 0.0150"/>
+</div>
+<span class="font-data-mono-md text-[10px] text-status-upcoming">Ultra-clean Factory New</span>
+</div>
+</div>
+<!-- Float Range Visualizer Micro-Widget -->
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1.5">
+<div class="flex justify-between items-center text-[11px] font-data-mono-md">
+<span class="text-text-muted">Target Range: 0.0000 - 0.0150</span>
+<span class="text-primary font-bold">Phase 4 Sapphire-Dominant</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full relative overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 15%"></div>
+<div class="bg-status-upcoming h-full" style="width: 25%"></div>
+<div class="bg-surface-container-high h-full" style="width: 60%"></div>
+</div>
+<div class="flex justify-between text-[10px] font-data-mono-md text-text-muted">
+<span>0.00 (FN)</span>
+<span>0.07 (MW)</span>
+<span>0.15 (FT)</span>
+<span>0.38 (WW)</span>
+<span>1.00 (BS)</span>
+</div>
+</div>
+<!-- Action Upon Trigger Toggles -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-label-caps text-label-caps uppercase text-text-secondary">Trigger Actions &amp; Execution Protocol</span>
+<!-- Action Item 1 -->
+<label class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest cursor-pointer hover:bg-surface-container-high/30 transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">notifications_active</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary leading-tight">Instant Audio &amp; Screen HUD Ping</span>
+<span class="font-body-sm text-[11px] text-text-muted">Zero-latency desktop and browser push</span>
+</div>
+</div>
+<input checked="" class="accent-primary w-4 h-4 cursor-pointer" type="checkbox"/>
+</label>
+<!-- Action Item 2 -->
+<label class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest cursor-pointer hover:bg-surface-container-high/30 transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">smart_toy</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary leading-tight">Autonomous Bot Snipe / Auto-Buy</span>
+<span class="font-body-sm text-[11px] text-tertiary font-data-mono-md">Reserve from Vault (Max: $3,100.00 USD)</span>
+</div>
+</div>
+<input checked="" class="accent-tertiary w-4 h-4 cursor-pointer" type="checkbox"/>
+</label>
+<!-- Action Item 3 -->
+<label class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-lowest cursor-pointer hover:bg-surface-container-high/30 transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">share</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[13px] text-text-primary leading-tight">Discord &amp; Telegram Webhook Dispatch</span>
+<span class="font-body-sm text-[11px] text-text-muted">Formatted rich embed with buy link</span>
+</div>
+</div>
+<input checked="" class="accent-secondary w-4 h-4 cursor-pointer" type="checkbox"/>
+</label>
+</div>
+<!-- CTA Action Buttons -->
+<div class="flex flex-col gap-2 pt-space-xs">
+<button class="w-full bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-caps text-label-caps uppercase py-space-sm px-space-md rounded-lg transition-all shadow-[0_0_20px_rgba(244,63,94,0.35)] flex items-center justify-center gap-2 group" id="armAlertBtn">
+<span class="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform">lock_clock</span>
+<span>ARM ALERT &amp; SYNC TO WEBSOCKET</span>
+</button>
+<div class="flex items-center justify-between px-1 text-[11px] font-data-mono-md text-text-muted">
+<span>Escrow Gas: $0.00</span>
+<span class="text-status-upcoming flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span> P2P Node #4 Ready</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Active Alert Watchlist & Real-Time Monitoring Grid (8 cols on 2xl) -->
+<div class="2xl:col-span-8 flex flex-col gap-space-md">
+<!-- Controls & Filter Toolbar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm bg-surface-card/70 backdrop-blur-xl p-space-sm rounded-xl">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-text-primary">Active Watched Assets</span>
+<span class="font-data-mono-md text-[12px] bg-surface-container px-2 py-0.5 rounded text-tertiary">6 of 14 displaying</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-high text-text-primary font-label-caps text-label-caps uppercase shadow-sm">All (14)</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-lowest hover:bg-surface-container text-text-secondary font-label-caps text-label-caps uppercase transition-colors">Auto-Snipe (5)</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-lowest hover:bg-surface-container text-text-secondary font-label-caps text-label-caps uppercase transition-colors">Cross-Arb (4)</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-lowest hover:bg-surface-container text-text-secondary font-label-caps text-label-caps uppercase transition-colors">Recently Hit (3)</button>
+</div>
+</div>
+<!-- High Density Tactical Alert Watchlist Table -->
+<div class="bg-surface-card/90 backdrop-blur-xl rounded-xl overflow-hidden shadow-xl flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-deep text-text-muted font-label-caps text-label-caps uppercase tracking-wider text-[11px]">
+<th class="py-space-sm px-space-md">Asset &amp; Wear Specification</th>
+<th class="py-space-sm px-space-md">Market Floor &amp; 24h Trend</th>
+<th class="py-space-sm px-space-md">Trigger Rule</th>
+<th class="py-space-sm px-space-md">Delta to Target</th>
+<th class="py-space-sm px-space-md">Protocol &amp; Dispatch</th>
+<th class="py-space-sm px-space-md text-right">Arm / Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-transparent font-body-sm text-body-sm">
+<!-- Row 1: Butterfly Knife -->
+<tr class="hover:bg-surface-container-high/40 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center shrink-0 shadow-inner">
+<img class="w-full h-full object-cover rounded" data-alt="Close up cinematic shot of CS2 Butterfly Knife Doppler Phase 4 with deep dark obsidian blade and vibrant cobalt blue swirl patterns reflecting tournament arena neon crimson lighting against dark metallic surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx0w6BeBfxX7FGeka6SPTlVEzWfwu9GVwzEpLmQTIg32-5mleXI-g4yT6mSHzps8y4RfcbFOmAP4xpkYRL8Ymd8bUlHkoguahNdeHtE-Jsptal-0ZscYYgXSJwdLO8x6_dFn5MTP-Zru606PPjBterPwl8mF3Kym3ClYhDWtGI1lD4J87M4tUQux-uoQUZ0b8b-b7P5iwq1VLR2AR1gY2Yu43Eww2mMk3evmNoNgQnM2soAyexraW9EA"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[14px] text-text-primary group-hover:text-primary transition-colors truncate">★ Butterfly Knife | Doppler</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-badge text-[10px] text-secondary bg-secondary/10 px-1.5 py-0.2 rounded uppercase">Phase 4</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">0.0142 FN</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[15px] font-bold text-text-primary">$3,150.00</span>
+<div class="flex items-center gap-1">
+<!-- Inline SVG sparkline -->
+<svg class="w-14 h-4 text-primary" fill="none" viewbox="0 0 60 16">
+<path d="M1 12 L15 10 L30 14 L45 6 L59 8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono-md text-[10px] text-primary">-1.8%</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[12px] text-tertiary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span> Drops &lt; $3,080.00
+                      </span>
+<span class="font-data-mono-md text-[10px] text-text-muted mt-0.5">Float &lt; 0.020</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[13px] text-primary font-bold">-2.2% away</span>
+<span class="font-data-mono-md text-[10px] text-text-muted">Spread: -$70.00</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="font-label-badge text-[10px] text-on-primary-container bg-primary-container px-2 py-0.5 rounded uppercase font-bold tracking-wide">AUTO-SNIPE</span>
+<div class="flex items-center gap-1 text-text-muted">
+<span class="material-symbols-outlined text-[16px] text-secondary">forum</span>
+<span class="material-symbols-outlined text-[16px] text-status-upcoming">send</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary" title="Alert Armed">
+<span class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-surface-deep transition"></span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Phantom Assassin Manifold Paradox -->
+<tr class="hover:bg-surface-container-high/40 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center shrink-0 shadow-inner">
+<img class="w-full h-full object-cover rounded" data-alt="Dota 2 Phantom Assassin Manifold Paradox Arcana twin dual blades gleaming with ethereal cyan crystal energy and dark purple aura, dark cybernetic fantasy atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZlXLBzaECQjq67Z8_0rXArl7mz2yO3HykZFkXAeE4xSHmZjFOQ_8xGQ986naA9dDcCr83T4ne9LoelPszGoXDVwouM-PgjA2Z20WoY2k6qfb1aOIUVWsGXijXhLv8tusZ3KaK2CQYmyEJCuXLA3GmyxT1QZRhzeQOdfvJ69bMoQ18MC79afgRUuaN5R4ozvVZQ98_jDe6WbkU1snEEYEWciUuUoSUWtpyT0ooypq8fSjHf7nPUQZ85A"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[14px] text-text-primary group-hover:text-primary transition-colors truncate">Phantom Assassin — Manifold Paradox</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-badge text-[10px] text-status-upcoming bg-status-upcoming/10 px-1.5 py-0.2 rounded uppercase">Exalted Style 3</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Arcana Dota 2</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[15px] font-bold text-text-primary">$118.50</span>
+<div class="flex items-center gap-1">
+<svg class="w-14 h-4 text-status-upcoming" fill="none" viewbox="0 0 60 16">
+<path d="M1 8 L15 12 L30 6 L45 8 L59 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono-md text-[10px] text-status-upcoming">+3.4%</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[12px] text-tertiary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span> Drops &lt; $110.00
+                      </span>
+<span class="font-data-mono-md text-[10px] text-text-muted mt-0.5">Full 100 Wins Unlocked</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[13px] text-text-secondary font-bold">-7.1% away</span>
+<span class="font-data-mono-md text-[10px] text-text-muted">Spread: -$8.50</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="font-label-badge text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 rounded uppercase font-semibold">PUSH &amp; DISCORD</span>
+<div class="flex items-center gap-1 text-text-muted">
+<span class="material-symbols-outlined text-[16px] text-secondary">forum</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary" title="Alert Armed">
+<span class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-surface-deep transition"></span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: AK-47 Fire Serpent -->
+<tr class="hover:bg-surface-container-high/40 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center shrink-0 shadow-inner">
+<img class="w-full h-full object-cover rounded" data-alt="CS2 AK-47 Fire Serpent skin showcasing classic Aztec serpent motif with green and amber scales across wooden rifle chassis, dramatic esports studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEVkmSVHGupu1VvbpY-A2d-zX5x4GyX_R0CYAOgGFvpC3druKTmAha_CAGeynLaVIDpvJaRk7UU6K3orxcFe7ZRjlqhHnPvAsgDRypJxI0XqZ17NrIzxTwla_jQnDAks409x8a-9qGzCV4I_xwtH7KANfa9obuvVPyRM0Enh4rWFiMVelLLs3lCpPdBCf-tixlenEjKLqOOttikNu9dUrc5m6ep_vh-Km6mIdwDEYLD29reWg0-y68aA"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[14px] text-text-primary group-hover:text-primary transition-colors truncate">AK-47 | Fire Serpent</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-badge text-[10px] text-tertiary bg-tertiary/10 px-1.5 py-0.2 rounded uppercase">Classified</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">0.174 FT</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[15px] font-bold text-text-primary">$740.00</span>
+<div class="flex items-center gap-1">
+<svg class="w-14 h-4 text-tertiary" fill="none" viewbox="0 0 60 16">
+<path d="M1 10 L15 8 L30 11 L45 5 L59 3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+<span class="font-data-mono-md text-[10px] text-tertiary">+5.7%</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[12px] text-status-upcoming font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> Spikes &gt; $820.00
+                      </span>
+<span class="font-data-mono-md text-[10px] text-text-muted mt-0.5">Take-Profit Exit</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[13px] text-status-upcoming font-bold">+10.8% away</span>
+<span class="font-data-mono-md text-[10px] text-text-muted">Target: +$80.00</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="font-label-badge text-[10px] text-tertiary bg-tertiary/10 px-2 py-0.5 rounded uppercase font-semibold">EXIT ALERT</span>
+<div class="flex items-center gap-1 text-text-muted">
+<span class="material-symbols-outlined text-[16px] text-tertiary">notifications</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary" title="Alert Armed">
+<span class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-surface-deep transition"></span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: StatTrak M4A1-S Printstream (Triggered recently) -->
+<tr class="bg-primary/5 hover:bg-primary/10 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center shrink-0 shadow-inner">
+<img class="w-full h-full object-cover rounded" data-alt="CS2 M4A1-S Printstream with pearlescent white chassis, black tactical iconography and holographic neon color shifts on gun silencer and barrel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa4T4mNx-y6LKiMsq02na1FNPGXcUdVZ_MCnH2MpugrjLGl3vX-HjD1wF1mya_KoL21EZIhTvFdWy2fgPouJ09fLBYSDbgd9QIyIsCGGlOuErkgKw8jhwnNZjuMdHqmS2EENip85sNBKxh65XbVIzpvj-2X6SDYmhXdvS25FbHybyISg5OLUJnfdCYeZtv8t0KpDiTDltlRmZCxAm5_em-uajIScgFFYshQy2fvjQtDte5PoUbtsjrRQ"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[14px] text-primary group-hover:underline truncate">StatTrak™ M4A1-S | Printstream</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-badge text-[10px] text-primary bg-primary/15 px-1.5 py-0.2 rounded uppercase">TRIGGER FIRED</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">0.082 MW</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[15px] font-bold text-primary">$394.50</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[14px]">south_east</span>
+<span class="font-data-mono-md text-[10px] text-primary font-bold">-6.1% FLASH DROP</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[12px] text-text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">check_circle</span> Floor &lt; $395.00
+                      </span>
+<span class="font-data-mono-md text-[10px] text-primary mt-0.5">Executed 14m ago</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[13px] text-status-live font-bold animate-pulse">TRIGGER MET</span>
+<span class="font-data-mono-md text-[10px] text-text-muted">Hit $394.50 (Bot #07)</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="font-label-badge text-[10px] text-on-primary-container bg-primary-container px-2 py-0.5 rounded uppercase font-bold">DISPATCHED</span>
+<span class="font-data-mono-md text-[10px] text-secondary">0.12s latency</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-2 py-1 bg-surface-container hover:bg-surface-container-high rounded text-text-primary font-data-mono-md text-[11px] uppercase transition-colors">
+                        Re-arm
+                      </button>
+<button class="p-1 rounded hover:bg-surface-container text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: AWP Dragon Lore -->
+<tr class="hover:bg-surface-container-high/40 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center shrink-0 shadow-inner">
+<img class="w-full h-full object-cover rounded" data-alt="Iconic CS2 AWP Dragon Lore sniper rifle with fire-breathing Celtic knotwork dragon on gold and jade green chassis, hyper-detailed render under dark esports arena lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYqngF3E2a6KB0VzO0uluwYZCSJg_2jNiYgnami5diZjff7U17NapEA67r8dua-Juve3wnaxZBhLTU1CiQtk9oShNeZqnRlAQliH7dNesiKQbaI8Jqirg6AeojHbgTp9CyQ-8iICv-KS_k3HNj0jVUMFo2t1q6QIRkufgU4XaB7H26TVNo8iT_6jrts6V3RmbyPV46DvJYa4pUm2fE_ueRPI-EP7Yb85zC124wzIZlCnrwhoMSWbef6Q"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[14px] text-text-primary group-hover:text-primary transition-colors truncate">AWP | Dragon Lore</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-badge text-[10px] text-tertiary bg-tertiary/10 px-1.5 py-0.2 rounded uppercase">Covert Souvenir</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">0.241 FT</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[15px] font-bold text-tertiary">$5,200.00</span>
+<div class="flex items-center gap-1">
+<span class="font-data-mono-md text-[10px] text-text-muted">Buff163: $5,560.00</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[12px] text-secondary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">swap_horiz</span> Spread &gt; 6.0% Arb
+                      </span>
+<span class="font-data-mono-md text-[10px] text-text-muted mt-0.5">Current delta: +6.92%</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[13px] text-status-upcoming font-bold">CONDITION ACTIVE</span>
+<span class="font-data-mono-md text-[10px] text-tertiary">+$360.00 Arb Profit</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="font-label-badge text-[10px] text-status-upcoming bg-status-upcoming/10 px-2 py-0.5 rounded uppercase font-semibold">TELEGRAM ARB</span>
+<span class="material-symbols-outlined text-[16px] text-status-upcoming">send</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary" title="Alert Armed">
+<span class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-surface-deep transition"></span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Specialist Gloves Crimson Kimono -->
+<tr class="hover:bg-surface-container-high/40 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest p-1 flex items-center justify-center shrink-0 shadow-inner">
+<img class="w-full h-full object-cover rounded" data-alt="CS2 Specialist Gloves Crimson Kimono with intense red diamond fabric weave and tactical black leather palms, macro high fidelity texture under dramatic dark rim light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_FYLmqSMteC4I1fWDHmntuFQRZGvuzJV17681Rvhe3nsFZZcKvS21Dgndb96xOWPYWqL-hT307wHSRgweIJebqJVCrHd3XL4ziToW2YMRVQ9Yqnm9GIBUfkUscw6LAV_EO3os8vMGX7kK2J3AOaEyKp5UlcUbZdXd2LrtQbRy0qnB_-C5qV7tH8tW107jjHsWjt7G2ztC1s1xcOE8O1XZnufG5JxzGeOi7SN8kf8Fw1uUrt_E30grvA"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[14px] text-text-primary group-hover:text-primary transition-colors truncate">Specialist Gloves | Crimson Kimono</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-badge text-[10px] text-primary bg-primary/10 px-1.5 py-0.2 rounded uppercase">Tier 1 Max Red</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">0.198 FT</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[15px] font-bold text-text-primary">$3,800.00</span>
+<div class="flex items-center gap-1">
+<span class="font-data-mono-md text-[10px] text-text-muted">Pattern Seed #661</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[12px] text-tertiary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span> Drops &lt; $3,650.00
+                      </span>
+<span class="font-data-mono-md text-[10px] text-text-muted mt-0.5">Both Hands Full Red</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-[13px] text-primary font-bold">-3.5% away</span>
+<span class="font-data-mono-md text-[10px] text-text-muted">Spread: -$150.00</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<span class="font-label-badge text-[10px] text-on-primary-container bg-primary-container px-2 py-0.5 rounded uppercase font-bold">AUTO-SNIPE</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">bolt</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary" title="Alert Armed">
+<span class="translate-x-4 inline-block h-3.5 w-3.5 transform rounded-full bg-surface-deep transition"></span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Bottom Telemetry Stats & Quick Action Bar -->
+<div class="bg-surface-deep/90 px-space-md py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<span class="font-data-mono-md text-[12px] text-text-muted">Active Node Pool: <span class="text-text-primary font-semibold">Frankfurt FRA-02 (Low Latency Valve Relay)</span></span>
+<span class="text-text-muted">•</span>
+<span class="font-data-mono-md text-[12px] text-text-muted">Vault Reserve Locked: <span class="text-tertiary font-bold">$3,100.00</span></span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="bg-surface-container hover:bg-surface-container-high text-text-secondary hover:text-text-primary px-space-sm py-1 rounded text-body-sm font-label-caps uppercase transition-colors">
+                Export Watchlist JSON
+              </button>
+<button class="bg-primary hover:bg-primary/90 text-on-primary font-label-caps uppercase px-space-sm py-1 rounded transition-colors text-[11px] font-bold">
+                Pause All Triggers
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Split Section: Real-Time Execution Log & Notification Channels Widget -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-md mt-space-sm">
+<!-- Fired Triggers & Execution Telemetry Console (7 cols) -->
+<div class="xl:col-span-7 bg-surface-card/80 backdrop-blur-xl p-space-md rounded-xl shadow-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">terminal</span>
+<h3 class="font-headline-sm text-headline-sm text-text-primary tracking-tight">Real-Time Execution Telemetry Console</h3>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming">STREAM LIVE</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg font-data-mono-md text-[12px] flex flex-col gap-space-sm max-h-56 overflow-y-auto">
+<!-- Log 1 -->
+<div class="flex items-start gap-space-sm text-text-secondary">
+<span class="text-text-muted shrink-0">[14:48:02.109]</span>
+<span class="text-primary font-bold shrink-0">[TARGET HIT]</span>
+<div class="flex-1">
+<span class="text-text-primary font-semibold">StatTrak™ M4A1-S | Printstream</span> dropped to <span class="text-primary font-bold">$394.50</span> (Alert threshold: &lt; $395.00) on Lootora Escrow Bot #07.
+              <div class="text-[11px] text-secondary mt-0.5">↳ iOS Web Push + Discord Webhook fired in 0.12s • Trade URL auto-opened.</div>
+</div>
+</div>
+<!-- Log 2 -->
+<div class="flex items-start gap-space-sm text-text-secondary">
+<span class="text-text-muted shrink-0">[11:22:15.842]</span>
+<span class="text-tertiary font-bold shrink-0">[AUTO-SNIPE]</span>
+<div class="flex-1">
+<span class="text-text-primary font-semibold">★ Karambit | Doppler Phase 2</span> listed on SCM at <span class="text-tertiary font-bold">$1,820.00</span>.
+              <div class="text-[11px] text-status-upcoming mt-0.5">↳ Instant Vault purchase approved via Escrow Bot API. Trade offer accepted by Valve server.</div>
+</div>
+</div>
+<!-- Log 3 -->
+<div class="flex items-start gap-space-sm text-text-secondary">
+<span class="text-text-muted shrink-0">[09:05:44.220]</span>
+<span class="text-secondary font-bold shrink-0">[ARB SPIKE]</span>
+<div class="flex-1">
+<span class="text-text-primary font-semibold">Dota 2 Dragonclaw Hook</span> volume surged +8.5% post-patch 7.37.
+              <div class="text-[11px] text-text-muted mt-0.5">↳ Spread delta: 9.4% vs Steam Community Market. Telegram notification delivered to @S1mple_TradeBot.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Pipeline Endpoints Widget (5 cols) -->
+<div class="xl:col-span-5 bg-surface-card/80 backdrop-blur-xl p-space-md rounded-xl shadow-lg flex flex-col justify-between gap-space-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">rss_feed</span>
+<h3 class="font-headline-sm text-headline-sm text-text-primary tracking-tight">Connected Dispatch Channels</h3>
+</div>
+<button class="font-label-badge text-label-badge text-primary hover:underline uppercase font-bold">Configure API</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<!-- Channel 1 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded bg-secondary/15 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[12px] text-text-primary truncate">Discord Webhook</span>
+<span class="font-data-mono-md text-[10px] text-text-muted truncate">#lootora-snipes</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-status-upcoming shrink-0" title="Connected"></span>
+</div>
+<!-- Channel 2 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded bg-status-upcoming/15 flex items-center justify-center text-status-upcoming shrink-0">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[12px] text-text-primary truncate">Telegram Bot</span>
+<span class="font-data-mono-md text-[10px] text-text-muted truncate">@S1mple_TradeBot</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-status-upcoming shrink-0" title="Connected"></span>
+</div>
+<!-- Channel 3 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded bg-primary/15 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[12px] text-text-primary truncate">Web Browser Push</span>
+<span class="font-data-mono-md text-[10px] text-text-muted truncate">Chrome &amp; Safari iOS</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-status-upcoming shrink-0" title="Connected"></span>
+</div>
+<!-- Channel 4 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-8 h-8 rounded bg-tertiary/15 flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[18px]">sms</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-[12px] text-text-primary truncate">SMS Fallback</span>
+<span class="font-data-mono-md text-[10px] text-text-muted truncate">+1 (***) ***-8821</span>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-tertiary shrink-0" title="Standby Mode"></span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<button class="bg-surface-container-lowest hover:bg-surface-container text-text-primary font-label-caps text-label-caps uppercase px-space-md py-2 rounded-lg transition-colors flex items-center gap-2 text-[11px]" id="testEndpointsBtn">
+<span class="material-symbols-outlined text-[16px] text-secondary">phonelink_ring</span>
+<span>Send Test Alert to All Channels</span>
+</button>
+<span class="font-data-mono-md text-[11px] text-text-muted">Webhooks secured with HMAC SHA256</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Rule tabs toggle interaction
+    const ruleButtons = document.querySelectorAll('.rule-toggle-btn');
+    ruleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        ruleButtons.forEach(b => {
+          b.classList.remove('bg-surface-container-high', 'text-primary', 'shadow-sm');
+          b.classList.add('text-text-muted');
+        });
+        btn.classList.add('bg-surface-container-high', 'text-primary', 'shadow-sm');
+        btn.classList.remove('text-text-muted');
+      });
+    });
+
+    // Arm Alert Button feedback interaction
+    const armBtn = document.getElementById('armAlertBtn');
+    if (armBtn) {
+      armBtn.addEventListener('click', () => {
+        const originalHtml = armBtn.innerHTML;
+        armBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">sync</span><span>SYNCING PROTOCOL WEBSOCKET...</span>`;
+        armBtn.classList.add('opacity-80');
+        setTimeout(() => {
+          armBtn.innerHTML = `<span class="material-symbols-outlined text-[18px]">verified</span><span>ALERT ARMED &amp; BROADCAST READY</span>`;
+          setTimeout(() => {
+            armBtn.innerHTML = originalHtml;
+            armBtn.classList.remove('opacity-80');
+          }, 2400);
+        }, 900);
+      });
+    }
+
+    // Test Endpoints button interaction
+    const testBtn = document.getElementById('testEndpointsBtn');
+    if (testBtn) {
+      testBtn.addEventListener('click', () => {
+        const origText = testBtn.innerText;
+        testBtn.innerText = 'DISPATCHING TEST PAYLOADS...';
+        setTimeout(() => {
+          testBtn.innerText = '✓ 4/4 CHANNELS CONFIRMED';
+          setTimeout(() => {
+            testBtn.innerText = origText;
+          }, 2000);
+        }, 800);
+      });
+    }
+  })();
+</script></main><footer class="w-full bg-surface-container-lowest py-space-lg"><div class="w-full px-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="font-data-mono-md text-body-sm text-text-secondary">Escrow Bot Network: <span class="text-text-primary font-semibold">99.98% Operational</span></span></div><span class="text-text-muted hidden md:inline">•</span><span class="font-label-badge text-label-badge text-text-muted uppercase">P2P Instant Settlement Protocol v3.4</span></div><div class="flex items-center gap-space-lg text-body-sm text-text-muted"><a class="hover:text-on-surface transition-colors font-body-sm" href="#">Steam OpenID Auth</a><a class="hover:text-on-surface transition-colors font-body-sm" href="#">API Key Safeguard</a><a class="hover:text-on-surface transition-colors font-body-sm" href="#">Anti-Fraud Escrow</a><a class="hover:text-on-surface transition-colors font-body-sm" href="#">Platform Telemetry</a><span class="font-data-mono-md text-[11px] text-text-muted">© 2025 LOOTORA INTEL</span></div></div></footer></body></html>

@@ -4,7 +4,12 @@ import type { ReactNode } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/cn";
 
-export type SegmentedTab<T extends string> = { value: T; content: ReactNode };
+export type SegmentedTab<T extends string> = {
+  value: T;
+  content: ReactNode;
+  /** Extra classes for this tab only (per-tab tones). */
+  className?: string;
+};
 
 type SegmentedTabsProps<T extends string> = {
   tabs: SegmentedTab<T>[];
@@ -23,7 +28,11 @@ export function SegmentedTabs<T extends string>({ tabs, value, onChange, label, 
     <Tabs value={value} onValueChange={(v) => onChange(v as T)} className="gap-0">
       <TabsList aria-label={label} className={cn("h-auto w-full group-data-horizontal/tabs:h-auto", listClassName)}>
         {tabs.map((tab) => (
-          <TabsTrigger key={tab.value} value={tab.value} className={cn("h-auto group-data-[variant=default]/tabs-list:data-active:shadow-xs", tabClassName)}>
+          <TabsTrigger
+            key={tab.value}
+            value={tab.value}
+            className={cn("h-auto group-data-[variant=default]/tabs-list:data-active:shadow-xs", tabClassName, tab.className)}
+          >
             {tab.content}
           </TabsTrigger>
         ))}

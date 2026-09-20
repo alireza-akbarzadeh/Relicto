@@ -14,7 +14,7 @@ To build a screen, follow **[IMPLEMENTING.md](IMPLEMENTING.md)**.
 | `steam-guard-2fa-verification` | `/verify` | Done, 2.7% diff |
 | `reset-password-recovery` | `/reset-password` | Done (6.0%: brand rename reflows title) |
 | `user-profile-trader-identity` | `/profile` | Done, 4.3% diff |
-| `order-history-trade-ledger` | `/orders` | To do |
+| `order-history-trade-ledger` | `/orders` | Done, 3.6% diff |
 | `live-order-tracking-escrow-protocol` | `/orders/[id]` | Done, 1.7% diff |
 | `sell-items-inventory-listing-studio` | `/sell` | To do |
 | `wallet-income-payout-dashboard` | `/wallet` | To do |

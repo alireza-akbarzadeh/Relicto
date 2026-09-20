@@ -6,7 +6,7 @@ import { ListingCard } from "./listing-card";
 
 /** Grid view: four columns; compact view: two (per the design's view switch). */
 const LAYOUT = {
-  grid: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md mb-space-lg",
+  grid: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-space-md mb-space-lg",
   list: "grid grid-cols-1 sm:grid-cols-2 gap-space-md mb-space-lg",
 } as const;
 

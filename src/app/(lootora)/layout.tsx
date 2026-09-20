@@ -8,7 +8,7 @@ export default async function RelictoLayout({ children }: LayoutProps<"/">) {
   return (
     <SessionProvider user={user} notifications={notifications}>
       <TooltipProvider>
-      {children}
+       {children}
       </TooltipProvider>
     </SessionProvider>
   );

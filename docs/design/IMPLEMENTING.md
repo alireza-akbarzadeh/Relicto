@@ -146,6 +146,19 @@ powershell -File scripts/design/compare.ps1 -A <design.png> -B "$TEMP/app.png" -
 - Aim for under ~3% overall. Every remaining hotspot must be explainable: live data (countdowns, session wallet), the brand rename, or 1px font baseline noise.
 - If a style change doesn't appear, Turbopack may have missed the file event. Make a real content change to the CSS file.
 
+**When a diff is hard to explain, measure both pages.** Copy the export into
+`public/_stitch/<name>.html`, open `http://localhost:3000/_stitch/<name>.html`
+and your route side by side, and compare real numbers with
+`getBoundingClientRect()` — element heights, column widths, computed font and
+line-height. That is how the profile page's 4px (an inline button's baseline
+strut vs shadcn's `inline-flex`) and the ledger's column drift were found.
+Delete the copy afterwards; it must not ship in `public/`.
+
+Two recurring causes:
+
+- **shadcn base classes change intrinsic size**: `whitespace-nowrap` and `shrink-0` stop text wrapping, which widens auto-layout table columns and flex rows. Add `whitespace-normal`, `shrink` or `inline-block` where the design wraps or shrinks.
+- **Dense tables**: Stitch's renderer measures text slightly narrower than Chrome, so auto-layout columns land differently. Give the table `table-fixed` and percentage column widths taken from the design's own render.
+
 ## 9. Before committing
 
 - [ ] `npx tsc --noEmit` and `npx eslint` are clean. Run `npx next typegen` if `PageProps` is missing.

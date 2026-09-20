@@ -28,6 +28,11 @@ const TRIGGERS = {
     button: "relative p-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors",
     badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live animate-pulse",
   },
+  /** Item vault: bordered button with a solid dot. */
+  vault: {
+    button: "relative p-2 rounded-lg bg-surface-container-lowest border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-surface-container transition-all",
+    badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary",
+  },
   /** Game hub: bordered button, Lucide bell, pinging dot. */
   hub: {
     button: "relative p-2 rounded-md bg-surface-card border border-border-dark text-text-secondary hover:text-white hover:border-surface-bright transition-colors",

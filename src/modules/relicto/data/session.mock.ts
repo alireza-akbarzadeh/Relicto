@@ -2,6 +2,8 @@ import type { AppNotification, SessionUser } from "../session-types";
 
 export const sessionUser: SessionUser = {
   handle: "S1mple_CS",
+  avatar: "/images/lootora/avatar.jpg",
+  avatarAlt: "S1mple_CS profile portrait",
   level: 94,
   role: "PRO SELLER",
   verified: true,

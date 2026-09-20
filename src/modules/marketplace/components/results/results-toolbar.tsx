@@ -30,24 +30,35 @@ export function ResultsToolbar() {
           <p className="font-body-sm text-body-sm text-text-muted">{CATALOG_META.telemetry}</p>
         </div>
         <div className="flex items-center gap-space-sm">
-          <div role="radiogroup" aria-label="Layout" className="flex items-center rounded bg-surface-container-lowest p-1">
-            {VIEWS.map((view) => (
+        <div
+          role="radiogroup"
+          aria-label="Layout"
+          className="inline-flex h-9 items-center gap-1 rounded-md bg-surface-container-lowest p-1"
+        >
+          {VIEWS.map((view) => {
+            const isActive = filters.view === view.value;
+
+            return (
               <button
                 key={view.value}
                 type="button"
                 role="radio"
-                aria-checked={filters.view === view.value}
+                aria-checked={isActive}
                 title={view.title}
                 onClick={() => patch({ view: view.value, page: filters.page })}
                 className={cn(
-                  "rounded p-1.5 transition-colors",
-                  filters.view === view.value ? "bg-surface-container text-text-primary hover:text-primary" : "text-text-muted hover:text-text-primary",
+                  "flex size-7 shrink-0 items-center justify-center rounded-sm",
+                  "transition-colors duration-150",
+                  isActive
+                    ? "bg-surface-container text-text-primary"
+                    : "text-text-muted hover:text-text-primary",
                 )}
               >
-                <Icon name={view.icon} className="text-[18px]" />
+                <Icon name={view.icon} className=" shrink-0" />
               </button>
-            ))}
-          </div>
+            );
+          })}
+        </div>
           <Select
             label="Sort listings"
             value={filters.sort}

@@ -15,6 +15,7 @@ import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import { ACCOUNT_LINKS } from "../../data/navigation";
 import { useSession } from "../../state/session-provider";
+import { AvatarImage } from "./avatar-image";
 import { USER_TRIGGERS } from "./user-triggers";
 
 type UserMenuProps = { trigger: keyof typeof USER_TRIGGERS };
@@ -37,9 +38,14 @@ export function UserMenu({ trigger }: UserMenuProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64">
         <div className="flex items-center justify-between rounded-lg bg-surface-container-low px-2.5 py-2">
-          <div className="flex flex-col">
-            <span className="font-headline-sm text-[14px] font-bold text-text-primary">{user.handle}</span>
-            <span className="font-label-badge text-[10px] text-text-muted uppercase">LVL {user.level} · {user.role}</span>
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 overflow-hidden rounded-full">
+              <AvatarImage user={user} size={36} />
+            </span>
+            <span className="flex flex-col">
+              <span className="font-headline-sm text-[14px] font-bold text-text-primary">{user.handle}</span>
+              <span className="font-label-badge text-[10px] text-text-muted uppercase">LVL {user.level} · {user.role}</span>
+            </span>
           </div>
           <div className="flex flex-col text-right">
             <span className="font-label-badge text-[10px] text-text-muted uppercase">Wallet</span>

@@ -76,3 +76,22 @@ export function HubBrand() {
     </Link>
   );
 }
+
+export function VaultBrand() {
+  return (
+    <Link href="/marketplace" className="group flex items-center gap-3">
+      <div className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-border-tactical bg-surface-container-lowest shadow-[0_0_16px_rgba(245,158,11,0.25)] transition-all group-hover:shadow-[0_0_20px_rgba(245,158,11,0.5)]">
+        <Icon name="shield" className="text-[24px] text-tertiary" />
+        <span className="absolute -top-0.5 -right-0.5 h-2 w-2 animate-ping rounded-full bg-status-live" />
+        <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-status-live" />
+      </div>
+      <div className="flex flex-col">
+        <div className="flex items-center gap-1.5">
+          <span className="font-headline-sm text-[18px] font-bold tracking-tight text-text-primary transition-colors group-hover:text-tertiary">RELICTO</span>
+          <span className="rounded border border-border-subtle bg-surface-container px-1.5 py-0.5 font-label-badge text-[10px] font-bold text-tertiary">PRO</span>
+        </div>
+        <span className="font-label-badge text-[10px] leading-none tracking-widest text-text-muted uppercase">Steam Intel Exchange</span>
+      </div>
+    </Link>
+  );
+}

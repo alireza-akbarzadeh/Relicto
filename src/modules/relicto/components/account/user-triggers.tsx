@@ -1,4 +1,5 @@
 import { Icon } from "@/components/ui/icon";
+import { AvatarImage } from "./avatar-image";
 import type { SessionUser } from "../../session-types";
 
 /** Account triggers, one per header family, transcribed from the Stitch headers. */
@@ -7,8 +8,8 @@ export function MarketUserTrigger({ user }: { user: SessionUser }) {
   return (
     <span className="flex items-center gap-space-sm pl-space-xs text-left">
       <span className="relative">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-          <Icon name="person" className="text-[18px] text-on-primary" />
+        <span className="flex h-8 w-8 overflow-hidden rounded-full bg-primary">
+          <AvatarImage user={user} size={32} />
         </span>
         <span className="absolute -right-1 -bottom-1 rounded bg-secondary-container px-1 font-label-badge text-[9px] leading-tight font-bold text-on-secondary-container">
           {user.level}
@@ -29,8 +30,8 @@ export function LedgerUserTrigger({ user }: { user: SessionUser }) {
   return (
     <span className="flex items-center gap-space-sm pl-space-xs">
       <span className="relative flex items-center justify-center rounded-full bg-primary p-0.5">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-          <Icon name="person" className="text-[18px] text-on-primary" />
+        <span className="flex h-8 w-8 overflow-hidden rounded-full bg-primary">
+          <AvatarImage user={user} size={32} />
         </span>
       </span>
       <span className="hidden flex-col text-left md:flex">
@@ -55,8 +56,8 @@ export function LedgerUserTrigger({ user }: { user: SessionUser }) {
 export function StudioUserTrigger({ user }: { user: SessionUser }) {
   return (
     <span className="flex items-center gap-2.5 bg-surface-container-lowest py-1 pr-3 pl-2 text-left">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-        <Icon name="person" className="text-[18px] text-on-primary" />
+      <span className="flex h-8 w-8 shrink-0 overflow-hidden rounded-full bg-primary">
+        <AvatarImage user={user} size={32} />
       </span>
       <span className="flex flex-col">
         <span className="flex items-center gap-1.5">
@@ -79,8 +80,8 @@ export function HubUserTrigger({ user }: { user: SessionUser }) {
   return (
     <span className="flex items-center gap-2.5 rounded-md border border-border-dark bg-surface-card p-1.5 pr-3 text-left">
       <span className="relative">
-        <span className="flex h-8 w-8 items-center justify-center rounded bg-linear-to-tr/srgb from-rose-600 to-indigo-600 text-xs font-bold text-white">
-          {user.handle.slice(0, 2).toUpperCase()}
+        <span className="flex h-8 w-8 overflow-hidden rounded bg-linear-to-tr/srgb from-rose-600 to-indigo-600">
+          <AvatarImage user={user} size={32} />
         </span>
         <span className="absolute -right-0.5 -bottom-0.5 h-2.5 w-2.5 rounded-full bg-status-live ring-2 ring-surface-card" />
       </span>
@@ -103,9 +104,18 @@ export function HubUserTrigger({ user }: { user: SessionUser }) {
   );
 }
 
+export function VaultUserTrigger({ user }: { user: SessionUser }) {
+  return (
+    <span className="flex h-9 w-9 shrink-0 overflow-hidden rounded-full border border-border-tactical bg-surface-container-high shadow-[0_0_10px_rgba(244,63,94,0.3)]">
+      <AvatarImage user={user} size={36} />
+    </span>
+  );
+}
+
 export const USER_TRIGGERS = {
   market: MarketUserTrigger,
   ledger: LedgerUserTrigger,
   studio: StudioUserTrigger,
   hub: HubUserTrigger,
+  vault: VaultUserTrigger,
 } as const;

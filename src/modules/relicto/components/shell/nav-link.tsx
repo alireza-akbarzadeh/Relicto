@@ -25,6 +25,11 @@ const STYLES = {
     idle: "text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container-high hover:text-on-surface",
     active: "bg-primary-container text-on-primary-container font-headline-sm text-label-caps",
   },
+  vault: {
+    base: "px-3 py-1.5 rounded transition-all text-xs",
+    idle: "text-text-secondary font-medium hover:bg-surface-container hover:text-text-primary",
+    active: "bg-surface-container-high text-tertiary border border-border-tactical font-semibold",
+  },
   hub: {
     base: "px-3 py-1.5 rounded transition-all",
     idle: "text-text-secondary hover:text-white hover:bg-surface-container",

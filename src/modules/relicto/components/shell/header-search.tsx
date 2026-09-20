@@ -81,3 +81,24 @@ export function HubHeaderSearch() {
     </div>
   );
 }
+
+export function VaultHeaderSearch() {
+  const input = useCommandSearch();
+  return (
+    <div className="mx-4 hidden max-w-md flex-1 items-center lg:flex">
+      <div className="group relative w-full">
+        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <Icon name="search" className="text-[20px] text-text-muted transition-colors group-focus-within:text-tertiary" />
+        </span>
+        <Input
+          {...input}
+          placeholder="Search skins, arcanas, knives, heroes..."
+          className="h-auto w-full rounded-lg border-border-subtle bg-surface-container-lowest/95 py-2 pr-12 pl-10 text-xs text-on-surface transition-all placeholder:text-text-muted focus-visible:border-tertiary focus-visible:ring-1 focus-visible:ring-tertiary/50 md:text-xs"
+        />
+        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5">
+          <kbd className="rounded border border-border-subtle bg-surface-container px-1.5 py-0.5 font-data-mono-md text-[10px] text-text-muted shadow-xs">⌘K</kbd>
+        </span>
+      </div>
+    </div>
+  );
+}

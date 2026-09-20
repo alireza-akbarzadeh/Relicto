@@ -2,6 +2,9 @@ import type { IconName } from "@/components/ui/icon";
 
 export type SessionUser = {
   handle: string;
+  /** Local portrait; the Steam avatar URL replaces it once the API is wired. */
+  avatar: string;
+  avatarAlt: string;
   level: number;
   role: string;
   verified: boolean;

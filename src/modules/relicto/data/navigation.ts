@@ -3,7 +3,7 @@ import type { NavItem } from "../session-types";
 /** Top navigation per header family, in the order each Stitch screen shows it. */
 export const MARKET_NAV: NavItem[] = [
   { id: "marketplace", label: "Marketplace", href: "/marketplace" },
-  { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
+  { id: "wiki", label: "Wiki", href: "/wiki" },
   { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "portfolio", label: "Portfolio / Inventory", href: "/profile" },
   { id: "community", label: "Community", href: "/community", comingSoon: true },
@@ -20,7 +20,7 @@ export const LEDGER_NAV: NavItem[] = [
 
 export const STUDIO_NAV: NavItem[] = [
   { id: "marketplace", label: "Marketplace", href: "/marketplace" },
-  { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
+  { id: "wiki", label: "Wiki", href: "/wiki" },
   { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "inventory", label: "Inventory", href: "/profile" },
   { id: "sell", label: "Sell Items", href: "/sell" },
@@ -31,7 +31,7 @@ export const STUDIO_NAV: NavItem[] = [
 /** Game hub (home). */
 export const HUB_NAV: NavItem[] = [
   { id: "marketplace", label: "Marketplace", href: "/marketplace" },
-  { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
+  { id: "wiki", label: "Wiki", href: "/wiki" },
   { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "inventory", label: "Inventory", href: "/profile" },
   { id: "sell", label: "Sell Items", href: "/sell" },

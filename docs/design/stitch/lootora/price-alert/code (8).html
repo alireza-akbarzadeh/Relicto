@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"border-subtle":"rgba(255, 255, 255, 0.08)","on-primary-fixed-variant":"#92002a","outline-variant":"#5b4041","on-background":"#e1e2ec","tertiary-fixed-dim":"#ffb95f","border-tactical":"rgba(245, 158, 11, 0.4)","error":"#ffb4ab","secondary":"#c0c1ff","primary-fixed-dim":"#ffb2b7","outline":"#aa888a","on-surface":"#e1e2ec","status-upcoming":"#06b6d4","tertiary-container":"#ca8100","on-secondary-fixed-variant":"#2f2ebe","surface-container-highest":"#32353d","on-tertiary-container":"#3e2400","surface-bright":"#363941","on-error":"#690005","border-focus":"rgba(244, 63, 94, 0.5)","on-secondary-fixed":"#07006c","inverse-primary":"#bc0b3b","surface-container":"#1d1f27","on-primary-fixed":"#40000d","surface-container-low":"#191b23","error-container":"#93000a","secondary-container":"#3131c0","on-error-container":"#ffdad6","surface-glass":"rgba(21, 27, 43, 0.72)","surface":"#10131a","on-tertiary-fixed":"#2a1700","surface-container-high":"#272a32","surface-card":"#151b2b","surface-tint":"#ffb2b7","on-secondary":"#1000a9","tertiary-fixed":"#ffddb8","secondary-fixed-dim":"#c0c1ff","on-tertiary-fixed-variant":"#653e00","surface-dim":"#10131a","primary":"#ffb2b7","surface-variant":"#32353d","surface-overlay":"rgba(10, 13, 20, 0.85)","status-live":"#ef4444","glow-crimson":"rgba(244, 63, 94, 0.25)","on-secondary-container":"#b0b2ff","inverse-surface":"#e1e2ec","inverse-on-surface":"#2d3038","primary-fixed":"#ffdadb","primary-container":"#ff516a","surface-container-lowest":"#0b0e15","canvas-base":"#0a0d14","on-primary":"#67001b","background":"#10131a","glow-indigo":"rgba(99, 102, 241, 0.25)","surface-deep":"#0f1420","on-tertiary":"#472a00","secondary-fixed":"#e1e0ff","text-secondary":"#94a3b8","on-surface-variant":"#e3bdbf","tertiary":"#ffb95f","text-muted":"#64748b","text-primary":"#f8fafc","glow-amber":"rgba(245, 158, 11, 0.25)","on-primary-container":"#5b0017"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xs":"0.25rem","margin-desktop":"2.5rem","space-xl":"2.5rem","space-sm":"0.5rem","margin":"1rem","gutter-desktop":"1.5rem","space-md":"1rem","space-lg":"1.5rem","gutter":"1.25rem"},"fontFamily":{"label-caps":["Space Grotesk"],"headline-sm":["Space Grotesk"],"headline-xl":["Space Grotesk"],"data-mono-md":["JetBrains Mono"],"data-mono-lg":["JetBrains Mono"],"headline-lg":["Space Grotesk"],"label-badge":["JetBrains Mono"],"headline-xl-mobile":["Space Grotesk"],"body-md":["Geist"],"display-hero-mobile":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"display-hero":["Space Grotesk"],"body-lg":["Geist"],"headline-md":["Space Grotesk"],"body-sm":["Geist"]},"fontSize":{"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.025em","fontWeight":"700"}],"data-mono-md":["14px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"data-mono-lg":["20px",{"lineHeight":"24px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"0em","fontWeight":"400"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.005em","fontWeight":"400"}]}}}}</script></head><body class="bg-canvas-base text-on-surface font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-deep/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.5)]"><div class="h-20 w-full px-margin-desktop flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg shrink-0"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[20px]">token</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-primary tracking-tight font-bold">LOOTORA</span><span class="font-label-badge text-label-badge text-tertiary tracking-wider">PROTOCOL V4.2</span></div></div><div class="hidden xl:flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-lowest"><span class="w-2 h-2 rounded-full bg-status-live animate-pulse"></span><span class="font-label-badge text-label-badge text-text-secondary uppercase">ENGINE ARMED</span></div></div><nav class="hidden 2xl:flex items-center gap-space-xs overflow-x-auto py-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-lg"><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="marketplace" href="#">Marketplace</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="wiki" href="#">Wiki</a><a aria-current="page" class="px-space-sm py-space-xs uppercase transition-all whitespace-nowrap bg-primary-container text-on-primary-container font-bold rounded-lg" data-path="tracker-alerts" href="#">Tracker</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="inventory" href="#">Inventory</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="sell-items" href="#">Sell Items</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="trade-up-liquidation" href="#">Trade-Up &amp; Liquidation</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="match-center" href="#">Match Center</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="wallet-income" href="#">Wallet &amp; Income</a><a class="px-space-sm py-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-caps text-label-caps uppercase transition-all whitespace-nowrap" data-path="community" href="#">Community</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden md:flex items-center gap-space-sm px-space-sm py-space-xs rounded-lg bg-surface-card"><div class="flex flex-col items-end"><span class="font-label-badge text-label-badge text-text-muted uppercase">Steam Vault</span><span class="font-data-mono-md text-data-mono-md text-tertiary font-bold">$4,289.50</span></div><button class="px-space-sm py-space-xs rounded bg-primary-container text-on-primary-container font-label-caps text-label-caps uppercase hover:brightness-110 transition-all">Deposit</button></div><button class="relative p-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-status-live ring-2 ring-surface-deep"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><div class="flex flex-col items-end hidden lg:flex"><span class="font-label-caps text-label-caps text-text-primary tracking-wide">@s1mple_cs</span><span class="font-label-badge text-label-badge text-tertiary-fixed-dim uppercase">TIER 1 PRO VERIFIED</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ring-2 ring-primary-container"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-20 bg-canvas-base"><div class="flex flex-col w-full">
+<div class="w-full px-margin-desktop py-space-lg flex flex-col gap-space-lg max-w-[1780px] mx-auto">
+<!-- TELEMETRY & PIPELINE SUB-HEADER -->
+<div class="flex flex-col gap-space-md">
+<!-- Breadcrumb & Critical Status Nodes -->
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="flex items-center gap-space-xs font-label-badge text-label-badge text-text-muted">
+<span class="text-text-secondary uppercase">PORTAL</span>
+<span>/</span>
+<span class="text-text-secondary uppercase">TELEMETRY</span>
+<span>/</span>
+<span class="text-primary font-bold uppercase tracking-wider">ADVANCED TRIGGER ENGINE [ALGO V4.2]</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-low shadow-sm">
+<span class="w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold tracking-tight">POL-STREAM ONLINE</span>
+</div>
+</div>
+<!-- Global Action Group -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="px-space-md py-space-xs rounded bg-surface-container hover:bg-surface-container-high text-text-secondary hover:text-text-primary font-label-caps text-label-caps uppercase transition-all shadow-sm flex items-center gap-space-xs" id="pauseAllBtn" onclick="toggleAllAutomations()">
+<span class="material-symbols-outlined text-[16px] text-tertiary">pause_circle</span>
+<span id="pauseBtnText">PAUSE ALL AUTOMATIONS</span>
+</button>
+<button class="px-space-md py-space-xs rounded bg-surface-container hover:bg-surface-container-high text-text-secondary hover:text-text-primary font-label-caps text-label-caps uppercase transition-all shadow-sm flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-status-upcoming">terminal</span>
+<span>EXPORT WEBHOOK LOGS</span>
+</button>
+<a class="px-space-md py-space-xs rounded bg-primary-container hover:brightness-110 text-on-primary-container font-label-caps text-label-caps uppercase transition-all shadow-sm flex items-center gap-space-xs" href="#rule-builder-anchor">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>+ CREATE ADVANCED RULE</span>
+</a>
+</div>
+</div>
+<!-- Real-Time Metric Telemetry Strip -->
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-space-sm">
+<div class="p-space-md rounded-lg bg-surface-card shadow-sm flex flex-col gap-space-xs relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">ACTIVE RULE SETS</span>
+<div class="flex items-baseline justify-between">
+<span class="font-data-mono-lg text-data-mono-lg text-text-primary font-bold">18</span>
+<span class="font-label-badge text-label-badge text-status-upcoming uppercase bg-surface-container-low px-space-xs py-0.5 rounded">All Verified</span>
+</div>
+</div>
+<div class="p-space-md rounded-lg bg-surface-card shadow-sm flex flex-col gap-space-xs relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-primary-container/10 rounded-full blur-xl pointer-events-none"></div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">SNIPER BOTS ARMED</span>
+<div class="flex items-baseline justify-between">
+<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">4 UNITS</span>
+<span class="font-label-badge text-label-badge text-status-live uppercase bg-surface-container-low px-space-xs py-0.5 rounded">P2P Escrow Ready</span>
+</div>
+</div>
+<div class="p-space-md rounded-lg bg-surface-card shadow-sm flex flex-col gap-space-xs relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-tertiary/10 rounded-full blur-xl pointer-events-none"></div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">VAULT LIQUIDITY MONITORED</span>
+<div class="flex items-baseline justify-between">
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary font-bold">$64,800.00</span>
+<span class="font-label-badge text-label-badge text-text-secondary bg-surface-container-low px-space-xs py-0.5 rounded">USDT Pool</span>
+</div>
+</div>
+<div class="p-space-md rounded-lg bg-surface-card shadow-sm flex flex-col gap-space-xs relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-status-upcoming/10 rounded-full blur-xl pointer-events-none"></div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">STEAM WS UPTIME</span>
+<div class="flex items-baseline justify-between">
+<span class="font-data-mono-lg text-data-mono-lg text-text-primary font-bold">99.99%</span>
+<span class="font-label-badge text-label-badge text-status-upcoming bg-surface-container-low px-space-xs py-0.5 rounded">Node SG-04</span>
+</div>
+</div>
+<div class="p-space-md rounded-lg bg-surface-card shadow-sm flex flex-col gap-space-xs relative overflow-hidden col-span-2 md:col-span-1">
+<div class="absolute right-0 top-0 w-24 h-24 bg-primary/10 rounded-full blur-xl pointer-events-none"></div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">TRIGGER LATENCY</span>
+<div class="flex items-baseline justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-tertiary">bolt</span>
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary font-bold">6ms</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-secondary bg-surface-container-low px-space-xs py-0.5 rounded">High-Frequency</span>
+</div>
+</div>
+</div>
+<!-- Quick Filter Navigation Bar -->
+<div class="flex items-center justify-between overflow-x-auto pb-space-xs">
+<div class="flex items-center gap-space-xs shrink-0">
+<button class="px-space-md py-space-xs rounded bg-primary-container text-on-primary-container font-label-caps text-label-caps uppercase shadow-sm">
+            ALL (18)
+          </button>
+<button class="px-space-md py-space-xs rounded bg-surface-container text-text-secondary hover:text-text-primary font-label-caps text-label-caps uppercase transition-colors">
+            SNIPER BOTS (4)
+          </button>
+<button class="px-space-md py-space-xs rounded bg-surface-container text-text-secondary hover:text-text-primary font-label-caps text-label-caps uppercase transition-colors">
+            SPREAD ARBITRAGE (6)
+          </button>
+<button class="px-space-md py-space-xs rounded bg-surface-container text-text-secondary hover:text-text-primary font-label-caps text-label-caps uppercase transition-colors">
+            FLOAT/PATTERN HUNTERS (5)
+          </button>
+<button class="px-space-md py-space-xs rounded bg-surface-container text-text-secondary hover:text-text-primary font-label-caps text-label-caps uppercase transition-colors">
+            VOLUME VOLATILITY (3)
+          </button>
+</div>
+<div class="hidden lg:flex items-center gap-space-xs font-label-badge text-label-badge text-text-muted">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span>WEBSOCKET SYNC: BUFFER ZERO DRIFT</span>
+</div>
+</div>
+</div>
+<!-- MODULE 2: ADVANCED MULTI-CONDITION RULE BUILDER (IFTTT ENGINE) -->
+<div class="w-full bg-surface-card rounded-xl p-space-lg shadow-xl relative overflow-hidden" id="rule-builder-anchor">
+<!-- Ambient Top Corner Glow -->
+<div class="absolute -top-16 -right-16 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -left-20 w-80 h-80 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex flex-col gap-space-lg relative z-10">
+<!-- Builder Header Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[24px]">precision_manufacturing</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-text-primary tracking-tight">Algorithmic Trigger Logic Studio</span>
+<span class="font-label-badge text-label-badge text-text-secondary uppercase">MULTI-LAYER IFTTT PROTOCOL // COMPILED V4.2</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-badge text-label-badge text-tertiary uppercase bg-surface-container-low px-space-sm py-space-xs rounded">HEURISTIC EVALUATION: ACTIVE</span>
+<div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container">
+<span class="font-label-badge text-label-badge text-text-muted">PROFILE:</span>
+<span class="font-label-badge text-label-badge text-status-upcoming uppercase">INSTANT ESCROW RELAY</span>
+</div>
+</div>
+</div>
+<!-- Target Asset Selector Strip -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-center bg-surface-container-low p-space-md rounded-lg">
+<div class="lg:col-span-4 flex items-center gap-space-md">
+<div class="w-16 h-16 rounded bg-surface-container flex-shrink-0 overflow-hidden relative shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Close up inspect view of a pristine Counter-Strike 2 Karambit Case Hardened blue gem knife weapon model bathed in neon crimson and dark futuristic obsidian studio reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLGa7B3lYESXUMvq1LzETOEYHkTHJsWAtdvRiK49eBxuwrk2HpDurvxrCYFU6dWCAWff9ucQElOxZ41ELxzKDicj3p4wJdwHBRI2jN0VMDpoi1GlyHyMTHrEky49USZmBEifaJ8DqEeBURoyCI61FtGu5ZMQyZy7I3teTlwHWChEvRihQ6Le_AesIbUPdVXHbtOK9v8X5xu5yFVU0tiyHeNSz4caatsbz4UHY_CWnQ-NwXU3bgPEHnlA"/>
+<span class="absolute bottom-0 right-0 bg-primary-container text-on-primary-container font-label-badge text-[9px] px-1 font-bold">★ T1</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">TARGET ESSEX INVENTORY ASSET</span>
+<span class="font-headline-sm text-headline-sm text-text-primary truncate">★ Karambit | Case Hardened</span>
+<span class="font-data-mono-md text-data-mono-md text-secondary">Factory New / Minimal Wear (#387 / #661)</span>
+</div>
+</div>
+<div class="lg:col-span-5 flex items-center gap-space-sm">
+<div class="flex flex-col gap-1 w-full">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">ASSET SELECTION PRESET</span>
+<select class="w-full px-space-md py-space-sm rounded bg-surface text-text-primary font-body-md text-body-md focus:outline-none focus:bg-surface-container transition-colors shadow-sm">
+<option selected="">★ Karambit | Case Hardened (Condition: FN / MW)</option>
+<option>★ Butterfly Knife | Doppler (Phase 4 / Sapphire)</option>
+<option>AWP | Dragon Lore (Field-Tested / Souvenir Edition)</option>
+<option>AK-47 | Case Hardened (Pattern 661 Scar Spec)</option>
+<option>Dota 2 | Manifold Paradox (Exalted Level 3 100+ Kills)</option>
+</select>
+</div>
+</div>
+<div class="lg:col-span-3 flex lg:justify-end gap-space-sm">
+<div class="flex flex-col text-right">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">GLOBAL 24H BENCHMARK</span>
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary font-bold">$3,150.00</span>
+<span class="font-label-badge text-label-badge text-text-secondary">Steam Liquidity: High</span>
+</div>
+</div>
+</div>
+<!-- Logic Conditions Stack (Condition A, B, C with AND/OR toggles) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-primary uppercase tracking-wide">EXECUTION CONDITION MATRIX</span>
+<div class="flex items-center gap-space-xs font-label-badge text-label-badge text-text-muted">
+<span>EVALUATION ORDER: PARALLEL LOCK</span>
+</div>
+</div>
+<!-- Condition A -->
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md p-space-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded bg-surface-container flex items-center justify-center font-data-mono-md text-data-mono-md text-primary font-bold shrink-0">A</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary uppercase">[PRICE INFLICTION METRIC]</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Execute on Steam Community Market or P2P Instant Ask</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm w-full md:w-auto">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">OPERATOR</span>
+<div class="px-space-sm py-space-xs rounded bg-surface font-data-mono-md text-data-mono-md text-primary font-bold">&lt; LESS THAN</div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">VALUE TARGET</span>
+<div class="px-space-md py-space-xs rounded bg-surface font-data-mono-md text-data-mono-md text-tertiary font-bold">$3,050.00 USD</div>
+<div class="px-space-sm py-space-xs rounded bg-surface-container text-primary font-data-mono-md text-data-mono-md font-bold">-3.17% SPREAD</div>
+</div>
+</div>
+<!-- Logic Gate Separator -->
+<div class="flex items-center justify-center gap-space-sm -my-1">
+<div class="h-0.5 w-12 bg-surface-container-highest"></div>
+<button class="px-space-sm py-0.5 rounded bg-surface-container text-secondary font-label-badge text-label-badge uppercase font-bold hover:bg-surface-container-high transition-colors">
+              LOGIC GATE: [AND]
+            </button>
+<div class="h-0.5 w-12 bg-surface-container-highest"></div>
+</div>
+<!-- Condition B -->
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md p-space-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded bg-surface-container flex items-center justify-center font-data-mono-md text-data-mono-md text-status-upcoming font-bold shrink-0">B</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary uppercase">[WEAR / FLOAT &amp; PATTERN SEED]</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Deep CS2 Valve protobuf item spec inspection</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm w-full md:w-auto">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">FLOAT</span>
+<div class="px-space-sm py-space-xs rounded bg-surface font-data-mono-md text-data-mono-md text-status-upcoming font-bold">≤ 0.0150</div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">PATTERN SEED</span>
+<div class="px-space-sm py-space-xs rounded bg-surface font-data-mono-md text-data-mono-md text-text-primary font-bold">['#387', '#412', '#661', '#955']</div>
+</div>
+</div>
+<!-- Logic Gate Separator -->
+<div class="flex items-center justify-center gap-space-sm -my-1">
+<div class="h-0.5 w-12 bg-surface-container-highest"></div>
+<button class="px-space-sm py-0.5 rounded bg-surface-container text-secondary font-label-badge text-label-badge uppercase font-bold hover:bg-surface-container-high transition-colors">
+              LOGIC GATE: [AND]
+            </button>
+<div class="h-0.5 w-12 bg-surface-container-highest"></div>
+</div>
+<!-- Condition C -->
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md p-space-md bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded bg-surface-container flex items-center justify-center font-data-mono-md text-data-mono-md text-tertiary font-bold shrink-0">C</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary uppercase">[CROSS-MARKET NET ARBITRAGE]</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Buff163, CSFloat &amp; DMarket spread differential</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm w-full md:w-auto">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">BENCHMARK RATIO</span>
+<div class="px-space-md py-space-xs rounded bg-surface font-data-mono-md text-data-mono-md text-tertiary font-bold">≥ +6.5% Net Yield</div>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">AFTER 2.5% FEE</span>
+</div>
+</div>
+</div>
+<!-- Execution Actions & Safeguards Matrix -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-space-md">
+<!-- Action 1 -->
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-primary">shopping_bag</span>
+<span class="font-label-caps text-label-caps text-text-primary uppercase">ACTION 1: AUTO-BUY</span>
+</div>
+<span class="font-label-badge text-label-badge text-primary uppercase bg-surface-container px-space-xs py-0.5 rounded">ENABLED</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Instant P2P Escrow Relay. Allocates monitored vault liquidity without manual two-factor challenge.</p>
+<div class="mt-auto pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">CAP CEILING</span>
+<span class="font-data-mono-md text-data-mono-md text-tertiary font-bold">$3,200.00 USDT</span>
+</div>
+</div>
+<!-- Action 2 -->
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-status-upcoming">notifications_active</span>
+<span class="font-label-caps text-label-caps text-text-primary uppercase">ACTION 2: HOT WEBHOOK</span>
+</div>
+<span class="font-label-badge text-label-badge text-status-upcoming uppercase bg-surface-container px-space-xs py-0.5 rounded">3 DISPATCH CHANNELS</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Immediate packet broadcast to Discord #snipes-vip, Telegram Private Bot &amp; SMS priority failover.</p>
+<div class="mt-auto pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">DISPATCH PING</span>
+<span class="font-data-mono-md text-data-mono-md text-text-primary font-bold">&lt; 12ms Relay</span>
+</div>
+</div>
+<!-- Action 3 -->
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-tertiary">swap_horiz</span>
+<span class="font-label-caps text-label-caps text-text-primary uppercase">ACTION 3: INSTANT RE-LIST</span>
+</div>
+<span class="font-label-badge text-label-badge text-tertiary uppercase bg-surface-container px-space-xs py-0.5 rounded">OPTIONAL FLIP</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Automated marketplace relisting on Lootora order book directly following inventory custody confirmation.</p>
+<div class="mt-auto pt-space-xs flex items-center justify-between">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">MARKUP MARGIN</span>
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold">+8.50% AUTO-BID</span>
+</div>
+</div>
+</div>
+<!-- Algorithmic Safeguards & Toggles -->
+<div class="flex flex-wrap items-center justify-between gap-space-md p-space-md bg-surface-container rounded-lg">
+<div class="flex flex-wrap items-center gap-space-lg">
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary-container" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-text-primary">Strict Slippage Protection (Max 0.8% deviation ceiling)</span>
+</label>
+<label class="flex items-center gap-space-sm cursor-pointer select-none">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary-container" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-text-primary">Revocation Kill-Switch if Steam API Latency &gt; 150ms</span>
+</label>
+</div>
+<div class="flex items-center gap-space-xs text-text-muted font-label-badge text-label-badge">
+<span class="material-symbols-outlined text-[16px] text-tertiary">verified_user</span>
+<span>PROTECTED BY STEAM PROTOBUF GUARD</span>
+</div>
+</div>
+<!-- Deploy CTAs -->
+<div class="flex flex-col sm:flex-row items-center justify-end gap-space-md pt-space-xs">
+<button class="w-full sm:w-auto px-space-lg py-space-sm rounded-lg bg-surface-container hover:bg-surface-container-high text-text-primary font-label-caps text-label-caps uppercase transition-all shadow-sm flex items-center justify-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-secondary">history</span>
+<span>SIMULATE HISTORICAL BACKTEST (98.4% Hit Rate)</span>
+</button>
+<button class="w-full sm:w-auto px-space-xl py-space-sm rounded-lg bg-primary-container hover:brightness-110 text-on-primary-container font-label-caps text-label-caps uppercase transition-all shadow-md flex items-center justify-center gap-space-xs" id="armEngineBtn" onclick="handleArmEngine()">
+<span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+<span id="armEngineText">ARM &amp; DEPLOY RULE ENGINE</span>
+</button>
+</div>
+</div>
+</div>
+<!-- MODULE 3: REAL-TIME ACTIVE TRIGGER RULES MATRIX (DENSE DATA GRID) -->
+<div class="w-full bg-surface-card rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-2 h-6 bg-primary rounded-full"></div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-text-primary">Active Algorithmic Trigger Grid</span>
+<span class="font-label-badge text-label-badge text-text-muted uppercase">REAL-TIME EXECUTION STATE &amp; HISTORICAL HIT LEDGER</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded bg-surface-container-low">
+<span class="w-2 h-2 rounded-full bg-status-live animate-pulse"></span>
+<span class="font-label-badge text-label-badge text-text-secondary uppercase">HIGH CONCURRENCY (5 SUB-ENGINES)</span>
+</div>
+</div>
+</div>
+<!-- Dense Matrix Grid Container -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-text-muted font-label-badge text-label-badge uppercase">
+<th class="p-space-md">RULE NAME &amp; TARGET</th>
+<th class="p-space-md">LOGIC PROFILE</th>
+<th class="p-space-md">THRESHOLD vs CURRENT</th>
+<th class="p-space-md">AUTO-EXECUTION STATUS</th>
+<th class="p-space-md">HISTORICAL HIT / YIELD</th>
+<th class="p-space-md text-right">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 space-y-1">
+<!-- Row 1 -->
+<tr class="bg-surface-container/60 hover:bg-surface-container transition-colors">
+<td class="p-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-status-upcoming shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Iconic Butterfly knife weapon skin with glowing dark blue and deep purple doppler phase 4 spectrum" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnvJvvTk6Hr0DjBbM71qqYp5gfDNve-hIH54THj8TSQ7Vr7J7D3n-Nrxm4uiulTv4b4k_4onkwu6_k0nbvo1RcKmKIyNIBFoLYyliIz6X0hfGa8dgBMD37fMHTQ-bma1VerAx1EGimPszpcRM7YJ_DDdOqAoXtVfzOvqb7UrH13v1mfJQ2X6umSMZFBu3TAc9-utNfCwMS5FSS8fm8sanBXlNcddZYcM8QNYm4taerxp2VhDxArvibgg"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary font-bold">Doppler P4 Tier 1 Ocean Snipe</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">★ Butterfly Knife | Doppler P4</span>
+</div>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-text-primary">Ask &lt; $3,080 + Float &lt; 0.012</span>
+<span class="font-body-sm text-body-sm text-text-muted">Auto-Buy + Telegram Push</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-data-mono-md text-data-mono-md font-bold">
+<span class="text-tertiary">$3,080.00</span>
+<span class="text-text-muted">vs</span>
+<span class="text-text-primary">$3,095.00</span>
+</div>
+<span class="font-label-badge text-label-badge text-primary">-0.48% To Target Lock</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-live animate-pulse"></span>
+<span class="font-data-mono-md text-data-mono-md text-status-live font-bold uppercase">ARMED &amp; POLLING</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted font-data-mono-md">6ms Websocket Latency</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold">+$1,420.00 NET</span>
+<span class="font-label-badge text-label-badge text-text-secondary">12 Escrows Executed</span>
+</div>
+</td>
+<td class="p-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-primary font-label-badge text-label-badge uppercase transition-colors" onclick="simulateTriggerTest('Doppler P4 Tier 1 Ocean Snipe')">
+                    TEST
+                  </button>
+<button class="p-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-secondary hover:text-text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<label class="relative inline-flex items-center cursor-pointer ml-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-primary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-surface-container-low/60 hover:bg-surface-container transition-colors">
+<td class="p-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-tertiary shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="AK-47 rifle weapon skin adorned with intense turquoise and golden case hardened pattern seed 661 scar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvbTvEhsIeZQVZjJ0NKI6aWYeREa6N16HKTJ5TD9HUmGCWqc6xnTTP76lJZoHfJb50p9E-haOSAbVWn4bgg3cxn7hbLdaPFMsXSvtG7r5fuy6jJS2BrYIYZkpZTA07UMOaeKC44A63wMjaQFimzxdfUmWsMEytJNYy1a15Crel6Hvd2Vhr2h28ov5MIfB-zNxWzNsseWovQJmNq4yvuGFwlfVr54xC5UMHNan_frQwNEfKK755pCw4_g"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary font-bold">Case Hardened Tier 1 Scar Hunter</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">AK-47 | Case Hardened</span>
+</div>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-text-primary">Seed #661 / #387, Any Wear</span>
+<span class="font-body-sm text-body-sm text-text-muted">Instant Lock Escrow + Hot SMS</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-data-mono-md text-data-mono-md font-bold">
+<span class="text-tertiary">Seed Match</span>
+<span class="text-text-muted">vs</span>
+<span class="text-text-primary">Seed #112</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted">Hunting Seed In Mempool</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-upcoming"></span>
+<span class="font-data-mono-md text-data-mono-md text-status-upcoming font-bold uppercase">ARMED // PERSIST</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted font-data-mono-md">Listening for Seed P2P</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-tertiary font-bold">+$3,250.00 UNREAL</span>
+<span class="font-label-badge text-label-badge text-text-secondary">1 Captured (30d)</span>
+</div>
+</td>
+<td class="p-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-primary font-label-badge text-label-badge uppercase transition-colors" onclick="simulateTriggerTest('Case Hardened Tier 1 Scar Hunter')">
+                    TEST
+                  </button>
+<button class="p-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-secondary hover:text-text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<label class="relative inline-flex items-center cursor-pointer ml-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-primary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-surface-container/60 hover:bg-surface-container transition-colors">
+<td class="p-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-primary shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Dota 2 Phantom Assassin Manifold Paradox dual blazing crystalline blades weapon artifact" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtuk8ZPA6FcLFPf7BUDc-_NrUgzEQDlRZcsBx4IWwHrVvjl6HKH3-Oa_aYJWbkBL4l4CWawbxb3VvmutuDskppia6sL-Mfoo_2CajBYeZ3RGOxMWhxhRYwTzM-4tjP_GJvAE4SY5NjgFcr87oTaVSKn04PbTQ6VQkavqbU7kXbsZ57fnZs-EP-MAS7kJEpKdxQXqzOl0dpIY_ApoiiSrr2gSwkAhgwCCGBo6tKWhvmLoB7HkwxAjh3Og"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary font-bold">Dota 2 Riyadh Masters Surge Arb</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">Phantom Assassin Manifold Paradox</span>
+</div>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-text-primary">Ask &lt; $112.00 OR Spread &gt; 12%</span>
+<span class="font-body-sm text-body-sm text-text-muted">Batch Auto-Buy 10x Units</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-data-mono-md text-data-mono-md font-bold">
+<span class="text-tertiary">$112.00</span>
+<span class="text-text-muted">vs</span>
+<span class="text-primary font-bold">$108.50</span>
+</div>
+<span class="font-label-badge text-label-badge text-primary">+3.12% Arbitrage Spread</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-live"></span>
+<span class="font-data-mono-md text-data-mono-md text-text-primary font-bold uppercase">ACTIVE (8/10 UNITS)</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted font-data-mono-md">Steam Escrow Safe</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold">+$194.40 NET</span>
+<span class="font-label-badge text-label-badge text-text-secondary">8 Units Stacked</span>
+</div>
+</td>
+<td class="p-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-primary font-label-badge text-label-badge uppercase transition-colors" onclick="simulateTriggerTest('Dota 2 Riyadh Masters Surge Arb')">
+                    TEST
+                  </button>
+<button class="p-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-secondary hover:text-text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<label class="relative inline-flex items-center cursor-pointer ml-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-primary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-surface-container-low/60 hover:bg-surface-container transition-colors">
+<td class="p-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-tertiary shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="AWP Dragon Lore sniper rifle emblazoned with fire breathing golden dragon in high-resolution esports museum aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyr4RTdoOh2JpcdY0YdG0XBCx_NLO0G0VH5gOkDMTaTz_lb-tZBGfW0Zk8IPJ33fZElm-9kXh4zsN6cm4an9MR8bVXOTSZs1J6EE_Ub4uWOqv_MxLB_-JD_hOGXnSWzBTmYoIwMBKgMWTxk3oKVNv8fvpFo-FlGcCz6GMrucV9MHPUsMw_KeKWglprtexsGxcYKUMtXXMuYkcYECwhPnQIKamd5CqnRfbAkEbe4h3PE1ogDd3uGBDrsw"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary font-bold">Souvenir Dragon Lore Liquidity Arbitrage</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">AWP | Dragon Lore (FT)</span>
+</div>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-text-primary">Buff163 Spread &gt; +$280.00</span>
+<span class="font-body-sm text-body-sm text-text-muted">Instant Counter-Escrow Match</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-data-mono-md text-data-mono-md font-bold">
+<span class="text-tertiary">+$280.00</span>
+<span class="text-text-muted">vs</span>
+<span class="text-text-primary">+$310.00</span>
+</div>
+<span class="font-label-badge text-label-badge text-primary">+1.07% Above Target</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-upcoming"></span>
+<span class="font-data-mono-md text-data-mono-md text-status-upcoming font-bold uppercase">POLLING (250MS)</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted font-data-mono-md">CN Mempool Mirror</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-text-muted font-bold">$0.00 (Pending)</span>
+<span class="font-label-badge text-label-badge text-text-secondary">No Fill Today</span>
+</div>
+</td>
+<td class="p-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-primary font-label-badge text-label-badge uppercase transition-colors" onclick="simulateTriggerTest('Souvenir Dragon Lore Liquidity Arbitrage')">
+                    TEST
+                  </button>
+<button class="p-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-secondary hover:text-text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<label class="relative inline-flex items-center cursor-pointer ml-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-primary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="bg-surface-container/60 hover:bg-surface-container transition-colors">
+<td class="p-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded bg-surface-container-lowest flex items-center justify-center text-secondary shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Futuristic monochrome M4A1-S Printstream rifle skin with pearlescent decals and holographic stickers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEmhz6cSJ1ZPCTAfEsoKqjQ7k7XfFR4GWdPc07wYC1-ewhpqwCTyg9edmwsFUKEer4mS3jHvb2DuRT6Y2PkiCkVque6F9BJdRyKfvjEGtwDx-H37tNp_4tBAw-iMDZkRaR7bktqcL6Fsl-Ou6wvWFN9hV6t0Y08ijEoG9vjGGUDDJlYskc8Li1JXlpiIW-OwXPirkFhalpVpK5wgZ2l4OmdtRycLkHls4dCZPr_eeMGswjlYqapHgR6A"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-primary font-bold">Printstream 4x Craft Dip Watch</span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary">M4A1-S | Printstream (FT)</span>
+</div>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-text-primary">Price &lt; $155.00 + Holo Stickers</span>
+<span class="font-body-sm text-body-sm text-text-muted">Push Alert Only (No Auto-Buy)</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-data-mono-md text-data-mono-md font-bold">
+<span class="text-tertiary">$155.00</span>
+<span class="text-text-muted">vs</span>
+<span class="text-text-primary">$162.20</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted">Awaiting Market Dip</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-upcoming"></span>
+<span class="font-data-mono-md text-data-mono-md text-status-upcoming font-bold uppercase">ACTIVE WATCHER</span>
+</div>
+<span class="font-label-badge text-label-badge text-text-muted font-data-mono-md">Web Push + Discord</span>
+</div>
+</td>
+<td class="p-space-md">
+<div class="flex flex-col">
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold">+$28.00 NET</span>
+<span class="font-label-badge text-label-badge text-text-secondary">2 Pushes Sent</span>
+</div>
+</td>
+<td class="p-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-primary font-label-badge text-label-badge uppercase transition-colors" onclick="simulateTriggerTest('Printstream 4x Craft Dip Watch')">
+                    TEST
+                  </button>
+<button class="p-1 rounded bg-surface-container-highest hover:bg-surface-bright text-text-secondary hover:text-text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+<label class="relative inline-flex items-center cursor-pointer ml-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-lowest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-text-primary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- MODULE 4: DUAL BOTTOM PANELS (TELEMETRY STREAM + PERFORMANCE MATRIX) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg">
+<!-- LEFT PANEL: AUTONOMOUS EXECUTION TERMINAL & WEBSOCKET TELEMETRY STREAM -->
+<div class="xl:col-span-7 bg-surface-card rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-status-upcoming">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-text-primary">Autonomous Execution Terminal</span>
+<span class="font-label-badge text-label-badge text-text-secondary uppercase">HIGH-FREQUENCY STEAM MEMPOOL WEBSOCKET STREAM</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="font-data-mono-md text-data-mono-md text-text-secondary font-bold">STREAM: 60 FPS</span>
+</div>
+</div>
+<!-- Terminal Output Stream Box -->
+<div class="h-64 overflow-y-auto bg-surface-container-lowest p-space-md rounded-lg font-data-mono-md text-body-sm flex flex-col gap-1.5 shadow-inner" id="terminal-stream">
+<div class="flex items-start gap-space-xs text-text-muted">
+<span class="text-tertiary font-bold">[14:02:18]</span>
+<span class="text-status-upcoming uppercase font-bold">WEBSOCKET_P2P:</span>
+<span class="text-text-secondary">New listing detected: ★ Butterfly Knife | Doppler P4 at $3,075.00 USD (Condition Met: Threshold &lt; $3,080.00).</span>
+</div>
+<div class="flex items-start gap-space-xs text-text-muted">
+<span class="text-tertiary font-bold">[14:02:19]</span>
+<span class="text-primary font-bold">AUTO_BOT_04:</span>
+<span class="text-text-primary">Initiated escrow lock via Steam API session token #9821. Slippage: 0.16% (Within &lt;0.8% Tolerance).</span>
+</div>
+<div class="flex items-start gap-space-xs text-text-muted">
+<span class="text-tertiary font-bold">[14:02:21]</span>
+<span class="text-secondary font-bold">DISCORD_WEBHOOK:</span>
+<span class="text-text-secondary">Broadcasted 200 OK to #snipes-vip channel. Response time: 11.2ms.</span>
+</div>
+<div class="flex items-start gap-space-xs text-text-muted">
+<span class="text-tertiary font-bold">[14:02:21]</span>
+<span class="text-primary font-bold">EXECUTION_SUCCESS:</span>
+<span class="text-text-primary font-bold">Order complete. Net Captured Yield: +$145.00 USD. Relisting armed at +8.5% ($3,336.35 USD).</span>
+</div>
+<div class="flex items-start gap-space-xs text-text-muted">
+<span class="text-tertiary font-bold">[14:03:04]</span>
+<span class="text-status-upcoming uppercase font-bold">MEMPOOL_POLL:</span>
+<span class="text-text-secondary">CS2 Protobuf buffer synchronized. 8,421 active bids scanned across 4 global relay clusters.</span>
+</div>
+<div class="flex items-start gap-space-xs text-text-muted">
+<span class="text-tertiary font-bold">[14:03:22]</span>
+<span class="text-tertiary font-bold">TELEMETRY_BEAT:</span>
+<span class="text-text-secondary">Latency test to Steam Valve CDN Europe Central: 4.8ms. Zero packet drop recorded.</span>
+</div>
+</div>
+<!-- Terminal Status Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs text-text-muted font-label-badge text-label-badge">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-tertiary">lock</span>
+<span>STEAM CLIENT OPENID TOKEN: ARMED &amp; SIGNED</span>
+</div>
+<button class="text-primary hover:brightness-110 uppercase font-bold transition-all" onclick="clearTerminalLogs()">
+            CLEAR LOCAL STREAM
+          </button>
+</div>
+</div>
+<!-- RIGHT PANEL: ALGORITHMIC PERFORMANCE & YIELD METRICS -->
+<div class="xl:col-span-5 bg-surface-card rounded-xl p-space-lg shadow-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-text-primary">Algorithmic Performance</span>
+<span class="font-label-badge text-label-badge text-text-secondary uppercase">30-DAY QUANTITATIVE PROFIT METRICS</span>
+</div>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold bg-surface-container-low px-space-sm py-space-xs rounded">+14.2% ROI</span>
+</div>
+<!-- Metrics Bento Split -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">30D CAPTURED PROFIT</span>
+<span class="font-data-mono-lg text-data-mono-lg text-primary font-bold">$4,892.40</span>
+<span class="font-label-badge text-label-badge text-text-secondary">Across 32 fills</span>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">ESCROW HANDSHAKE</span>
+<span class="font-data-mono-lg text-data-mono-lg text-tertiary font-bold">240ms</span>
+<span class="font-label-badge text-label-badge text-status-upcoming">Ultra-Low Latency</span>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">EXECUTION SUCCESS</span>
+<span class="font-data-mono-lg text-data-mono-lg text-text-primary font-bold">96.8%</span>
+<span class="font-label-badge text-label-badge text-primary">31 / 32 Zero Slippage</span>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-lg flex flex-col gap-space-xs">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">MAX MONITORED VAULT</span>
+<span class="font-data-mono-lg text-data-mono-lg text-secondary font-bold">$64,800</span>
+<span class="font-label-badge text-label-badge text-text-secondary">Automated Escrow</span>
+</div>
+</div>
+<!-- Connected Notification Rails Status -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<span class="font-label-badge text-label-badge text-text-muted uppercase">NOTIFICATION &amp; WEBHOOK RAILS</span>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs">
+<div class="p-space-xs px-space-sm bg-surface-container-low rounded flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-primary text-[10px]">DISCORD</span>
+<span class="w-2 h-2 rounded-full bg-status-live"></span>
+</div>
+<div class="p-space-xs px-space-sm bg-surface-container-low rounded flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-primary text-[10px]">TELEGRAM</span>
+<span class="w-2 h-2 rounded-full bg-status-live"></span>
+</div>
+<div class="p-space-xs px-space-sm bg-surface-container-low rounded flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-primary text-[10px]">WEB PUSH</span>
+<span class="w-2 h-2 rounded-full bg-status-upcoming"></span>
+</div>
+<div class="p-space-xs px-space-sm bg-surface-container-low rounded flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-primary text-[10px]">TWILIO SMS</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let automationsPaused = false;
+
+  function toggleAllAutomations() {
+    automationsPaused = !automationsPaused;
+    const btnText = document.getElementById('pauseBtnText');
+    const pauseBtn = document.getElementById('pauseAllBtn');
+    
+    if (automationsPaused) {
+      btnText.innerText = 'RESUME ALL AUTOMATIONS';
+      pauseBtn.classList.remove('text-text-secondary');
+      pauseBtn.classList.add('text-primary');
+      addLogEntry('ADMIN_COMMAND', 'Global execution kill-switch activated. 18 triggers paused.', 'text-primary');
+    } else {
+      btnText.innerText = 'PAUSE ALL AUTOMATIONS';
+      pauseBtn.classList.add('text-text-secondary');
+      pauseBtn.classList.remove('text-primary');
+      addLogEntry('ADMIN_COMMAND', 'Trigger engine unpaused. 18 triggers listening on mempool.', 'text-primary');
+    }
+  }
+
+  function handleArmEngine() {
+    const armBtn = document.getElementById('armEngineBtn');
+    const armText = document.getElementById('armEngineText');
+    
+    armText.innerText = 'COMPILING & DEPLOYING...';
+    setTimeout(() => {
+      armText.innerText = 'RULE ENGINE DEPLOYED [HOT]';
+      addLogEntry('RULE_DEPLOY', 'Karambit Case Hardened #387/#661 rule compiled with protobuf guard. Armed.', 'text-primary');
+      setTimeout(() => {
+        armText.innerText = 'ARM & DEPLOY RULE ENGINE';
+      }, 3000);
+    }, 600);
+  }
+
+  function simulateTriggerTest(ruleName) {
+    addLogEntry('MANUAL_TEST', `Synthetic trigger fired for "${ruleName}". Webhook broadcast OK (200).`, 'text-status-upcoming');
+  }
+
+  function clearTerminalLogs() {
+    const terminal = document.getElementById('terminal-stream');
+    terminal.innerHTML = '<div class="text-text-muted font-body-sm italic">Local buffer cleared. Awaiting next incoming WebSocket frame...</div>';
+  }
+
+  function addLogEntry(source, message, highlightColorClass) {
+    const terminal = document.getElementById('terminal-stream');
+    const timeStr = new Date().toTimeString().split(' ')[0];
+    const logRow = document.createElement('div');
+    logRow.className = 'flex items-start gap-space-xs text-text-muted';
+    logRow.innerHTML = `
+      <span class="text-tertiary font-bold">[${timeStr}]</span>
+      <span class="${highlightColorClass} font-bold uppercase">${source}:</span>
+      <span class="text-text-primary">${message}</span>
+    `;
+    terminal.prepend(logRow);
+  }
+</script></main><footer class="w-full bg-surface-deep shadow-[0_-1px_12px_rgba(0,0,0,0.6)]"><div class="w-full px-margin-desktop py-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex flex-wrap items-center gap-space-md text-text-muted font-label-badge text-label-badge"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-status-upcoming text-[16px]">lock</span><span class="text-text-secondary">Lootora Cryptographic Core</span></div><span class="text-text-muted">/</span><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-status-upcoming"></span><span class="text-text-secondary">Valve OpenID 2.0 Connected</span></div><span class="text-text-muted">/</span><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-tertiary text-[16px]">speed</span><span class="text-text-secondary">Latency: <span class="text-tertiary font-data-mono-md">14ms</span></span></div><span class="text-text-muted">/</span><div class="flex items-center gap-space-xs"><span class="text-text-secondary">Block Height: <span class="font-data-mono-md text-text-primary">#892,104</span></span></div></div><div class="flex items-center gap-space-md"><span class="font-body-sm text-body-sm text-text-muted">© 2025 Lootora Protocol. High-Frequency Steam Intel Exchange.</span></div></div></footer></body></html>

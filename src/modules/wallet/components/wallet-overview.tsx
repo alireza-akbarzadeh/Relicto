@@ -2,12 +2,14 @@ import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { WalletData, WalletMetric } from "../types";
 
-const TONE = {
+export const TONE = {
   primary: { icon: "text-primary", value: "text-primary", foot: "text-primary" },
   amber: { icon: "text-tertiary-fixed-dim", value: "text-tertiary-fixed-dim", foot: "text-tertiary-fixed-dim" },
   cyan: { icon: "text-status-upcoming", value: "text-secondary", foot: "text-secondary" },
   muted: { icon: "text-text-primary", value: "text-text-primary", foot: "text-status-upcoming" },
 } as const;
+
+
 
 function MetricCard({ metric }: { metric: WalletMetric }) {
   const tone = TONE[metric.tone];

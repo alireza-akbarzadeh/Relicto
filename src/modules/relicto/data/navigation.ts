@@ -6,8 +6,8 @@ export const MARKET_NAV: NavItem[] = [
   { id: "wiki", label: "Wiki", href: "/wiki" },
   { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "portfolio", label: "Portfolio / Inventory", href: "/profile" },
-  { id: "community", label: "Community", href: "/community", comingSoon: true },
-  { id: "price-alerts", label: "Price Alerts", href: "/alerts", comingSoon: true },
+  { id: "community", label: "Community", href: "/community" },
+  { id: "price-alerts", label: "Price Alerts", href: "/alerts" },
 ];
 
 export const LEDGER_NAV: NavItem[] = [
@@ -15,7 +15,7 @@ export const LEDGER_NAV: NavItem[] = [
   { id: "orders", label: "ORDERS & ESCROW", href: "/orders" },
   { id: "inventory", label: "INVENTORY", href: "/profile" },
   { id: "price-tracker", label: "PRICE TRACKER", href: "/tracker" },
-  { id: "community", label: "COMMUNITY", href: "/community", comingSoon: true },
+  { id: "community", label: "COMMUNITY", href: "/community" },
 ];
 
 export const STUDIO_NAV: NavItem[] = [
@@ -25,7 +25,7 @@ export const STUDIO_NAV: NavItem[] = [
   { id: "inventory", label: "Inventory", href: "/profile" },
   { id: "sell", label: "Sell Items", href: "/sell" },
   { id: "wallet", label: "Wallet & Income", href: "/wallet" },
-  { id: "community", label: "Community", href: "/community", comingSoon: true },
+  { id: "community", label: "Community", href: "/community" },
 ];
 
 /** Game hub (home). */
@@ -37,7 +37,7 @@ export const HUB_NAV: NavItem[] = [
   { id: "sell", label: "Sell Items", href: "/sell" },
   { id: "wallet", label: "Wallet & Income", href: "/wallet" },
   { id: "hub", label: "Game Hub", href: "/" },
-  { id: "community", label: "Community", href: "/community", comingSoon: true },
+  { id: "community", label: "Community", href: "/community" },
 ];
 
 /** Account menu shared by every header. */

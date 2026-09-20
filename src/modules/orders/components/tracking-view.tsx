@@ -14,7 +14,7 @@ export function TrackingView({ order }: { order: OrderTracking }) {
   return (
     <div className="min-h-screen bg-surface-container-lowest font-body-md text-body-md text-on-surface antialiased">
       <LedgerHeader />
-      <main className="w-full pt-20">
+      <main className="w-full pt-16">
         <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-space-lg px-gutter-desktop py-space-lg">
           <StatusBanner order={order} />
           <EscrowSteps steps={order.steps} />

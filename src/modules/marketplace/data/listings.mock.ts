@@ -1,6 +1,6 @@
 import type { Listing } from "../types";
 
-const img = (name: string) => `/images/Relicto/items/${name}.jpg`;
+const img = (name: string) => `/images/lootora/items/${name}.jpg`;
 const DAY = 86_400_000;
 const NOW = Date.UTC(2025, 8, 19);
 

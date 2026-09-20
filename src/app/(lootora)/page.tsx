@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { HubView } from "@/modules/hub/components/hub-view";
 import { getHub } from "@/modules/hub/data/get-hub";
+import { forbidden, unauthorized } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Game Hub & Meta Intel",

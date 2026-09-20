@@ -13,7 +13,7 @@ To build a screen, follow **[IMPLEMENTING.md](IMPLEMENTING.md)**.
 | `create-account-inventory-bind` | `/sign-up` | Done (8.3%: copy edits by design owner) |
 | `steam-guard-2fa-verification` | `/verify` | Done, 2.7% diff |
 | `reset-password-recovery` | `/reset-password` | Done (6.0%: brand rename reflows title) |
-| `user-profile-trader-identity` | `/profile` | To do |
+| `user-profile-trader-identity` | `/profile` | Done, 4.3% diff |
 | `order-history-trade-ledger` | `/orders` | To do |
 | `live-order-tracking-escrow-protocol` | `/orders/[id]` | To do |
 | `sell-items-inventory-listing-studio` | `/sell` | To do |

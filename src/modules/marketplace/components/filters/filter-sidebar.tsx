@@ -16,7 +16,7 @@ export function FilterSidebar() {
   const active = criteriaChips(filters).length;
 
   return (
-    <aside className="sticky top-20 w-full rounded-xl bg-surface-card p-space-md shadow-lg lg:w-72 lg:shrink-0">
+    <aside className="sticky top-20 w-full  rounded-xl bg-surface-card p-space-md shadow-lg lg:w-72 lg:shrink-0">
       <div className="mb-space-md flex items-center justify-between pb-space-sm">
         <div className="flex items-center gap-2">
           <Icon name="tune" className="text-[20px] text-primary" />

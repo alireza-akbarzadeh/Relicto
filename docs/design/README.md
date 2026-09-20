@@ -15,7 +15,7 @@ To build a screen, follow **[IMPLEMENTING.md](IMPLEMENTING.md)**.
 | `reset-password-recovery` | `/reset-password` | Done (6.0%: brand rename reflows title) |
 | `user-profile-trader-identity` | `/profile` | Done, 4.3% diff |
 | `order-history-trade-ledger` | `/orders` | To do |
-| `live-order-tracking-escrow-protocol` | `/orders/[id]` | To do |
+| `live-order-tracking-escrow-protocol` | `/orders/[id]` | Done, 1.7% diff |
 | `sell-items-inventory-listing-studio` | `/sell` | To do |
 | `wallet-income-payout-dashboard` | `/wallet` | To do |
 | `tracker/` (price tracker) | `/tracker` | To do |

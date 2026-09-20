@@ -1,9 +1,9 @@
 "use client";
 
-import { formatClock, formatCountdown } from "@/lib/format";
+import { formatClock, formatCountdown, formatTimer } from "@/lib/format";
 import { useCountdown } from "@/hooks/use-countdown";
 
-const FORMATS = { clock: formatClock, verbose: formatCountdown } as const;
+const FORMATS = { clock: formatClock, verbose: formatCountdown, timer: formatTimer } as const;
 
 type CountdownTextProps = {
   seconds: number;
@@ -11,7 +11,7 @@ type CountdownTextProps = {
   className?: string;
 };
 
-/** Live-ticking countdown text: "04:12:35" (clock) or "04h 12m 30s" (verbose). */
+/** Live-ticking countdown: "04:12:35" (clock), "04h 12m 30s" (verbose) or "08:42" (timer). */
 export function CountdownText({ seconds, format = "clock", className }: CountdownTextProps) {
   const remaining = useCountdown(seconds);
   return (

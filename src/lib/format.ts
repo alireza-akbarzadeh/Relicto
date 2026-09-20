@@ -46,3 +46,9 @@ export function formatCountdown(totalSeconds: number) {
   const { h, m, s } = splitSeconds(totalSeconds);
   return `${pad(h)}h ${pad(m)}m ${pad(s)}s`;
 }
+
+/** 522 → "08:42"; hours are only shown when present. */
+export function formatTimer(totalSeconds: number) {
+  const { h, m, s } = splitSeconds(totalSeconds);
+  return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+}

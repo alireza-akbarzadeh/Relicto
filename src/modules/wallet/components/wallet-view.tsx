@@ -42,7 +42,7 @@ function WalletIntro() {
   const badges = [
     ["verified_user", "SOLVENCY VAULT", "$1,489,200.00", "text-tertiary"],
     ["phonelink_ring", "STEAM GUARD 2FA", "Armed (>180d)", "text-primary"],
-    ["ac_unit", "COLD STORAGE", "94.2% Secured", "text-status-upcoming"],
+    ["lock", "COLD STORAGE", "94.2% Secured", "text-status-upcoming"],
     ["bolt", "DISPATCH SLA", "< 120s Auto", "text-primary-container"],
   ] as const;
   return (

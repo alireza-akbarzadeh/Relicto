@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_standard" name="shell-type"/>
+<title>Lootora — Sell Items &amp; Inventory Listing Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+  @layer base {
+    html, body { margin: 0; padding: 0; background-color: #0b0e15; }
+    body { overscroll-behavior: none; }
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0b0e15; }
+  ::-webkit-scrollbar-thumb { background: #272a32; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #32353d; }
+</style>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-secondary-container": "#b0b2ff",
+        "inverse-surface": "#e1e2ec",
+        "on-tertiary-container": "#3e2400",
+        "on-error-container": "#ffdad6",
+        "on-error": "#690005",
+        "on-primary-fixed-variant": "#92002a",
+        "primary-fixed-dim": "#ffb2b7",
+        "primary-fixed": "#ffdadb",
+        "border-focus": "rgba(244, 63, 94, 0.5)",
+        "surface-container-highest": "#32353d",
+        "on-secondary-fixed": "#07006c",
+        "surface-overlay": "rgba(10, 13, 20, 0.85)",
+        "primary": "#ff516a",
+        "surface-variant": "#32353d",
+        "on-secondary-fixed-variant": "#2f2ebe",
+        "background": "#10131a",
+        "on-primary": "#ffffff",
+        "surface-container": "#1d1f27",
+        "tertiary-container": "#ca8100",
+        "secondary-fixed-dim": "#c0c1ff",
+        "on-tertiary-fixed": "#2a1700",
+        "on-primary-fixed": "#40000d",
+        "text-muted": "#64748b",
+        "glow-amber": "rgba(245, 158, 11, 0.25)",
+        "secondary-fixed": "#e1e0ff",
+        "tertiary-fixed-dim": "#ffb95f",
+        "surface-bright": "#363941",
+        "surface-card": "#151b2b",
+        "surface-container-low": "#191b23",
+        "status-upcoming": "#06b6d4",
+        "on-secondary": "#1000a9",
+        "status-live": "#ef4444",
+        "surface-tint": "#ffb2b7",
+        "error": "#ffb4ab",
+        "secondary-container": "#3131c0",
+        "on-background": "#e1e2ec",
+        "text-secondary": "#94a3b8",
+        "canvas-base": "#0a0d14",
+        "on-tertiary-fixed-variant": "#653e00",
+        "on-surface": "#e1e2ec",
+        "border-subtle": "rgba(255, 255, 255, 0.08)",
+        "outline-variant": "#5b4041",
+        "on-surface-variant": "#e3bdbf",
+        "border-tactical": "rgba(245, 158, 11, 0.4)",
+        "surface-container-lowest": "#0b0e15",
+        "glow-crimson": "rgba(244, 63, 94, 0.25)",
+        "primary-container": "#ff516a",
+        "outline": "#aa888a",
+        "surface-dim": "#10131a",
+        "inverse-on-surface": "#2d3038",
+        "surface-deep": "#0f1420",
+        "tertiary-fixed": "#ffddb8",
+        "surface": "#10131a",
+        "tertiary": "#ffb95f",
+        "surface-container-high": "#272a32",
+        "glow-indigo": "rgba(99, 102, 241, 0.25)",
+        "inverse-primary": "#bc0b3b",
+        "on-primary-container": "#ffffff",
+        "on-tertiary": "#472a00",
+        "secondary": "#c0c1ff",
+        "text-primary": "#f8fafc",
+        "error-container": "#93000a",
+        "surface-glass": "rgba(21, 27, 43, 0.72)"
+      },
+      borderRadius: {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      spacing: {
+        "margin": "1rem",
+        "space-sm": "0.5rem",
+        "gutter-desktop": "1.5rem",
+        "space-xl": "2rem",
+        "space-xs": "0.25rem",
+        "gutter": "1.25rem",
+        "space-md": "1rem",
+        "margin-desktop": "2.5rem",
+        "space-lg": "1.5rem"
+      },
+      fontFamily: {
+        "body-md": ["Geist", "sans-serif"],
+        "label-caps": ["Space Grotesk", "sans-serif"],
+        "headline-md": ["Space Grotesk", "sans-serif"],
+        "display-hero": ["Space Grotesk", "sans-serif"],
+        "display-hero-mobile": ["Space Grotesk", "sans-serif"],
+        "body-lg": ["Geist", "sans-serif"],
+        "body-sm": ["Geist", "sans-serif"],
+        "headline-lg-mobile": ["Space Grotesk", "sans-serif"],
+        "data-mono-lg": ["JetBrains Mono", "monospace"],
+        "headline-xl-mobile": ["Space Grotesk", "sans-serif"],
+        "label-badge": ["JetBrains Mono", "monospace"],
+        "headline-lg": ["Space Grotesk", "sans-serif"],
+        "data-mono-md": ["JetBrains Mono", "monospace"],
+        "headline-xl": ["Space Grotesk", "sans-serif"],
+        "headline-sm": ["Space Grotesk", "sans-serif"]
+      }
+    }
+  }
+};
+</script>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary selection:text-white">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#0c1017]/95 backdrop-blur-xl border-b border-white/[0.08]">
+<div class="h-16 max-w-7xl mx-auto px-4 lg:px-6 flex items-center justify-between gap-3">
+<div class="flex items-center gap-5">
+<div class="flex items-center gap-2.5 cursor-pointer select-none">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center shadow-[0_0_14px_rgba(244,63,94,0.45)]">
+<span class="material-symbols-outlined text-white text-[18px]">token</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-sm uppercase text-text-primary tracking-wider font-bold leading-tight">Lootora</span>
+<span class="font-label-badge text-[10px] text-primary uppercase leading-tight font-semibold">Protocol v4.2</span>
+</div>
+</div>
+<!-- Desktop Navigation Menu -->
+<nav class="hidden xl:flex items-center gap-1">
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Marketplace</a>
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Wiki</a>
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Tracker</a>
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Inventory</a>
+<a class="px-2.5 py-1 rounded bg-surface-container-high text-primary font-headline-sm text-xs uppercase font-bold tracking-wide border border-primary/20" href="#">Sell Items</a>
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Trade-Up</a>
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Match Center</a>
+<a class="px-2.5 py-1 text-text-secondary hover:text-text-primary hover:bg-surface-container/60 rounded transition-colors font-headline-sm text-xs uppercase tracking-wide" href="#">Wallet</a>
+</nav>
+</div>
+<!-- User Profile & Wallet Pills -->
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex items-center bg-surface-container-lowest border border-white/[0.08] rounded px-3 py-1.5 gap-2.5">
+<div class="flex flex-col text-right">
+<span class="font-label-badge text-[10px] uppercase text-text-muted">Steam Vault</span>
+<span class="font-data-mono-md text-xs text-tertiary font-bold">$4,289.50</span>
+</div>
+<button class="px-2.5 py-1 rounded bg-primary text-white font-headline-sm text-xs uppercase tracking-wide hover:brightness-110 shadow-[0_0_10px_rgba(244,63,94,0.3)] transition-all flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]">add</span>Deposit
+        </button>
+</div>
+<button class="relative p-1.5 text-text-secondary hover:text-text-primary hover:bg-surface-container/50 rounded transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live animate-pulse"></span>
+</button>
+<div class="flex items-center gap-2 pl-2 border-l border-white/[0.08]">
+<div class="hidden md:flex flex-col text-right">
+<span class="font-headline-sm text-xs text-text-primary leading-tight font-semibold">@s1mple_cs</span>
+<span class="font-label-badge text-[10px] text-status-upcoming uppercase">Pro Verified</span>
+</div>
+<div class="w-8 h-8 rounded bg-surface-card border border-primary/40 flex items-center justify-center shadow-[0_0_8px_rgba(244,63,94,0.25)]">
+<span class="material-symbols-outlined text-primary text-[18px]">person</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="w-full pt-16 bg-[#0a0d14] min-h-screen">
+<div class="flex flex-col w-full">
+<!-- Telemetry & Breadcrumb HUD Bar -->
+<section class="w-full bg-[#0d111a] border-b border-white/[0.06] px-4 lg:px-6 py-2">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-2 text-text-secondary text-xs">
+<div class="flex items-center gap-1.5 font-data-mono-md text-[11px] tracking-wider">
+<span class="text-text-muted">PORTAL</span>
+<span class="text-white/20">/</span>
+<span class="text-text-muted">INVENTORY OPS</span>
+<span class="text-white/20">/</span>
+<span class="text-primary font-bold">SELLER STUDIO</span>
+</div>
+<div class="flex flex-wrap items-center gap-2 font-data-mono-md text-[11px]">
+<div class="flex items-center gap-1.5 bg-surface-card border border-white/[0.06] px-2.5 py-1 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming animate-pulse"></span>
+<span class="text-text-secondary">Steam Web API: <span class="text-status-upcoming font-semibold">99.98% Synced</span> (12ms)</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-card border border-white/[0.06] px-2.5 py-1 rounded">
+<span class="material-symbols-outlined text-[13px] text-tertiary">shield</span>
+<span class="text-text-secondary">Mobile 2FA: <span class="text-tertiary font-semibold">Armed (&gt;180d)</span></span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-card border border-white/[0.06] px-2.5 py-1 rounded">
+<span class="material-symbols-outlined text-[13px] text-primary">bolt</span>
+<span class="text-text-secondary">Hold: <span class="text-primary font-semibold">0 Days (Instant)</span></span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-card border border-white/[0.06] px-2.5 py-1 rounded">
+<span class="material-symbols-outlined text-[13px] text-secondary">smart_toy</span>
+<span class="text-text-secondary">Bots: <span class="text-secondary font-semibold">24/24 Online</span></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Hero Header & Rapid Action Deck -->
+<section class="w-full bg-[#10141f] border-b border-white/[0.06] px-4 lg:px-6 py-5">
+<div class="max-w-7xl mx-auto flex flex-col gap-4">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="flex flex-col gap-1.5 max-w-3xl">
+<div class="flex items-center gap-2">
+<span class="bg-primary/20 text-primary border border-primary/30 px-2 py-0.5 rounded font-label-badge text-[10px] uppercase tracking-widest font-bold">Trading Terminal</span>
+<span class="bg-surface-container-highest/80 text-secondary border border-white/[0.08] px-2 py-0.5 rounded font-data-mono-md text-[10px]">V4.8 TACTICAL CORE</span>
+</div>
+<h1 class="font-headline-xl text-2xl lg:text-3xl text-text-primary uppercase tracking-tight font-bold">
+              Seller Studio <span class="text-primary font-normal">[PRO LIQUIDITY ENGINE]</span>
+</h1>
+<p class="font-body-md text-xs sm:text-sm text-text-secondary leading-relaxed">
+              Direct P2P escrow listing engine with instant bot cashout liquidity, automated float rank benchmarking, and real-time Steam Community market floor indexing. Zero skin custody lock.
+            </p>
+</div>
+<!-- Quick Summary Stats Pill -->
+<div class="grid grid-cols-3 gap-3 bg-surface-card border border-white/[0.08] px-4 py-3 rounded-lg shadow-lg">
+<div class="flex flex-col">
+<span class="font-label-badge text-[10px] uppercase text-text-muted">Pro Fee Rate</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-data-mono-lg text-lg text-primary font-bold">2.0%</span>
+<span class="font-label-badge text-[9px] text-status-upcoming">VIP 4</span>
+</div>
+</div>
+<div class="flex flex-col border-l border-white/[0.08] pl-3">
+<span class="font-label-badge text-[10px] uppercase text-text-muted">24H Volume</span>
+<span class="font-data-mono-lg text-lg text-tertiary font-bold mt-0.5">$18,420.50</span>
+</div>
+<div class="flex flex-col border-l border-white/[0.08] pl-3">
+<span class="font-label-badge text-[10px] uppercase text-text-muted">Avg Liquidation</span>
+<span class="font-data-mono-lg text-lg text-text-primary font-bold mt-0.5">4.2 min</span>
+</div>
+</div>
+</div>
+<!-- Action Toolbar Controls -->
+<div class="flex flex-col gap-3 pt-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<!-- Game Switcher Tabs -->
+<div class="flex items-center gap-1 bg-surface-container-lowest p-1 rounded border border-white/[0.06]">
+<button class="flex items-center gap-1.5 px-3 py-1 rounded bg-surface-card text-text-primary font-headline-sm text-xs uppercase font-semibold border border-white/[0.1]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                CS2 (128 Items)
+              </button>
+<button class="flex items-center gap-1.5 px-3 py-1 rounded text-text-muted hover:text-text-primary font-headline-sm text-xs uppercase transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-status-upcoming"></span>
+                Dota 2 (46 Items)
+              </button>
+<button class="flex items-center gap-1.5 px-3 py-1 rounded text-text-muted hover:text-text-primary font-headline-sm text-xs uppercase transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                TF2 (12 Items)
+              </button>
+</div>
+<!-- Quick Filters -->
+<div class="flex flex-wrap items-center gap-1.5">
+<button class="bg-primary/15 text-primary border border-primary/30 px-2.5 py-1 rounded font-data-mono-md text-xs font-medium flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Tradable Now (42)
+              </button>
+<button class="bg-surface-container-highest/60 text-text-muted border border-white/[0.06] px-2.5 py-1 rounded font-data-mono-md text-xs hover:text-text-primary transition-colors">
+                Trade Hold (1-7d) (16)
+              </button>
+<button class="bg-surface-container-highest/30 text-text-muted border border-white/[0.04] px-2.5 py-1 rounded font-data-mono-md text-xs opacity-50 cursor-not-allowed">
+                Non-Tradable (0)
+              </button>
+</div>
+</div>
+<!-- Search and Batch Action Buttons -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5 bg-surface-card border border-white/[0.08] p-2 rounded-lg">
+<div class="relative flex-1 min-w-[240px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[17px]">search</span>
+<input class="w-full bg-[#0b0e15] border border-white/[0.06] text-text-primary font-body-md text-xs rounded pl-9 pr-3 py-1.5 focus:outline-none focus:border-primary/50 transition-colors placeholder:text-text-muted" placeholder="Search inventory by skin, wear, float, sticker craft, pattern seed..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="bg-surface-container border border-white/[0.06] text-tertiary px-3 py-1.5 rounded font-label-caps text-xs uppercase hover:bg-surface-bright flex items-center gap-1 transition-colors font-medium">
+<span class="material-symbols-outlined text-[15px]">flash_on</span>
+                Auto-Price Floor (-1%)
+              </button>
+<button class="bg-surface-container border border-white/[0.06] text-text-secondary px-3 py-1.5 rounded font-label-caps text-xs uppercase hover:bg-surface-bright transition-colors font-medium">
+                Select All Tradable (6)
+              </button>
+<button class="bg-surface-container border border-white/[0.06] text-text-secondary px-3 py-1.5 rounded font-label-caps text-xs uppercase hover:bg-surface-bright flex items-center gap-1 transition-colors font-medium">
+<span>Sort: Highest Value</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+<button class="bg-primary hover:bg-[#f43f5e] text-white px-3.5 py-1.5 rounded font-headline-sm text-xs uppercase font-bold tracking-wide shadow-md flex items-center gap-1.5 transition-all">
+<span class="material-symbols-outlined text-[15px]">receipt_long</span>
+                Bulk List Selected (1) — $3,150.00
+              </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Two-Column Workspace Stage -->
+<section class="w-full px-4 lg:px-6 py-6">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+<!-- LEFT COLUMN: Backpack Inventory Grid (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-3">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-base uppercase text-text-primary tracking-wide font-bold">Backpack Inventory</span>
+<span class="bg-primary/20 text-primary border border-primary/30 font-data-mono-md text-[10px] px-2 py-0.5 rounded font-semibold">6 Ready To List</span>
+</div>
+<span class="font-data-mono-md text-xs text-text-secondary">Steam Sync: <span class="text-tertiary">30s ago</span></span>
+</div>
+<!-- Inventory List Container -->
+<div class="flex flex-col gap-2.5">
+<!-- ITEM 1 (Active / Selected) -->
+<div class="relative bg-surface-card border border-primary/50 rounded-lg p-3 shadow-lg transition-all">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l"></div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary cursor-pointer" type="checkbox"/>
+<div class="relative w-14 h-14 rounded bg-[#0b0e15] border border-white/[0.08] flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Butterfly Knife Doppler Phase 4 weapon skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIEAULMj-ZNnRYPPNSoLMlrrVvMsuAwtk4UwYsu9qfuchiegeLvS-6fQr4YkYn7shbRllY3q3DwN0OZkQU6tijVynU1CA5lXNaMi1J9RPff_NM7bJwUtqI5sIuqUJRlC5jHjzTf0_L_HlfCXjzjoSxsM6t7yLRzjBeZm9I0_M_MmLJk_Bl7VF_inDlDo98EqqrViS7zJlGyaSKfEHLNEQ63fqtMNqolRj5oNbdXs65"/>
+<span class="absolute top-0.5 left-0.5 px-1 bg-status-upcoming text-surface-container-lowest font-label-badge text-[9px] font-bold rounded">P4</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-xs sm:text-sm text-text-primary font-semibold truncate">★ Butterfly Knife | Doppler</span>
+<span class="bg-primary/20 text-primary border border-primary/30 px-1.5 py-0.2 rounded font-label-badge text-[10px] uppercase">Covert</span>
+</div>
+<span class="font-data-mono-md text-xs text-status-upcoming">Factory New <span class="text-text-muted">· Float: 0.0112 (Rank #18)</span></span>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-status-upcoming" style="width: 11%;"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:items-end text-left sm:text-right min-w-[130px]">
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$3,150.00</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Floor: $3,135.00</span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming font-semibold">+ $15.00 (+0.48%)</span>
+</div>
+</div>
+</div>
+<!-- ITEM 2 -->
+<div class="relative bg-surface-card/60 hover:bg-surface-card border border-white/[0.06] rounded-lg p-3 transition-all">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<input class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary cursor-pointer" type="checkbox"/>
+<div class="relative w-14 h-14 rounded bg-[#0b0e15] border border-white/[0.08] flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Counter-Strike 2 AWP Dragon Lore sniper rifle skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASEz0HwqSuI7BIxoa4ngZRUJNjKYxVI8NK8yoOF7KnV51uMhqIWIYgpYc1CwOetHIa7tfpNIM9sZrjLCI0zYTXSJWqajL1feLYBx8ZrWRhMkgwp8EmE8af09vjTPSekraUlwZvNzBvH6Whx9OSl95HEtmNXAP74EDndkTIOUczyyuOGwPiJ4HLYZ7KGul6OtVkL64itSkS98f55_bkbNnJ65bCsKUivH5xsgyWIOI0"/>
+<span class="absolute top-0.5 left-0.5 px-1 bg-tertiary text-surface-container-lowest font-label-badge text-[9px] font-bold rounded">SVN</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-xs sm:text-sm text-text-primary font-semibold truncate">AWP | Dragon Lore</span>
+<span class="bg-tertiary/20 text-tertiary border border-tertiary/30 px-1.5 py-0.2 rounded font-label-badge text-[10px] uppercase">Souvenir</span>
+</div>
+<span class="font-data-mono-md text-xs text-text-secondary">Field-Tested <span class="text-text-muted">· Float: 0.1824 (Clean)</span></span>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-tertiary" style="width: 38%;"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:items-end text-left sm:text-right min-w-[130px]">
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$5,200.00</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Floor: $5,180.00</span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming font-semibold">+ $20.00 (+0.39%)</span>
+</div>
+</div>
+</div>
+<!-- ITEM 3 -->
+<div class="relative bg-surface-card/60 hover:bg-surface-card border border-white/[0.06] rounded-lg p-3 transition-all">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<input class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary cursor-pointer" type="checkbox"/>
+<div class="relative w-14 h-14 rounded bg-[#0b0e15] border border-white/[0.08] flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Counter-Strike 2 Sport Gloves Vice" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw4cizrP6wS83UpB0EXTbLdfXENRtpCXbgTz8Lt5suj1MWvNeZ2suSese5GrlC3EeWQp64sKfrxZ0Tr5OaHgIxb9wRlxccypB-K8atds5qUKEL1V4P0nTUZ0SguEGjBARS8LMixcWmVwzPEAecLQRCDmPWI5YgftArp3VzYbdFLS9Kk_XAuc9YzApah-QXRRka4d4hu-jOqjmk_XkKxrdbHEoxlm1tX0GquBiONX9k"/>
+<span class="absolute top-0.5 left-0.5 px-1 bg-secondary text-surface-container-lowest font-label-badge text-[9px] font-bold rounded">EXTRA</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-xs sm:text-sm text-text-primary font-semibold truncate">Sport Gloves | Vice</span>
+<span class="bg-primary/20 text-primary border border-primary/30 px-1.5 py-0.2 rounded font-label-badge text-[10px] uppercase">Extraordinary</span>
+</div>
+<span class="font-data-mono-md text-xs text-text-secondary">Field-Tested <span class="text-text-muted">· Float: 0.2118</span></span>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-secondary" style="width: 45%;"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:items-end text-left sm:text-right min-w-[130px]">
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$1,420.00</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Floor: $1,440.00</span>
+<span class="font-data-mono-md text-[11px] text-primary font-semibold">- $20.00 (-1.39%)</span>
+</div>
+</div>
+</div>
+<!-- ITEM 4 -->
+<div class="relative bg-surface-card/60 hover:bg-surface-card border border-white/[0.06] rounded-lg p-3 transition-all">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<input class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary cursor-pointer" type="checkbox"/>
+<div class="relative w-14 h-14 rounded bg-[#0b0e15] border border-white/[0.08] flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="AK-47 Case Hardened rifle skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqqfto7zmbC2WRqWH81CCCZMmjGAEoU0nYOLXRERFKM6yjvFmNP3zNB7UYCIlSNhm5Au1WxMt8XgZv7xjF7vwP8d-3fNyPX-stN5HPGVTysWu5xZeIbBDSFIJivgtftnYsGQ46eFRZdqCoS3I7N61oZKg-JZYdOrc5AbenkkH9flWLBFixV4O65CUcPBEnxDlBhWBlDikozzGUexgU3M9vC30hVIho9olEdrXVtAM9"/>
+<span class="absolute top-0.5 left-0.5 px-1 bg-status-upcoming text-surface-container-lowest font-label-badge text-[9px] font-bold rounded">#571</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-xs sm:text-sm text-text-primary font-semibold truncate">AK-47 | Case Hardened</span>
+<span class="bg-status-upcoming/20 text-status-upcoming border border-status-upcoming/30 px-1.5 py-0.2 rounded font-label-badge text-[10px] uppercase">Tier 2 Gem</span>
+</div>
+<span class="font-data-mono-md text-xs text-text-secondary">Well-Worn <span class="text-text-muted">· 72% Blue Scar</span></span>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-status-upcoming" style="width: 62%;"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:items-end text-left sm:text-right min-w-[130px]">
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$420.00</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Floor: $385.00</span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming font-semibold">+ $35.00 (+9.09%)</span>
+</div>
+</div>
+</div>
+<!-- ITEM 5 -->
+<div class="relative bg-surface-card/60 hover:bg-surface-card border border-white/[0.06] rounded-lg p-3 transition-all">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<input class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary cursor-pointer" type="checkbox"/>
+<div class="relative w-14 h-14 rounded bg-[#0b0e15] border border-white/[0.08] flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Dota 2 Manifold Paradox Arcana" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7iRk-_33fnAiab3HS_OGBPpoieOHpMyuQYDZ-n4Lb8WrZwE3iFh4_6NqFS5_g9DKFvCs5aKEydY0ECH-9lMxi2N2jArqeoRShnXSKUxyqrSz5YwwhOVBzvZcKdsSdkQ1JpRUSj63sj22AtipwDU9tt1lg0IMQht7ux_SvY_Pw_puUBOWowtW1R-eava1X0uQESpPqRMEWckESxS6cRxmAxB7Eg9zHO2cDtoGbLHPy"/>
+<span class="absolute top-0.5 left-0.5 px-1 bg-primary text-surface-container-lowest font-label-badge text-[9px] font-bold rounded">ARC</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-xs sm:text-sm text-text-primary font-semibold truncate">Manifold Paradox Arcana</span>
+<span class="bg-primary/20 text-primary border border-primary/30 px-1.5 py-0.2 rounded font-label-badge text-[10px] uppercase">Exalted 3</span>
+</div>
+<span class="font-data-mono-md text-xs text-text-secondary">Phantom Assassin <span class="text-text-muted">· 1,420 Kills</span></span>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-primary" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:items-end text-left sm:text-right min-w-[130px]">
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$119.50</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Floor: $118.00</span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming font-semibold">+ $1.50 (+1.27%)</span>
+</div>
+</div>
+</div>
+<!-- ITEM 6 -->
+<div class="relative bg-surface-card/60 hover:bg-surface-card border border-white/[0.06] rounded-lg p-3 transition-all">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<input class="w-4 h-4 rounded bg-surface-container-lowest text-primary accent-primary cursor-pointer" type="checkbox"/>
+<div class="relative w-14 h-14 rounded bg-[#0b0e15] border border-white/[0.08] flex-shrink-0 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="M4A1-S Printstream silenced rifle skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIsVkqynz-XGXw240wfjhlCiiBE_4PZ5oMeoY9KC3iekYSrmnsHy6kBixW4dt5jpCAN_sMp-_TMtnsRBJJ3D9JsDaPGI4BihVkrIFx9gEDYud0868VbwA8sETdZ4rH-3vtQD4XoxgBY55CunocRFGCpg_cvTI_yEZhGwUU0PqJa4bF11A9Lx24DbyCsV0DidrMBFUG9F_pFSUkeewGR8bthKXNfUD-RCYjgxgo906h"/>
+<span class="absolute top-0.5 left-0.5 px-1 bg-secondary text-surface-container-lowest font-label-badge text-[9px] font-bold rounded">4x</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="font-headline-sm text-xs sm:text-sm text-text-primary font-semibold truncate">M4A1-S | Printstream</span>
+<span class="bg-primary/20 text-primary border border-primary/30 px-1.5 py-0.2 rounded font-label-badge text-[10px] uppercase">Covert</span>
+</div>
+<span class="font-data-mono-md text-xs text-text-secondary">Field-Tested <span class="text-text-muted">· Float: 0.2201 (4x Holo)</span></span>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full overflow-hidden mt-1">
+<div class="h-full bg-secondary" style="width: 48%;"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:items-end text-left sm:text-right min-w-[130px]">
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$165.00</span>
+<span class="font-data-mono-md text-[11px] text-text-muted">Floor: $162.00</span>
+<span class="font-data-mono-md text-[11px] text-status-upcoming font-semibold">+ $3.00 (+1.85%)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Inventory Footer Telemetry -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-2 bg-[#0e131d] border border-white/[0.06] px-4 py-2.5 rounded-lg text-xs">
+<span class="font-data-mono-md text-text-secondary">Showing 6 of 128 tradable items</span>
+<div class="flex items-center gap-2">
+<span class="font-label-badge text-[11px] uppercase text-text-muted">Backpack Est. Value:</span>
+<span class="font-data-mono-lg text-sm text-tertiary font-bold">$10,474.50 USD</span>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Active Listing Focus & Pricing Configurator (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-3.5 bg-surface-card border border-white/[0.08] p-4 lg:p-5 rounded-xl shadow-xl">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-headline-md text-base uppercase text-text-primary tracking-wide font-bold">Listing Focus</span>
+</div>
+<span class="font-data-mono-md text-[11px] text-text-muted bg-[#0b0e15] border border-white/[0.06] px-2 py-0.5 rounded font-medium">#L00T-99824</span>
+</div>
+<!-- Selected Item Hero Preview Card -->
+<div class="relative bg-[#0b0e15] border border-white/[0.08] p-3 rounded-lg flex items-center gap-3 overflow-hidden">
+<div class="relative w-16 h-16 rounded bg-[#151b2b] border border-white/[0.08] flex-shrink-0 flex items-center justify-center shadow-md">
+<img class="w-full h-full object-cover rounded" data-alt="Butterfly Knife Doppler Phase 4 blade" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1uCYuUwPN1GE9FtOdMHFt0P-GirEVFmvNkn-jbMv9jT1HfSOanQ6d_ki7BZFDR2xhGqTpv3N8RNzzqszvFDRXhOPqgbiGCPivyhIEG6D2ekYp-oDqSHknvVT-8StZhYNOTKFpoe2EC5Px9-kEWiKmT83sDQhMu8mhVc46P9y0IM2YJ56iVnnfnJ0XOWgp4WqVsD1CgZvRcV26P6EmEsTcWK2zVAMekQrkriJYJKt4"/>
+<span class="absolute bottom-1 right-1 px-1 bg-[#10131a]/90 text-status-upcoming font-data-mono-md text-[9px] font-bold rounded">FN</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-badge text-[10px] text-primary uppercase font-bold tracking-wider">CS2 · Knife</span>
+<h2 class="font-headline-sm text-sm text-text-primary font-bold truncate">★ Butterfly Knife | Doppler (P4)</h2>
+<div class="flex items-center gap-1.5 text-xs font-data-mono-md text-text-secondary pt-0.5">
+<span class="text-status-upcoming">Float: 0.0112</span>
+<span class="text-white/20">·</span>
+<span class="text-tertiary">Lowest Rank #18</span>
+</div>
+</div>
+</div>
+<!-- Pricing Strategy Tabs -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-[11px] uppercase text-text-muted font-semibold tracking-wider">Listing Liquidity Mode</label>
+<div class="grid grid-cols-3 gap-1 bg-[#0b0e15] p-1 rounded-lg border border-white/[0.06]">
+<button class="py-1.5 text-center rounded bg-primary text-white font-headline-sm text-xs uppercase font-bold tracking-wide shadow transition-all">
+                Market P2P
+              </button>
+<button class="py-1.5 text-center rounded text-text-muted hover:text-text-primary font-headline-sm text-xs uppercase transition-all font-semibold">
+                Instant Bot
+              </button>
+<button class="py-1.5 text-center rounded text-text-muted hover:text-text-primary font-headline-sm text-xs uppercase transition-all font-semibold">
+                24H Auction
+              </button>
+</div>
+</div>
+<!-- Custom Price Field & Adjustments -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-caps text-[11px] uppercase text-text-muted font-semibold tracking-wider">Target Ask Price (USD)</label>
+<span class="font-data-mono-md text-[11px] text-status-upcoming bg-status-upcoming/10 border border-status-upcoming/20 px-2 py-0.5 rounded font-medium">Floor ($3,135) +1.5%</span>
+</div>
+<div class="relative flex items-center">
+<span class="absolute left-3.5 font-data-mono-lg text-base text-tertiary font-bold">$</span>
+<input class="w-full bg-[#0b0e15] border border-white/[0.08] text-text-primary font-data-mono-lg text-lg rounded pl-8 pr-20 py-2 focus:outline-none focus:border-primary/50 transition-colors" type="text" value="3,150.00"/>
+<span class="absolute right-3 font-label-badge text-[10px] text-text-muted uppercase font-bold">USD Vault</span>
+</div>
+<!-- Quick adjustment pills -->
+<div class="grid grid-cols-3 gap-1.5 pt-0.5">
+<button class="bg-[#191f2e] border border-white/[0.06] hover:bg-surface-bright text-text-secondary py-1 rounded font-data-mono-md text-xs text-center transition-colors">
+                -10% ($2,835)
+              </button>
+<button class="bg-[#191f2e] border border-white/[0.06] hover:bg-surface-bright text-status-upcoming py-1 rounded font-data-mono-md text-xs text-center transition-colors font-medium">
+                +0.48% vs Floor
+              </button>
+<button class="bg-[#191f2e] border border-white/[0.06] hover:bg-surface-bright text-text-secondary py-1 rounded font-data-mono-md text-xs text-center transition-colors">
+                +15% ($3,622)
+              </button>
+</div>
+</div>
+<!-- Settlement & Payout Breakdown Card -->
+<div class="bg-[#0b0e15] border border-white/[0.08] p-3 rounded-lg flex flex-col gap-2">
+<div class="flex items-center justify-between pb-1 border-b border-white/[0.06]">
+<span class="font-label-caps text-[11px] uppercase text-text-muted font-bold tracking-wider">Escrow Settlement Ledger</span>
+<span class="font-data-mono-md text-[10px] text-primary font-semibold">Tier 1 Pro Liquidity</span>
+</div>
+<div class="flex flex-col gap-1 font-data-mono-md text-xs">
+<div class="flex justify-between text-text-secondary">
+<span>Gross Listed Value:</span>
+<span class="text-text-primary font-semibold">$3,150.00</span>
+</div>
+<div class="flex justify-between text-text-secondary">
+<span>Lootora Platform Fee (Pro Tier 2.0%):</span>
+<span class="text-primary font-semibold">-$63.00</span>
+</div>
+<div class="flex justify-between text-text-secondary">
+<span>Steam Bot Relay:</span>
+<span class="text-status-upcoming font-semibold">$0.00 (Free)</span>
+</div>
+<div class="w-full h-px bg-white/[0.06] my-1"></div>
+<div class="flex justify-between items-center text-sm pt-0.5">
+<span class="text-text-primary font-semibold">Net Trader Proceeds:</span>
+<span class="font-data-mono-lg text-base text-tertiary font-bold">$3,087.00 USD</span>
+</div>
+</div>
+</div>
+<!-- Payout Configuration Options -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-[11px] uppercase text-text-muted font-semibold tracking-wider">Settlement Preferences</label>
+<div class="flex items-center justify-between bg-[#0b0e15] border border-white/[0.06] px-3 py-2 rounded">
+<div class="flex items-center gap-2">
+<input checked="" class="w-3.5 h-3.5 rounded bg-surface-container text-primary accent-primary cursor-pointer" type="checkbox"/>
+<span class="font-body-md text-xs text-text-primary">Instant Crypto Settlement (USDT / Arbitrum)</span>
+</div>
+<span class="font-label-badge text-[10px] text-status-upcoming uppercase font-bold">Zero Gas</span>
+</div>
+<div class="flex items-center justify-between bg-[#0b0e15] border border-white/[0.06] px-3 py-2 rounded">
+<div class="flex items-center gap-2">
+<input checked="" class="w-3.5 h-3.5 rounded bg-surface-container text-primary accent-primary cursor-pointer" type="checkbox"/>
+<span class="font-body-md text-xs text-text-primary">Allow Counter-Offers (Min: $2,950.00)</span>
+</div>
+<span class="material-symbols-outlined text-[15px] text-tertiary">tune</span>
+</div>
+</div>
+<!-- Custom Note / Float Intel -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-caps text-[11px] uppercase text-text-muted font-semibold tracking-wider">Trader Buyer Note / Craft Intel</label>
+<input class="w-full bg-[#0b0e15] border border-white/[0.06] text-text-secondary font-data-mono-md text-xs rounded px-3 py-1.5 focus:outline-none focus:text-text-primary focus:border-primary/50 transition-colors" type="text" value="0.0112 Scratchless spine, Doppler Phase 4 deep sapphire gradient tier"/>
+</div>
+<!-- Master CTA Button -->
+<div class="flex flex-col gap-2 pt-1">
+<button class="w-full py-2.5 rounded bg-primary hover:bg-[#f43f5e] text-white font-headline-md text-sm uppercase tracking-wider transition-all shadow-[0_0_16px_rgba(244,63,94,0.35)] flex items-center justify-center gap-2 font-bold">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+              List Item on Lootora ($3,150.00)
+            </button>
+<div class="flex items-center justify-center gap-1 text-center font-data-mono-md text-[11px] text-text-muted">
+<span class="material-symbols-outlined text-[13px] text-status-upcoming">verified_user</span>
+<span>Encrypted Steam P2P Escrow Bot Verification System</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Live Marketplace Listings (Bottom Management Section) -->
+<section class="w-full bg-[#0b0e15] border-t border-white/[0.06] px-4 lg:px-6 py-6">
+<div class="max-w-7xl mx-auto flex flex-col gap-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-live animate-pulse"></span>
+<h2 class="font-headline-lg text-lg uppercase text-text-primary tracking-tight font-bold">Active Live Marketplace Listings</h2>
+<span class="bg-primary/20 text-primary border border-primary/30 font-data-mono-md text-[11px] px-2 py-0.5 rounded font-bold">3 On Sale</span>
+</div>
+<button class="self-start sm:self-auto bg-surface-card hover:bg-surface-bright border border-white/[0.08] text-text-primary px-3 py-1.5 rounded font-headline-sm text-xs uppercase transition-colors flex items-center gap-1.5 font-semibold">
+<span class="material-symbols-outlined text-[15px]">refresh</span>
+            Refresh Live Index
+          </button>
+</div>
+<!-- Live Listings Table Card -->
+<div class="w-full bg-surface-card border border-white/[0.08] rounded-xl overflow-hidden shadow-xl">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#0b0e15] border-b border-white/[0.06] text-label-caps text-[11px] uppercase text-text-muted">
+<th class="py-2.5 px-4 font-bold">Asset &amp; Wear Intel</th>
+<th class="py-2.5 px-4 font-bold">Listed Price</th>
+<th class="py-2.5 px-4 font-bold">Market Floor Delta</th>
+<th class="py-2.5 px-4 font-bold">Buyer Telemetry</th>
+<th class="py-2.5 px-4 font-bold">Age</th>
+<th class="py-2.5 px-4 text-right font-bold">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/[0.04] font-data-mono-md text-xs">
+<!-- Listing Row 1 -->
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-[#0b0e15] border border-white/[0.08] flex items-center justify-center overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Talon Knife Fade skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyOEzElvFUGGxPp6YEnZSgSpfDD5Znqid_7Jxg_leEn2LZJrlmlv6sY8wtwP_f259x2Po9vf8pesWxZbRPHgBx1hGP_hw7t3tQVOkcFHUDLK-r4KlEslgDu8DiA7SDRQ2D5dShZzUQKwmIrrSKj1WTq79H0-pinwO33nfgud5KmJJ5LjiBFFn-ISXUl_srJvtQ6AQDmwZTS-oR9dNv62Pb4Y7sw2YU4ezxQrWSGE_d"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-xs text-text-primary font-bold">★ Talon Knife | Fade</span>
+<span class="text-status-upcoming text-[11px]">FN 0.021 · 98.4% Fade Index</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="text-tertiary font-bold text-sm">$1,650.00</span>
+</td>
+<td class="py-3 px-4">
+<span class="bg-status-upcoming/15 text-status-upcoming border border-status-upcoming/30 px-2 py-0.5 rounded font-bold text-[11px]">+$30.00 (+1.8%)</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-xs">
+<span class="text-text-secondary">142 Views</span>
+<span class="text-white/20">·</span>
+<span class="text-primary font-semibold">2 Offers (Max $1,580)</span>
+</div>
+</td>
+<td class="py-3 px-4 text-text-muted text-[11px]">12h 45m ago</td>
+<td class="py-3 px-4 text-right">
+<div class="inline-flex items-center gap-1.5">
+<button class="bg-surface-container border border-white/[0.08] hover:bg-surface-bright text-text-primary px-2.5 py-1 rounded font-label-badge text-[10px] uppercase font-semibold transition-colors">
+                        Inspect
+                      </button>
+<button class="bg-error-container/40 border border-error/30 hover:bg-error-container text-on-error-container px-2.5 py-1 rounded font-label-badge text-[10px] uppercase font-semibold transition-colors">
+                        Delist
+                      </button>
+</div>
+</td>
+</tr>
+<!-- Listing Row 2 -->
+<tr class="bg-white/[0.01] hover:bg-white/[0.02] transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-[#0b0e15] border border-white/[0.08] flex items-center justify-center overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Desert Eagle Fennec Fox pistol skin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwqbAlzgqYF0UU4AV7XStVKwVPQO9VWAl0XKAHfV-J8EnXziL7WRQhXMpK-LeYAxSgaZWbSZOLlXdurrOdDjeGR4s9Z8Qn7Lc-M3A0xSX3Hlhgy3fNSmxo_pVJFBzSzg5_sIbzPXy-gIN8veiR3h650dSLwvDQo5EHhz5jHFntKUYiGuNCS-OeG01cuuFnLF9rjm0d71Gn8kVzt_02vDeSfwF2T--2HZRywzHmy3jt"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-xs text-text-primary font-bold">Desert Eagle | Fennec Fox</span>
+<span class="text-text-secondary text-[11px]">MW 0.084 · Clean Top Slide</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="text-tertiary font-bold text-sm">$620.00</span>
+</td>
+<td class="py-3 px-4">
+<span class="bg-[#1f2430] border border-white/[0.08] text-text-secondary px-2 py-0.5 rounded font-semibold text-[11px]">Exact Floor Match</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-xs">
+<span class="text-text-secondary">88 Views</span>
+<span class="text-white/20">·</span>
+<span class="text-text-muted">0 Offers</span>
+</div>
+</td>
+<td class="py-3 px-4 text-text-muted text-[11px]">1d 04h ago</td>
+<td class="py-3 px-4 text-right">
+<div class="inline-flex items-center gap-1.5">
+<button class="bg-surface-container border border-white/[0.08] hover:bg-surface-bright text-text-primary px-2.5 py-1 rounded font-label-badge text-[10px] uppercase font-semibold transition-colors">
+                        Inspect
+                      </button>
+<button class="bg-error-container/40 border border-error/30 hover:bg-error-container text-on-error-container px-2.5 py-1 rounded font-label-badge text-[10px] uppercase font-semibold transition-colors">
+                        Delist
+                      </button>
+</div>
+</td>
+</tr>
+<!-- Listing Row 3 -->
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-[#0b0e15] border border-white/[0.08] flex items-center justify-center overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Specialist Gloves Crimson Web" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdsPw2AS6zEbpaZf6LuAprioXxgcZ2FQQ4Gl17NvbnggSwvOw79vlOXkbvsz7HJv1clUnxU9SUmGQlz3AR_1LfSg4-VpmJ303K_7wO7BMSwOPtcCt9CnCoXC1FLto-HG4FhEtsrWlN0XkaY00MMImQ6kOPTZOnSOL4PUiQuy0kvKdO-cNaucQa8bPHuXV4XMCkukfT2j1fWb1WMIIizc45y9HhdfLbe3temshP50a9"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-xs text-text-primary font-bold">★ Specialist Gloves | Crimson Web</span>
+<span class="text-primary text-[11px]">FT 0.24 · Centered Large Web</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="text-tertiary font-bold text-sm">$570.00</span>
+</td>
+<td class="py-3 px-4">
+<span class="bg-status-upcoming/15 text-status-upcoming border border-status-upcoming/30 px-2 py-0.5 rounded font-bold text-[11px]">+$10.00 (+1.7%)</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-xs">
+<span class="text-text-secondary">312 Views</span>
+<span class="text-white/20">·</span>
+<span class="text-primary font-semibold">3 Offers (Max $550)</span>
+</div>
+</td>
+<td class="py-3 px-4 text-text-muted text-[11px]">2d 11h ago</td>
+<td class="py-3 px-4 text-right">
+<div class="inline-flex items-center gap-1.5">
+<button class="bg-surface-container border border-white/[0.08] hover:bg-surface-bright text-text-primary px-2.5 py-1 rounded font-label-badge text-[10px] uppercase font-semibold transition-colors">
+                        Inspect
+                      </button>
+<button class="bg-error-container/40 border border-error/30 hover:bg-error-container text-on-error-container px-2.5 py-1 rounded font-label-badge text-[10px] uppercase font-semibold transition-colors">
+                        Delist
+                      </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Zero-Custody Escrow Guarantee Box -->
+<div class="bg-surface-card border border-white/[0.08] p-4 lg:p-5 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded bg-primary/20 border border-primary/40 flex items-center justify-center flex-shrink-0 shadow-md">
+<span class="material-symbols-outlined text-primary text-[22px]">verified</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<h3 class="font-headline-sm text-sm uppercase text-text-primary tracking-wide font-bold">
+                Valve Steam Guard Escrow Guarantee
+              </h3>
+<p class="font-body-md text-xs text-text-secondary max-w-3xl leading-relaxed">
+                All listings are managed through automated zero-collateral P2P bot relay. Your skins never leave your backpack until buyer deposits are confirmed in on-chain or multi-currency escrow vault. No API keys ever shared.
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 self-stretch md:self-auto justify-end">
+<button class="bg-surface-container hover:bg-surface-bright border border-white/[0.08] text-text-primary px-3 py-1.5 rounded font-headline-sm text-xs uppercase font-semibold transition-colors">
+              Escrow Whitepaper
+            </button>
+<button class="bg-primary hover:bg-[#f43f5e] text-white px-3.5 py-1.5 rounded font-headline-sm text-xs uppercase font-bold tracking-wide transition-colors shadow-md">
+              Trade URL Settings
+            </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Unified Bottom Footer -->
+<footer class="w-full bg-[#080b11] border-t border-white/[0.08] py-4 shadow-[0_-1px_12px_rgba(0,0,0,0.6)]">
+<div class="max-w-7xl mx-auto px-4 lg:px-6 flex flex-col md:flex-row items-center justify-between gap-3">
+<div class="flex flex-col md:flex-row items-center gap-3">
+<div class="flex items-center gap-2">
+<div class="w-5 h-5 rounded bg-primary/20 border border-primary/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[13px]">verified_user</span>
+</div>
+<span class="font-headline-sm text-xs text-text-primary tracking-wide uppercase font-bold">Lootora Cryptographic Core</span>
+</div>
+<div class="hidden md:block w-px h-3.5 bg-white/[0.1]"></div>
+<span class="font-label-badge text-[10px] text-text-muted uppercase">OpenSSL &amp; Steam OpenID Consensus Verified</span>
+</div>
+<div class="flex items-center gap-4 text-xs font-data-mono-md">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+<span class="text-tertiary">Global Latency: 14ms</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+<span class="text-text-primary">Block Height: #892,104</span>
+</div>
+</div>
+<div class="text-center md:text-right font-body-sm text-[11px] text-text-muted">
+      © 2025 Lootora Protocol Foundation. Asset Intelligence Terminal.
+    </div>
+</div>
+</footer>
+</body></html>

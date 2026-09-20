@@ -1,15 +1,14 @@
 "use client";
 
 import { formatMoney } from "@/lib/format";
-import { MARKET_NAV } from "../../data/navigation";
+import { STUDIO_NAV } from "../../data/navigation";
 import { useSession } from "../../state/session-provider";
-import { AvatarImage } from "../account/avatar-image";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
-import { VaultBrand } from "./brand";
+import { MarketBrand } from "./brand";
+import { CartButton } from "./cart-button";
 import { VaultHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
-import { CartButton } from "./cart-button";
 
 /** Header of the item vault (detail) screens: Steam identity chip, cart and avatar. */
 export function VaultHeader({ steamId }: { steamId: string }) {
@@ -19,9 +18,9 @@ export function VaultHeader({ steamId }: { steamId: string }) {
     <header className="fixed top-0 right-0 left-0 z-50 w-full border-b border-border-subtle bg-overlay-base/95 shadow-[0_4px_24px_rgba(0,0,0,0.7)] backdrop-blur-xl">
       <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-4 px-4 lg:px-8">
         <div className="flex shrink-0 items-center gap-6">
-          <VaultBrand />
+        <MarketBrand />
           <nav className="hidden items-center gap-1 rounded-lg border border-border-subtle bg-surface-container-lowest/90 p-1 xl:flex">
-            <NavLinks items={MARKET_NAV} variant="vault" />
+            <NavLinks items={STUDIO_NAV} variant="vault" />
           </nav>
         </div>
         <VaultHeaderSearch />

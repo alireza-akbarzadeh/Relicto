@@ -11,6 +11,7 @@ import { RecentlyViewed } from "./promo/recently-viewed";
 import { ListingGrid } from "./results/listing-grid";
 import { PaginationBar } from "./results/pagination-bar";
 import { ResultsToolbar } from "./results/results-toolbar";
+import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 
 type MarketplaceViewProps = { catalog: Listing[]; query: string };
 
@@ -19,7 +20,7 @@ export function MarketplaceView({ catalog, query }: MarketplaceViewProps) {
   return (
     <MarketplaceProvider key={query} catalog={catalog} initialQuery={query}>
       <div className="bg-canvas-base font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
-        <MarketHeader />
+        <StudioHeader />
         <main className="min-h-screen w-full bg-canvas-base pt-16">
           <div className="flex w-full flex-col">
             <div className="relative w-full overflow-hidden">

@@ -33,7 +33,7 @@ export function LedgerHeader() {
               <span className="font-label-badge text-label-badge text-secondary">VAC CLEAN</span>
             </div>
           </div>
-          <WalletChip variant="market" />
+          <WalletChip  />
           <CartButton />
           <NotificationsMenu trigger="count" />
           <UserMenu trigger="market" />

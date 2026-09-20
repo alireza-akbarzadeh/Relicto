@@ -20,7 +20,7 @@ export function HubHeader() {
         </div>
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
           <HubHeaderSearch />
-          <WalletChip variant="hub" />
+          <WalletChip  />
           <CartButton />
           <NotificationsMenu trigger="hub" />
           <UserMenu trigger="hub" />

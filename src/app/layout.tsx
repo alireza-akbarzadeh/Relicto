@@ -5,6 +5,7 @@ import { fontVariables } from "@/lib/fonts";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="stylesheet" href={ICON_FONT_HREF} />
       </head>
       <body className="min-h-screen bg-canvas-base antialiased">
-        {children}
+        <NuqsAdapter>
+          {children}
+        </NuqsAdapter>
         <Toaster />
       </body>
     </html>

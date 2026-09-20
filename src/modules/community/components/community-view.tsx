@@ -1,14 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import { useMemo, useState } from "react";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/cn";
 import { MarketFooter } from "@/modules/relicto/components/shell/footers";
-import { MarketHeader } from "@/modules/relicto/components/shell/market-header";
+import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
+import Image from "next/image";
+import { useMemo, useState } from "react";
 import type { CommunityData, CommunityPost, CommunityTone } from "../types";
 
 const TONE: Record<CommunityTone, string> = { primary: "text-primary", amber: "text-tertiary", cyan: "text-status-upcoming", indigo: "text-secondary", muted: "text-text-muted" };
@@ -20,7 +20,7 @@ export function CommunityView({ data }: { data: CommunityData }) {
   const [posts, setPosts] = useState(data.posts);
   const visible = useMemo(() => channel === CHANNELS[0] ? posts : posts.filter((post) => channel.includes("Trade") ? post.tag.includes("TRADE") : channel.includes("Speculation") ? post.role.includes("Quant") : channel.includes("Escrow") ? post.role.includes("Escrow") : true), [channel, posts]);
   const broadcast = () => { if (!draft.trim()) return; setPosts((current) => [{ id: `post-${Date.now()}`, initials: "S1", handle: "@S1mple_CS", role: "PRO SELLER", roleTone: "primary", age: "now", tag: "BROADCAST", tagTone: "primary", title: draft.trim(), body: "Broadcast from the Relicto trader community feed.", likes: 0, comments: 0 }, ...current]); setDraft(""); };
-  return <div className="min-h-screen bg-canvas-base font-body-md text-body-md text-on-surface antialiased"><MarketHeader /><main className="w-full bg-canvas-base pt-16"><CommunityTelemetry /><section className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-space-lg px-gutter-desktop py-space-lg xl:grid-cols-12"><ChannelRail channels={CHANNELS} active={channel} setActive={setChannel} guilds={data.guilds} /><div className="flex flex-col gap-space-md xl:col-span-6"><Composer draft={draft} setDraft={setDraft} onBroadcast={broadcast} /><div className="flex flex-col gap-space-md">{visible.map((post) => <PostCard key={post.id} post={post} />)}</div></div><CommunityAside /></section></main><MarketFooter /></div>;
+  return <div className="min-h-screen bg-canvas-base font-body-md text-body-md text-on-surface antialiased"><StudioHeader /><main className="w-full bg-canvas-base pt-16"><CommunityTelemetry /><section className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-space-lg px-gutter-desktop py-space-lg xl:grid-cols-12"><ChannelRail channels={CHANNELS} active={channel} setActive={setChannel} guilds={data.guilds} /><div className="flex flex-col gap-space-md xl:col-span-6"><Composer draft={draft} setDraft={setDraft} onBroadcast={broadcast} /><div className="flex flex-col gap-space-md">{visible.map((post) => <PostCard key={post.id} post={post} />)}</div></div><CommunityAside /></section></main><MarketFooter /></div>;
 }
 
 function CommunityTelemetry() { return <section className="border-b border-white/6 bg-surface-container-lowest px-gutter-desktop py-space-sm"><div className="mx-auto flex max-w-[1600px] flex-col justify-between gap-space-sm lg:flex-row lg:items-center"><div className="flex items-center gap-space-sm font-label-caps text-label-caps tracking-wider text-text-muted uppercase"><Icon name="hub" className="text-[18px] text-primary" />Portal / Trader Community / Global Arbitrage & Guild Lounge <span className="flex items-center gap-1 rounded bg-status-live/15 px-2 py-0.5 font-label-badge text-[10px] text-status-live"><span className="h-1.5 w-1.5 animate-ping rounded-full bg-status-live" />Live Signal</span></div><div className="flex flex-wrap gap-space-md font-label-badge text-label-badge uppercase"><span><b className="text-status-upcoming">42,910</b> Traders Active</span><span><b className="text-tertiary">$3,410,200</b> 24h P2P Vol</span><span><b className="text-primary">1,240</b> Verified Vouches</span><span className="text-secondary">0 Escrow Disputes</span></div></div></section>; }

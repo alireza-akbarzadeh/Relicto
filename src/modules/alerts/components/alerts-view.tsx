@@ -94,7 +94,7 @@ function TriggerTelemetry({
             className="h-auto gap-1 rounded bg-surface-container px-space-md py-space-xs font-label-caps text-label-caps text-text-secondary uppercase"
           >
             <Icon
-              name={paused ? "play_arrow" : "pause_circle"}
+              name={paused ? "play_arrow" : "3d_rotation"}
               className="text-[16px] text-tertiary"
             />
             {paused ? "Resume All Automations" : "Pause All Automations"}
@@ -190,7 +190,7 @@ function RuleBuilder() {
         <div className="flex flex-col justify-between gap-space-md lg:flex-row lg:items-center">
           <div className="flex items-center gap-space-md">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-container text-primary">
-              <Icon name="precision_manufacturing" className="text-[24px]" />
+              <Icon name="play_arrow" className="text-[24px]" />
             </div>
             <div>
               <h2 className="font-headline-md text-headline-md text-text-primary">
@@ -420,7 +420,7 @@ function TriggerGrid({
       <div className="mb-space-md flex items-center justify-between">
         <div>
           <h2 className="font-headline-md text-headline-md text-text-primary">
-            Active Algorithmic Trigger Grid
+            Active Algorithmic Trigger Grid 
           </h2>
           <span className="font-label-badge text-[10px] text-text-muted uppercase">
             Real-time execution state & historical ML ledger

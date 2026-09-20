@@ -10,7 +10,7 @@ import { PriceDelta } from "./price-delta";
 import { WishlistButton } from "./wishlist-button";
 
 export function ListingCard({ listing, priority }: { listing: Listing; priority?: boolean }) {
-  const { viewOffers, quickBuy } = useListingActions(listing);
+  const { viewOffers, quickBuy, inBasket } = useListingActions(listing);
 
   return (
     <div className="group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-card p-space-md shadow-md transition-all duration-200 hover:bg-surface-container">
@@ -67,9 +67,14 @@ export function ListingCard({ listing, priority }: { listing: Listing; priority?
         <button
           type="button"
           onClick={quickBuy}
-          className="w-full rounded bg-primary-container px-space-sm py-2 font-headline-sm text-[13px] font-bold text-on-primary-container uppercase shadow-xs transition-all hover:bg-primary"
+          className={cn(
+            "w-full rounded px-space-sm py-2 font-headline-sm text-[13px] font-bold uppercase shadow-xs transition-all",
+            inBasket
+              ? "cursor-default bg-status-upcoming/20 text-status-upcoming"
+              : "bg-primary-container text-on-primary-container hover:bg-primary",
+          )}
         >
-          Quick Buy Now
+          {inBasket ? "In Basket" : "Quick Buy Now"}
         </button>
       </div>
     </div>

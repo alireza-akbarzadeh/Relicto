@@ -4,7 +4,7 @@ import type { NavItem } from "../session-types";
 export const MARKET_NAV: NavItem[] = [
   { id: "marketplace", label: "Marketplace", href: "/marketplace" },
   { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
-  { id: "tracker", label: "Tracker", href: "/tracker", comingSoon: true },
+  { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "portfolio", label: "Portfolio / Inventory", href: "/profile" },
   { id: "community", label: "Community", href: "/community", comingSoon: true },
   { id: "price-alerts", label: "Price Alerts", href: "/alerts", comingSoon: true },
@@ -14,14 +14,14 @@ export const LEDGER_NAV: NavItem[] = [
   { id: "marketplace", label: "MARKETPLACE", href: "/marketplace" },
   { id: "orders", label: "ORDERS & ESCROW", href: "/orders" },
   { id: "inventory", label: "INVENTORY", href: "/profile" },
-  { id: "price-tracker", label: "PRICE TRACKER", href: "/tracker", comingSoon: true },
+  { id: "price-tracker", label: "PRICE TRACKER", href: "/tracker" },
   { id: "community", label: "COMMUNITY", href: "/community", comingSoon: true },
 ];
 
 export const STUDIO_NAV: NavItem[] = [
   { id: "marketplace", label: "Marketplace", href: "/marketplace" },
   { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
-  { id: "tracker", label: "Tracker", href: "/tracker", comingSoon: true },
+  { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "inventory", label: "Inventory", href: "/profile" },
   { id: "sell", label: "Sell Items", href: "/sell" },
   { id: "wallet", label: "Wallet & Income", href: "/wallet" },
@@ -32,7 +32,7 @@ export const STUDIO_NAV: NavItem[] = [
 export const HUB_NAV: NavItem[] = [
   { id: "marketplace", label: "Marketplace", href: "/marketplace" },
   { id: "wiki", label: "Wiki", href: "/wiki", comingSoon: true },
-  { id: "tracker", label: "Tracker", href: "/tracker", comingSoon: true },
+  { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "inventory", label: "Inventory", href: "/profile" },
   { id: "sell", label: "Sell Items", href: "/sell" },
   { id: "wallet", label: "Wallet & Income", href: "/wallet" },

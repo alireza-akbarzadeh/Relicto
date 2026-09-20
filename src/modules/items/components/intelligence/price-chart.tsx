@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useQueryStates } from "nuqs";
+import { itemSearchParams } from "../../lib/search-params";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -45,8 +46,10 @@ function Plot({ data }: { data: PriceIntelligence }) {
 
 /** Historical price telemetry with patch annotations and range switches. */
 export function PriceChart({ data }: { data: PriceIntelligence }) {
-  const [range, setRange] = useState(data.activeRange);
-  const [mode, setMode] = useState(data.activeMode);
+  const [{ range, chart: mode }, setQuery] = useQueryStates(
+    { range: itemSearchParams.range, chart: itemSearchParams.chart },
+    { history: "replace", clearOnDefault: true },
+  );
 
   return (
     <section id="intelligence" className="flex w-full scroll-mt-40 flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 shadow-xl">
@@ -66,7 +69,7 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
                 key={option}
                 variant={null}
                 size={null}
-                onClick={() => setRange(option)}
+                onClick={() => void setQuery({ range: option })}
                 aria-pressed={range === option}
                 className={cn(
                   PILL,
@@ -83,7 +86,7 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
                 key={option}
                 variant={null}
                 size={null}
-                onClick={() => setMode(option)}
+                onClick={() => void setQuery({ chart: option })}
                 aria-pressed={mode === option}
                 className={cn(
                   PILL,

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useQueryStates } from "nuqs";
+import { itemSearchParams } from "../../lib/search-params";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,13 +17,18 @@ type OffersSectionProps = { offers: Offer[]; note: string; styles: string[] };
 
 /** Live seller offers with the style filter and escrow toggles. */
 export function OffersSection({ offers, note, styles }: OffersSectionProps) {
-  const [style, setStyle] = useState(styles[0]);
-  const [botOnly, setBotOnly] = useState(true);
-  const [verifiedOnly, setVerifiedOnly] = useState(true);
+  const [{ offers: style, bot: botOnly, verified: verifiedOnly }, setQuery] = useQueryStates(
+    { offers: itemSearchParams.offers, bot: itemSearchParams.bot, verified: itemSearchParams.verified },
+    { history: "replace", clearOnDefault: true },
+  );
+
+  /** "Verified" means a verified badge or a 99%+ positive rating. */
+  const trusted = (offer: Offer) => offer.seller.verified || Number.parseFloat(offer.seller.rating) >= 99;
 
   const visible = offers.filter((offer) => {
-    if (style !== "ALL" && !offer.style.label.toLowerCase().startsWith(style.toLowerCase().slice(0, 7))) return false;
+    if (style !== "ALL" && !offer.style.label.toLowerCase().startsWith(style.toLowerCase())) return false;
     if (botOnly && offer.fulfilment !== "bot") return false;
+    if (verifiedOnly && !trusted(offer)) return false;
     return true;
   });
 
@@ -56,7 +62,7 @@ export function OffersSection({ offers, note, styles }: OffersSectionProps) {
               key={option}
               variant={null}
               size={null}
-              onClick={() => setStyle(option)}
+              onClick={() => void setQuery({ offers: option })}
               aria-pressed={style === option}
               className={cn(
                 "h-auto rounded border-0 px-2.5 py-1 font-data-mono-md text-xs transition-colors",
@@ -71,11 +77,11 @@ export function OffersSection({ offers, note, styles }: OffersSectionProps) {
         </div>
         <div className="flex items-center gap-4">
           <Label className="flex cursor-pointer items-center gap-2 text-xs font-normal text-text-secondary select-none">
-            <Checkbox checked={botOnly} onCheckedChange={(next) => setBotOnly(next === true)} />
+            <Checkbox checked={botOnly} onCheckedChange={(next) => void setQuery({ bot: next === true })} />
             <span>Instant Bot Trade Escrow Only</span>
           </Label>
           <Label className="hidden cursor-pointer items-center gap-2 text-xs font-normal text-text-secondary select-none sm:flex">
-            <Checkbox checked={verifiedOnly} onCheckedChange={(next) => setVerifiedOnly(next === true)} />
+            <Checkbox checked={verifiedOnly} onCheckedChange={(next) => void setQuery({ verified: next === true })} />
             <span>Verified Traders (99%+)</span>
           </Label>
         </div>

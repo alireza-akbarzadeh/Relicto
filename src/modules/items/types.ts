@@ -51,11 +51,14 @@ export type ChartAnnotation = {
   detailTone: "emerald" | "amber";
 };
 
+export type ChartRange = "24H" | "7D" | "30D" | "90D" | "1Y" | "ALL";
+export type ChartMode = "LINE" | "CANDLE";
+
 export type PriceIntelligence = {
-  ranges: string[];
-  activeRange: string;
-  modes: string[];
-  activeMode: string;
+  ranges: ChartRange[];
+  activeRange: ChartRange;
+  modes: ChartMode[];
+  activeMode: ChartMode;
   points: PricePoint[];
   annotations: ChartAnnotation[];
   axis: { label: string; strong?: boolean }[];

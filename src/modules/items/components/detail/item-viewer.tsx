@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
+import { useQueryState } from "nuqs";
+import { itemSearchParams } from "../../lib/search-params";
 import { BADGE_WEIGHT, RARITY } from "../../lib/tones";
-import type { ItemDetail, InspectMode } from "../../types";
+import type { ItemDetail } from "../../types";
 
 /** Item render with rarity chips, kill counter and the inspect-mode switch. */
 export function ItemViewer({ item }: { item: ItemDetail }) {
-  const [mode, setMode] = useState<InspectMode>(item.inspectModes[0].id);
+  const [mode, setMode] = useQueryState("view", itemSearchParams.view.withOptions({ history: "replace", clearOnDefault: true }));
 
   return (
     <div className="group relative flex aspect-4/3 w-full flex-col justify-between overflow-hidden rounded-lg border border-border-subtle bg-surface-card p-4 shadow-2xl">
@@ -67,7 +68,7 @@ export function ItemViewer({ item }: { item: ItemDetail }) {
               key={option.id}
               variant={null}
               size={null}
-              onClick={() => setMode(option.id)}
+              onClick={() => void setMode(option.id)}
               aria-pressed={mode === option.id}
               className={cn(
                 "h-auto rounded border-0 px-3 py-1 font-label-caps text-xs transition-all",

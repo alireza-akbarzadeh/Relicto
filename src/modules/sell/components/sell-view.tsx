@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import Image from "next/image";
+import { useQueryStates } from "nuqs";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -11,6 +12,7 @@ import { cn } from "@/lib/cn";
 import { StudioFooter } from "@/modules/relicto/components/shell/footers";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import type { SellData, SellGame } from "../types";
+import { sellSearchParams } from "../lib/search-params";
 import { InventoryList } from "./inventory-list";
 import { ListingFocus } from "./listing-focus";
 
@@ -18,15 +20,17 @@ const SORT_OPTIONS: readonly SelectOption<string>[] = [{ value: "highest", label
 const GAME_LABELS: Record<SellGame, string> = { cs2: "CS2", dota2: "Dota 2", tf2: "TF2" };
 
 export function SellView({ data }: { data: SellData }) {
-  const [game, setGame] = useState<SellGame>("cs2");
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"tradable" | "hold">("tradable");
-  const [sort, setSort] = useState("highest");
-  const [selected, setSelected] = useState(["butterfly"]);
+  /* Inventory game, search, trade filter, sort and picks are all URL state. */
+  const [{ game, q: query, filter, sort, picks: selected }, setParams] = useQueryStates(sellSearchParams, { history: "replace", clearOnDefault: true });
+  const setGame = (value: SellGame) => void setParams({ game: value });
+  const setQuery = (value: string) => void setParams({ q: value });
+  const setFilter = (value: "tradable" | "hold") => void setParams({ filter: value });
+  const setSort = (value: string) => void setParams({ sort: value as (typeof sellSearchParams.sort)["defaultValue"] });
+  const setSelected = (next: string[]) => void setParams({ picks: next });
   const focusRef = useRef<HTMLDivElement>(null);
   const items = useMemo(() => data.inventory.filter((item) => (game === "cs2" ? item.game === "cs2" : item.game === game)).filter((item) => `${item.name} ${item.wear} ${item.float} ${item.rarity}`.toLowerCase().includes(query.toLowerCase())).sort((left, right) => sort === "highest" ? right.price - left.price : left.price - right.price), [data.inventory, game, query, sort]);
   const focus = data.inventory.find((item) => selected.includes(item.id)) ?? data.inventory[0];
-  const toggleItem = (id: string, checked: boolean) => setSelected((current) => checked ? [...new Set([...current, id])] : current.filter((itemId) => itemId !== id));
+  const toggleItem = (id: string, checked: boolean) => setSelected(checked ? [...new Set([...selected, id])] : selected.filter((itemId) => itemId !== id));
   return <div className="min-h-screen bg-canvas-base font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><StudioHeader /><main className="w-full bg-canvas-base pt-20"><Telemetry /><SellerHero game={game} setGame={setGame} filter={filter} setFilter={setFilter} query={query} setQuery={setQuery} sort={sort} setSort={setSort} selected={selected} onSelectAll={() => setSelected(items.map((item) => item.id))} /></main><section className="w-full px-margin-desktop py-space-lg"><div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-space-lg lg:grid-cols-12"><div className="lg:col-span-7"><InventoryList items={items} selected={selected} onToggle={toggleItem} game={game} totalInventory={data.totalInventory} readyToList={data.readyToList} /></div><div ref={focusRef} className="scroll-mt-24 lg:col-span-5"><ListingFocus item={focus} /></div></div></section><ActiveListings data={data} /><Guarantee /><StudioFooter /></div>;
 }
 

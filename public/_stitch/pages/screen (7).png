@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_blank" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"border-subtle":"rgba(255, 255, 255, 0.08)","on-primary-fixed-variant":"#92002a","outline-variant":"#5b4041","on-background":"#e1e2ec","tertiary-fixed-dim":"#ffb95f","border-tactical":"rgba(245, 158, 11, 0.4)","error":"#ffb4ab","secondary":"#c0c1ff","primary-fixed-dim":"#ffb2b7","outline":"#aa888a","on-surface":"#e1e2ec","status-upcoming":"#06b6d4","tertiary-container":"#ca8100","on-secondary-fixed-variant":"#2f2ebe","surface-container-highest":"#32353d","on-tertiary-container":"#3e2400","surface-bright":"#363941","on-error":"#690005","border-focus":"rgba(244, 63, 94, 0.5)","on-secondary-fixed":"#07006c","inverse-primary":"#bc0b3b","surface-container":"#1d1f27","on-primary-fixed":"#40000d","surface-container-low":"#191b23","error-container":"#93000a","secondary-container":"#3131c0","on-error-container":"#ffdad6","surface-glass":"rgba(21, 27, 43, 0.72)","surface":"#10131a","on-tertiary-fixed":"#2a1700","surface-container-high":"#272a32","surface-card":"#151b2b","surface-tint":"#ffb2b7","on-secondary":"#1000a9","tertiary-fixed":"#ffddb8","secondary-fixed-dim":"#c0c1ff","on-tertiary-fixed-variant":"#653e00","surface-dim":"#10131a","primary":"#ffb2b7","surface-variant":"#32353d","surface-overlay":"rgba(10, 13, 20, 0.85)","status-live":"#ef4444","glow-crimson":"rgba(244, 63, 94, 0.25)","on-secondary-container":"#b0b2ff","inverse-surface":"#e1e2ec","inverse-on-surface":"#2d3038","primary-fixed":"#ffdadb","primary-container":"#ff516a","surface-container-lowest":"#0b0e15","canvas-base":"#0a0d14","on-primary":"#67001b","background":"#10131a","glow-indigo":"rgba(99, 102, 241, 0.25)","surface-deep":"#0f1420","on-tertiary":"#472a00","secondary-fixed":"#e1e0ff","text-secondary":"#94a3b8","on-surface-variant":"#e3bdbf","tertiary":"#ffb95f","text-muted":"#64748b","text-primary":"#f8fafc","glow-amber":"rgba(245, 158, 11, 0.25)","on-primary-container":"#5b0017"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xs":"0.25rem","margin-desktop":"2.5rem","space-xl":"2.5rem","space-sm":"0.5rem","margin":"1rem","gutter-desktop":"1.5rem","space-md":"1rem","space-lg":"1.5rem","gutter":"1.25rem"},"fontFamily":{"label-caps":["Space Grotesk"],"headline-sm":["Space Grotesk"],"headline-xl":["Space Grotesk"],"data-mono-md":["JetBrains Mono"],"data-mono-lg":["JetBrains Mono"],"headline-lg":["Space Grotesk"],"label-badge":["JetBrains Mono"],"headline-xl-mobile":["Space Grotesk"],"body-md":["Geist"],"display-hero-mobile":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"display-hero":["Space Grotesk"],"body-lg":["Geist"],"headline-md":["Space Grotesk"],"body-sm":["Geist"]},"fontSize":{"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.06em","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0em","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.025em","fontWeight":"700"}],"data-mono-md":["14px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"500"}],"data-mono-lg":["20px",{"lineHeight":"24px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"600"}],"label-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.08em","fontWeight":"600"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"0em","fontWeight":"400"}],"headline-md":["22px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","letterSpacing":"0.005em","fontWeight":"400"}]}}}}</script></head><body class="bg-canvas-base text-on-surface font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col justify-between"><main class="w-full flex-grow flex items-center justify-center p-space-md md:p-space-xl bg-canvas-base"><div class="flex flex-col w-full max-w-7xl mx-auto px-space-sm md:px-space-lg py-space-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Breadcrumb Sentinel Pill -->
+<div class="flex items-center justify-between flex-wrap gap-space-sm mb-space-lg">
+<div class="flex items-center gap-space-xs bg-surface-deep px-space-md py-space-xs rounded-full shadow-sm">
+<span class="material-symbols-outlined text-status-live text-body-sm animate-pulse" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-data-mono-md text-label-badge text-text-muted tracking-widest uppercase">
+        PORTAL <span class="text-on-surface-variant font-bold">//</span> SECURITY SENTINEL <span class="text-on-surface-variant font-bold">//</span> <span class="text-primary tracking-wider font-semibold">PERMISSION_CHALLENGE_403</span>
+</span>
+</div>
+<div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-xs rounded-full shadow-sm">
+<span class="inline-block w-2 h-2 rounded-full bg-status-live animate-ping"></span>
+<span class="font-data-mono-md text-label-badge text-primary uppercase">VAULT_LOCK_ENGAGED</span>
+<span class="font-data-mono-md text-label-badge text-text-muted tracking-tighter">NODE_ID: LTR-VALVE-7033</span>
+</div>
+</div>
+<!-- Hero Section: Lock Core Visual & Cyber 403 Typographic Statement -->
+<div class="relative bg-surface-deep rounded-xl p-space-md md:p-space-xl mb-space-lg shadow-xl overflow-hidden">
+<!-- Cyber Ambient Backdrops -->
+<div class="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-br from-primary/10 via-error-container/20 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-96 h-96 bg-gradient-to-tl from-tertiary/10 via-primary-container/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+<!-- Decorative Grid Overlay -->
+<div class="absolute inset-0 bg-[radial-gradient(#ffb2b7_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<!-- Vault Lock Cyber Graphic Centerpiece (5 cols) -->
+<div class="lg:col-span-5 flex flex-col items-center justify-center text-center relative py-space-sm">
+<!-- Multi-ring Shield Aura -->
+<div class="relative flex items-center justify-center w-56 h-56 md:w-72 md:h-72">
+<!-- Outer Radar Vector Ring -->
+<svg class="absolute inset-0 w-full h-full animate-[spin_24s_linear_infinite]" fill="none" viewbox="0 0 288 288">
+<circle class="text-border-focus" cx="144" cy="144" r="138" stroke="currentColor" stroke-dasharray="12 18" stroke-linecap="round" stroke-width="1.5"></circle>
+<circle class="text-outline-variant" cx="144" cy="144" r="118" stroke="currentColor" stroke-dasharray="4 8" stroke-width="1"></circle>
+<path class="text-primary" d="M144 6 A138 138 0 0 1 282 144" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<!-- Middle Pulsing Hexagonal Reactor -->
+<div class="absolute inset-4 rounded-full bg-surface-card/90 shadow-[0_0_40px_rgba(244,63,94,0.3)] flex items-center justify-center backdrop-blur-xl">
+<!-- Steam Guard Geometric Glyph + Padlock SVG -->
+<svg class="w-28 h-28 md:w-36 md:h-36 text-primary" fill="none" viewbox="0 0 120 120">
+<!-- Valve / Steam Shield Contour -->
+<path d="M60 10 L102 26 V62 C102 88 60 108 60 108 C60 108 18 88 18 62 V26 L60 10 Z" fill="#191b23" stroke="currentColor" stroke-linejoin="round" stroke-width="2.5"></path>
+<!-- Vault Padlock Shackle -->
+<path d="M48 52 V38 C48 31.3726 53.3726 26 60 26 C66.6274 26 72 31.3726 72 38 V52" stroke="#ffb95f" stroke-linecap="round" stroke-width="3"></path>
+<!-- Padlock Body -->
+<rect fill="#ff516a" height="28" rx="3" width="36" x="42" y="52"></rect>
+<!-- Keyhole / Mobile 2FA Pulse -->
+<circle cx="60" cy="63" fill="#ffffff" r="3.5"></circle>
+<path d="M60 66.5 V73" stroke="#ffffff" stroke-linecap="round" stroke-width="2"></path>
+<!-- Steam Orbit Arm & Piston Accents -->
+<circle cx="36" cy="46" fill="#ffb95f" r="4"></circle>
+<line stroke="#ffb95f" stroke-dasharray="2 2" stroke-width="1.5" x1="36" x2="48" y1="46" y2="56"></line>
+<circle cx="84" cy="46" fill="#06b6d4" r="4"></circle>
+<line stroke="#06b6d4" stroke-dasharray="2 2" stroke-width="1.5" x1="84" x2="72" y1="46" y2="56"></line>
+</svg>
+</div>
+<!-- Bottom Micro Status Beacon -->
+<div class="absolute bottom-2 flex items-center gap-space-xs bg-surface-container-highest/90 px-space-sm py-1 rounded-full shadow-md backdrop-blur-md">
+<span class="material-symbols-outlined text-tertiary text-body-sm" style="font-variation-settings: 'FILL' 1;">lock_clock</span>
+<span class="font-data-mono-md text-label-badge text-tertiary tracking-wider font-bold uppercase">ESCROW HOLD ACTIVE</span>
+</div>
+</div>
+<!-- Lock Subtext -->
+<p class="mt-space-md font-data-mono-md text-label-badge text-text-muted tracking-widest uppercase">
+          STEAM_MOBILE_AUTHENTICATOR // 0x403_ENCLAVE
+        </p>
+</div>
+<!-- Typographic Narrative & Challenge Title (7 cols) -->
+<div class="lg:col-span-7 flex flex-col justify-center">
+<!-- Giant Cyber Status Badge -->
+<div class="flex items-center gap-space-sm flex-wrap mb-space-sm">
+<span class="font-headline-xl text-primary font-display-hero leading-none tracking-tighter drop-shadow-[0_0_24px_rgba(244,63,94,0.35)]">
+            403
+          </span>
+<div class="flex flex-col">
+<div class="inline-flex items-center gap-space-xs bg-surface-container-highest px-space-sm py-1 rounded-md">
+<span class="w-2 h-2 rounded-full bg-status-live"></span>
+<span class="font-data-mono-md text-label-badge text-primary-fixed tracking-wider uppercase font-bold">
+                VAULT RESTRICTED // CLEARANCE REQUIRED
+              </span>
+</div>
+<span class="font-data-mono-md text-label-badge text-text-muted mt-1 uppercase">PROTOCOL: AEGIS_GATEWAY_V4.8</span>
+</div>
+</div>
+<h1 class="font-headline-lg text-text-primary text-headline-lg mb-space-sm tracking-tight leading-tight">
+          Access to this High-Frequency Liquidity Vault or Arbitrage Terminal is Restricted
+        </h1>
+<p class="font-body-lg text-text-secondary text-body-lg mb-space-lg leading-relaxed max-w-2xl">
+          This trading terminal requires active <span class="text-text-primary font-semibold">Steam Guard Mobile 2FA confirmation</span> (minimum 7-day cooldown cleared), <span class="text-tertiary font-semibold">Tier 1 Trader Identity verification</span>, or authenticated Guild Membership credentials to interact with real-time liquidity pools.
+        </p>
+<!-- CTAs: Tactical Radiant Buttons -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<button class="inline-flex items-center justify-center gap-space-sm bg-primary-container hover:bg-inverse-primary text-text-primary px-space-lg py-space-sm rounded-lg font-headline-sm text-headline-sm uppercase tracking-wider transition duration-200 shadow-[0_0_20px_rgba(244,63,94,0.4)] cursor-pointer">
+<span class="material-symbols-outlined text-body-lg">lock_open</span>
+<span>Authenticate via Steam Mobile Guard</span>
+</button>
+<button class="inline-flex items-center justify-center gap-space-sm bg-surface-card hover:bg-surface-container-high text-on-surface px-space-md py-space-sm rounded-lg font-headline-sm text-headline-sm uppercase tracking-wide transition duration-150 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-secondary text-body-lg">verified_user</span>
+<span>Verify Trader Identity / 2FA</span>
+</button>
+<button class="inline-flex items-center justify-center gap-space-xs bg-transparent hover:bg-surface-container-low text-text-muted hover:text-text-primary px-space-md py-space-sm rounded-lg font-label-caps text-label-caps uppercase transition cursor-pointer">
+<span class="material-symbols-outlined text-body-md">storefront</span>
+<span>Switch to Public Marketplace</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Lower Split Section: Diagnostic Security Card & Recommendations -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg mb-space-lg items-start">
+<!-- Left Column: Diagnostic Telemetry Card (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container rounded-xl p-space-lg shadow-lg relative overflow-hidden">
+<!-- Top Title Bar -->
+<div class="flex items-center justify-between pb-space-md mb-space-md bg-surface-container-low -mx-space-lg -mt-space-lg px-space-lg pt-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-headline-sm">terminal</span>
+<span class="font-headline-sm text-headline-sm text-text-primary uppercase tracking-wide">
+            Live Diagnostic Security Card
+          </span>
+</div>
+<span class="font-data-mono-md text-label-badge bg-surface-container-highest px-space-xs py-1 rounded text-text-muted uppercase">
+          HASH: #7F8B-403
+        </span>
+</div>
+<!-- Diagnostic Fields Grid -->
+<div class="flex flex-col gap-space-sm">
+<!-- Field 1: Reason Code -->
+<div class="flex flex-col md:flex-row md:items-center justify-between bg-surface-deep px-space-md py-space-sm rounded-lg gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-live text-body-md">report_problem</span>
+<span class="font-data-mono-md text-label-badge text-text-muted uppercase">Reason Code</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-primary font-bold bg-surface-container-highest px-space-sm py-0.5 rounded">
+            ERR_STEAM_GUARD_COOLDOWN_ACTIVE
+          </span>
+</div>
+<!-- Field 2: Target Account -->
+<div class="flex flex-col md:flex-row md:items-center justify-between bg-surface-deep px-space-md py-space-sm rounded-lg gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-body-md">account_circle</span>
+<span class="font-data-mono-md text-label-badge text-text-muted uppercase">Account Identifier</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-data-mono-md text-data-mono-md text-text-primary font-semibold">@s1mple_cs</span>
+<span class="font-data-mono-md text-label-badge text-tertiary bg-surface-container-low px-space-xs py-0.5 rounded">Pro Trader #8492</span>
+</div>
+</div>
+<!-- Field 3: Required Clearance Tier -->
+<div class="flex flex-col md:flex-row md:items-center justify-between bg-surface-deep px-space-md py-space-sm rounded-lg gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-body-md">military_tech</span>
+<span class="font-data-mono-md text-label-badge text-text-muted uppercase">Required Tier</span>
+</div>
+<span class="font-headline-sm text-body-sm text-tertiary font-bold tracking-wide">
+            Tier 1 Verified Arbitrageur
+          </span>
+</div>
+<!-- Field 4: Current Status -->
+<div class="flex flex-col md:flex-row md:items-center justify-between bg-surface-deep px-space-md py-space-sm rounded-lg gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-text-muted text-body-md">phonelink_lock</span>
+<span class="font-data-mono-md text-label-badge text-text-muted uppercase">Current Security Level</span>
+</div>
+<span class="font-data-mono-md text-body-sm text-error font-medium">
+            Standard Steam OpenID (Mobile Auth &lt; 7 Days)
+          </span>
+</div>
+<!-- Field 5: Escrow Protocol -->
+<div class="flex flex-col md:flex-row md:items-center justify-between bg-surface-deep px-space-md py-space-sm rounded-lg gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-upcoming text-body-md">gavel</span>
+<span class="font-data-mono-md text-label-badge text-text-muted uppercase">Escrow Safeguard</span>
+</div>
+<span class="font-data-mono-md text-data-mono-md text-status-upcoming font-semibold">
+            Multi-Sig Vault Protection Engaged
+          </span>
+</div>
+</div>
+<!-- Cooldown Telemetry Bar Graphic -->
+<div class="mt-space-md bg-surface-deep p-space-md rounded-lg">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-data-mono-md text-label-badge text-text-muted uppercase">Cooldown Clearance Timeline</span>
+<span class="font-data-mono-md text-label-badge text-tertiary font-bold">3 of 7 Days Elapsed (57% Locked)</span>
+</div>
+<!-- Segmented Progress Bar -->
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden flex gap-1 p-0.5">
+<div class="bg-status-live h-full rounded-full w-1/7"></div>
+<div class="bg-status-live h-full rounded-full w-1/7"></div>
+<div class="bg-status-live h-full rounded-full w-1/7"></div>
+<div class="bg-surface-container-low h-full rounded-full w-1/7 opacity-60"></div>
+<div class="bg-surface-container-low h-full rounded-full w-1/7 opacity-40"></div>
+<div class="bg-surface-container-low h-full rounded-full w-1/7 opacity-20"></div>
+<div class="bg-surface-container-low h-full rounded-full w-1/7 opacity-10"></div>
+</div>
+</div>
+</div>
+<!-- Right Column: Step-by-Step Security Recommendations Checklist (5 cols) -->
+<div class="lg:col-span-5 bg-surface-card rounded-xl p-space-lg shadow-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-space-sm mb-space-md">
+<span class="material-symbols-outlined text-tertiary text-headline-sm" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary uppercase tracking-wide">
+            Access Recovery Protocol
+          </h2>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary mb-space-md">
+          Complete the following Valve Steam Guard criteria to automatically elevate your access level to the live Liquidity Terminal:
+        </p>
+<!-- Checklist -->
+<ul class="flex flex-col gap-space-sm">
+<li class="flex items-start gap-space-sm bg-surface-deep p-space-sm rounded-lg">
+<span class="material-symbols-outlined text-primary text-body-md mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-text-primary font-semibold">
+                Enable Steam Guard Mobile Authenticator
+              </span>
+<span class="font-body-sm text-body-sm text-text-muted">
+                Install official Steam App on iOS or Android and bind your authenticating device.
+              </span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm bg-surface-deep p-space-sm rounded-lg">
+<span class="material-symbols-outlined text-primary text-body-md mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-text-primary font-semibold">
+                Bind Trade URL &amp; Steam API Key
+              </span>
+<span class="font-body-sm text-body-sm text-text-muted">
+                Link your Steam Trade Token to Lootora for zero-delay escrow verification.
+              </span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm bg-surface-deep p-space-sm rounded-lg">
+<span class="material-symbols-outlined text-tertiary text-body-md mt-0.5">timelapse</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-text-primary font-semibold">
+                Clear 7-Day Valve New Device Hold
+              </span>
+<span class="font-body-sm text-body-sm text-text-muted">
+                Valve requires 168 hours of continuous 2FA device binding without token resets.
+              </span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm bg-surface-deep p-space-sm rounded-lg">
+<span class="material-symbols-outlined text-primary text-body-md mt-0.5">check_circle</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-text-primary font-semibold">
+                Verify Secondary Email &amp; SMS Dispatch
+              </span>
+<span class="font-body-sm text-body-sm text-text-muted">
+                Provide dual-channel fallback dispatch for emergency multi-sig unlocks.
+              </span>
+</div>
+</li>
+</ul>
+</div>
+<!-- Quick Escalation Support Banner -->
+<div class="mt-space-lg pt-space-md bg-surface-deep -mx-space-lg -mb-space-lg p-space-lg rounded-b-xl flex items-center justify-between flex-wrap gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-live text-body-lg">support_agent</span>
+<span class="font-body-sm text-body-sm text-text-secondary">
+            Suspect an unauthorized lockout?
+          </span>
+</div>
+<button class="font-headline-sm text-label-caps text-primary hover:text-primary-fixed uppercase tracking-wider underline underline-offset-4 cursor-pointer">
+          Contact 24/7 Security Escrow Arbiter →
+        </button>
+</div>
+</div>
+</div>
+<!-- Bottom Telemetry Minimalist Footer Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm py-space-sm text-text-muted font-data-mono-md text-label-badge">
+<div class="flex items-center gap-space-md">
+<span>LOOTORA ENGINE: v4.2.1-RELEASE</span>
+<span>ENCRYPTION: AES-256-GCM</span>
+<span>SIGNATURE: RADIANT_AEGIS_SIG_OK</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-status-live"></span>
+<span>SECURE AUDIT LOG ID: 0x84A09FD32</span>
+</div>
+</div>
+</div></main></body></html>

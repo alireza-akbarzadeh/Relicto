@@ -42,6 +42,7 @@ export type Listing = {
   offers: number;
   safeguards: SafeguardKey[];
   listedAt: number;
+  cs2?: Cs2Spec;
 };
 
 export type Mover = {
@@ -59,6 +60,12 @@ export type Mover = {
 
 export type MoverWindow = "1h" | "24h" | "7d";
 
+export type WearKey = "fn" | "mw" | "ft" | "ww" | "bs";
+export type FloatBand = "any" | "under001" | "under01" | "over01";
+
+/** CS2 inventory metadata; absent on Dota 2 cosmetics. */
+export type Cs2Spec = { wear: WearKey; float: number; stattrak: boolean; pattern: number };
+
 export type Filters = {
   query: string;
   ecosystem: EcosystemFilter;
@@ -71,4 +78,8 @@ export type Filters = {
   view: ViewMode;
   page: number;
   perPage: 24 | 48 | 96;
+  /* CS2 economy facets; ignored while browsing Dota 2. */
+  wear: WearKey[];
+  float: FloatBand;
+  stattrak: boolean;
 };

@@ -123,6 +123,17 @@ export const manifoldParadox: ItemDetail = {
       priceUsd: 121,
       priceNote: "+$2.50 vs Best",
     },
+    {
+      id: "skinflipper",
+      seller: { initials: "SF", name: "SkinFlipper", rating: "88.2% Positive · 61 deals", tone: "neutral", verified: false },
+      style: { label: "STYLE 1 UNLOCKED", tone: "cyan" },
+      quality: "Standard",
+      gems: "No gems socketed",
+      fulfilment: "p2p",
+      fulfilmentNote: "Replies within 2 hours",
+      priceUsd: 116.4,
+      priceNote: "Unverified seller",
+    },
   ],
   intelligence: {
     ranges: ["24H", "7D", "30D", "90D", "1Y", "ALL"],

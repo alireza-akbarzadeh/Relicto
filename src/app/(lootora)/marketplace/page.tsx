@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   description: "Discover, compare and trade verified Steam cosmetics with instant bot escrow.",
 };
 
-export default async function MarketplacePage({ searchParams }: PageProps<"/marketplace">) {
-  const [{ q }, catalog] = await Promise.all([searchParams, getMarketplaceCatalog()]);
-  const query = typeof q === "string" ? q : "";
-  return <MarketplaceView catalog={catalog} query={query} />;
+/** Filters live in the URL (nuqs), so this stays a plain server component. */
+export default async function MarketplacePage() {
+  const catalog = await getMarketplaceCatalog();
+  return <MarketplaceView catalog={catalog} />;
 }

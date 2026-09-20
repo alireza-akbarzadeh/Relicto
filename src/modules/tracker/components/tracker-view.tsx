@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQueryStates } from "nuqs";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -9,14 +9,17 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { StudioFooter } from "@/modules/relicto/components/shell/footers";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
+import { trackerSearchParams } from "../lib/search-params";
 import type { TrackerData, TrackerTone } from "../types";
 
 const TONE: Record<TrackerTone, string> = { primary: "text-primary", amber: "text-tertiary", cyan: "text-status-upcoming", muted: "text-text-muted" };
 
 export function TrackerView({ data }: { data: TrackerData }) {
-  const [market, setMarket] = useState("CS2");
-  const [range, setRange] = useState("4H");
-  const [query, setQuery] = useState("");
+  /* Market, range and search live in the URL so a terminal view can be shared. */
+  const [{ market, range, q: query }, setParams] = useQueryStates(trackerSearchParams, { history: "replace", clearOnDefault: true });
+  const setMarket = (value: string) => void setParams({ market: value as (typeof trackerSearchParams.market)["defaultValue"] });
+  const setRange = (value: string) => void setParams({ range: value as (typeof trackerSearchParams.range)["defaultValue"] });
+  const setQuery = (value: string) => void setParams({ q: value });
   const assets = useMemo(() => data.assets.filter((asset) => `${asset.name} ${asset.detail}`.toLowerCase().includes(query.toLowerCase())), [data.assets, query]);
   return <div className="min-h-screen bg-canvas-base font-body-md text-body-md text-on-surface antialiased"><StudioHeader /><main className="w-full bg-canvas-base pt-20"><Telemetry market={market} setMarket={setMarket} /><Ticker assets={data.assets} /><div className="mx-auto flex w-full max-w-[1600px] flex-col gap-space-lg px-gutter-desktop py-space-lg"><div className="grid grid-cols-1 items-start gap-space-lg xl:grid-cols-12"><div className="flex flex-col gap-space-lg xl:col-span-8"><PriceTerminal assets={assets} range={range} setRange={setRange} query={query} setQuery={setQuery} chart={data.chart} /><SpreadTable rows={data.spreads} /></div><div className="flex flex-col gap-space-lg xl:col-span-4"><OrderBook rows={data.orderBook} /><WebhookPanel /><StreamPanel /></div></div></div></main><StudioFooter /></div>;
 }

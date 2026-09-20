@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import type { InventoryItem, SellGame } from "../types";

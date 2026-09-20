@@ -1,5 +1,4 @@
 import { MarketFooter } from "@/modules/relicto/components/shell/footers";
-import { MarketHeader } from "@/modules/relicto/components/shell/market-header";
 import { LISTINGS_ANCHOR } from "../lib/scroll";
 import { MarketplaceProvider } from "../state/marketplace-provider";
 import type { Listing } from "../types";
@@ -13,17 +12,18 @@ import { PaginationBar } from "./results/pagination-bar";
 import { ResultsToolbar } from "./results/results-toolbar";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 
-type MarketplaceViewProps = { catalog: Listing[]; query: string };
+type MarketplaceViewProps = { catalog: Listing[] };
 
 /** Stitch: "Relicto — Marketplace Item Discovery & Trading Hub". */
-export function MarketplaceView({ catalog, query }: MarketplaceViewProps) {
+export function MarketplaceView({ catalog }: MarketplaceViewProps) {
   return (
-    <MarketplaceProvider key={query} catalog={catalog} initialQuery={query}>
+    <MarketplaceProvider catalog={catalog}>
       <div className="bg-canvas-base font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
         <StudioHeader />
-        <main className="min-h-screen w-full bg-canvas-base pt-16">
+        <main className="min-h-screen w-full bg-canvas-base pt-20">
           <div className="flex w-full flex-col">
-            <div className="relative w-full overflow-hidden">
+            {/* overflow-x-clip (not overflow-hidden) so the sticky filter rail keeps working. */}
+            <div className="relative w-full overflow-x-clip">
               <div className="pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-primary-container/10 blur-3xl" />
               <div className="pointer-events-none absolute -top-20 right-1/4 h-80 w-[500px] rounded-full bg-[rgb(245_158_11/0.1)] blur-3xl" />
               <div className="pointer-events-none absolute top-48 left-10 h-72 w-72 rounded-full bg-[rgb(99_102_241/0.1)] blur-3xl" />

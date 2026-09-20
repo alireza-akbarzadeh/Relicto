@@ -5,7 +5,7 @@ import { useMarketplace } from "../../state/marketplace-provider";
 
 /** Which economy's facets drive the catalog: Dota 2 (heroes) or CS2 (wear & pattern). */
 export function GameContext() {
-  const { filters, patch } = useMarketplace();
+  const { filters, setGame } = useMarketplace();
   const cs2 = filters.ecosystem === "cs2";
 
   return (
@@ -20,7 +20,7 @@ export function GameContext() {
       </div>
       <button
         type="button"
-        onClick={() => patch({ ecosystem: cs2 ? "dota2" : "cs2", heroes: [] })}
+        onClick={() => setGame(cs2 ? "dota2" : "cs2")}
         className="mt-1.5 flex w-full items-center justify-between px-1 text-left font-label-badge text-label-badge text-text-muted transition-colors hover:text-tertiary"
       >
         <span>{cs2 ? "Switch to Dota 2 Hero & Style Mode" : "Switch to CS2 Wear & Pattern ID Mode"}</span>

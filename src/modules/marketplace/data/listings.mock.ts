@@ -32,6 +32,7 @@ export const LISTINGS: Listing[] = [
     glow: { blob: "primary", shadow: "crimson-20" }, mediaBadge: { kind: "float", value: "0.014" },
     priceUsd: 1280, change: { percent: 5.6, window: "7d" }, meta: ["Direct Trade", "19 active offers"], offers: 19,
     safeguards: ["verifiedSellers"], listedAt: NOW - 1 * DAY,
+    cs2: { wear: "fn", float: 0.014, stattrak: false, pattern: 909 },
   },
   {
     id: "bladeform-legacy", name: "Bladeform Legacy", game: "dota2", rarity: "arcana", hero: "Juggernaut", slot: "Head",
@@ -50,6 +51,7 @@ export const LISTINGS: Listing[] = [
     glow: { blob: "secondary", shadow: "indigo-30" }, mediaBadge: { kind: "escrow", label: "Instant Steam Trade" },
     priceUsd: 3150, change: { percent: 11.2, window: "30d" }, meta: ["Verified Escrow", "8 offers"], offers: 8,
     safeguards: ["instantEscrow", "verifiedSellers"], listedAt: NOW - 3 * DAY,
+    cs2: { wear: "fn", float: 0.0112, stattrak: true, pattern: 412 },
   },
   {
     id: "codicil-veiled", name: "Codicil of the Veiled Ones", game: "dota2", rarity: "immortal", hero: "Phantom Assassin", slot: "Head",
@@ -77,6 +79,7 @@ export const LISTINGS: Listing[] = [
     glow: { blob: "primary", shadow: "crimson-30" }, mediaBadge: { kind: "float", value: "0.18" },
     priceUsd: 1420, change: { percent: 2.9, window: "7d" }, meta: ["Instant Bot", "14 active offers"], offers: 14,
     safeguards: ["instantEscrow"], listedAt: NOW - 4 * DAY,
+    cs2: { wear: "ft", float: 0.1804, stattrak: false, pattern: 571 },
   },
 ];
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useQueryStates } from "nuqs";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { StudioFooter } from "@/modules/relicto/components/shell/footers";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
+import { wikiSearchParams } from "../lib/search-params";
 import type { WikiData, WikiGuide, WikiTone } from "../types";
 
 const TONE: Record<WikiTone, string> = {
@@ -27,8 +29,9 @@ const FILTERS = [
 ];
 
 export function WikiView({ data }: { data: WikiData }) {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState(FILTERS[0]);
+  const [{ q: query, topic: filter }, setParams] = useQueryStates(wikiSearchParams, { history: "replace", clearOnDefault: true });
+  const setQuery = (value: string) => void setParams({ q: value });
+  const setFilter = (value: string) => void setParams({ topic: value as (typeof wikiSearchParams.topic)["defaultValue"] });
   const [float, setFloat] = useState("0.02840000");
   const guides = useMemo(
     () =>

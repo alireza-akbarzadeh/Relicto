@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useQueryState } from "nuqs";
+import { profileSearchParams } from "../lib/search-params";
 import type { ProfileData, ProfileTab } from "../types";
 import { ListingsSection } from "./listings/listings-section";
 import { ShowcaseSection } from "./showcase/showcase-section";
@@ -25,13 +26,13 @@ function Panel({ tab, data }: { tab: ProfileTab; data: ProfileData }) {
 
 /** Tab strip plus the 70/30 body grid; the sidebar stays on every tab. */
 export function ProfileBoard({ data }: { data: ProfileData }) {
-  const [tab, setTab] = useState<ProfileTab>("showcase");
+  const [tab, setTab] = useQueryState("tab", profileSearchParams.tab.withOptions({ history: "replace", clearOnDefault: true }));
 
   return (
     <>
       <ProfileTabs
         value={tab}
-        onChange={setTab}
+        onChange={(next) => void setTab(next)}
         inventoryCount={data.inventoryCount}
         listingCount={data.listings.length}
         reviewCount={data.reviewCount}

@@ -8,7 +8,7 @@ import { useMarketplace } from "../../state/marketplace-provider";
 
 /** Game ecosystem switch under the search bar. */
 export function EcosystemPills() {
-  const { filters, patch } = useMarketplace();
+  const { filters, setGame } = useMarketplace();
 
   return (
     <div role="radiogroup" aria-label="Game ecosystem" className="mb-space-md flex flex-wrap items-center justify-center gap-space-sm">
@@ -20,7 +20,7 @@ export function EcosystemPills() {
             type="button"
             role="radio"
             aria-checked={active}
-            onClick={() => patch({ ecosystem: eco.value })}
+            onClick={() => setGame(eco.value)}
             className={cn(
               "flex items-center gap-space-xs rounded px-space-md py-2 transition-all",
               active

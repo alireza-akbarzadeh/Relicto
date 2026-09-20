@@ -5,20 +5,16 @@ import { Icon } from "@/components/ui/icon";
 import { scrollToListings } from "../../lib/scroll";
 import { useMarketplace } from "../../state/marketplace-provider";
 
-/** The big command search: type, then Explore (or Enter) to filter the listings. */
-export function HeroSearch() {
-  const { filters, patch } = useMarketplace();
-  const [draft, setDraft] = useState(filters.query);
+type FieldProps = { initial: string; onCommit: (query: string) => void };
+
+/** Typing is local; committing writes the term to the URL. */
+function SearchField({ initial, onCommit }: FieldProps) {
+  const [draft, setDraft] = useState(initial);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    patch({ query: draft.trim() });
+    onCommit(draft.trim());
     scrollToListings();
-  };
-
-  const clear = () => {
-    setDraft("");
-    patch({ query: "" });
   };
 
   return (
@@ -37,7 +33,10 @@ export function HeroSearch() {
         {draft && (
           <button
             type="button"
-            onClick={clear}
+            onClick={() => {
+              setDraft("");
+              onCommit("");
+            }}
             title="Clear search"
             className="p-2 text-text-muted transition-colors hover:text-text-primary"
           >
@@ -58,4 +57,14 @@ export function HeroSearch() {
       </div>
     </form>
   );
+}
+
+/**
+ * The big command search. The committed term lives in the URL, so the field is
+ * keyed by it: a term arriving from elsewhere (header search, shared link,
+ * back button) remounts the field with that value instead of syncing state.
+ */
+export function HeroSearch() {
+  const { filters, patch } = useMarketplace();
+  return <SearchField key={filters.query} initial={filters.query} onCommit={(query) => patch({ query })} />;
 }

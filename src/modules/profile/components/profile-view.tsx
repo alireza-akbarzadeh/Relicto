@@ -10,7 +10,7 @@ export function ProfileView({ data }: { data: ProfileData }) {
   return (
     <div className="min-h-screen bg-surface-container-lowest font-body-md text-body-md text-on-surface antialiased">
       <StudioHeader />
-      <div className="w-full bg-surface-container-lowest pt-16">
+      <div className="w-full bg-surface-container-lowest pt-20">
         <div className="flex w-full flex-col">
           <ProfileHero identity={data.identity} />
           <StatStrip stats={data.stats} />

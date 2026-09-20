@@ -1,20 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQueryStates } from "nuqs";
 import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
 import type { WalletTransaction } from "../types";
+import { walletSearchParams } from "../lib/search-params";
 
 const TYPE_OPTIONS: readonly SelectOption<string>[] = ["All Transactions", "Deposits Only", "Withdrawals Only", "Marketplace Sales", "Marketplace Purchases"].map((label) => ({ value: label, label }));
 const RANGE_OPTIONS: readonly SelectOption<string>[] = ["Last 30 Days", "This Quarter", "Year to Date", "All-Time Archive"].map((label) => ({ value: label, label }));
 const STATUS = { live: "text-tertiary", cyan: "text-status-upcoming", amber: "text-tertiary" } as const;
 
 export function WalletAuditLedger({ transactions }: { transactions: WalletTransaction[] }) {
-  const [query, setQuery] = useState("");
-  const [type, setType] = useState("All Transactions");
-  const [range, setRange] = useState("Last 30 Days");
+  const [{ q: query, type, range }, setParams] = useQueryStates(walletSearchParams, { history: "replace", clearOnDefault: true });
+  const setQuery = (value: string) => void setParams({ q: value });
+  const setType = (value: string) => void setParams({ type: value as (typeof walletSearchParams.type)["defaultValue"] });
+  const setRange = (value: string) => void setParams({ range: value as (typeof walletSearchParams.range)["defaultValue"] });
   const visible = useMemo(() => transactions.filter((transaction) => `${transaction.title} ${transaction.hash} ${transaction.asset} ${transaction.node}`.toLowerCase().includes(query.toLowerCase())), [transactions, query]);
   return (
     <section className="flex flex-col gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">

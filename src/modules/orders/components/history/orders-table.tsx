@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -20,11 +19,10 @@ const COLUMNS = [
 const PAGE_BUTTON = "h-auto rounded border-0 px-space-sm py-1 font-label-badge text-label-badge";
 const STEP_BUTTON = "h-auto rounded border-0 bg-surface-container p-1.5 transition-colors hover:bg-surface-bright";
 
-type OrdersTableProps = { rows: LedgerRow[]; total: number; pages: number };
+type OrdersTableProps = { rows: LedgerRow[]; total: number; pages: number; page: number; onPage: (page: number) => void };
 
 /** The ledger table with its record footnote and pagination. */
-export function OrdersTable({ rows, total, pages }: OrdersTableProps) {
-  const [page, setPage] = useState(1);
+export function OrdersTable({ rows, total, pages, page, onPage }: OrdersTableProps) {
   const shown = rows.length ? `1 - ${rows.length}` : "0";
 
   return (
@@ -83,7 +81,7 @@ export function OrdersTable({ rows, total, pages }: OrdersTableProps) {
             <NoticeButton
               key={number}
               notice={{ title: `Page ${number}`, description: "Paging loads more rows once the orders API is wired." }}
-              onClickCapture={() => setPage(number)}
+              onClickCapture={() => onPage(number)}
               aria-current={page === number ? "page" : undefined}
               className={cn(
                 PAGE_BUTTON,
@@ -97,7 +95,7 @@ export function OrdersTable({ rows, total, pages }: OrdersTableProps) {
           ))}
           <NoticeButton
             notice={{ title: `Page ${Math.min(page + 1, pages)}`, description: "Paging loads more rows once the orders API is wired." }}
-            onClickCapture={() => setPage((current) => Math.min(current + 1, pages))}
+            onClickCapture={() => onPage(Math.min(page + 1, pages))}
             aria-label="Next page"
             className={cn(STEP_BUTTON, "text-text-secondary hover:text-text-primary")}
           >

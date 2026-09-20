@@ -35,7 +35,7 @@ export function HistoryView({ data }: { data: LedgerData }) {
               query={filters.query}
               onQuery={filters.setQuery}
             />
-            <OrdersTable rows={filters.visible} total={data.total} pages={data.pages} />
+            <OrdersTable rows={filters.visible} total={data.total} pages={data.pages} page={filters.page} onPage={filters.setPage} />
             <SlaBanner />
           </div>
         </div>

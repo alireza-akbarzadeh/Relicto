@@ -88,6 +88,7 @@ export const ICON_NAMES = [
   "lock_reset",
   "login",
   "logout",
+  "magic_button",
   "mail",
   "mark_email_read",
   "memory",
@@ -113,6 +114,7 @@ export const ICON_NAMES = [
   "play_arrow",
   "play_circle",
   "policy",
+  "progress_activity",
   "public",
   "publish",
   "pulse_alert",
@@ -183,6 +185,7 @@ export const ICON_NAMES = [
   "vpn_key",
   "warning",
   "waterfall_chart",
+  "whatshot",
   "workspace_premium",
 ] as const;
 

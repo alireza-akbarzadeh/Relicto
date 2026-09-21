@@ -4,6 +4,7 @@
  */
 export const ICON_NAMES = [
   "3d_rotation",
+  "ac_unit",
   "account_balance",
   "account_balance_wallet",
   "account_circle",
@@ -151,6 +152,7 @@ export const ICON_NAMES = [
   "storefront",
   "support_agent",
   "swap_horiz",
+  "swap_horizontal_circle",
   "switch_account",
   "swords",
   "sync",

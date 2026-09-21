@@ -1,119 +1,153 @@
 /*
- * Light theme: "Arena Daylight" (docs/design/light-theme.md).
- * Dark stays the default; `<html data-theme="light">` swaps every token.
- * Same brand hues as the dark theme (crimson action, amber value, indigo
- * identity, cyan escrow) on cool neutral surfaces. Only colours change, so
- * layouts are identical across themes.
+ * Light Theme: "Daylight Cyber / Tactical Arena"
+ * A high-energy, modern gaming light theme with crisp porcelain surfaces,
+ * vibrant neon accents, and sharp tactical contrast.
  */
 [data-theme="light"] {
   color-scheme: light;
 
-  /* Canvas & surfaces: neutral cool greys, white Level 1 panels. */
-  --color-canvas-base: #f3f4f8;
-  --color-background: #f6f7fb;
-  --color-surface: #f6f7fb;
-  --color-surface-dim: #eef0f5;
-  --color-surface-deep: #eceff5;
+  /* Canvas & Surfaces: Crisp, high-tech porcelain base with subtle cool-cyan undertones */
+  --color-canvas-base: #f0f3f8;
+  --color-background: #f4f6fa;
+  --color-surface: #ffffff;
+  --color-surface-dim: #e4e9f2;
+  --color-surface-deep: #dcdeeb;
   --color-surface-card: #ffffff;
   --color-surface-bright: #ffffff;
-  --color-surface-variant: #e3e7ef;
-  --color-surface-tint: #e11d48;
+  --color-surface-variant: #e1e6f0;
+  --color-surface-tint: #f43f5e;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f2f4f9;
-  --color-surface-container: #eaedf4;
-  --color-surface-container-high: #e2e6ef;
-  --color-surface-container-highest: #d9dee9;
-  --color-surface-glass: rgba(255, 255, 255, 0.75);
-  --color-surface-overlay: rgba(243, 244, 248, 0.88);
-  --color-overlay-base: #f3f4f8;
-  --color-surface-band: #eceff5;
-  --color-surface-base: #f3f4f8;
+  --color-surface-container-low: #f5f7fc;
+  --color-surface-container: #ebeff7;
+  --color-surface-container-high: #e2e7f2;
+  --color-surface-container-highest: #d6dded;
+  --color-surface-glass: rgba(255, 255, 255, 0.85);
+  --color-surface-overlay: rgba(240, 243, 248, 0.92);
+  --color-overlay-base: #f0f3f8;
+  --color-surface-band: #e5ebf5;
+  --color-surface-base: #f0f3f8;
 
-  /* Text: near-black navy ink, slate supporting tones. */
-  --color-text-primary: #0d1120;
-  --color-text-secondary: #3f4a5e;
-  --color-text-muted: #6f7a8f;
-  --color-on-surface: #151a28;
-  --color-on-surface-variant: #4b5468;
-  --color-on-background: #151a28;
-  --color-inverse-surface: #1b2130;
-  --color-inverse-on-surface: #f1f3f8;
+  /* Text & Typography: Deep obsidian-navy for maximum legibility without harsh black */
+  --color-text-primary: #090d16;
+  --color-text-secondary: #333e52;
+  --color-text-muted: #62708a;
+  --color-on-surface: #090d16;
+  --color-on-surface-variant: #3a475d;
+  --color-on-background: #090d16;
+  --color-inverse-surface: #121824;
+  --color-inverse-on-surface: #f8fafc;
 
-  /* Primary: esports crimson. Fills carry white text; `primary` is the readable text tone. */
-  --color-primary: #c8103a;
-  --color-primary-container: #e11d48;
+  /* Primary: Vibrant Neon Esports Crimson / Rose */
+  --color-primary: #e11d48;
+  --color-primary-container: #f43f5e;
   --color-on-primary: #ffffff;
   --color-on-primary-container: #ffffff;
-  --color-inverse-primary: #ff8fa3;
-  /* The dark designs use *-fixed roles as accent text, so they get readable tones here. */
+  --color-inverse-primary: #ff758f;
   --color-primary-fixed: #be123c;
   --color-primary-fixed-dim: #e11d48;
   --color-on-primary-fixed: #4c0519;
-  --color-on-primary-fixed-variant: #9f1239;
+  --color-on-primary-fixed-variant: #881337;
 
-  /* Secondary: identity indigo. */
-  --color-secondary: #4f46e5;
-  --color-secondary-container: #e4e4ff;
+  /* Secondary: Electric Hyper-Violet / Indigo */
+  --color-secondary: #6366f1;
+  --color-secondary-container: #e0e7ff;
   --color-on-secondary: #ffffff;
-  --color-on-secondary-container: #3730a3;
-  --color-secondary-fixed: #4338ca;
+  --color-on-secondary-container: #312e81;
+  --color-secondary-fixed: #4f46e5;
   --color-secondary-fixed-dim: #6366f1;
   --color-on-secondary-fixed: #1e1b4b;
   --color-on-secondary-fixed-variant: #3730a3;
 
-  /* Tertiary: value amber. Deep amber for text and fills, vivid amber for containers. */
-  --color-tertiary: #b45309;
+  /* Tertiary: Cyber Amber / Gold (for item float tags, market values, and highlights) */
+  --color-tertiary: #d97706;
   --color-tertiary-container: #f59e0b;
   --color-on-tertiary: #ffffff;
-  --color-on-tertiary-container: #2a1700;
-  --color-tertiary-fixed: #92400e;
-  --color-tertiary-fixed-dim: #b45309;
-  --color-on-tertiary-fixed: #2a1700;
+  --color-on-tertiary-container: #1c0d00;
+  --color-tertiary-fixed: #b45309;
+  --color-tertiary-fixed-dim: #d97706;
+  --color-on-tertiary-fixed: #1c0d00;
   --color-on-tertiary-fixed-variant: #78350f;
 
-  /* Status & feedback */
-  --color-status-live: #dc2626;
-  --color-status-upcoming: #0891b2;
-  --color-status-success: #059669;
-  --color-status-cyan: #0891b2;
-  --color-status-amber: #d97706;
-  --color-error: #c81e1e;
+  /* Status & Feedback: Electric Cyan, Emerald, and Crimson */
+  --color-status-live: #f43f5e;
+  --color-status-upcoming: #0284c7;
+  --color-status-success: #10b981;
+  --color-status-cyan: #06b6d4;
+  --color-status-amber: #f59e0b;
+  --color-error: #e11d48;
   --color-on-error: #ffffff;
-  --color-error-container: #fee2e2;
-  --color-on-error-container: #991b1b;
+  --color-error-container: #ffe4e6;
+  --color-on-error-container: #9f1239;
 
-  /* Lines & glows: 1px slate structure, low-opacity accent halos. */
-  --color-outline: #8a93a6;
-  --color-outline-variant: #d5dae4;
-  --color-border-subtle: #e3e7ee;
-  --color-border-focus: rgba(225, 29, 72, 0.45);
-  --color-border-tactical: rgba(180, 83, 9, 0.35);
-  --color-border-glow: rgba(225, 29, 72, 0.25);
-  --color-border-highlight: #cfd5e1;
-  --color-border-dark: #d5dae4;
-  --color-glow-crimson: rgba(225, 29, 72, 0.14);
-  --color-glow-amber: rgba(245, 158, 11, 0.16);
-  --color-glow-indigo: rgba(99, 102, 241, 0.14);
-  --color-glow-cyan: rgba(8, 145, 178, 0.14);
+  /* Lines & Tactical Glows: Clean ice-blue borders with vivid neon glow overlays */
+  --color-outline: #728099;
+  --color-outline-variant: #cbd5e1;
+  --color-border-subtle: #dbe2ef;
+  --color-border-focus: rgba(225, 29, 72, 0.6);
+  --color-border-tactical: rgba(217, 119, 6, 0.45);
+  --color-border-glow: rgba(225, 29, 72, 0.35);
+  --color-border-highlight: #c0cbde;
+  --color-border-dark: #cbd5e1;
 
-  /* Auth extras */
-  --color-brand-crimson: #e11d48;
-  --color-brand-crimson-glow: rgba(225, 29, 72, 0.25);
-  --color-brand-rose: #be123c;
+  /* Neon Ambient Glows */
+  --color-glow-crimson: rgba(225, 29, 72, 0.22);
+  --color-glow-amber: rgba(245, 158, 11, 0.25);
+  --color-glow-indigo: rgba(99, 102, 241, 0.22);
+  --color-glow-cyan: rgba(6, 182, 212, 0.22);
+
+  /* Auth & Specific Scopes */
+  --color-brand-crimson: #f43f5e;
+  --color-brand-crimson-glow: rgba(244, 63, 94, 0.3);
+  --color-brand-rose: #e11d48;
   --color-brand-crimson-deep: #be123c;
-  --color-brand-crimson-hover: #be123c;
-  --color-brand-rose-hover: #9f1239;
-  --color-brand-signup-end: #f43f5e;
+  --color-brand-crimson-hover: #e11d48;
+  --color-brand-rose-hover: #be123c;
+  --color-brand-signup-end: #fb7185;
   --color-auth-vault: #ffffff;
-  --color-auth-notice: #f2f4f9;
+  --color-auth-notice: #f5f7fc;
   --color-auth-field-focus: #ffffff;
-  --color-auth-tab-active: #e2e6ef;
-  --color-auth-raised: #f2f4f9;
-  --color-auth-raised-hover: #e9edf4;
-  --color-auth-steam-hover: #e9edf4;
+  --color-auth-tab-active: #e2e7f2;
+  --color-auth-raised: #f5f7fc;
+  --color-auth-raised-hover: #ebeff7;
+  --color-auth-steam-hover: #ebeff7;
 }
 
-/* Level 1 panels get a 1px slate boundary (an outline, so layout never shifts). */
+/* Also update the utility overrides to match the new crisp light palette */
+[data-theme="light"] {
+  --color-slate-300: #1e293b;
+  --color-slate-400: #334155;
+  --color-slate-600: #64748b;
+  --color-zinc-300: #27272a;
+  --color-zinc-400: #3f3f46;
+  --color-red-400: #dc2626;
+  --color-rose-300: #be123c;
+  --color-rose-400: #f43f5e;
+  --color-rose-800: #ffe4e6;
+  --color-rose-950: #fff1f2;
+  --color-amber-300: #d97706;
+  --color-amber-400: #f59e0b;
+  --color-amber-800: #fef3c7;
+  --color-amber-950: #fffbeb;
+  --color-emerald-400: #059669;
+  --color-emerald-950: #ecfdf5;
+  --color-cyan-200: #0284c7;
+  --color-cyan-300: #06b6d4;
+  --color-cyan-400: #0891b2;
+  --color-cyan-900: #cffafe;
+  --color-cyan-950: #ecfeff;
+  --color-blue-400: #2563eb;
+  --color-blue-900: #dbeafe;
+  --color-indigo-400: #6366f1;
+  --color-indigo-900: #e0e7ff;
+  --color-indigo-950: #eef2ff;
+  --color-purple-400: #a855f7;
+  --color-purple-800: #f3e8ff;
+  --color-purple-950: #faf5ff;
+  --color-pink-300: #ec4899;
+  --color-pink-400: #f43f5e;
+}
+
+/* Clean 1px ice-slate outline for cards */
 [data-theme="light"] .bg-surface-card {
   outline: 1px solid var(--color-border-subtle);
   outline-offset: -1px;

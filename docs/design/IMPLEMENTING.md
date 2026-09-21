@@ -174,6 +174,14 @@ More v3 behaviour the mobile exports rely on:
 - **Invalid classes in the export** (`w-13`, `h-13`, `py-0.2`, `scrollbar-none`, and `status-upcoming: "06b6d4"` without `#` in some configs) do nothing in v3. Drop them, but keep the intended cyan for `status-upcoming`.
 - Fixed toasts, sheets and modals in the export can leak into the full-page capture. They explain hotspots, they are not layout bugs.
 
+## Light theme
+
+- Dark is the default. `<html data-theme="light">` swaps the tokens. The choice is stored under the `relicto-theme` key in localStorage and applied before first paint by `THEME_SCRIPT` (`src/lib/theme.ts`). Read and flip it with `useTheme()` (`src/hooks/use-theme.ts`) or `<ThemeToggle>` (`src/components/theme-toggle.tsx`).
+- Light values live in `styles/theme/light.css` (tokens and Tailwind v3 shade remaps) and `styles/theme/light-scopes.css` (hub and auth scopes, one-off utilities). Only colours change, never type, spacing or radius.
+- Colours must come from tokens. A hex or `rgba()` in a component won't switch themes. When you add a token to `colors.css`, add its light value to `light.css` too.
+- In the hub and auth scopes, `text-white` / `border-white/*` mean ink in light mode (`--color-white` is remapped). Steam-branded fills keep real white.
+- Light panels (`bg-surface-card`) get a 1px outline instead of relying on dark shadows.
+
 ## 9. Before committing
 
 - [ ] `npx tsc --noEmit` and `npx eslint` are clean. Run `npx next typegen` if `PageProps` is missing.

@@ -40,6 +40,18 @@ const TRIGGERS = {
     icon: <Bell className="size-4" />,
     ping: true,
   },
+  /** Mobile market family (marketplace, tracker): 44px button, glowing dot. */
+  mobile: {
+    button: "relative w-11 h-11 flex items-center justify-center rounded-lg bg-surface-card/60 text-text-secondary hover:text-text-primary transition-colors",
+    badge: "absolute top-2 right-2 w-2 h-2 rounded-full bg-primary shadow-[0_0_6px_var(--color-primary-container)]",
+    icon: <Icon name="notifications" className="text-[20px]" />,
+  },
+  /** Mobile linked family (hub, sell, wallet, alerts): rounded-xl button, live dot. */
+  mobileLinked: {
+    button: "relative w-11 h-11 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface-variant hover:text-text-primary transition-colors",
+    badge: "absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-status-live shadow-[0_0_8px_rgba(239,68,68,0.8)]",
+    icon: <Icon name="notifications" className="text-[20px]" />,
+  },
 } satisfies Record<string, TriggerStyle>;
 
 export type NotificationsTrigger = keyof typeof TRIGGERS;
@@ -65,7 +77,7 @@ export function NotificationsMenu({ trigger }: { trigger: NotificationsTrigger }
         {unreadCount > 0 && style.ping && <span className={cn(style.badge, "animate-ping")} />}
         {unreadCount > 0 && <span className={style.badge}>{trigger === "count" ? unreadCount : null}</span>}
       </PopoverTrigger>
-      <PopoverContent className="w-[380px] p-2">
+      <PopoverContent className="w-[min(380px,calc(100vw-1rem))] p-2">
         <div className="flex items-center justify-between px-2.5 pt-1.5 pb-2.5">
           <span className="flex items-center gap-2 font-headline-sm text-[15px] font-bold text-text-primary">
             Notifications

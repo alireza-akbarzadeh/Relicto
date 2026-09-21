@@ -112,10 +112,34 @@ export function VaultUserTrigger({ user }: { user: SessionUser }) {
   );
 }
 
+/** Mobile headers: a bare 32px portrait. Each family casts a different glow. */
+function MobilePortrait({ user, glow }: { user: SessionUser; glow?: string }) {
+  return (
+    <span className={`flex h-8 w-8 shrink-0 overflow-hidden rounded-full bg-primary ${glow ?? ""}`}>
+      <AvatarImage user={user} size={32} />
+    </span>
+  );
+}
+
+export function MobileUserTrigger({ user }: { user: SessionUser }) {
+  return <MobilePortrait user={user} glow="shadow-[0_0_10px_rgba(244,63,94,0.35)]" />;
+}
+
+export function MobileLinkedUserTrigger({ user }: { user: SessionUser }) {
+  return <MobilePortrait user={user} glow="shadow-[0_0_12px_rgba(255,178,183,0.3)]" />;
+}
+
+export function MobilePlainUserTrigger({ user }: { user: SessionUser }) {
+  return <MobilePortrait user={user} />;
+}
+
 export const USER_TRIGGERS = {
   market: MarketUserTrigger,
   ledger: LedgerUserTrigger,
   studio: StudioUserTrigger,
   hub: HubUserTrigger,
   vault: VaultUserTrigger,
+  mobile: MobileUserTrigger,
+  mobileLinked: MobileLinkedUserTrigger,
+  mobilePlain: MobilePlainUserTrigger,
 } as const;

@@ -1,0 +1,14 @@
+{
+  "id": "session-1789841341603",
+  "startedAt": "2026-09-19T18:09:01.603Z",
+  "cwd": "/Users/alirezaakbarzadeh/workshop/Relicto",
+  "context": {},
+  "metrics": {
+    "edits": 0,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-09-19T18:09:38.914Z",
+  "duration": 37311
+}

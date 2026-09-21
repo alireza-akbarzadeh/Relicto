@@ -31,5 +31,12 @@ export function useCodeCells(initial: string[]) {
     refs.current[i] = el;
   };
 
-  return { cells, code: cells.join(""), register, onChange, onKeyDown, onPaste };
+  /** Fill from a pasted or programmatic code ("VRTXP"). */
+  const fill = (value: string) => {
+    const chars = value.slice(0, cells.length).split("");
+    setCells((c) => c.map((v, idx) => chars[idx] ?? v));
+    focus(chars.length);
+  };
+
+  return { cells, code: cells.join(""), register, onChange, onKeyDown, onPaste, fill };
 }

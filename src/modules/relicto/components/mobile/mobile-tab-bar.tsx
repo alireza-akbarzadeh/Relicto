@@ -34,10 +34,15 @@ const STYLE = {
   },
 } satisfies Record<MobileTabFamily, Record<string, string>>;
 
-type MobileTabBarProps = { family: MobileTabFamily; active: string };
+type MobileTabBarProps = {
+  family: MobileTabFamily;
+  active: string;
+  /** Solid glyph on the active tab (the profile screen draws it filled). */
+  filled?: boolean;
+};
 
 /** Fixed bottom navigation of the mobile screens. */
-export function MobileTabBar({ family, active }: MobileTabBarProps) {
+export function MobileTabBar({ family, active, filled = false }: MobileTabBarProps) {
   const style = STYLE[family];
 
   return (
@@ -56,7 +61,7 @@ export function MobileTabBar({ family, active }: MobileTabBarProps) {
                 current ? style.active : style.idle,
               )}
             >
-              <Icon name={tab.icon} className={style.icon} />
+              <Icon name={tab.icon} filled={filled && current} className={style.icon} />
               <span className={style.label}>{tab.label}</span>
               {"dot" in tab && tab.dot && (
                 <span className="absolute top-1 right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_6px_var(--color-primary-container)]" />

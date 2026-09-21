@@ -12,7 +12,7 @@ import { SynergyRail } from "./synergy-rail";
 /** Mobile item inspector (Stitch: "Lootora Mobile — Item Detail: PA Manifold Paradox"). */
 export function ItemMobile({ item }: { item: ItemMobileData }) {
   return (
-    <div className="flex min-h-screen flex-col bg-canvas-base font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
+    <div className="stitch-heavy-grotesk stitch-medium-mono stitch-lite-geist flex min-h-screen flex-col bg-canvas-base font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
       <InspectorHeader />
       <main className="pb-safe flex w-full flex-1 flex-col bg-canvas-base pt-16">
         <div className="flex w-full flex-col text-on-surface">

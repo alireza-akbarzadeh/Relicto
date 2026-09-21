@@ -3,6 +3,7 @@
 @import "../styles/theme/colors.css";
 @import "../styles/theme/typography.css";
 @import "../styles/theme/scopes.css";
+@import "../styles/theme/stitch-weights.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "../styles/theme/shadcn.css";

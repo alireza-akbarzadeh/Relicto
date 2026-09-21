@@ -35,7 +35,7 @@ function RelayStrip({ relay }: { relay: TrackerMobileData["relay"] }) {
 /** Mobile arbitrage terminal (Stitch: "Lootora Mobile — Real-Time Price Tracker & Arbitrage Terminal"). */
 export function TrackerMobile({ data }: { data: TrackerMobileData }) {
   return (
-    <div className="flex min-h-screen flex-col bg-canvas-base font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
+    <div className="stitch-heavy-grotesk stitch-medium-mono stitch-lite-geist flex min-h-screen flex-col bg-canvas-base font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
       <MarketMobileHeader />
       <main className="flex min-h-[max(884px,100dvh)] w-full flex-1 flex-col bg-canvas-base pt-16 pb-24">
         <div className="flex w-full flex-col gap-4 pb-6">

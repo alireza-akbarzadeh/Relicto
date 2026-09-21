@@ -17,7 +17,7 @@ export function TrackingMobile({ order }: { order: TrackingMobileData }) {
   const stage = `STEP ${active + 1} OF ${order.steps.length}`;
 
   return (
-    <div className="flex min-h-screen flex-col bg-surface font-body-md text-body-md text-on-surface">
+    <div className="stitch-heavy-grotesk stitch-medium-mono stitch-lite-geist flex min-h-screen flex-col bg-surface font-body-md text-body-md text-on-surface">
       <IntelMobileHeader />
       <main className="relative flex w-full flex-col bg-surface pt-16 pb-20">
         <div className="flex w-full flex-col gap-space-md px-space-md py-space-sm text-on-surface">

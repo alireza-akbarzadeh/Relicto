@@ -69,7 +69,7 @@ function Card({ card }: { card: ArbCard }) {
   const title = (
     <div className="flex items-center gap-1.5">
       <span className={NAME}>{card.name}</span>
-      <span className="rounded bg-primary-container px-1 py-0.5 font-label-badge text-[9px] leading-[14px] font-bold tracking-[0.08em] text-on-primary-container uppercase">
+      <span className="rounded bg-primary-container px-1 py-0.5 font-label-badge text-label-badge font-bold text-on-primary-container uppercase">
         {card.badge}
       </span>
     </div>

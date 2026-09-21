@@ -11,6 +11,7 @@ export const ICON_NAMES = [
   "add",
   "add_circle",
   "add_shopping_cart",
+  "add_task",
   "alternate_email",
   "analytics",
   "apps",
@@ -165,6 +166,7 @@ export const ICON_NAMES = [
   "visibility_off",
   "vpn_key",
   "warning",
+  "waterfall_chart",
   "workspace_premium",
 ] as const;
 

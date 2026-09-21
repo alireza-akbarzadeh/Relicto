@@ -15,6 +15,7 @@ export const ICON_NAMES = [
   "analytics",
   "apps",
   "arrow_back",
+  "arrow_back_ios_new",
   "arrow_drop_down",
   "arrow_forward",
   "arrow_outward",

@@ -1,0 +1,104 @@
+/*
+ * Light theme, part 2: everything the token swap in light.css can't reach.
+ * Palette shades the dark designs use as light-on-dark text, the page scopes
+ * that hard-code dark values, and one-off utilities.
+ */
+
+/* Tailwind v3 shades: light tints become readable mid tones; deep fills become pale tints. */
+[data-theme="light"] {
+  --color-slate-300: #334155;
+  --color-slate-400: #475569;
+  --color-slate-600: #94a3b8;
+  --color-zinc-300: #3f3f46;
+  --color-zinc-400: #52525b;
+  --color-red-400: #dc2626;
+  --color-rose-300: #be123c;
+  --color-rose-400: #e11d48;
+  --color-rose-800: #ffe4e6;
+  --color-rose-950: #fff1f2;
+  --color-amber-300: #b45309;
+  --color-amber-400: #d97706;
+  --color-amber-800: #fef3c7;
+  --color-amber-950: #fffbeb;
+  --color-emerald-400: #059669;
+  --color-emerald-950: #ecfdf5;
+  --color-cyan-200: #0e7490;
+  --color-cyan-300: #0891b2;
+  --color-cyan-400: #0891b2;
+  --color-cyan-900: #cffafe;
+  --color-cyan-950: #ecfeff;
+  --color-blue-400: #2563eb;
+  --color-blue-900: #dbeafe;
+  --color-indigo-400: #4f46e5;
+  --color-indigo-900: #e0e7ff;
+  --color-indigo-950: #eef2ff;
+  --color-purple-400: #9333ea;
+  --color-purple-800: #f3e8ff;
+  --color-purple-950: #faf5ff;
+  --color-pink-300: #db2777;
+  --color-pink-400: #db2777;
+}
+
+/*
+ * Hub and auth were drawn with white text and white hairlines on dark.
+ * Inside those scopes, white means "ink" and black means "paper".
+ */
+[data-theme="light"] :is(.theme-hub, .theme-auth) {
+  --color-white: #0f172a;
+  --color-black: #ffffff;
+}
+
+/* Scope palettes (scopes.css) re-declared with light values; specificity beats the dark scope. */
+[data-theme="light"] .theme-hub {
+  --color-primary: #e11d48;
+  --color-primary-container: #e11d48;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ffffff;
+  --color-tertiary: #00675e;
+  --color-on-tertiary: #ffffff;
+  --color-surface-card: #ffffff;
+  --color-surface-container-low: #eff4ff;
+  --color-surface-container: #e5eeff;
+  --color-surface-container-high: #dce9ff;
+  --color-surface-container-highest: #d3e4fe;
+  --color-surface-bright: #f8f9ff;
+  --color-on-surface-variant: #475569;
+  --color-border-tactical: rgba(0, 103, 94, 0.3);
+}
+
+[data-theme="light"] .theme-auth-signin {
+  --color-primary: #e11d48;
+  --color-on-primary: #ffffff;
+}
+
+[data-theme="light"] .theme-auth-signup {
+  --color-surface-variant: #d3e4fe;
+  --color-border-tactical: rgba(0, 103, 94, 0.3);
+  --color-border-focus: rgba(2, 132, 199, 0.45);
+  --color-glow-crimson: rgba(225, 29, 72, 0.15);
+}
+
+[data-theme="light"] .theme-auth-2fa {
+  --color-surface-dim: #f1f5fb;
+}
+
+[data-theme="light"] .theme-auth-recovery {
+  --color-surface-card: #ffffff;
+  --color-surface-container: #e5eeff;
+  --color-surface-container-high: #dce9ff;
+}
+
+/* One-off utilities with baked-in dark values. */
+[data-theme="light"] .custom-radial-grid {
+  background-image: radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px);
+}
+
+[data-theme="light"] .border-glow-subtle {
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .custom-gradient-bg {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(225, 29, 72, 0.08) 0%, rgba(248, 250, 252, 0) 70%),
+    radial-gradient(circle at 10% 40%, rgba(2, 132, 199, 0.06) 0%, rgba(248, 250, 252, 0) 50%);
+}

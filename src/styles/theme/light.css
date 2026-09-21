@@ -1,0 +1,120 @@
+/*
+ * Light theme: "Arena Daylight" (docs/design/light-theme.md).
+ * Dark stays the default; `<html data-theme="light">` swaps every token.
+ * Same brand hues as the dark theme (crimson action, amber value, indigo
+ * identity, cyan escrow) on cool neutral surfaces. Only colours change, so
+ * layouts are identical across themes.
+ */
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Canvas & surfaces: neutral cool greys, white Level 1 panels. */
+  --color-canvas-base: #f3f4f8;
+  --color-background: #f6f7fb;
+  --color-surface: #f6f7fb;
+  --color-surface-dim: #eef0f5;
+  --color-surface-deep: #eceff5;
+  --color-surface-card: #ffffff;
+  --color-surface-bright: #ffffff;
+  --color-surface-variant: #e3e7ef;
+  --color-surface-tint: #e11d48;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f9;
+  --color-surface-container: #eaedf4;
+  --color-surface-container-high: #e2e6ef;
+  --color-surface-container-highest: #d9dee9;
+  --color-surface-glass: rgba(255, 255, 255, 0.75);
+  --color-surface-overlay: rgba(243, 244, 248, 0.88);
+  --color-overlay-base: #f3f4f8;
+  --color-surface-band: #eceff5;
+  --color-surface-base: #f3f4f8;
+
+  /* Text: near-black navy ink, slate supporting tones. */
+  --color-text-primary: #0d1120;
+  --color-text-secondary: #3f4a5e;
+  --color-text-muted: #6f7a8f;
+  --color-on-surface: #151a28;
+  --color-on-surface-variant: #4b5468;
+  --color-on-background: #151a28;
+  --color-inverse-surface: #1b2130;
+  --color-inverse-on-surface: #f1f3f8;
+
+  /* Primary: esports crimson. Fills carry white text; `primary` is the readable text tone. */
+  --color-primary: #c8103a;
+  --color-primary-container: #e11d48;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ffffff;
+  --color-inverse-primary: #ff8fa3;
+  /* The dark designs use *-fixed roles as accent text, so they get readable tones here. */
+  --color-primary-fixed: #be123c;
+  --color-primary-fixed-dim: #e11d48;
+  --color-on-primary-fixed: #4c0519;
+  --color-on-primary-fixed-variant: #9f1239;
+
+  /* Secondary: identity indigo. */
+  --color-secondary: #4f46e5;
+  --color-secondary-container: #e4e4ff;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #3730a3;
+  --color-secondary-fixed: #4338ca;
+  --color-secondary-fixed-dim: #6366f1;
+  --color-on-secondary-fixed: #1e1b4b;
+  --color-on-secondary-fixed-variant: #3730a3;
+
+  /* Tertiary: value amber. Deep amber for text and fills, vivid amber for containers. */
+  --color-tertiary: #b45309;
+  --color-tertiary-container: #f59e0b;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #2a1700;
+  --color-tertiary-fixed: #92400e;
+  --color-tertiary-fixed-dim: #b45309;
+  --color-on-tertiary-fixed: #2a1700;
+  --color-on-tertiary-fixed-variant: #78350f;
+
+  /* Status & feedback */
+  --color-status-live: #dc2626;
+  --color-status-upcoming: #0891b2;
+  --color-status-success: #059669;
+  --color-status-cyan: #0891b2;
+  --color-status-amber: #d97706;
+  --color-error: #c81e1e;
+  --color-on-error: #ffffff;
+  --color-error-container: #fee2e2;
+  --color-on-error-container: #991b1b;
+
+  /* Lines & glows: 1px slate structure, low-opacity accent halos. */
+  --color-outline: #8a93a6;
+  --color-outline-variant: #d5dae4;
+  --color-border-subtle: #e3e7ee;
+  --color-border-focus: rgba(225, 29, 72, 0.45);
+  --color-border-tactical: rgba(180, 83, 9, 0.35);
+  --color-border-glow: rgba(225, 29, 72, 0.25);
+  --color-border-highlight: #cfd5e1;
+  --color-border-dark: #d5dae4;
+  --color-glow-crimson: rgba(225, 29, 72, 0.14);
+  --color-glow-amber: rgba(245, 158, 11, 0.16);
+  --color-glow-indigo: rgba(99, 102, 241, 0.14);
+  --color-glow-cyan: rgba(8, 145, 178, 0.14);
+
+  /* Auth extras */
+  --color-brand-crimson: #e11d48;
+  --color-brand-crimson-glow: rgba(225, 29, 72, 0.25);
+  --color-brand-rose: #be123c;
+  --color-brand-crimson-deep: #be123c;
+  --color-brand-crimson-hover: #be123c;
+  --color-brand-rose-hover: #9f1239;
+  --color-brand-signup-end: #f43f5e;
+  --color-auth-vault: #ffffff;
+  --color-auth-notice: #f2f4f9;
+  --color-auth-field-focus: #ffffff;
+  --color-auth-tab-active: #e2e6ef;
+  --color-auth-raised: #f2f4f9;
+  --color-auth-raised-hover: #e9edf4;
+  --color-auth-steam-hover: #e9edf4;
+}
+
+/* Level 1 panels get a 1px slate boundary (an outline, so layout never shifts). */
+[data-theme="light"] .bg-surface-card {
+  outline: 1px solid var(--color-border-subtle);
+  outline-offset: -1px;
+}

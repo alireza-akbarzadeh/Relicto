@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeToggle } from "@/components/theme-toggle";
 import { formatMoney } from "@/lib/format";
 import { STUDIO_NAV } from "../../data/navigation";
 import { useSession } from "../../state/session-provider";
@@ -40,6 +41,7 @@ export function VaultHeader({ steamId }: { steamId: string }) {
               </div>
             </div>
           </div>
+          <ThemeToggle className="rounded-lg border border-border-subtle bg-surface-container-lowest p-2 text-text-secondary hover:bg-surface-container hover:text-text-primary" />
           <NotificationsMenu trigger="vault" />
           <CartButton />
           <UserMenu trigger="vault" />

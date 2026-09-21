@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/theme-toggle";
 import { STUDIO_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
@@ -22,6 +23,7 @@ export function StudioHeader() {
           <StudioHeaderSearch />
           <WalletChip  />
           <CartButton />
+          <ThemeToggle className="bg-surface-container-low p-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface" />
           <NotificationsMenu trigger="square" />
           <UserMenu trigger="studio" />
         </div>

@@ -1,5 +1,5 @@
 import { HubFooter } from "@/modules/relicto/components/shell/hub-footer";
-import { HubHeader } from "@/modules/relicto/components/shell/hub-header";
+import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import type { HubData } from "../types";
 import { CommunityBoard } from "./community/community-board";
 import { LoadoutShowcase } from "./loadouts/loadout-showcase";
@@ -11,7 +11,7 @@ import { GameStage } from "./stage/game-stage";
 export function HubView({ hub }: { hub: HubData }) {
   return (
     <div className="theme-hub min-h-screen bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-white">
-      <HubHeader />
+      <StudioHeader />
       <main className="min-h-screen w-full bg-surface pt-20">
         <GameStage pulse={hub.pulse} games={hub.games} spotlights={hub.spotlights}>
           <MetaIndex cards={hub.metaCards} />

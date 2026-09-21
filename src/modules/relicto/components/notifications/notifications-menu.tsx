@@ -13,51 +13,48 @@ type TriggerStyle = { button: string; badge: string; icon?: ReactNode; ping?: bo
 
 /** Trigger styles per header family, straight from each Stitch header. */
 const TRIGGERS = {
-  /** Marketplace: rounded button with a numeric badge. */
+  /** Standard Header Notification trigger: matching rounded-xl pill design */
   count: {
     button:
-      "relative p-2 rounded-lg bg-surface-container hover:bg-surface-container-high transition-all text-text-secondary hover:text-text-primary active:scale-95",
+      "group relative flex h-10 items-center justify-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3 text-text-secondary transition-all duration-200 hover:border-tertiary/40 hover:bg-surface-container-high hover:text-text-primary active:scale-95 backdrop-blur-md",
     badge:
-      "absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-on-primary font-label-badge text-[10px] flex items-center justify-center shadow-md",
+      "ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-tertiary px-1.5 font-data-mono-md text-[10px] font-bold text-on-tertiary shadow-[0_0_10px_rgba(245,158,11,0.4)]",
   },
-  /** Orders / tracking / profile: rounded-lg button with a pulsing dot. */
+  /** Dot badge variant matching rounded-xl pill */
   dot: {
     button:
-      "relative p-space-sm rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-center justify-center active:scale-95",
-    badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live animate-pulse",
+      "group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-surface-container-low/80 text-text-secondary transition-all duration-200 hover:border-white/20 hover:bg-surface-container-high hover:text-text-primary active:scale-95 backdrop-blur-md",
+    badge:
+      "absolute top-2 right-2 h-2 w-2 rounded-full bg-status-live shadow-[0_0_8px_rgba(239,68,68,0.8)]",
   },
-  /** Sell / wallet: square button with a pulsing dot. */
   square: {
     button:
-      "relative p-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors",
-    badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live animate-pulse",
+      "group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-surface-container-low/80 text-text-secondary transition-all hover:border-white/20 hover:bg-surface-container-high hover:text-text-primary active:scale-95",
+    badge:
+      "absolute top-2 right-2 h-2 w-2 rounded-full bg-status-live shadow-[0_0_8px_rgba(239,68,68,0.8)]",
   },
-  /** Item vault: bordered button with a solid dot. */
   vault: {
     button:
-      "relative p-2 rounded-lg bg-surface-container-lowest border border-border-subtle text-text-secondary hover:text-text-primary hover:bg-surface-container transition-all active:scale-95",
-    badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary",
+      "group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-surface-container-lowest text-text-secondary hover:text-text-primary hover:bg-surface-container transition-all active:scale-95",
+    badge: "absolute top-2 right-2 h-2 w-2 rounded-full bg-primary",
   },
-  /** Game hub: bordered button, Lucide bell, pinging dot. */
   hub: {
     button:
-      "relative p-2 rounded-md bg-surface-card border border-border-dark text-text-secondary hover:text-white hover:border-surface-bright transition-all active:scale-95",
-    badge: "absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-live",
+      "group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-surface-card text-text-secondary hover:text-white hover:border-white/20 transition-all active:scale-95",
+    badge: "absolute top-2 right-2 h-2 w-2 rounded-full bg-status-live",
     icon: <Bell className="size-4" />,
     ping: true,
   },
-  /** Mobile market family (marketplace, tracker): 44px button, glowing dot. */
   mobile: {
     button:
-      "relative w-11 h-11 flex items-center justify-center rounded-lg bg-surface-card/60 text-text-secondary hover:text-text-primary transition-colors active:scale-95",
+      "relative w-11 h-11 flex items-center justify-center rounded-xl border border-white/10 bg-surface-card/60 text-text-secondary hover:text-text-primary transition-colors active:scale-95",
     badge:
-      "absolute top-2 right-2 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]",
+      "absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]",
     icon: <Icon name="notifications" className="text-[20px]" />,
   },
-  /** Mobile linked family (hub, sell, wallet, alerts): rounded-xl button, live dot. */
   mobileLinked: {
     button:
-      "relative w-11 h-11 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface-variant hover:text-text-primary transition-colors active:scale-95",
+      "relative w-11 h-11 flex items-center justify-center rounded-xl border border-white/10 bg-surface-container-low text-on-surface-variant hover:text-text-primary transition-colors active:scale-95",
     badge:
       "absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-status-live shadow-[0_0_8px_rgba(239,68,68,0.8)]",
     icon: <Icon name="notifications" className="text-[20px]" />,

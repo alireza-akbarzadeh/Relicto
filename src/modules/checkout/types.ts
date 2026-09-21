@@ -1,4 +1,4 @@
-import type { IconName } from "@/components/ui/icon";
+import { IconName } from "@/components/ui/icon";
 
 export type CheckoutItem = {
   id: string;
@@ -9,10 +9,17 @@ export type CheckoutItem = {
   game: string;
   gameTone: string;
   name: string;
+  subname?: string;
+  category?: string;
   detail: string;
   intel: string[];
   bot: string;
   price: number;
+  marketPrice?: number;
+  discountPercentage?: number;
+  wear?: string;
+  floatValue?: number;
+  paintSeed?: number;
   marker: string;
   markerTone: string;
   icon?: IconName;

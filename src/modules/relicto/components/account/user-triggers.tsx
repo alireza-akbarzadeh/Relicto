@@ -55,24 +55,25 @@ export function LedgerUserTrigger({ user }: { user: SessionUser }) {
 
 export function StudioUserTrigger({ user }: { user: SessionUser }) {
   return (
-    <span className="flex items-center gap-2.5 bg-surface-container-lowest py-1 pr-3 pl-2 text-left">
-      <span className="flex h-8 w-8 shrink-0 overflow-hidden rounded-full bg-primary">
-        <AvatarImage user={user} size={32} />
-      </span>
-      <span className="flex flex-col">
-        <span className="flex items-center gap-1.5">
-          <span className="font-headline-sm text-body-sm font-semibold text-text-primary">{user.handle}</span>
-          <span className="bg-surface-container-high px-1 font-data-mono-md text-label-badge text-status-upcoming">
+    <div className="flex h-10 items-center gap-2.5 rounded-xl border border-white/10 bg-surface-container-low/80 p-1.5 pr-3 text-left backdrop-blur-md transition-all duration-200 hover:border-tertiary/40 hover:bg-surface-container-high active:scale-95">
+      <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-surface-container-lowest">
+        <AvatarImage user={user} size={28} />
+      </div>
+
+      <div className="flex flex-col gap-0.5 min-w-0">
+        <div className="flex items-center gap-1.5">
+          <span className="truncate font-headline-sm text-xs font-bold leading-none text-text-primary">
+            {user.handle}
+          </span>
+          <span className="rounded bg-tertiary/10 px-1 py-0.5 font-data-mono-md text-[9px] font-bold text-tertiary border border-tertiary/20 leading-none uppercase">
             LVL {user.level}
           </span>
+        </div>
+        <span className="font-label-caps text-[9px] font-semibold uppercase tracking-wider text-text-muted leading-none truncate">
+          {user.role}
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="font-label-badge text-label-badge font-bold text-tertiary">{user.role}</span>
-          <span className="inline-block h-1 w-1 rounded-full bg-status-upcoming" />
-          <span className="font-label-badge text-label-badge text-text-muted uppercase">Steam Synced</span>
-        </span>
-      </span>
-    </span>
+      </div>
+    </div>
   );
 }
 

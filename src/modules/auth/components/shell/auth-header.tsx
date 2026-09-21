@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 
@@ -61,6 +62,7 @@ export function AuthHeader({ active }: { active: AuthNavId }) {
             <Icon name="lock" className="text-[18px] text-tertiary" />
             <span className="font-mono text-xs font-medium tracking-wider text-slate-300">256-BIT ESCROW</span>
           </div>
+          <ThemeToggle className="h-9 w-9 rounded-full border border-white/5 bg-surface-card/50 text-slate-300 hover:text-white" />
           <Link
             href="/sign-in"
             aria-label="Account"

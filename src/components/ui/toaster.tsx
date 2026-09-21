@@ -1,12 +1,14 @@
 "use client";
 
 import { Toaster as Sonner } from "sonner";
+import { useTheme } from "@/hooks/use-theme";
 
 /** App-wide toast host, styled with the design tokens. */
 export function Toaster() {
+  const { theme } = useTheme();
   return (
     <Sonner
-      theme="dark"
+      theme={theme}
       position="bottom-right"
       offset={24}
       toastOptions={{

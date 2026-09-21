@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Icon } from "@/components/ui/icon";
 import { MARKET_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
@@ -35,6 +36,7 @@ export function LedgerHeader() {
           </div>
           <WalletChip  />
           <CartButton />
+          <ThemeToggle className="rounded bg-surface-container p-2 text-text-secondary hover:bg-surface-container-high hover:text-text-primary" />
           <NotificationsMenu trigger="count" />
           <UserMenu trigger="market" />
         </div>

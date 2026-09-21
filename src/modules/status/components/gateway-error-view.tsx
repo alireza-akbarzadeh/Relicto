@@ -27,9 +27,9 @@ export function GatewayErrorView({ onRetry }: { onRetry?: () => void }) {
             <div className="flex flex-wrap items-center justify-between gap-space-md">
               <div className="flex items-center gap-space-sm font-label-badge text-label-badge tracking-widest text-text-muted">
                 <span className="text-text-secondary">PORTAL</span>
-                <span>//</span>
+                <span>{"//"}</span>
                 <span className="text-text-secondary">INFRASTRUCTURE SENTINEL</span>
-                <span>//</span>
+                <span>{"//"}</span>
                 <span className="font-bold text-primary">VALVE_API_GATEWAY_OUTAGE</span>
               </div>
               <div className="flex items-center gap-space-sm rounded bg-surface-container-high px-space-md py-space-xs shadow-md">
@@ -178,7 +178,7 @@ export function GatewayErrorView({ onRetry }: { onRetry?: () => void }) {
                   <span className="font-data-mono-md text-data-mono-md text-text-muted">HOST: valve-relay-ord.relicto.internal</span>
                 </div>
                 <div className="flex flex-col gap-space-xs overflow-x-auto rounded-xl bg-surface-container-lowest p-space-md font-data-mono-md text-data-mono-md text-text-secondary shadow-2xl">
-                  <div className="text-text-muted">// Relicto Edge Gateway Heartbeat Trace (ISO 8601 UTC)</div>
+                  <div className="text-text-muted">{"// Relicto Edge Gateway Heartbeat Trace (ISO 8601 UTC)"}</div>
                   {OUTAGE.incidentLog.map((line, index) => (
                     <div key={index} className={cn("flex gap-space-sm", line.indent && "pl-space-md")}>
                       {line.time && <span className="text-text-muted">{line.time}</span>}

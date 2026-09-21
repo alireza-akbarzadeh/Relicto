@@ -21,8 +21,8 @@ export function ForbiddenView() {
           <div className="flex items-center gap-space-xs rounded-full bg-surface-deep px-space-md py-space-xs shadow-sm">
             <Icon name="shield" className="animate-pulse text-body-sm text-status-live" filled />
             <span className="font-data-mono-md text-label-badge tracking-widest text-text-muted uppercase">
-              PORTAL <span className="font-bold text-on-surface-variant">//</span> SECURITY SENTINEL{" "}
-              <span className="font-bold text-on-surface-variant">//</span>{" "}
+              PORTAL <span className="font-bold text-on-surface-variant">{"//"}</span> SECURITY SENTINEL{" "}
+              <span className="font-bold text-on-surface-variant">{"//"}</span>{" "}
               <span className="font-semibold tracking-wider text-primary">PERMISSION_CHALLENGE_403</span>
             </span>
           </div>

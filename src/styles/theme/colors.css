@@ -90,6 +90,8 @@
   --color-border-glow: rgba(244, 63, 94, 0.3);
   --color-border-highlight: rgba(255, 255, 255, 0.14);
   --color-border-dark: #282d3d;
+  /* Account menu panel. */
+  --color-menu-panel: #121620;
   /* Game hub sub-bar band. */
   --color-surface-band: #12151e;
 

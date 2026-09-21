@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
+import { useTheme } from "@/hooks/use-theme";
 import { formatMoney } from "@/lib/format";
 import { ACCOUNT_LINKS } from "../../data/navigation";
 import { useSession } from "../../state/session-provider";
@@ -25,6 +26,7 @@ export function UserMenu({ trigger }: UserMenuProps) {
   const { user } = useSession();
   const router = useRouter();
   const Trigger = USER_TRIGGERS[trigger];
+  const { theme, toggle } = useTheme();
 
   const signOut = () => {
     toast.success("Signed out", {
@@ -44,7 +46,7 @@ export function UserMenu({ trigger }: UserMenuProps) {
 
       <DropdownMenuContent
         align="end"
-        className="w-80 border border-white/10 bg-[#121620]/95 p-2 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden"
+        className="w-80 border border-white/10 bg-menu-panel/95 p-2 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden"
       >
         {/* User Card Header */}
         <div className="relative overflow-hidden rounded-xl bg-surface-container-low/50 p-3.5 border border-white/5">
@@ -54,13 +56,13 @@ export function UserMenu({ trigger }: UserMenuProps) {
                 <AvatarImage user={user} size={44} />
               </span>
               <span
-                className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-[#121620] bg-status-live"
+                className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-menu-panel bg-status-live"
                 title="Online"
               />
             </div>
 
             <div className="flex flex-col min-w-0">
-              <span className="truncate font-headline-sm text-base font-extrabold tracking-tight text-white">
+              <span className="truncate font-headline-sm text-base font-extrabold tracking-tight text-text-primary">
                 {user.handle}
               </span>
               <div className="flex items-center gap-2 mt-1">
@@ -109,7 +111,7 @@ export function UserMenu({ trigger }: UserMenuProps) {
                 <Link
                   href={link.href}
                   {...props}
-                  className="group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-white active:scale-[0.98]"
+                  className="group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
                 >
                   <Icon
                     name={link.icon}
@@ -121,6 +123,16 @@ export function UserMenu({ trigger }: UserMenuProps) {
             />
           ))}
         </DropdownMenuGroup>
+
+        <div className="px-1">
+          <DropdownMenuItem
+            onClick={toggle}
+            className="group flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
+          >
+            <Icon name={theme === "light" ? "dark_mode" : "light_mode"} className="text-[18px] text-text-muted group-hover:text-amber-400" />
+            <span>{theme === "light" ? "Dark mode" : "Light mode"}</span>
+          </DropdownMenuItem>
+        </div>
 
         <DropdownMenuSeparator className="my-1.5 bg-white/5" />
 

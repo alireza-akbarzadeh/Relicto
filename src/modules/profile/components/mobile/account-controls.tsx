@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/cn";
 
 const ROW = "flex items-center justify-between rounded-lg p-space-sm text-text-primary transition-colors hover:bg-surface-container-high";
@@ -13,7 +13,8 @@ const ROW = "flex items-center justify-between rounded-lg p-space-sm text-text-p
 /** Settings, OLED night mode, persona switch and token revoke. */
 export function AccountControls({ savedAccounts }: { savedAccounts: number }) {
   const router = useRouter();
-  const [oled, setOled] = useState(true);
+  const { theme, toggle } = useTheme();
+  const oled = theme === "dark";
 
   const signOut = () => {
     toast.success("Steam token revoked", { description: "This device was signed out of Relicto." });
@@ -44,7 +45,7 @@ export function AccountControls({ savedAccounts }: { savedAccounts: number }) {
           role="switch"
           aria-checked={oled}
           aria-label="OLED night mode"
-          onClick={() => setOled((on) => !on)}
+          onClick={toggle}
           className={cn(
             "h-5 w-10 rounded-full border-0 p-0.5 shadow-inner transition-colors",
             oled ? "justify-end bg-secondary-container" : "justify-start bg-surface-container-highest",

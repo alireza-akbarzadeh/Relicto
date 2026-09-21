@@ -33,6 +33,7 @@ export const ICON_NAMES = [
   "cancel",
   "casino",
   "cell_tower",
+  "chat",
   "check",
   "check_circle",
   "checklist",

@@ -159,6 +159,21 @@ Two recurring causes:
 - **shadcn base classes change intrinsic size**: `whitespace-nowrap` and `shrink-0` stop text wrapping, which widens auto-layout table columns and flex rows. Add `whitespace-normal`, `shrink` or `inline-block` where the design wraps or shrinks.
 - **Dense tables**: Stitch's renderer measures text slightly narrower than Chrome, so auto-layout columns land differently. Give the table `table-fixed` and percentage column widths taken from the design's own render.
 
+## Mobile screens
+
+- The page renders both compositions: `<div className="md:hidden"><XMobile/></div><div className="hidden md:block"><XView/></div>`. Mobile data goes through `get<Domain>Mobile()`; URL state uses its own nuqs keys unless the parser is identical to the desktop one (`q`, `view`, `range`, `style`).
+- Shell pieces live in `modules/relicto/components/mobile`: `MarketMobileHeader`, `LinkedMobileHeader`, `IntelMobileHeader`, `MobileBackButton` and `MobileTabBar` (families `market`, `linked`, `intel`, links in `data/mobile-navigation.ts`).
+- Copy the export's `<body>` classes onto the composition root. Some bodies set only `font-body-md` (no `text-body-md`), so unsized text inherits the 1.5 ratio instead of 22px.
+- **Font weights**: most mobile exports load Space Grotesk 600/700, JetBrains Mono 500–700 and Geist 400–600 only, so Chrome snaps other weights (an unweighted 15px Space Grotesk title renders at 600). Add the matching classes from `styles/theme/stitch-weights.css` (`stitch-heavy-grotesk`, `stitch-medium-mono`, `stitch-lite-geist`) to the root.
+
+More v3 behaviour the mobile exports rely on:
+
+- **Named size beats arbitrary size**: with `text-body-sm text-[12px]` (or `text-label-badge text-[9px]`) on one element, v3 renders the named size. Only the extra `leading-*` / `tracking-*` apply. Write the named size.
+- **`space-y-*` overrides child margins**: its selector outranks `mt-*` / `mb-*` / `my-*` on children, so drop those. It also gives the first in-flow child a top margin when absolute glows come first; reproduce that with container padding (`pt-6`, `pt-7`).
+- **v3 buttons wrap and inherit line-height**: shadcn `Button` adds `whitespace-nowrap` and `text-sm` (20px line-height). Add `whitespace-normal` where the label wraps and a text size (`text-body-md`) where children inherit line-height.
+- **Invalid classes in the export** (`w-13`, `h-13`, `py-0.2`, `scrollbar-none`, and `status-upcoming: "06b6d4"` without `#` in some configs) do nothing in v3. Drop them, but keep the intended cyan for `status-upcoming`.
+- Fixed toasts, sheets and modals in the export can leak into the full-page capture. They explain hotspots, they are not layout bugs.
+
 ## 9. Before committing
 
 - [ ] `npx tsc --noEmit` and `npx eslint` are clean. Run `npx next typegen` if `PageProps` is missing.

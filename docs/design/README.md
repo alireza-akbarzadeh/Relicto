@@ -24,15 +24,29 @@ To build a screen, follow **[IMPLEMENTING.md](IMPLEMENTING.md)**.
 
 ## Mobile screens (`stitch/mobile/`)
 
-| Export | Status |
-| --- | --- |
-| `lootora_mobile_marketplace_trading_hub` | To do |
-| `lootora_mobile_item_detail_pa_manifold_paradox` | To do |
-| `lootora_mobile_live_order_tracker_escrow_protocol` | To do |
-| `lootora_mobile_real_time_price_tracker_arbitrage_terminal` | To do |
-| `lootora_mobile_steam_auth_security_gateway` | To do |
-| `lootora_mobile_user_profile_trader_identity` | To do |
-| `stitch_valve_esports_tournament_hub` (Steam Intel Exchange & esports trading) | To do |
+Rendered at 390px. Each route renders the mobile composition below `md` and the desktop one above it (see `/tournaments`).
+Diffs are against the export rendered locally (`scripts/design/shoot.mjs <url> <out> 390 884`).
+
+| Export | Route | Status |
+| --- | --- | --- |
+| `lootora_mobile_marketplace_trading_hub` | `/marketplace` | Done, 0.92% |
+| `lootora_mobile_item_detail_pa_manifold_paradox` | `/items/[slug]` | Done, 1.30% (design toast leaks into the capture) |
+| `lootora_mobile_real_time_price_tracker_arbitrage_terminal` | `/tracker` | Done, 0.62% |
+| `lootora_mobile_live_order_tracker_escrow_protocol` | `/orders/[id]` | Done, 0.40% |
+| `lootora_mobile_user_profile_trader_identity` | `/profile` | Done, 0.87% |
+| `lootora_mobile_esports_meta_hub` | `/` | Done, 4.94% (design's hidden predict sheet leaks into the capture) |
+| `lootora_mobile_wallet_instant_cashout` | `/wallet` | Done, 0.88% |
+| `lootora_mobile_price_alerts_sniper_bots` | `/alerts` | Done, 3.04% (new-rule button sits above the tab bar on purpose) |
+| `lootora_mobile_liquidation_trade_up` | `/sell` | Done, 0.70% |
+| `lootora_mobile_escrow_checkout` | `/checkout` | Done; lines come from the live cart, so item text differs |
+| `lootora_mobile_steam_auth_security_gateway` | `/sign-in` | Done, 1.01% (prefilled credentials left empty) |
+| `lootora_mobile_steam_guard_2fa` | `/verify` | Done, 1.77% (code starts empty) |
+| `lootora_mobile_sign_in_steam_gateway` | — | Alternate sign-in variant with a generic header; not used |
+| `stitch_valve_esports_tournament_hub` | `/tournaments` | Done (arena) |
+
+Four exports (hub, wallet, alerts, trade-up) request `Space Grotesk` and `JetBrains Mono` at `wght@100..900`,
+which Google Fonts rejects, so Stitch drew them in a serif fallback. The pages use the design-system fonts;
+diff against a copy with the ranges fixed (`100..800` / `300..700`).
 
 ## Esports arena (`stitch/arena-*.html`)
 

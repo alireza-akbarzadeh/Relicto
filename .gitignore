@@ -49,3 +49,6 @@ next-env.d.ts
 .claude/settings.local.json
 .idea/
 
+
+# Design reference copies served for diffing (docs/design/IMPLEMENTING.md); never ship
+/public/_stitch/

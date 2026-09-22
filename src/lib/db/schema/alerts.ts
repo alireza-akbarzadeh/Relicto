@@ -18,8 +18,17 @@ export const alertRules = pgTable(
     itemId: text("item_id").references(() => items.id, { onDelete: "cascade" }),
     kind: alertKind("kind").notNull().default("snipe"),
     name: text("name").notNull(),
+    /** The exact variant being watched ("Phase 4 · Factory New"). */
+    detail: text("detail"),
+    /** Glyph on the rule row, chosen when the rule is created. */
+    icon: text("icon").notNull().default("notifications"),
     direction: alertDirection("direction").notNull().default("below"),
     targetCents: integer("target_cents").notNull(),
+    /**
+     * Last observed market price. Rules can watch items Relicto doesn't list,
+     * so the live floor is preferred and this is the fallback.
+     */
+    currentCents: integer("current_cents"),
     status: alertStatus("status").notNull().default("armed"),
     lastTriggeredAt: timestamp("last_triggered_at"),
     ...timestamps,

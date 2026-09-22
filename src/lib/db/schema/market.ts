@@ -34,6 +34,12 @@ export const listings = pgTable(
     changePercent: real("change_percent"),
     /** Window the change covers ("24h" when null, else "7d", "30d"). */
     changeWindow: text("change_window"),
+    /** Cheapest competing listing, so the seller studio can flag undercuts. */
+    floorCents: integer("floor_cents"),
+    /** Last scraped Steam Community Market price, when one exists. */
+    steamMarketCents: integer("steam_market_cents"),
+    /** Seller's own line about this copy ("4x Holographic Web Stickers"). */
+    sellerNote: text("seller_note"),
     ...timestamps,
   },
   (t) => [

@@ -13,8 +13,10 @@ import { Pool } from "pg";
 import { LISTINGS } from "../../modules/marketplace/data/listings.mock";
 import * as schema from "../../lib/db/schema";
 import { buildPriceSeries } from "./price-series";
+import { seedAlerts } from "./seed-alerts";
 import { seedContent } from "./seed-content";
 import { seedOrders } from "./seed-orders";
+import { seedProfile } from "./seed-profile";
 import { seedTrader, targetEmail } from "./seed-trader";
 import { seedWallet } from "./seed-wallet";
 
@@ -156,12 +158,15 @@ async function main() {
   await seedOrders(db, traderId, SELLER.id, vendorId);
   const entries = await seedWallet(db, traderId);
   const content = await seedContent(db);
+  const profile = await seedProfile(db, traderId);
+  const alerts = await seedAlerts(db, traderId);
 
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,
   );
   console.log(`ledger + treasury attached to ${handle} (orders=6 entries=${entries})`);
   console.log(`content posts=${content.posts} guides=${content.guides}`);
+  console.log(`profile showcase=${profile.showcase} seller-listings=${profile.listings} alerts=${alerts}`);
   await pool.end();
 }
 

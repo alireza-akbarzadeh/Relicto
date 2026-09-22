@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/cn";
 
 const LABEL = "font-label-badge text-label-badge tracking-wider text-text-secondary uppercase";
@@ -16,19 +17,32 @@ const FIELD =
 /** "Or Relicto Trader ID": handle, passkey (revealable), remember-device switch and submit. */
 export function CredentialFormMobile({ uid }: { uid: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [identity, setIdentity] = useState("");
   const [secret, setSecret] = useState("");
   const [reveal, setReveal] = useState(false);
   const [remember, setRemember] = useState(true);
+  const [pending, setPending] = useState(false);
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!identity.trim() || !secret) {
-      toast.error("Enter your trader handle and passkey");
+      toast.error("Enter your email and passkey");
       return;
     }
+
+    setPending(true);
+    const { error } = await authClient.signIn.email({ email: identity, password: secret, rememberMe: remember });
+    setPending(false);
+
+    if (error) {
+      toast.error("Sign-in failed", { description: error.message ?? "Check your email and password." });
+      return;
+    }
+
     toast.success("Session authenticated", { description: remember ? "Remembered on this device for 30 days." : "Session ends when you close the app." });
-    router.push("/marketplace");
+    router.push(searchParams.get("next") || "/marketplace");
+    router.refresh();
   };
 
   return (
@@ -42,13 +56,13 @@ export function CredentialFormMobile({ uid }: { uid: string }) {
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <label htmlFor="trader-identity" className={LABEL}>
-              Trader Handle / Email
+              Email
             </label>
             <span className="font-label-badge text-label-badge text-text-muted">{uid}</span>
           </div>
           <div className="relative flex items-center">
             <Icon name="badge" className="absolute left-3.5 text-[18px] text-text-muted" />
-            <Input id="trader-identity" value={identity} onChange={(e) => setIdentity(e.target.value)} autoComplete="username" placeholder="user@relicto.gg or alias" className={cn(FIELD, "pr-4")} />
+            <Input id="trader-identity" type="email" value={identity} onChange={(e) => setIdentity(e.target.value)} autoComplete="username" placeholder="user@domain.com" className={cn(FIELD, "pr-4")} />
           </div>
         </div>
 
@@ -113,10 +127,11 @@ export function CredentialFormMobile({ uid }: { uid: string }) {
           type="submit"
           variant={null}
           size={null}
-          className="group h-auto w-full gap-2 rounded-lg border-0 bg-primary-container py-4 font-headline-sm text-headline-sm font-semibold tracking-wider text-text-primary uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] transition-all active:scale-[0.98]"
+          disabled={pending}
+          className="group h-auto w-full gap-2 rounded-lg border-0 bg-primary-container py-4 font-headline-sm text-headline-sm font-semibold tracking-wider text-text-primary uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
         >
-          <Icon name="key" className="text-[20px] transition-transform group-hover:rotate-12" />
-          <span>Authenticate Session</span>
+          <Icon name={pending ? "progress_activity" : "key"} className={pending ? "animate-spin text-[20px]" : "text-[20px] transition-transform group-hover:rotate-12"} />
+          <span>{pending ? "Authenticating..." : "Authenticate Session"}</span>
         </Button>
       </form>
     </>

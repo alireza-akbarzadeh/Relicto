@@ -12,6 +12,7 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { useTheme } from "@/hooks/use-theme";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { authClient } from "@/lib/auth-client";
 import { formatMoney } from "@/lib/format";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,11 +30,13 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
   const router = useRouter();
   const { theme, toggle } = useTheme();
 
-  const signOut = () => {
+  const signOut = async () => {
+    await authClient.signOut();
     toast.success("Signed out", {
-      description: "Your Steam session was closed on this device.",
+      description: "Your session was closed on this device.",
     });
     router.push("/sign-in");
+    router.refresh();
   };
 
   return (

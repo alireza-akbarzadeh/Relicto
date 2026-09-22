@@ -9,15 +9,15 @@ import { SignUpForm } from "./sign-up-form";
 
 function OnboardingSteps() {
   return (
-    <div className="mb-6 grid grid-cols-2 gap-3">
-      <div className="flex items-center gap-3 rounded-xl border border-primary/40 bg-surface-container-high p-3 shadow-[0_0_15px_rgba(255,81,106,0.12)]">
+    <div className="mb-6 grid grid-cols-2 gap-3 lg:mb-4 lg:gap-2.5">
+      <div className="flex items-center gap-3 rounded-xl border border-primary/40 bg-surface-container-high p-3 shadow-[0_0_15px_rgba(255,81,106,0.12)] lg:gap-2.5 lg:p-2.5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-container font-headline-sm text-sm font-bold text-on-primary shadow-sm">1</div>
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-label-caps text-xs font-bold tracking-wider text-text-primary uppercase">Step 1: Account Setup</span>
           <span className="font-data-mono-md text-[11px] font-semibold text-primary">In Progress</span>
         </div>
       </div>
-      <div className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-deep p-3 opacity-70">
+      <div className="flex items-center gap-3 rounded-xl border border-border-subtle bg-surface-deep p-3 opacity-70 lg:gap-2.5 lg:p-2.5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-variant font-headline-sm text-sm font-semibold text-text-muted">2</div>
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-label-caps text-xs tracking-wider text-text-secondary uppercase">Step 2: Steam Trade Bind</span>
@@ -30,10 +30,10 @@ function OnboardingSteps() {
 
 function FastTrackBanner() {
   return (
-    <div className="mb-6 flex flex-col items-center justify-between gap-4 rounded-xl border border-status-upcoming/30 bg-surface-deep/95 p-4 shadow-[0_4px_20px_rgba(6,182,212,0.08)] transition-all hover:border-status-upcoming/50 sm:flex-row">
-      <div className="flex items-center gap-3.5">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-status-upcoming/40 bg-surface-card shadow-md">
-          <Icon name="sports_esports" className="text-[26px] text-status-upcoming" />
+    <div className="mb-6 flex flex-col items-center justify-between gap-4 rounded-xl border border-status-upcoming/30 bg-surface-deep/95 p-4 shadow-[0_4px_20px_rgba(6,182,212,0.08)] transition-all hover:border-status-upcoming/50 sm:flex-row lg:mb-4 lg:gap-3 lg:p-3">
+      <div className="flex items-center gap-3.5 lg:gap-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-status-upcoming/40 bg-surface-card shadow-md lg:h-10 lg:w-10">
+          <Icon name="sports_esports" className="text-[26px] text-status-upcoming lg:text-[22px]" />
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
@@ -62,15 +62,15 @@ function FastTrackBanner() {
 /** Registration card: onboarding steps, Steam fast-track, manual form. */
 export function RegistrationCard() {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-surface-card/90 p-5 shadow-[0_12px_40px_rgba(0,0,0,0.7)] backdrop-blur-xl sm:p-8">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-surface-card/90 p-5 shadow-[0_12px_40px_rgba(0,0,0,0.7)] backdrop-blur-xl sm:p-8 lg:p-6">
       <div className="absolute top-0 right-0 left-0 h-1 bg-linear-to-r/srgb from-primary-container via-tertiary to-status-upcoming" />
       <OnboardingSteps />
       <FastTrackBanner />
-      <DividerLabel className="my-6" labelClassName="rounded font-label-badge text-[11px] text-text-muted">
+      <DividerLabel className="my-6 lg:my-4" labelClassName="rounded font-label-badge text-[11px] text-text-muted">
         or register manual credentials
       </DividerLabel>
       <SignUpForm />
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 border-t border-white/5 pt-4 text-center">
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 border-t border-white/5 pt-4 text-center lg:mt-3 lg:pt-3">
         <span className="font-body-sm text-xs text-text-muted">Already registered on Relicto Escrow?</span>
         <Link href="/sign-in" className="font-headline-sm text-xs font-semibold tracking-wider text-primary uppercase hover:text-primary-fixed hover:underline">
           Sign In to Exchange Desk

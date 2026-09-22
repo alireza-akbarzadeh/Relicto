@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { AuthFooter } from "./auth-footer";
-import { AuthHeader, type AuthNavId } from "./auth-header";
+import { AuthHeader, type AuthPage } from "./auth-header";
 
 type AuthShellProps = {
-  nav: AuthNavId;
+  page: AuthPage;
   /** Per-screen token scope from styles/theme/scopes.css. */
   scope: "theme-auth-signin" | "theme-auth-signup" | "theme-auth-2fa" | "theme-auth-recovery";
   /** Classes for <main> (padding, background effects). */
@@ -15,7 +15,7 @@ type AuthShellProps = {
 };
 
 /** Page frame for every auth screen: scoped tokens, header, centered stage, footer. */
-export function AuthShell({ nav, scope, mainClassName, backdrop, children }: AuthShellProps) {
+export function AuthShell({ page, scope, mainClassName, backdrop, children }: AuthShellProps) {
   return (
     <div
       className={cn(
@@ -24,7 +24,7 @@ export function AuthShell({ nav, scope, mainClassName, backdrop, children }: Aut
       )}
     >
       {backdrop}
-      <AuthHeader active={nav} />
+      <AuthHeader page={page} />
       <main className={cn("relative w-full flex-1 px-4 sm:px-6", mainClassName)}>{children}</main>
       <AuthFooter />
     </div>

@@ -5,7 +5,7 @@ import { VaultCard } from "./vault-card";
 /** Stitch: "Relicto — Steam Guard 2FA Verification". */
 export function VerifyView() {
   return (
-    <AuthShell nav="sla" scope="theme-auth-2fa" mainClassName="flex flex-col items-center justify-center overflow-hidden bg-surface-dim pt-20 pb-12">
+    <AuthShell page="verify" scope="theme-auth-2fa" mainClassName="flex flex-col items-center justify-center overflow-hidden bg-surface-dim pt-20 pb-12">
       <div className="pointer-events-none absolute top-1/3 left-1/2 -z-10 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-rose-500/10 blur-[120px]" />
       <div className="pointer-events-none absolute right-1/4 -bottom-10 -z-10 h-80 w-80 rounded-full bg-amber-500/10 blur-[100px]" />
       <div className="flex w-full max-w-lg flex-col gap-3">

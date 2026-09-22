@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 import { AuthField } from "../ui/auth-field";
 
 const LABEL = "font-mono text-xs font-semibold tracking-wider text-slate-300 uppercase";
@@ -15,11 +17,28 @@ const INPUT =
 
 /** Relicto credentials form (identity + password + remember me). */
 export function SignInForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
+  const [pending, setPending] = useState(false);
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
-    toast("Credential sign-in", { description: "Email & password sign-in is wired to Better Auth in the logic phase." });
+
+    setPending(true);
+    const { error } = await authClient.signIn.email({ email, password, rememberMe: remember });
+    setPending(false);
+
+    if (error) {
+      toast.error("Sign-in failed", { description: error.message ?? "Check your email and password." });
+      return;
+    }
+
+    toast.success("Session authenticated");
+    router.push(searchParams.get("next") || "/marketplace");
+    router.refresh();
   };
 
   return (
@@ -27,11 +46,14 @@ export function SignInForm() {
       <AuthField
         id="identity"
         name="identity"
+        type="email"
         label="Account Identity"
-        aside={<span className="font-mono text-[11px] text-text-muted">SteamID64 / Email</span>}
+        aside={<span className="font-mono text-[11px] text-text-muted">Email</span>}
         icon="badge"
-        placeholder="Relicto.trader or user@domain.com"
+        placeholder="user@domain.com"
         autoComplete="username"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         labelClassName={LABEL}
         inputClassName={`${INPUT} pr-4`}
       />
@@ -48,6 +70,8 @@ export function SignInForm() {
         revealable
         placeholder="••••••••••••••••"
         autoComplete="current-password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         labelClassName={LABEL}
         inputClassName={`${INPUT} pr-12`}
       />
@@ -67,10 +91,11 @@ export function SignInForm() {
       </div>
       <Button
         type="submit"
-        className="mt-2 h-auto w-full gap-2 rounded-xl bg-primary-container py-3.5 font-display text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] duration-200 hover:bg-rose-500 hover:shadow-[0_0_32px_rgba(244,63,94,0.6)] active:scale-[0.99]"
+        disabled={pending}
+        className="mt-2 h-auto w-full gap-2 rounded-xl bg-primary-container py-3.5 font-display text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] duration-200 hover:bg-rose-500 hover:shadow-[0_0_32px_rgba(244,63,94,0.6)] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-60"
       >
-        <span>Authenticate Session</span>
-        <Icon name="lock_open" className="text-[18px]" />
+        <span>{pending ? "Authenticating..." : "Authenticate Session"}</span>
+        <Icon name={pending ? "progress_activity" : "lock_open"} className={pending ? "animate-spin text-[18px]" : "text-[18px]"} />
       </Button>
     </form>
   );

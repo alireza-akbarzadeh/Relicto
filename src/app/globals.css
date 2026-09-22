@@ -81,3 +81,40 @@
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/*
+ * Sign-up page: reflows [status, heading, form, perks] from a single mobile
+ * column into a [form | status/heading/perks] desktop split without
+ * reordering the DOM (so mobile keeps its Stitch order, screen readers keep
+ * source order, and the form can span multiple sidebar rows).
+ */
+@utility signup-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "status" "heading" "form" "perks";
+}
+
+@utility signup-grid-split {
+  grid-template-columns: 7fr 5fr;
+  align-items: start;
+  grid-template-areas:
+    "form status"
+    "form heading"
+    "form perks";
+}
+
+@utility signup-area-status {
+  grid-area: status;
+}
+
+@utility signup-area-heading {
+  grid-area: heading;
+}
+
+@utility signup-area-form {
+  grid-area: form;
+}
+
+@utility signup-area-perks {
+  grid-area: perks;
+}

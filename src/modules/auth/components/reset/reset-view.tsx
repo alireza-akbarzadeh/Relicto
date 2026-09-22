@@ -27,7 +27,7 @@ function LockEmblem() {
 export function ResetView() {
   return (
     <AuthShell
-      nav="sla"
+      page="reset"
       scope="theme-auth-recovery"
       mainClassName="flex items-center justify-center pt-24 pb-16"
       backdrop={

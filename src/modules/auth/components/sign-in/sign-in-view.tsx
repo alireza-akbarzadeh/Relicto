@@ -12,7 +12,7 @@ const TRUST: { icon: IconName; label: string; value: string; tone: string }[] = 
 /** Stitch: "Relicto — Sign In & Steam Gateway". */
 export function SignInView() {
   return (
-    <AuthShell nav="gate" scope="theme-auth-signin" mainClassName="custom-gradient-bg flex items-center justify-center pt-24 pb-16">
+    <AuthShell page="sign-in" scope="theme-auth-signin" mainClassName="custom-gradient-bg flex items-center justify-center pt-24 pb-16">
       <div className="relative z-10 mx-auto flex w-full max-w-xl flex-col gap-6">
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-tertiary/30 bg-surface-card px-3 py-1 text-tertiary shadow-[0_0_16px_rgba(255,185,95,0.1)]">

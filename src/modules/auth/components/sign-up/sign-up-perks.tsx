@@ -16,7 +16,7 @@ const ACCENT = {
 export function SignUpPerks() {
   return (
     <>
-      <div className="mt-1 grid grid-cols-1 gap-3 md:grid-cols-3">
+      <div className="mt-1 grid grid-cols-1 gap-3 md:grid-cols-3 lg:grid-cols-1">
         {PERKS.map((perk) => {
           const a = ACCENT[perk.accent];
           return (
@@ -36,7 +36,7 @@ export function SignUpPerks() {
           );
         })}
       </div>
-      <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-white/5 bg-surface-card/60 p-4 shadow-md backdrop-blur-xs sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-white/5 bg-surface-card/60 p-4 shadow-md backdrop-blur-xs sm:flex-row lg:items-start">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-secondary/30 bg-surface-deep text-secondary">
             <Icon name="trending_up" className="text-[20px]" />
@@ -49,7 +49,7 @@ export function SignUpPerks() {
             </div>
           </div>
         </div>
-        <div className="flex h-8 w-full items-center sm:w-60">
+        <div className="flex h-8 w-full items-center sm:w-60 lg:w-full">
           <svg className="h-8 w-full overflow-visible" fill="none" viewBox="0 0 200 40" aria-hidden>
             <defs>
               <linearGradient id="sparklineGrad" x1="0" x2="0" y1="0" y2="1">

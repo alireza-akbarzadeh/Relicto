@@ -1,9 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { authClient } from "@/lib/auth-client";
 import { SIGN_UP_DEFAULTS } from "../../data/sign-up.mock";
 import { passwordStrength } from "../../lib/password-strength";
 import { AuthField } from "../ui/auth-field";
@@ -16,18 +18,49 @@ const INPUT =
   "rounded-lg border-white/10 bg-surface-container-lowest px-3.5 py-2.5 font-body-md text-sm text-text-primary placeholder:text-gray-400 focus-visible:border-primary-container focus-visible:ring-0";
 
 export function SignUpForm() {
+  const router = useRouter();
   const [form, setForm] = useState(SIGN_UP_DEFAULTS);
+  const [pending, setPending] = useState(false);
   const set = <K extends keyof typeof form>(key: K) => (value: (typeof form)[K]) => setForm((f) => ({ ...f, [key]: value }));
   const strength = useMemo(() => passwordStrength(form.password), [form.password]);
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
-    toast.success("Trader profile drafted", { description: "Account creation is wired to Better Auth in the logic phase." });
+
+    if (!form.gamertag.trim()) {
+      toast.error("Pick a trader handle first");
+      return;
+    }
+    if (form.password !== form.confirm) {
+      toast.error("Passwords don't match");
+      return;
+    }
+    if (!form.acceptTerms) {
+      toast.error("Accept the Terms of Service to continue");
+      return;
+    }
+
+    setPending(true);
+    const { error } = await authClient.signUp.email({
+      name: form.gamertag,
+      email: form.email,
+      password: form.password,
+    });
+    setPending(false);
+
+    if (error) {
+      toast.error("Couldn't create your account", { description: error.message ?? "Try a different email." });
+      return;
+    }
+
+    toast.success("Trader profile created", { description: "Welcome to Relicto." });
+    router.push("/marketplace");
+    router.refresh();
   };
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <form onSubmit={submit} className="flex flex-col gap-2 lg:gap-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-3">
         <AuthField
           id="gamertag" label="Trader Gamertag / Handle" labelClassName={LABEL} inputClassName={INPUT}
           value={form.gamertag} onChange={(e) => set("gamertag")(e.target.value)} placeholder="e.g. s1mple_trader"
@@ -62,10 +95,11 @@ export function SignUpForm() {
       <ConsentChecks terms={form.acceptTerms} webhooks={form.webhooks} onTerms={set("acceptTerms")} onWebhooks={set("webhooks")} />
       <Button
         type="submit"
-        className="mt-2 h-auto w-full gap-2 rounded-xl bg-linear-to-r/srgb from-primary-container to-brand-signup-end px-6 py-3 font-headline-sm text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(255,81,106,0.45)] hover:shadow-[0_0_36px_rgba(255,81,106,0.7)] hover:brightness-110 active:scale-[0.99]"
+        disabled={pending}
+        className="mt-2 h-auto w-full gap-2 rounded-xl bg-linear-to-r/srgb from-primary-container to-brand-signup-end px-6 py-3 font-headline-sm text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(255,81,106,0.45)] hover:shadow-[0_0_36px_rgba(255,81,106,0.7)] hover:brightness-110 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-60"
       >
-        <span>Create Relicto Trader Account</span>
-        <Icon name="arrow_forward" className="text-[18px]" />
+        <span>{pending ? "Creating Account..." : "Create Relicto Trader Account"}</span>
+        <Icon name={pending ? "progress_activity" : "arrow_forward"} className={pending ? "animate-spin text-[18px]" : "text-[18px]"} />
       </Button>
     </form>
   );

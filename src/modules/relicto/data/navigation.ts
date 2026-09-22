@@ -19,13 +19,13 @@ export const LEDGER_NAV: NavItem[] = [
 ];
 
 export const STUDIO_NAV: NavItem[] = [
-  { id: "marketplace", label: "Marketplace", href: "/marketplace" },
-  { id: "wiki", label: "Wiki", href: "/wiki" },
-  { id: "tracker", label: "Tracker", href: "/tracker" },
-  { id: "inventory", label: "Inventory", href: "/profile" },
-  { id: "sell", label: "Sell Items", href: "/sell" },
-  { id: "wallet", label: "Wallet & Income", href: "/wallet" },
-  { id: "community", label: "Community", href: "/community" },
+  { id: "marketplace", label: "Marketplace", href: "/marketplace", icon: "storefront" },
+  { id: "wiki", label: "Wiki", href: "/wiki", icon: "menu_book" },
+  { id: "tracker", label: "Tracker", href: "/tracker", icon: "monitoring" },
+  { id: "inventory", label: "Inventory", href: "/profile", icon: "inventory_2" },
+  { id: "sell", label: "Sell Items", href: "/sell", icon: "sell" },
+  { id: "wallet", label: "Wallet & Income", href: "/wallet", icon: "account_balance_wallet" },
+  { id: "community", label: "Community", href: "/community", icon: "groups" },
 ];
 
 /** Game hub (home). */

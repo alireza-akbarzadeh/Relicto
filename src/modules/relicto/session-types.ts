@@ -32,4 +32,5 @@ export type NavItem = {
   href: string;
   /** Designed in the nav but no screen exists yet — clicking explains instead of 404ing. */
   comingSoon?: boolean;
+  icon?: IconName;
 };

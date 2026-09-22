@@ -98,6 +98,7 @@ export const ICON_NAMES = [
   "mail",
   "mark_email_read",
   "memory",
+  "menu",
   "menu_book",
   "mic",
   "military_tech",

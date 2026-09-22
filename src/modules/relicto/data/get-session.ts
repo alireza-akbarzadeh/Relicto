@@ -30,6 +30,22 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
   return { user: toSessionUser(result.user), notifications: [] };
 }
 
+/**
+ * The account id domain queries key on. `SessionUser` is a view-model and
+ * deliberately doesn't carry it, so data loaders ask for it separately.
+ */
+export async function getUserId(): Promise<string | null> {
+  const result = await auth.api.getSession({ headers: await headers() });
+  return result?.user.id ?? null;
+}
+
+/** As `getUserId`, for pages the proxy already guarantees are signed in. */
+export async function requireUserId(): Promise<string> {
+  const id = await getUserId();
+  if (!id) redirect("/sign-in");
+  return id;
+}
+
 /** Same as `getSession`, but redirects to sign-in instead of returning null. Use in layouts/pages behind the private routes proxy protects. */
 export async function requireSession() {
   const session = await getSession();

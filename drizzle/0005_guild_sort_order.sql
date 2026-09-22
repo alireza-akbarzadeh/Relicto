@@ -1,0 +1,1 @@
+ALTER TABLE "guilds" ADD COLUMN "sort_order" integer DEFAULT 0 NOT NULL;

@@ -14,6 +14,16 @@ export const ledgerKind = pgEnum("ledger_kind", [
   "promo",
 ]);
 export const ledgerStatus = pgEnum("ledger_status", ["pending", "settled", "failed"]);
+/** Where the money actually settled — drives the row's icon and follow-up link. */
+export const ledgerVenue = pgEnum("ledger_venue", [
+  "tron",
+  "sepa",
+  "stripe",
+  "steam-escrow",
+  "marketplace",
+  "market-maker",
+  "internal",
+]);
 export const paymentRail = pgEnum("payment_rail", ["card", "crypto", "steam", "paypal", "bank"]);
 export const payoutStatus = pgEnum("payout_status", ["requested", "processing", "paid", "failed"]);
 
@@ -48,6 +58,15 @@ export const ledgerEntries = pgTable(
     /** Settlement hash shown in the audit ledger. */
     hash: text("hash"),
     description: text("description"),
+    venue: ledgerVenue("venue").notNull().default("internal"),
+    /** Headline of the audit row ("Instant Cashout (USDT TRC20)"). */
+    title: text("title"),
+    /** What moved: a wallet address, a card, or the item that was traded. */
+    assetLabel: text("asset_label"),
+    /** Second line — counterparty or processor. */
+    detailLabel: text("detail_label"),
+    /** Which node or bot handled it. */
+    nodeLabel: text("node_label"),
     occurredAt: timestamp("occurred_at").notNull().defaultNow(),
     ...createdAt,
   },

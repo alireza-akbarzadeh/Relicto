@@ -18,6 +18,8 @@ export const profiles = pgTable(
     realName: text("real_name"),
     alias: text("alias"),
     role: text("role").notNull().default("Trader"),
+    /** Accent the role badge renders in, beside the handle. */
+    roleTone: text("role_tone").notNull().default("muted"),
     tier: text("tier"),
     level: integer("level").notNull().default(1),
     steamId: text("steam_id"),
@@ -28,6 +30,10 @@ export const profiles = pgTable(
     /** Percent, 0–100. */
     trustScore: integer("trust_score").notNull().default(0),
     tradeCount: integer("trade_count").notNull().default(0),
+    /** Rolling median time to hand an item off, shown on the vendor card. */
+    fulfillmentSeconds: integer("fulfillment_seconds"),
+    /** One-line pitch under the handle on the vendor card. */
+    blurb: text("blurb"),
     ...timestamps,
   },
   (t) => [

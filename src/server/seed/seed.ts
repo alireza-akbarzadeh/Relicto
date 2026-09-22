@@ -13,6 +13,10 @@ import { Pool } from "pg";
 import { LISTINGS } from "../../modules/marketplace/data/listings.mock";
 import * as schema from "../../lib/db/schema";
 import { buildPriceSeries } from "./price-series";
+import { seedContent } from "./seed-content";
+import { seedOrders } from "./seed-orders";
+import { seedTrader, targetEmail } from "./seed-trader";
+import { seedWallet } from "./seed-wallet";
 
 config({ path: ".env.local" });
 config();
@@ -148,9 +152,16 @@ async function main() {
     );
   }
 
+  const { traderId, vendorId, handle } = await seedTrader(db, targetEmail(process.argv));
+  await seedOrders(db, traderId, SELLER.id, vendorId);
+  const entries = await seedWallet(db, traderId);
+  const content = await seedContent(db);
+
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,
   );
+  console.log(`ledger + treasury attached to ${handle} (orders=6 entries=${entries})`);
+  console.log(`content posts=${content.posts} guides=${content.guides}`);
   await pool.end();
 }
 

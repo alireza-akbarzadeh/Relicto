@@ -22,6 +22,27 @@
       "when": 1790078154712,
       "tag": "0002_listing_presentation",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790084159794,
+      "tag": "0003_orders_wallet_fields",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790085406503,
+      "tag": "0004_content_tones",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790085653110,
+      "tag": "0005_guild_sort_order",
+      "breakpoints": true
     }
   ]
 }

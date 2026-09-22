@@ -11,7 +11,11 @@ export const guilds = pgTable(
     detail: text("detail"),
     /** Single-glyph sigil rendered on the guild chip ("♛", "◈"). */
     symbol: text("symbol"),
+    /** Accent the guild chip renders in ("amber", "cyan", "indigo", "primary"). */
+    tone: text("tone").notNull().default("muted"),
     memberCount: integer("member_count").notNull().default(0),
+    /** Position in the guild rail — curated, not ranked by size. */
+    sortOrder: integer("sort_order").notNull().default(0),
     ...timestamps,
   },
   (t) => [uniqueIndex("guilds_slug_idx").on(t.slug)],
@@ -26,6 +30,8 @@ export const communityPosts = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     guildId: text("guild_id").references(() => guilds.id, { onDelete: "set null" }),
     tag: text("tag"),
+    /** Accent for the tag pill above the post title. */
+    tagTone: text("tag_tone").notNull().default("muted"),
     title: text("title").notNull(),
     body: text("body").notNull(),
     image: text("image"),

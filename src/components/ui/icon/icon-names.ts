@@ -1,6 +1,7 @@
 /**
- * Every Material Symbol the app renders. The font request is subset to exactly
- * this list, so add a name here before using it — `IconName` enforces that.
+ * Every icon name the app renders, kept as Material Symbols names for
+ * continuity — `icon-map.ts` resolves each one to a lucide-react component.
+ * Add a name here before using it — `IconName` enforces that.
  */
 export const ICON_NAMES = [
   "3d_rotation",
@@ -200,8 +201,3 @@ export const ICON_NAMES = [
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];
-
-/** Google Fonts requires `icon_names` sorted alphabetically. */
-export const ICON_FONT_HREF =
-  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" +
-  `&icon_names=${[...ICON_NAMES].sort().join(",")}&display=block`;

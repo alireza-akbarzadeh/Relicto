@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { ICON_FONT_HREF } from "@/components/ui/icon";
 import { Toaster } from "@/components/ui/toaster";
 import { fontVariables } from "@/lib/fonts";
 import "./globals.css";
@@ -27,9 +26,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         {/* Applies the saved light/dark choice before first paint (see lib/theme.ts). */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="stylesheet" href={ICON_FONT_HREF} />
       </head>
       <body className="min-h-screen bg-canvas-base antialiased">
         <NuqsAdapter>

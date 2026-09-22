@@ -85,7 +85,7 @@ export function NavLinks({ items, variant }: { items: NavItem[]; variant: NavSty
             >
               <div className="flex items-center gap-1.5">
                 {item.icon && typeof item.icon === "string" ? (
-                  <Icon name={item.icon} className="text-[16px]" />z
+                  <Icon name={item.icon} className="text-[16px]" />
                 ) : (
                   item.icon
                 )}

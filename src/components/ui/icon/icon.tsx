@@ -1,27 +1,25 @@
 import { cn } from "@/lib/cn";
+import { ICON_MAP } from "./icon-map";
 import type { IconName } from "./icon-names";
 
 type IconProps = {
   name: IconName;
   className?: string;
-  /** Solid glyph (Material Symbols FILL axis). */
+  /** Solid glyph — sets fill to the current text color. */
   filled?: boolean;
   /** Provide when the icon carries meaning on its own; otherwise it's decorative. */
   label?: string;
 };
 
-const FILLED = { fontVariationSettings: "'FILL' 1" } as const;
-
 export function Icon({ name, className, filled, label }: IconProps) {
+  const Glyph = ICON_MAP[name];
   return (
-    <span
+    <Glyph
       className={cn("icon-symbol", className)}
-      style={filled ? FILLED : undefined}
+      fill={filled ? "currentColor" : "none"}
       aria-hidden={label ? undefined : true}
       aria-label={label}
       role={label ? "img" : undefined}
-    >
-      {name}
-    </span>
+    />
   );
 }

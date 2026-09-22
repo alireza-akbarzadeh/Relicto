@@ -29,6 +29,11 @@ export const listings = pgTable(
     stattrak: boolean("stattrak").notNull().default(false),
     listedAt: timestamp("listed_at").notNull().defaultNow(),
     soldAt: timestamp("sold_at"),
+    /** Cached market stats — recomputed on a schedule, not per page load. */
+    offerCount: integer("offer_count").notNull().default(0),
+    changePercent: real("change_percent"),
+    /** Window the change covers ("24h" when null, else "7d", "30d"). */
+    changeWindow: text("change_window"),
     ...timestamps,
   },
   (t) => [

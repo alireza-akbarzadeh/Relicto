@@ -1,5 +1,25 @@
-import { index, integer, pgEnum, pgTable, text, uniqueIndex } from "drizzle-orm/pg-core";
+import { index, integer, jsonb, pgEnum, pgTable, text, uniqueIndex } from "drizzle-orm/pg-core";
 import { primaryId, timestamps } from "./_shared";
+
+/**
+ * Authored art direction for an item's marketplace card: badge wording, accent
+ * tones, corner glow, the media chip. Kept as one jsonb blob rather than a
+ * dozen columns — it's editorial styling, not queryable trading data.
+ */
+export type ItemPresentation = {
+  badge: { label: string; style: string };
+  tag: { label: string; accent: string; bold?: boolean };
+  subtitle: string;
+  detail: { label: string; accent: string };
+  glow: { blob: string; shadow: string };
+  mediaBadge:
+    | { kind: "escrow"; label: string }
+    | { kind: "float"; value: string }
+    | { kind: "fx"; label: string; icon: string; accent: string };
+  safeguards: string[];
+  /** The card's two meta lines — authored, not all price-derived ("Direct Trade"). */
+  meta: [string, string];
+};
 
 /** Union of every rarity/category the Dota 2 and CS2 screens render. */
 export const itemRarity = pgEnum("item_rarity", [
@@ -57,6 +77,7 @@ export const items = pgTable(
     imageAlt: text("image_alt"),
     /** Steam inventory identifiers, used when binding a real inventory. */
     steamClassId: text("steam_class_id"),
+    presentation: jsonb("presentation").$type<ItemPresentation>(),
     ...timestamps,
   },
   (t) => [

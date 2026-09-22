@@ -1,6 +1,6 @@
 {
-  "id": "3d606686-111e-48d8-937f-fed472ef390f",
-  "prevId": "baf5519a-643b-4842-a826-82e1a7987ce1",
+  "id": "dd85e90b-d8dc-4fa4-aa61-9963273cf91d",
+  "prevId": "3d606686-111e-48d8-937f-fed472ef390f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1085,6 +1085,12 @@
         "steam_class_id": {
           "name": "steam_class_id",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "presentation": {
+          "name": "presentation",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         },
@@ -2302,6 +2308,25 @@
         "sold_at": {
           "name": "sold_at",
           "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "offer_count": {
+          "name": "offer_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "change_percent": {
+          "name": "change_percent",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_window": {
+          "name": "change_window",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },

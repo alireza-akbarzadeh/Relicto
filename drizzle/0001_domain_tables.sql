@@ -22,6 +22,7 @@ CREATE TYPE "public"."payout_status" AS ENUM('requested', 'processing', 'paid', 
 CREATE TYPE "public"."price_venue" AS ENUM('relicto', 'steam', 'buff', 'skinport', 'csfloat');--> statement-breakpoint
 CREATE TYPE "public"."notification_tone" AS ENUM('success', 'warning', 'info', 'alert');--> statement-breakpoint
 CREATE TYPE "public"."trade_up_status" AS ENUM('draft', 'submitted', 'settled', 'failed');--> statement-breakpoint
+CREATE TYPE "public"."wiki_guide_kind" AS ENUM('phase', 'seed', 'gem', 'formula');--> statement-breakpoint
 CREATE TABLE "alert_channels" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
@@ -105,6 +106,57 @@ CREATE TABLE "items" (
 	"image_url" text,
 	"image_alt" text,
 	"steam_class_id" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "community_comments" (
+	"id" text PRIMARY KEY NOT NULL,
+	"post_id" text NOT NULL,
+	"author_id" text NOT NULL,
+	"body" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "community_post_likes" (
+	"id" text PRIMARY KEY NOT NULL,
+	"post_id" text NOT NULL,
+	"user_id" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "community_posts" (
+	"id" text PRIMARY KEY NOT NULL,
+	"author_id" text NOT NULL,
+	"guild_id" text,
+	"tag" text,
+	"title" text NOT NULL,
+	"body" text NOT NULL,
+	"image" text,
+	"metric_label" text,
+	"metric_value" text,
+	"metric_delta" text,
+	"like_count" integer DEFAULT 0 NOT NULL,
+	"comment_count" integer DEFAULT 0 NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "guild_members" (
+	"id" text PRIMARY KEY NOT NULL,
+	"guild_id" text NOT NULL,
+	"user_id" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "guilds" (
+	"id" text PRIMARY KEY NOT NULL,
+	"slug" text NOT NULL,
+	"name" text NOT NULL,
+	"detail" text,
+	"symbol" text,
+	"member_count" integer DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -386,6 +438,33 @@ CREATE TABLE "trade_up_items" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "wiki_guides" (
+	"id" text PRIMARY KEY NOT NULL,
+	"game_id" text,
+	"slug" text NOT NULL,
+	"category" text NOT NULL,
+	"title" text NOT NULL,
+	"summary" text NOT NULL,
+	"body" text,
+	"kind" "wiki_guide_kind" NOT NULL,
+	"read_minutes" integer,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "wiki_revisions" (
+	"id" text PRIMARY KEY NOT NULL,
+	"guide_id" text,
+	"author_id" text,
+	"author_handle" text NOT NULL,
+	"trust_label" text,
+	"title" text NOT NULL,
+	"path" text NOT NULL,
+	"commit_hash" text NOT NULL,
+	"changes" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "alert_channels" ADD CONSTRAINT "alert_channels_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "alert_events" ADD CONSTRAINT "alert_events_rule_id_alert_rules_id_fk" FOREIGN KEY ("rule_id") REFERENCES "public"."alert_rules"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "alert_events" ADD CONSTRAINT "alert_events_channel_id_alert_channels_id_fk" FOREIGN KEY ("channel_id") REFERENCES "public"."alert_channels"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -397,6 +476,14 @@ ALTER TABLE "heroes" ADD CONSTRAINT "heroes_game_id_games_id_fk" FOREIGN KEY ("g
 ALTER TABLE "item_styles" ADD CONSTRAINT "item_styles_item_id_items_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."items"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_game_id_games_id_fk" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "items" ADD CONSTRAINT "items_hero_id_heroes_id_fk" FOREIGN KEY ("hero_id") REFERENCES "public"."heroes"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "community_comments" ADD CONSTRAINT "community_comments_post_id_community_posts_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."community_posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "community_comments" ADD CONSTRAINT "community_comments_author_id_user_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "community_post_likes" ADD CONSTRAINT "community_post_likes_post_id_community_posts_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."community_posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "community_post_likes" ADD CONSTRAINT "community_post_likes_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "community_posts" ADD CONSTRAINT "community_posts_author_id_user_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "community_posts" ADD CONSTRAINT "community_posts_guild_id_guilds_id_fk" FOREIGN KEY ("guild_id") REFERENCES "public"."guilds"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "guild_members" ADD CONSTRAINT "guild_members_guild_id_guilds_id_fk" FOREIGN KEY ("guild_id") REFERENCES "public"."guilds"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "guild_members" ADD CONSTRAINT "guild_members_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "matches" ADD CONSTRAINT "matches_tournament_id_tournaments_id_fk" FOREIGN KEY ("tournament_id") REFERENCES "public"."tournaments"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "matches" ADD CONSTRAINT "matches_team_a_id_teams_id_fk" FOREIGN KEY ("team_a_id") REFERENCES "public"."teams"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "matches" ADD CONSTRAINT "matches_team_b_id_teams_id_fk" FOREIGN KEY ("team_b_id") REFERENCES "public"."teams"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -436,6 +523,9 @@ ALTER TABLE "trade_up_contracts" ADD CONSTRAINT "trade_up_contracts_outcome_item
 ALTER TABLE "trade_up_items" ADD CONSTRAINT "trade_up_items_contract_id_trade_up_contracts_id_fk" FOREIGN KEY ("contract_id") REFERENCES "public"."trade_up_contracts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "trade_up_items" ADD CONSTRAINT "trade_up_items_item_id_items_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."items"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "trade_up_items" ADD CONSTRAINT "trade_up_items_listing_id_listings_id_fk" FOREIGN KEY ("listing_id") REFERENCES "public"."listings"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wiki_guides" ADD CONSTRAINT "wiki_guides_game_id_games_id_fk" FOREIGN KEY ("game_id") REFERENCES "public"."games"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wiki_revisions" ADD CONSTRAINT "wiki_revisions_guide_id_wiki_guides_id_fk" FOREIGN KEY ("guide_id") REFERENCES "public"."wiki_guides"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wiki_revisions" ADD CONSTRAINT "wiki_revisions_author_id_user_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "alert_channels_user_idx" ON "alert_channels" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "alert_events_rule_idx" ON "alert_events" USING btree ("rule_id");--> statement-breakpoint
 CREATE INDEX "alert_rules_user_idx" ON "alert_rules" USING btree ("user_id");--> statement-breakpoint
@@ -451,6 +541,13 @@ CREATE INDEX "items_game_idx" ON "items" USING btree ("game_id");--> statement-b
 CREATE INDEX "items_hero_idx" ON "items" USING btree ("hero_id");--> statement-breakpoint
 CREATE INDEX "items_rarity_idx" ON "items" USING btree ("rarity");--> statement-breakpoint
 CREATE INDEX "items_slot_idx" ON "items" USING btree ("slot");--> statement-breakpoint
+CREATE INDEX "community_comments_post_idx" ON "community_comments" USING btree ("post_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "community_post_likes_post_user_idx" ON "community_post_likes" USING btree ("post_id","user_id");--> statement-breakpoint
+CREATE INDEX "community_posts_author_idx" ON "community_posts" USING btree ("author_id");--> statement-breakpoint
+CREATE INDEX "community_posts_guild_idx" ON "community_posts" USING btree ("guild_id");--> statement-breakpoint
+CREATE INDEX "community_posts_created_at_idx" ON "community_posts" USING btree ("created_at");--> statement-breakpoint
+CREATE UNIQUE INDEX "guild_members_guild_user_idx" ON "guild_members" USING btree ("guild_id","user_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "guilds_slug_idx" ON "guilds" USING btree ("slug");--> statement-breakpoint
 CREATE INDEX "matches_tournament_idx" ON "matches" USING btree ("tournament_id");--> statement-breakpoint
 CREATE INDEX "matches_status_idx" ON "matches" USING btree ("status");--> statement-breakpoint
 CREATE UNIQUE INDEX "predictions_match_user_idx" ON "predictions" USING btree ("match_id","user_id");--> statement-breakpoint
@@ -497,4 +594,8 @@ CREATE INDEX "reviews_profile_idx" ON "reviews" USING btree ("profile_id");--> s
 CREATE INDEX "showcase_items_profile_idx" ON "showcase_items" USING btree ("profile_id");--> statement-breakpoint
 CREATE INDEX "trade_up_contracts_user_idx" ON "trade_up_contracts" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "trade_up_contracts_status_idx" ON "trade_up_contracts" USING btree ("status");--> statement-breakpoint
-CREATE INDEX "trade_up_items_contract_idx" ON "trade_up_items" USING btree ("contract_id");
+CREATE INDEX "trade_up_items_contract_idx" ON "trade_up_items" USING btree ("contract_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "wiki_guides_slug_idx" ON "wiki_guides" USING btree ("slug");--> statement-breakpoint
+CREATE INDEX "wiki_guides_kind_idx" ON "wiki_guides" USING btree ("kind");--> statement-breakpoint
+CREATE INDEX "wiki_revisions_guide_idx" ON "wiki_revisions" USING btree ("guide_id");--> statement-breakpoint
+CREATE INDEX "wiki_revisions_created_at_idx" ON "wiki_revisions" USING btree ("created_at");

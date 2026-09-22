@@ -15,3 +15,5 @@ export * from "./notifications";
 export * from "./profiles";
 export * from "./esports";
 export * from "./trade-ups";
+export * from "./community";
+export * from "./wiki";

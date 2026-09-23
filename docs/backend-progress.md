@@ -320,7 +320,7 @@ telemetry strips) stays authored.
 | `/items/manifold-paradox` | floor, Steam ref, move, **real seller book**; buy buttons reserve a real listing | lore, styles, meta, synergy copy |
 | `/tournaments` | bracket cards = the desktop tournaments; radar = live matches | championship banner, quick match |
 | `/` (hub) | surge cards' price and move | esports and meta picks (editorial, as on desktop) |
-| `/sell` | vault totals, instant-cashout tray (the unlisted inventory) | trade-up contract (see open issues) |
+| `/sell` | vault totals, instant-cashout tray (the unlisted inventory); trade-up chamber since Phase 4 | bot name, rails |
 
 Bugs this fixed along the way:
 
@@ -341,6 +341,66 @@ Verified: per-screen comparison scripts (mobile vs desktop, all equal), desktop
 tracker output byte-identical after its query refactor, and all 11 mobile
 screens at 390×844 in a production build — 200s, no console errors, no broken
 images — including a real mobile payment that produced a new escrow order.
+
+## Phase 4 — interactions and external data
+
+| Item | State |
+| --- | --- |
+| Cart + checkout writes | ✅ step 5 |
+| Watchlist (`relicto/actions/watchlist.ts`) | ✅ hearts + tracker board |
+| Alert rules (`alerts/actions/rules.ts`) | ✅ create + arm/disarm, migration `0015` |
+| Sell listings (`sell/actions/listings.ts`) | ✅ list + delist |
+| Wallet (`wallet/actions/treasury.ts`) | ✅ cashout request + vault freeze, migration `0016` |
+| Escrow buyer actions (`orders/actions/escrow.ts`) | ✅ cancel + dispute |
+| Escrow auto-cancel | ✅ expired on read + `/api/cron/escrow-timeouts` (daily on Vercel) |
+| **Trade-ups** | ✅ see below |
+| Steam sign-in | 🟡 plugin + buttons in `79f8b3d`; round trip unverified (needs the VPN) |
+| Profile edits | ☐ no design yet — the hero button still toasts "on the roadmap" |
+| Make an offer | ☐ no write path (see open issues) |
+| Dota datafeed / Steam inventory / price feeds + cron | ☐ needs the VPN |
+
+### Trade-ups ✅
+
+Migration `0017_trade_up_forge`. New `trade_up_outcomes` (the CS2 pool: item,
+value, chance, `tone`), `trade_up_contracts.seed` / `outcome_id`,
+`trade_up_items.inventory_item_id`, a unique slot per contract and **one open
+draft per trader** (partial unique index). Server module
+`src/server/modules/trade-ups/`; actions `sell/actions/trade-ups.ts`.
+
+- **The chamber is a persisted draft.** Inputs are the trader's own unlisted
+  inventory copies. Every slot tap and Smart Fill saves the whole slot list
+  (`saveContractSlots`); the server answers with the chamber as it holds it and
+  the client adopts only the newest answer. Reading never opens a draft.
+- **Rules are enforced server-side:** own + unlisted copies, CS2 grades only
+  (no ★ knives/gloves, no Souvenir/Contraband), one grade per contract, ten
+  inputs to ignite. The client applies the same rules from `sell/lib/trade-up.ts`.
+- **Ignite draws on the server** (`crypto.getRandomValues`), after locking the
+  draft and all ten inputs, and refuses a chamber that differs from what the
+  client showed (`stale`). In one transaction: the inputs are burned, the
+  outcome joins the inventory (wear from the inputs' average float), the
+  contract records outcome, value and odds, the profile's cached units and
+  portfolio move, and a fresh draft opens with a new seed.
+- Committed skins leave the desktop studio rail and the mobile cashout tray.
+- Derived rather than authored: EV (Σ chance × value), float average + wear
+  band (live as slots change), tier wording and verdict (from `tone`), seed label.
+
+**Divergences.** EV reads **$449.69** (ROI +16.95%) against the mock's $462.10
+(+20.18%): the mock's EV doesn't match its own odds. Slot tiles show the finish
+("Redline", "Kill Confirmed") where the design abbreviated by hand ("AK-47",
+"Kill Conf"). The three Smart Fill skins are real inventory, so the desktop
+studio rail shows **9** items instead of 6.
+
+**Not real yet.** The outcome pool is stored per game, since there is no
+collection data to derive it from, and values are cached quotes, not live
+floors. Settlement is database-only. No bot executes a contract in Steam, and a
+Steam inventory sync would overwrite forge-made rows. `db:seed` rebuilds the
+trader's contracts and undoes forge-made inventory.
+
+Verified: a service script (21 checks: reads, knife/mixed/foreign refusals,
+save, stale ignite, settle, burn, units −9, new draft, replay refused), a 200k
+draw distribution (18.5 / 34.5 / 47.0%), and in the browser at 390×844 against
+the dev server — Smart Fill → Ignite → result dialog → outcome in the cashout
+tray, no console errors.
 
 ## Known data artifacts
 
@@ -373,11 +433,13 @@ Fixed since step 5:
 - ~~Mobile checkout read mocks and had no dispatch.~~ Step 7.
 - ~~The header wallet chip read `$0.00`.~~ Step 7.
 
+- ~~Nothing fires the 180-second auto-cancel.~~ Escrows expire on read, and
+  `/api/cron/escrow-timeouts` sweeps the rest. Vercel Hobby only allows a daily
+  cron, so an unread escrow can outlive its window by up to a day.
+- ~~Trade-ups aren't backed by the database.~~ Phase 4.
+
 Still open:
 
-- **Nothing fires the 180-second auto-cancel.** The `cancelled` transition
-  exists (refund, relist, notify); it needs a cron that sends it for escrows
-  past their window. Phase 4.
 - **Offers don't notify yet** — there is no "make an offer" write path. When
   one lands, add an `offer_received` kind to the catalog.
 - **iOS push needs an installed web app**: a manifest and 192/512px icons.
@@ -386,9 +448,6 @@ Still open:
 - **Authored copy that now lies on live data:** the checkout breadcrumb's
   "Active Cart (3)", the combo banner's fixed `-$25.00`, and the dispatch
   modal's three named Sentinels.
-- **Trade-ups aren't backed by the database.** The mobile trade-up contract
-  (committed skins, odds, outcomes) is still authored; the `trade_ups` tables
-  exist but nothing reads or writes them.
 - **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
   rules use fixed ids, so seeding a second trader collides with the demo one.
   The handle collision is fixed; re-keying those rows per trader is not.
@@ -403,6 +462,6 @@ Still open:
 Unchanged by this work, listed so it is not lost:
 
 - `src/lib/env.ts` zod validation
-- Steam sign-in (OpenID 2.0 plugin)
+- Steam sign-in: plugin written (`src/lib/steam/`), round trip not yet verified
 - `additionalFields` / `username` plugin, 2FA, email verification and reset
 - `/verify` and `/reset-password` are still static mockups

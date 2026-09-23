@@ -3,7 +3,7 @@
  * belongs to the listing, so the cart itself stays what it should be: a link
  * between a trader and a listing.
  */
-import { and, eq, inArray, like } from "drizzle-orm";
+import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 import { checkout } from "../../modules/checkout/data/checkout.mock";
@@ -29,7 +29,7 @@ const BASKET: Record<string, { listingId: string; copyOf?: string }> = {
 async function clearCheckoutOrders(db: Db, buyerId: string) {
   const mine = and(eq(schema.orders.buyerId, buyerId), like(schema.orders.id, "order-chk-%"));
   const reserved = await db
-    .select({ listingId: schema.orderItems.listingId })
+    .select({ orderId: schema.orders.id, code: schema.orders.code, listingId: schema.orderItems.listingId })
     .from(schema.orderItems)
     .innerJoin(schema.orders, eq(schema.orderItems.orderId, schema.orders.id))
     .where(mine);
@@ -37,6 +37,26 @@ async function clearCheckoutOrders(db: Db, buyerId: string) {
   const listingIds = reserved.flatMap((row) => (row.listingId ? [row.listingId] : []));
   if (listingIds.length) {
     await db.update(schema.listings).set({ status: "active" }).where(inArray(schema.listings.id, listingIds));
+  }
+
+  const orderIds = reserved.map((row) => row.orderId);
+  if (orderIds.length) {
+    // Sellers paid out by a completed test trade give the payout back first.
+    const payouts = await db
+      .select({ walletId: schema.ledgerEntries.walletId, amountCents: schema.ledgerEntries.amountCents })
+      .from(schema.ledgerEntries)
+      .where(and(inArray(schema.ledgerEntries.orderId, orderIds), eq(schema.ledgerEntries.kind, "sale")));
+    for (const payout of payouts) {
+      await db
+        .update(schema.walletAccounts)
+        .set({ balanceCents: sql`${schema.walletAccounts.balanceCents} - ${payout.amountCents}` })
+        .where(eq(schema.walletAccounts.id, payout.walletId));
+    }
+
+    await db.delete(schema.ledgerEntries).where(inArray(schema.ledgerEntries.orderId, orderIds));
+    await db
+      .delete(schema.notifications)
+      .where(or(...reserved.map((row) => like(schema.notifications.dedupeKey, `${row.code}:%`))));
   }
 
   await db

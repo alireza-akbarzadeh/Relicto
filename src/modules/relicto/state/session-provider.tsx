@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import type {  AppNotification, SessionUser } from "../session-types";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { useNotificationFeed } from "../hooks/use-notification-feed";
+import type { AppNotification, SessionUser } from "../session-types";
 
 type SessionState = {
   user: SessionUser;
@@ -19,17 +20,9 @@ type SessionProviderProps = {
   children: ReactNode;
 };
 
-/** Client session for the Relicto app: the signed-in trader and their notifications. */
+/** Client session for the Relicto app: the signed-in trader and their live notifications. */
 export function SessionProvider({ user, notifications: initial, children }: SessionProviderProps) {
-  const [notifications, setNotifications] = useState(initial);
-
-  const markRead = useCallback((id: string) => {
-    setNotifications((list) => list.map((n) => (n.id === id ? { ...n, unread: false } : n)));
-  }, []);
-
-  const markAllRead = useCallback(() => {
-    setNotifications((list) => list.map((n) => ({ ...n, unread: false })));
-  }, []);
+  const { notifications, markRead, markAllRead } = useNotificationFeed(initial);
 
   const value = useMemo(
     () => ({

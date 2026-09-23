@@ -20,6 +20,7 @@ import { seedOrders } from "./seed-orders";
 import { seedProfile } from "./seed-profile";
 import { seedSell } from "./seed-sell";
 import { seedTrader, targetEmail } from "./seed-trader";
+import { seedTournaments } from "./seed-tournaments";
 import { seedTracker } from "./seed-tracker";
 import { seedWallet } from "./seed-wallet";
 
@@ -173,6 +174,7 @@ async function main() {
   const board = await seedTracker(db, traderId);
   const studio = await seedSell(db, traderId, vendorId);
   const basket = await seedCheckout(db, traderId, SELLER.id);
+  const arena = await seedTournaments(db);
 
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,
@@ -182,6 +184,7 @@ async function main() {
   console.log(`profile showcase=${profile.showcase} seller-listings=${profile.listings} alerts=${alerts}`);
   console.log(`tracker assets=${board.assets} depth=${board.levels} spreads=${board.spreads}`);
   console.log(`studio inventory=${studio.inventory} active=${studio.active} basket=${basket}`);
+  console.log(`arena tournaments=${arena.tournaments} matches=${arena.matches}`);
   await pool.end();
 }
 

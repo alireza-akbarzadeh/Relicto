@@ -3,12 +3,19 @@ import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { notificationService } from "@/server/modules/notifications/notifications.service";
 import type { AppNotification, SessionUser } from "../session-types";
 
 /**
- * Wallet balance, trader level/role and notifications belong to domain
- * tables that don't exist yet (see docs/backend-plan.md, Phase 2). Every
- * signed-in trader gets these defaults until that data is real.
+ * Where a request with a cookie but no live session goes. The flag tells the
+ * proxy the cookie is stale, so it clears it instead of bouncing the trader back
+ * into the app — which would loop.
+ */
+const EXPIRED = "/sign-in?expired=1";
+
+/**
+ * Wallet balance and trader level/role belong to domain tables that aren't
+ * read here yet. Every signed-in trader gets these defaults until they are.
  */
 function toSessionUser(user: { name: string; image?: string | null; emailVerified: boolean }): SessionUser {
   return {
@@ -27,7 +34,7 @@ function toSessionUser(user: { name: string; image?: string | null; emailVerifie
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
   const result = await auth.api.getSession({ headers: await headers() });
   if (!result) return null;
-  return { user: toSessionUser(result.user), notifications: [] };
+  return { user: toSessionUser(result.user), notifications: await notificationService.feed(result.user.id) };
 }
 
 /**
@@ -42,13 +49,13 @@ export async function getUserId(): Promise<string | null> {
 /** As `getUserId`, for pages the proxy already guarantees are signed in. */
 export async function requireUserId(): Promise<string> {
   const id = await getUserId();
-  if (!id) redirect("/sign-in");
+  if (!id) redirect(EXPIRED);
   return id;
 }
 
 /** Same as `getSession`, but redirects to sign-in instead of returning null. Use in layouts/pages behind the private routes proxy protects. */
 export async function requireSession() {
   const session = await getSession();
-  if (!session) redirect("/sign-in");
+  if (!session) redirect(EXPIRED);
   return session;
 }

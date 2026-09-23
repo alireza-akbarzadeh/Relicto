@@ -1,13 +1,14 @@
 import "server-only";
 
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, or } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { escrowEvents, games, items, orderItems, orders, profiles, tradeOffers } from "@/lib/db/schema";
 
 /** Codes are shown with a `#`, stored without one. */
 const bare = (code: string) => code.replace(/^#/, "").toUpperCase();
 
-export async function findOrderByCode(code: string) {
+/** Only the two parties to an order can open it; anyone else gets null. */
+export async function findOrderByCode(code: string, viewerId: string) {
   const [row] = await db
     .select({
       order: orders,
@@ -21,7 +22,7 @@ export async function findOrderByCode(code: string) {
     .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
     .leftJoin(items, eq(orderItems.itemId, items.id))
     .leftJoin(games, eq(items.gameId, games.id))
-    .where(eq(orders.code, bare(code)))
+    .where(and(eq(orders.code, bare(code)), or(eq(orders.buyerId, viewerId), eq(orders.sellerId, viewerId))))
     .limit(1);
 
   return row ?? null;
@@ -45,4 +46,10 @@ export async function findVendorProfile(userId: string | null) {
   if (!userId) return null;
   const [row] = await db.select().from(profiles).where(eq(profiles.userId, userId)).limit(1);
   return row ?? null;
+}
+
+/** False only on a database nobody has seeded — the one case the sample stands in. */
+export async function hasOrders() {
+  const [row] = await db.select({ id: orders.id }).from(orders).limit(1);
+  return Boolean(row);
 }

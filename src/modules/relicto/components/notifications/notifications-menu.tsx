@@ -9,6 +9,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/cn";
 import { useSession } from "../../state/session-provider";
 import { NotificationItem } from "./notification-item";
+import { PushToggle } from "./push-toggle";
 
 type TriggerStyle = { button: string; badge: string; icon?: ReactNode; ping?: boolean };
 
@@ -98,6 +99,8 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
           Mark all read
         </button>
       </div>
+
+      <PushToggle />
 
       {/* List Body / Empty State */}
       <div className="flex max-h-95 flex-col divide-y divide-white/5 overflow-y-auto p-1.5 [scrollbar-width:thin]">

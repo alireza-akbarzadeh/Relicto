@@ -3,6 +3,9 @@ import "server-only";
 import { asc, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { cartItems, escrowEvents, items, ledgerEntries, listings, orderItems, orders, walletAccounts } from "@/lib/db/schema";
+import { draft, type NotificationDraft } from "../notifications/notifications.catalog";
+import type { NotificationRow } from "../notifications/notifications.repository";
+import { notificationService } from "../notifications/notifications.service";
 import { buildOrderRows, orderCode } from "./checkout.order-rows";
 import { allocate, quote } from "./checkout.pricing";
 import { cartLinesWhere, LINE } from "./checkout.repository";
@@ -10,7 +13,8 @@ import { cartLinesWhere, LINE } from "./checkout.repository";
 export type SettleInput = { rail: string; promo: boolean; cartIds: string[] };
 
 export type SettleResult =
-  | { status: "placed"; codes: string[] }
+  /** `notices` are the sellers' notifications, for push once the transaction has committed. */
+  | { status: "placed"; codes: string[]; notices: NotificationRow[] }
   | { status: "rail-unavailable" | "empty" | "stale" | "insufficient-funds" };
 
 /** Card, crypto and Steam need a payment provider (backend-plan, Phase 4); the vault settles in-house. */
@@ -52,6 +56,7 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
     const shares = allocate(prices, due.comboCents + due.promoCents);
     const now = new Date();
     const codes: string[] = [];
+    const drafts: NotificationDraft[] = [];
     let balance = wallet.balanceCents;
 
     for (const [index, line] of lines.entries()) {
@@ -68,6 +73,7 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
       await tx.insert(escrowEvents).values(rows.events);
       await tx.insert(ledgerEntries).values(rows.debit);
       codes.push(code);
+      drafts.push(draft.orderReceived({ code, item: line.name, sellerId: line.listing.sellerId, totalCents }));
     }
 
     await tx
@@ -77,6 +83,9 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
     await tx.update(walletAccounts).set({ balanceCents: balance }).where(eq(walletAccounts.id, wallet.id));
     await tx.delete(cartItems).where(inArray(cartItems.id, lines.map((line) => line.cartId)));
 
-    return { status: "placed", codes };
+    // Sellers hear about it in the same transaction, so a rolled-back order never notifies.
+    const notices = await notificationService.record(tx, drafts);
+
+    return { status: "placed", codes, notices };
   });
 }

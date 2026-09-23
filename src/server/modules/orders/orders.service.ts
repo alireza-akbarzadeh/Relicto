@@ -55,9 +55,12 @@ export const orderService = {
     };
   },
 
-  /** Live escrow state for one order code, or null when it isn't ours. */
-  async tracking(code: string): Promise<OrderTracking | null> {
-    const row = await tracking.findOrderByCode(code);
+  /** False only before anything is seeded. */
+  hasOrders: () => tracking.hasOrders(),
+
+  /** Live escrow state for one order code, or null when it doesn't exist or isn't the viewer's. */
+  async tracking(code: string, viewerId: string): Promise<OrderTracking | null> {
+    const row = await tracking.findOrderByCode(code, viewerId);
     if (!row) return null;
 
     const [events, offer, vendor] = await Promise.all([

@@ -5,25 +5,28 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
+import { useCheckoutDispatch } from "../../hooks/use-checkout-dispatch";
 import { useMobileCheckout } from "../../hooks/use-mobile-checkout";
+import { SETTLEMENT_RAIL } from "../../lib/mobile";
 import type { CheckoutMobile } from "../../mobile.types";
 
 /** Fixed settlement dock: partner ping, total (USD and ETH quote) and the authorize action. */
 export function CheckoutDock({ data }: { data: CheckoutMobile }) {
   const router = useRouter();
   const { items, total, eth, rail, remainingUsd } = useMobileCheckout(data);
+  const { dispatch, pending } = useCheckoutDispatch({
+    onPlaced: (codes) => {
+      toast.success("Multi-sig escrow authorized", { description: `${codes.length} items dispatched to Sentinel bots.` });
+      router.push(`/orders/${codes[0]}`);
+    },
+  });
 
   const authorize = () => {
-    if (!items.length) {
-      toast.error("Your escrow cart is empty");
-      return;
-    }
     if (rail.id === "vault" && remainingUsd < 0) {
       toast.error("Not enough vault balance", { description: `Top up ${formatMoney(-remainingUsd)} or pick another rail.` });
       return;
     }
-    toast.success("Multi-sig escrow authorized", { description: `${items.length} items dispatched to Sentinel bots.` });
-    router.push(`/orders/${data.orderId}`);
+    dispatch({ rail: SETTLEMENT_RAIL[rail.id] ?? rail.id, promo: false });
   };
 
   return (
@@ -57,6 +60,7 @@ export function CheckoutDock({ data }: { data: CheckoutMobile }) {
           variant={null}
           size={null}
           onClick={authorize}
+          disabled={pending}
           className="h-12 w-full gap-space-sm rounded border-0 bg-primary-container font-headline-sm text-headline-sm font-semibold tracking-wider text-on-primary uppercase shadow-[0_0_20px_rgba(255,81,106,0.35)] transition-all active:scale-[0.98]"
         >
           <Icon name="swap_horizontal_circle" className="text-[20px]" />

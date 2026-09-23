@@ -1,12 +1,14 @@
 import "server-only";
 
+import type { TrackingMobile } from "@/modules/orders/mobile.types";
 import type { ActiveEscrow, LedgerData, OrderTracking } from "@/modules/orders/types";
 import { toLedgerRow } from "./orders.presenter";
 import * as repository from "./orders.repository";
 import { ledgerInput, type LedgerInput } from "./orders.schema";
 import { toLedgerStats } from "./orders.stats";
 import type { LedgerOrderRow } from "./orders.types";
-import { toOrderTracking } from "./tracking.presenter";
+import { toTrackingMobile } from "./tracking-mobile.presenter";
+import { toOrderTracking, type TrackingInput } from "./tracking.presenter";
 import * as tracking from "./tracking.repository";
 
 /** Vault chrome above the table — a product claim, not a per-trader figure. */
@@ -26,6 +28,20 @@ function toActiveEscrow(row: LedgerOrderRow, escrowCount: number): ActiveEscrow 
     item: headline(row),
     href: `/orders/${code}`,
   };
+}
+
+/** Everything both trackers read about one order; null unless the viewer is a party to it. */
+async function loadTracking(code: string, viewerId: string): Promise<TrackingInput | null> {
+  const row = await tracking.findOrderByCode(code, viewerId);
+  if (!row) return null;
+
+  const [events, offer, vendor] = await Promise.all([
+    tracking.findEscrowEvents(row.order.id),
+    tracking.findTradeOffer(row.order.id),
+    tracking.findVendorProfile(row.order.sellerId),
+  ]);
+
+  return { ...row, events, offer, vendor };
 }
 
 export const orderService = {
@@ -60,15 +76,13 @@ export const orderService = {
 
   /** Live escrow state for one order code, or null when it doesn't exist or isn't the viewer's. */
   async tracking(code: string, viewerId: string): Promise<OrderTracking | null> {
-    const row = await tracking.findOrderByCode(code, viewerId);
-    if (!row) return null;
+    const input = await loadTracking(code, viewerId);
+    return input ? toOrderTracking(input) : null;
+  },
 
-    const [events, offer, vendor] = await Promise.all([
-      tracking.findEscrowEvents(row.order.id),
-      tracking.findTradeOffer(row.order.id),
-      tracking.findVendorProfile(row.order.sellerId),
-    ]);
-
-    return toOrderTracking({ ...row, events, offer, vendor });
+  /** The same order in the mobile tracker's shape. */
+  async trackingMobile(code: string, viewerId: string): Promise<TrackingMobile | null> {
+    const input = await loadTracking(code, viewerId);
+    return input ? toTrackingMobile(input) : null;
   },
 };

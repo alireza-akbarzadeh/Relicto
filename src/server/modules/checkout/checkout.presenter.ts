@@ -1,6 +1,6 @@
 import type { IconName } from "@/components/ui/icon";
 import type { CheckoutData, CheckoutItem } from "@/modules/checkout/types";
-import { quote } from "./checkout.pricing";
+import { quote } from "@/modules/checkout/lib/pricing";
 import { PAYMENT_RAILS, sessionCode } from "./checkout.rails";
 import type { CartLine } from "./checkout.repository";
 import { usd } from "../wallet/wallet.presenter";

@@ -7,7 +7,7 @@ import { draft, type NotificationDraft } from "../notifications/notifications.ca
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
 import { buildOrderRows, orderCode } from "./checkout.order-rows";
-import { allocate, quote } from "./checkout.pricing";
+import { allocate, quote } from "@/modules/checkout/lib/pricing";
 import { cartLinesWhere, LINE } from "./checkout.repository";
 
 export type SettleInput = { rail: string; promo: boolean; cartIds: string[] };

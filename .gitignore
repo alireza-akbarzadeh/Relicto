@@ -52,3 +52,7 @@ next-env.d.ts
 
 # Design reference copies served for diffing (docs/design/IMPLEMENTING.md); never ship
 /public/_stitch/
+
+# Local verification scratch (Playwright MCP captures, throwaway parity scripts)
+/.playwright-mcp/
+/.verify-*.mts

@@ -12,5 +12,4 @@ export const checkoutMobile: CheckoutMobile = {
     { id: "card", label: "Card / Stripe", icon: "credit_card", tone: "muted", note: "+1.8% fee", feePct: 1.8 },
   ],
   dock: { ping: "18ms · READY", hold: "0 SEC (INSTANT)" },
-  orderId: "LTR-89412-ESCR",
 };

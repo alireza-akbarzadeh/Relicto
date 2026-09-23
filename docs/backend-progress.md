@@ -57,7 +57,8 @@ npx tsx --conditions=react-server .verify-x.mts
 | `/tracker` | `trackerService.terminal()` | ✅ 3 noted divergences |
 | `/sell` | `sellService.studio()` | ✅ parity-verified |
 | `/checkout` | `checkoutService.basket()` + `actions/cart.ts` | ✅ reads + writes, 1 noted divergence |
-| `/tournaments` | mock | ☐ step 6 |
+| `/tournaments` | `tournamentService.arena()` | ✅ parity-verified, open-events count derived |
+| notifications | `notificationService` + `/api/escrow/events` | ✅ in-app bell + Web Push |
 | mobile compositions | mock | ☐ step 7 |
 
 ## Remaining steps
@@ -219,10 +220,80 @@ Verified end to end in the browser against a production build: quick-buy on
 `/marketplace` → live basket → Authorize & Dispatch → `/orders/LT-…` tracker.
 A concurrent double-submit settles exactly once.
 
-### Step 6 — `/tournaments`
+### ~~Step 6 — `/tournaments`~~ ✅ done
 
-Tables: `tournaments`, `teams`, `matches`, `predictions`. Route sits outside
-`(lootora)` and has no session requirement.
+Migration `0012_tournament_fields`. Tournaments gained description, format,
+capacity (+ unit), a cached `entrant_count`, `registration_closes_at`, image,
+`featured` (the hero banner's events), `sort_order` and a `presentation` jsonb
+(badge wording, accents, perk, calls to action, roster initials). Matches gained
+`round`, `featured` (the live broadcast), `sort_order` and `presentation`.
+
+Derived rather than stored: the hero's registration countdown (from
+`registration_closes_at`, so it ticks), each roster's `+N` (entrants minus the
+named initials), a match's `pending` flag (`scheduled`), its `GAME • ROUND`
+label, and the broadcast's score. Page chrome, filter chips, the platform
+marketing stats and the infrastructure copy stay authored — nothing real
+measures them yet.
+
+Hero, cards, broadcast and feeds match the mocks exactly. **One derived
+divergence:** "Active Arenas" reads **6 open events** (every tournament not
+completed) instead of the authored 24.
+
+The loader calls `connection()` so the page renders per request; without it
+Next prerendered `/tournaments` at build time and the countdown and scores froze.
+
+### Notifications and the escrow lifecycle ✅
+
+Migration `0013_notification_delivery`: `notifications.kind`, a unique
+`dedupe_key`, and a `push_subscriptions` table.
+
+| Event | Who | Fired by |
+| --- | --- | --- |
+| Someone is buying your item | seller | `placeOrder` (checkout) |
+| Trade offer ready — accept in Steam | buyer | escrow webhook `offer_sent` |
+| Item sold, payout credited | seller | escrow webhook `delivered` |
+| Item delivered | buyer | escrow webhook `delivered` |
+| Escrow cancelled / back on the market | both | escrow webhook `cancelled` |
+
+All copy lives in `notifications.catalog.ts`. Notifications are written **inside
+the transaction** that changes the order, so a rolled-back trade never
+notifies; device push goes out after commit via `after()`. The dedupe key
+(order code + event + recipient) means a retried event can't notify twice.
+
+**Escrow webhook** — `POST /api/escrow/events`, `Authorization: Bearer
+$ESCROW_WEBHOOK_SECRET`. This is the API the trade bots will call:
+
+```json
+{ "type": "offer_sent", "orderCode": "LT-89410-ES", "steamOfferId": "948201",
+  "botName": "Relicto Sentinel Bot #42", "token": "984-KZT" }
+{ "type": "delivered", "orderCode": "LT-89410-ES" }
+{ "type": "cancelled", "orderCode": "LT-89410-ES", "reason": "Seller did not respond." }
+```
+
+Each event locks the order and only applies to an open escrow; a repeat answers
+`unchanged`. `delivered` completes the order, marks the listing sold, settles
+the buyer's pending debit and credits the seller the **listed price** (basket
+discounts are Relicto's promotion). `cancelled` refunds the buyer and puts the
+listing back on sale. Checkout-made ledger rows and notifications are undone
+by `db:seed`.
+
+**Delivery.** The bell loads from the database with the session, refreshes
+every 30 s while the tab is visible, and at once when a push arrives (the
+service worker pings open tabs). Read state is saved. Device push is opt-in
+from a row in the bell ("Turn on"), using Web Push with VAPID keys and
+`public/sw.js`; dead devices (404/410) are forgotten automatically.
+
+Verified: a lifecycle script (placement → offer → retry → delivery → retry →
+cancellation; 19 checks) against the real webhook, and in the browser — the
+toggle subscribed through FCM, the server's push was accepted by FCM, and a
+push injected through DevTools ran the service worker and refreshed the bell.
+Automated Chromium can't receive pushes from FCM itself, so seeing the OS
+notification pop on a real device is still to check.
+
+**Env** (in `.env.local` for dev; add to Vercel for other environments):
+`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (set a
+real ops `mailto:`), `ESCROW_WEBHOOK_SECRET`. Without VAPID keys push is off
+and the bell still works; without the secret the webhook answers 503.
 
 ### Step 7 — mobile compositions
 
@@ -248,15 +319,26 @@ chases them as defects:
   because the seeded liquid balance is `/wallet`'s $3,140. Remove the Butterfly
   Knife and the remaining two lines settle.
 
-## Open issues found during step 5
+## Open issues
 
-Not fixed — outside the step, but real:
+Fixed since step 5:
 
-- **`orderService.tracking(code)` doesn't check ownership.** Its doc comment
-  says "null when it isn't ours", but `findOrderByCode` filters on the code
-  alone, so any signed-in user can open any order's tracker by code.
-- **Nothing enforces the 180-second auto-cancel.** The tracker counts down, but
-  no job cancels the order or refunds the vault. Needs the cron from Phase 4.
+- ~~Any signed-in user could open any order's tracker by code.~~ The lookup is
+  now scoped to the buyer and seller; anyone else gets a 404, same as an
+  unknown code.
+- ~~A stale session cookie looped `/sign-in` ↔ the app.~~ The app now sends a
+  dead session to `/sign-in?expired=1`, where the proxy clears the cookie.
+
+Still open:
+
+- **Nothing fires the 180-second auto-cancel.** The `cancelled` transition
+  exists (refund, relist, notify); it needs a cron that sends it for escrows
+  past their window. Phase 4.
+- **Offers don't notify yet** — there is no "make an offer" write path. When
+  one lands, add an `offer_received` kind to the catalog.
+- **iOS push needs an installed web app**: a manifest and 192/512px icons.
+  There is no PNG brand icon in `public/` yet, so OS notifications use the
+  site default.
 - **Mobile checkout** (`use-mobile-checkout`, `checkoutMobile.vaultUsd`) still
   reads mocks and has no dispatch — step 7.
 - **Authored copy that now lies on live data:** the checkout breadcrumb's

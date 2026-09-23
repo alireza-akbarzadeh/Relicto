@@ -16,5 +16,4 @@ export type CheckoutMobile = {
   handshake: { status: string; hold: string; passphrase: string };
   rails: MobileRail[];
   dock: { ping: string; hold: string };
-  orderId: string;
 };

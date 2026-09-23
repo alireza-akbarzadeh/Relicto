@@ -19,6 +19,9 @@ export const checkoutService = {
     return toCheckoutData(rows, balanceCents);
   },
 
+  /** Spendable vault balance, in cents — what every checkout quotes as "available". */
+  vaultCents: (userId: string) => repo.findWalletBalance(userId),
+
   /** Just the lines, for the header cart every page carries. */
   async lines(userId: string): Promise<CheckoutItem[] | null> {
     const rows = await repo.findCartLines(userId);

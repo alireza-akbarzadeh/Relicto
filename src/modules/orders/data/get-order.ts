@@ -21,7 +21,10 @@ export async function getOrderTracking(orderId: string): Promise<OrderTracking> 
   return { ...tracking, code: orderCode(orderId, tracking.code) };
 }
 
-/** The mobile tracker's view of the same order. */
+/** The mobile tracker's view of the same order, with the same access rule. */
 export async function getOrderTrackingMobile(orderId: string): Promise<TrackingMobile> {
+  const live = await orderService.trackingMobile(orderId, await requireUserId());
+  if (live) return live;
+  if (await orderService.hasOrders()) notFound();
   return { ...trackingMobile, code: orderCode(orderId, trackingMobile.code) };
 }

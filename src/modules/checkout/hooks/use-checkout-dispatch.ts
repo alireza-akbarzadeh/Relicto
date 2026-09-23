@@ -19,8 +19,11 @@ const DECLINED = {
 const decline = (status: keyof typeof DECLINED) =>
   toast.error(DECLINED[status][0], { description: DECLINED[status][1] });
 
-/** Authorize & Dispatch: settles the basket, then hands the new escrow codes to the dispatch dialog. */
-export function useCheckoutDispatch() {
+/**
+ * Authorize & Dispatch: settles the basket, then hands the new escrow codes to
+ * the dispatch dialog — or to `onPlaced`, for screens that go straight on.
+ */
+export function useCheckoutDispatch({ onPlaced }: { onPlaced?: (codes: string[]) => void } = {}) {
   const router = useRouter();
   const { items, sync } = useCart();
   const [codes, setCodes] = useState<string[] | null>(null);
@@ -36,7 +39,7 @@ export function useCheckoutDispatch() {
       try {
         const result = await placeOrder({ rail, promo, cartIds: items.map((item) => item.id) });
         if (result.items) sync(result.items);
-        if (result.status === "placed") setCodes(result.codes);
+        if (result.status === "placed") (onPlaced ?? setCodes)(result.codes);
         else decline(result.status);
       } catch {
         toast.error("Couldn't authorize the trade", { description: "Check your connection and try again." });

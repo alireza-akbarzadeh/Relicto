@@ -19,7 +19,10 @@ export async function getCartLines(): Promise<CheckoutItem[]> {
   return (await checkoutService.lines(await requireUserId())) ?? checkout.items;
 }
 
-/** Mobile checkout settings: vault balance, rails, handshake and reservation window. */
+/**
+ * Mobile checkout: the same spendable vault balance the desktop rail quotes;
+ * rails, handshake copy and the reservation window stay authored.
+ */
 export async function getCheckoutMobile(): Promise<CheckoutMobile> {
-  return checkoutMobile;
+  return { ...checkoutMobile, vaultUsd: (await checkoutService.vaultCents(await requireUserId())) / 100 };
 }

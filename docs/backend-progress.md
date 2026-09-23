@@ -59,7 +59,7 @@ npx tsx --conditions=react-server .verify-x.mts
 | `/checkout` | `checkoutService.basket()` + `actions/cart.ts` | ✅ reads + writes, 1 noted divergence |
 | `/tournaments` | `tournamentService.arena()` | ✅ parity-verified, open-events count derived |
 | notifications | `notificationService` + `/api/escrow/events` | ✅ in-app bell + Web Push |
-| mobile compositions | mock | ☐ step 7 |
+| mobile compositions | the same services, `*-mobile.presenter.ts` | ✅ facts agree with desktop |
 
 ## Remaining steps
 
@@ -295,11 +295,52 @@ notification pop on a real device is still to check.
 real ops `mailto:`), `ESCROW_WEBHOOK_SECRET`. Without VAPID keys push is off
 and the bell still works; without the secret the webhook answers 503.
 
-### Step 7 — mobile compositions
+### ~~Step 7 — mobile compositions~~ ✅ done
 
-Every page ships a separate mobile composition switched by CSS at `md`. These
-still read their own mocks and need the same treatment, reusing the services
-already built.
+Every page's mobile composition now reads the same services as its desktop
+one, through a `*-mobile.presenter.ts` beside the desktop presenter. Migration
+`0014_spread_venue` (`market_spreads.secondary_venue`).
+
+**The rule is different from steps 1–6.** The mobile mocks carry their own
+sample numbers that contradict the desktop mocks (mobile wallet `$3,449.50`
+vs desktop `$3,140.00`), so mobile can't be value-for-value with its mock and
+desktop at once. Mobile is checked against **desktop**: one trader sees the
+same facts at every width. Mobile-only chrome (action buttons, rail copy,
+telemetry strips) stays authored.
+
+| Mobile screen | Live now | Still authored |
+| --- | --- | --- |
+| `/orders/[id]` | the real order: steps, bot, token, seller, item, window — was a fake order for every code | protocol banner, link telemetry |
+| `/checkout` | vault balance; **pays for real** (same `placeOrder`), then opens the new order; totals use the server's pricing | rails, handshake copy, ETH rate |
+| `/wallet` | balances, 24h move, ledger with item art and signs | vault chrome, actions, rails |
+| `/profile` | trust, rating, dispute rate, dispatch, tier, escrow, showcase, link badges | bot/node chrome, security checklist |
+| `/marketplace` | the live catalog, one card per item at its floor, ranked by move; hearts from the watchlist; pool = hub liquidity | search copy, pills, meta-spike banner |
+| `/tracker` | ticker, focus asset, candles/EMA from price history, depth, arbitrage | telemetry, relay, volume bars, other Doppler phases |
+| `/alerts` | the same rules, live floors, sparklines, buying power, push status | header telemetry, Telegram/Discord relays |
+| `/items/manifold-paradox` | floor, Steam ref, move, **real seller book**; buy buttons reserve a real listing | lore, styles, meta, synergy copy |
+| `/tournaments` | bracket cards = the desktop tournaments; radar = live matches | championship banner, quick match |
+| `/` (hub) | surge cards' price and move | esports and meta picks (editorial, as on desktop) |
+| `/sell` | vault totals, instant-cashout tray (the unlisted inventory) | trade-up contract (see open issues) |
+
+Bugs this fixed along the way:
+
+- The mobile order tracker showed the same fake Butterfly order for every code.
+- Mobile "Authorize" only toasted and navigated to a hard-coded order — nothing
+  was charged. It now settles through the same action as desktop.
+- The mobile item page's buy buttons used a basket id the server couldn't
+  resolve, so they never reserved anything.
+- The mobile wallet printed `+` before every amount — a $850 cashout read
+  `+$850.00`. Signs now come from the value.
+- The header wallet chip read `$0.00` for everyone; it is the real balance.
+- Seed gaps: spreads weren't linked to catalog items, showcase cards and rule
+  `a3` weren't linked to theirs (a final `linkShowcaseItems` /
+  `linkAlertItems` pass now runs after every item exists), and the Butterfly
+  sale ledger row now points at its order.
+
+Verified: per-screen comparison scripts (mobile vs desktop, all equal), desktop
+tracker output byte-identical after its query refactor, and all 11 mobile
+screens at 390×844 in a production build — 200s, no console errors, no broken
+images — including a real mobile payment that produced a new escrow order.
 
 ## Known data artifacts
 
@@ -329,6 +370,9 @@ Fixed since step 5:
 - ~~A stale session cookie looped `/sign-in` ↔ the app.~~ The app now sends a
   dead session to `/sign-in?expired=1`, where the proxy clears the cookie.
 
+- ~~Mobile checkout read mocks and had no dispatch.~~ Step 7.
+- ~~The header wallet chip read `$0.00`.~~ Step 7.
+
 Still open:
 
 - **Nothing fires the 180-second auto-cancel.** The `cancelled` transition
@@ -339,13 +383,20 @@ Still open:
 - **iOS push needs an installed web app**: a manifest and 192/512px icons.
   There is no PNG brand icon in `public/` yet, so OS notifications use the
   site default.
-- **Mobile checkout** (`use-mobile-checkout`, `checkoutMobile.vaultUsd`) still
-  reads mocks and has no dispatch — step 7.
 - **Authored copy that now lies on live data:** the checkout breadcrumb's
   "Active Cart (3)", the combo banner's fixed `-$25.00`, and the dispatch
   modal's three named Sentinels.
-- **The header wallet chip reads `$0.00`** — `get-session.ts` still hardcodes
-  `walletUsd: 0`.
+- **Trade-ups aren't backed by the database.** The mobile trade-up contract
+  (committed skins, odds, outcomes) is still authored; the `trade_ups` tables
+  exist but nothing reads or writes them.
+- **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
+  rules use fixed ids, so seeding a second trader collides with the demo one.
+  The handle collision is fixed; re-keying those rows per trader is not.
+- **Mobile checkout has no discount rows.** Its total applies the three-item
+  combo (as the server charges) but the design shows only subtotal, fee and
+  total, so the discount is invisible there.
+- **Radar rows use full team names** ("Gaimin Gladiators"), which wrap where the
+  design had short ones. A short display name per team would fix it.
 
 ## Still missing from `backend-plan.md`
 

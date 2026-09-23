@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const orderCode = z.string().trim().regex(/^#?LT-\d{5}-[A-Z]{2}$/i, "Expected a tracking code like LT-89410-ES");
+export const orderCode = z.string().trim().regex(/^#?LT-\d{5}-[A-Z]{2}$/i, "Expected a tracking code like LT-89410-ES");
 
 export const offerSent = z.object({
   steamOfferId: z.string().min(1).max(32),
@@ -21,3 +21,6 @@ export const escrowEvent = z.discriminatedUnion("type", [
 ]);
 
 export type EscrowEvent = z.infer<typeof escrowEvent>;
+
+/** A trader acting on one of their own orders. */
+export const orderCodeInput = z.object({ code: orderCode });

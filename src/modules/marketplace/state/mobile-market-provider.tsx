@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryStates } from "nuqs";
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { filterMobileListings, type MobileCriteria } from "../lib/mobile-filters";
 import { mobileMarketSearchParams } from "../lib/mobile-search-params";
 import type { MobileListing } from "../mobile.types";
@@ -15,18 +15,15 @@ type MobileMarketState = {
   filtered: boolean;
   set: (patch: Partial<MobileCriteria & { view: "grid" | "list" }>) => void;
   reset: () => void;
-  isSaved: (slug: string) => boolean;
-  toggleSaved: (slug: string) => void;
 };
 
 const MobileMarketContext = createContext<MobileMarketState | null>(null);
 
 const DEFAULTS = { q: "", cat: "all", msort: "spikes", band: "50to6k", lowFloat: false } as const;
 
-/** URL-backed state of the mobile marketplace (nuqs), plus the local watchlist. */
+/** URL-backed state of the mobile marketplace (nuqs). The watchlist is app-wide (`useWatchlist`). */
 export function MobileMarketProvider({ listings, children }: { listings: MobileListing[]; children: ReactNode }) {
   const [query, setQuery] = useQueryStates(mobileMarketSearchParams, { history: "replace", clearOnDefault: true });
-  const [saved, setSaved] = useState(() => new Set(listings.filter((l) => l.saved).map((l) => l.slug)));
 
   const value = useMemo<MobileMarketState>(() => {
     const { view, ...criteria } = query;
@@ -38,16 +35,8 @@ export function MobileMarketProvider({ listings, children }: { listings: MobileL
       filtered: (Object.keys(DEFAULTS) as (keyof typeof DEFAULTS)[]).some((key) => criteria[key] !== DEFAULTS[key]),
       set: (patch) => void setQuery(patch),
       reset: () => void setQuery(DEFAULTS),
-      isSaved: (slug) => saved.has(slug),
-      toggleSaved: (slug) =>
-        setSaved((current) => {
-          const next = new Set(current);
-          if (next.has(slug)) next.delete(slug);
-          else next.add(slug);
-          return next;
-        }),
     };
-  }, [query, setQuery, listings, saved]);
+  }, [query, setQuery, listings]);
 
   return <MobileMarketContext.Provider value={value}>{children}</MobileMarketContext.Provider>;
 }

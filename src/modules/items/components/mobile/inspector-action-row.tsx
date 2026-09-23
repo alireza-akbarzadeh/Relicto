@@ -1,23 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
+import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import type { ItemMobile } from "../../mobile.types";
 
 const ACTION = "h-9 w-9 rounded-lg border-0 bg-surface-container-low text-text-secondary transition-all active:scale-95";
 
 /** Breadcrumb plus watchlist and share, under the header. */
 export function InspectorActionRow({ item }: { item: ItemMobile }) {
-  const [saved, setSaved] = useState(false);
-
-  const toggleSaved = () => {
-    setSaved((current) => !current);
-    toast(saved ? "Removed from watchlist" : "Added to watchlist", { description: item.name });
-  };
+  const { isWatched, toggle } = useWatchlist();
+  const saved = isWatched(item.slug);
+  const toggleSaved = () => toggle(item.slug, item.name);
 
   const share = async () => {
     const url = window.location.href;

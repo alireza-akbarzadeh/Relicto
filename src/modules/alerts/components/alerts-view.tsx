@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
+import { setAlertArmed } from "../actions/rules";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -37,14 +39,23 @@ const TONE: Record<CommunityTone, string> = {
 export function AlertsView({ alerts: initial }: { alerts: PriceAlert[] }) {
   const [alerts, setAlerts] = useState(initial);
   const [paused, setPaused] = useState(false);
-  const toggle = (id: string) =>
-    setAlerts((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, status: item.status === "paused" ? "armed" : "paused" }
-          : item,
-      ),
-    );
+  const setStatus = (id: string, status: AlertStatus) =>
+    setAlerts((items) => items.map((item) => (item.id === id ? { ...item, status } : item)));
+
+  /** Pauses or re-arms a rule, saved on the server; rolls back if that fails. */
+  const toggle = (id: string) => {
+    const before = alerts.find((item) => item.id === id)?.status ?? "armed";
+    const next: AlertStatus = before === "paused" ? "armed" : "paused";
+    setStatus(id, next);
+    setAlertArmed({ id, armed: next === "armed" })
+      .then(({ ok }) => {
+        if (!ok) setStatus(id, before);
+      })
+      .catch(() => {
+        setStatus(id, before);
+        toast.error("Couldn't update the rule", { description: "Check your connection and try again." });
+      });
+  };
   return (
     <div className="min-h-screen bg-canvas-base font-body-md text-body-md text-on-surface antialiased">
       <StudioHeader />

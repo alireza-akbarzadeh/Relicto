@@ -1,6 +1,7 @@
 import "server-only";
 
 import { headers } from "next/headers";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
@@ -32,9 +33,12 @@ function toSessionUser(user: { name: string; image?: string | null; emailVerifie
   };
 }
 
+/** One Better Auth lookup per request, however many loaders ask who is signed in. */
+const readSession = cache(async () => auth.api.getSession({ headers: await headers() }));
+
 /** The signed-in trader, or null when there's no session. */
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
-  const result = await auth.api.getSession({ headers: await headers() });
+  const result = await readSession();
   if (!result) return null;
   const [notifications, walletCents] = await Promise.all([
     notificationService.feed(result.user.id),
@@ -48,7 +52,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
  * deliberately doesn't carry it, so data loaders ask for it separately.
  */
 export async function getUserId(): Promise<string | null> {
-  const result = await auth.api.getSession({ headers: await headers() });
+  const result = await readSession();
   return result?.user.id ?? null;
 }
 

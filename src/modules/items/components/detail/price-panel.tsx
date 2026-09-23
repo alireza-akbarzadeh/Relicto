@@ -9,6 +9,7 @@ import { formatMoney } from "@/lib/format";
 import { ESCROW_TONE, STAT_TONE } from "../../lib/tones";
 import type { ItemDetail } from "../../types";
 import { useCart } from "@/modules/relicto/state/cart-provider";
+import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 
 const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3 font-headline-sm text-sm transition-all hover:bg-surface-container-high";
 
@@ -16,6 +17,8 @@ const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3
 export function PricePanel({ item }: { item: ItemDetail }) {
   const { price } = item;
   const { addItem } = useCart();
+  const { isWatched, toggle } = useWatchlist();
+  const watched = isWatched(item.slug);
   const addToCart = () => {
     addItem({
       id: item.slug,
@@ -100,13 +103,16 @@ export function PricePanel({ item }: { item: ItemDetail }) {
               <Icon name="add_shopping_cart" className="text-[20px]" />
               <span className="hidden sm:inline">Add</span>
             </Button>
-            <NoticeButton
-              notice={{ title: "Added to watchlist", description: "Watchlists sync with your account once auth is wired." }}
-              aria-label="Add to watchlist"
-              className={cn(ACTION, "px-3.5 text-text-secondary hover:text-primary")}
+            <Button
+              variant={null}
+              size={null}
+              onClick={() => toggle(item.slug, item.name)}
+              aria-label={watched ? "Remove from watchlist" : "Add to watchlist"}
+              aria-pressed={watched}
+              className={cn(ACTION, "px-3.5 hover:text-primary", watched ? "text-primary" : "text-text-secondary")}
             >
-              <Icon name="favorite" className="text-[20px]" />
-            </NoticeButton>
+              <Icon name="favorite" filled={watched} className="text-[20px]" />
+            </Button>
             <NoticeButton
               notice={{ title: "Price ping", description: "Configure the alert threshold in the panel below." }}
               aria-label="Configure price drop ping"

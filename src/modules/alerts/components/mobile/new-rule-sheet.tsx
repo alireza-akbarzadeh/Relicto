@@ -13,32 +13,37 @@ import { useAlertRules } from "../../state/alert-rules-provider";
 const FIELD = "h-11 rounded-lg border-0 bg-canvas-base px-3 shadow-inner placeholder:text-text-muted focus-visible:ring-2 focus-visible:ring-border-focus md:text-body-md dark:bg-canvas-base";
 const LABEL = "mb-1 block font-label-badge text-label-badge text-text-secondary uppercase";
 
-type NewRuleSheetProps = { open: boolean; onOpenChange: (open: boolean) => void; fallbackImage: string };
+type NewRuleSheetProps = { open: boolean; onOpenChange: (open: boolean) => void };
 
-/** "Deploy Snipe Rule": name, target price, float cap and auto-buy; adds the rule to the feed. */
-export function NewRuleSheet({ open, onOpenChange, fallbackImage }: NewRuleSheetProps) {
-  const { add } = useAlertRules();
+/** "Deploy Snipe Rule": name, target price, float cap and auto-buy; saves the rule and refreshes the feed. */
+export function NewRuleSheet({ open, onOpenChange }: NewRuleSheetProps) {
+  const { create } = useAlertRules();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [float, setFloat] = useState("");
   const [autoBuy, setAutoBuy] = useState(false);
 
-  const submit = (event: FormEvent) => {
+  const [pending, setPending] = useState(false);
+
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
     const target = Number(price);
+    const cap = float.trim() ? Number(float) : null;
     if (!name.trim() || !(target > 0)) {
       toast.error("Add an asset name and a target price");
       return;
     }
-    add({
-      id: `rule-${Date.now()}`, kind: "snipe", game: { label: "CS2", tone: "crimson" }, category: { label: "Price Snipe", tone: "amber" },
-      name: name.trim(), image: fallbackImage, imageAlt: name.trim(), armed: true,
-      target: { label: "Target Snipe Threshold", value: `< ${formatMoney(target)}`, tone: "emerald" },
-      current: { label: "Float Cap", value: float.trim() || "Any", tone: "plain" },
-      tags: [{ label: autoBuy ? "Auto-Exec" : "Push Alert", tone: autoBuy ? "emerald" : "muted" }],
-      ping: `${name.trim()} sniper responding`,
-    });
-    toast.success("Trigger rule deployed across 4 snipers", { description: `${name.trim()} under ${formatMoney(target)}` });
+    if (cap !== null && !(cap >= 0 && cap <= 1)) {
+      toast.error("Float cap must be between 0 and 1");
+      return;
+    }
+
+    setPending(true);
+    const saved = await create({ name: name.trim(), targetUsd: target, maxFloat: cap, autoBuy });
+    setPending(false);
+    if (!saved) return;
+
+    toast.success("Trigger rule deployed", { description: `${name.trim()} under ${formatMoney(target)}` });
     setName("");
     setPrice("");
     setFloat("");
@@ -92,6 +97,7 @@ export function NewRuleSheet({ open, onOpenChange, fallbackImage }: NewRuleSheet
           </div>
           <Button
             type="submit"
+            disabled={pending}
             variant={null}
             size={null}
             className="h-12 w-full rounded-xl border-0 bg-primary-container font-headline-sm text-headline-sm font-semibold tracking-wider text-on-primary-container uppercase shadow-lg transition-all active:scale-95"

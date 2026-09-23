@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
+import { useListingWrites } from "../hooks/use-listing-writes";
 import type { InventoryItem } from "../types";
 
 const MODES = ["Market P2P", "Instant Bot", "24H Auction"] as const;
@@ -16,6 +16,7 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
   const [mode, setMode] = useState<(typeof MODES)[number]>(MODES[0]);
   const [price, setPrice] = useState(item.price.toFixed(2));
   const [note, setNote] = useState("0.0112 Scratchless spine, Doppler Phase 4 deep sapphire gradient tier");
+  const { pending, list } = useListingWrites();
   const fee = Number(price || 0) * 0.02;
   const proceeds = Number(price || 0) - fee;
   return <aside className="flex flex-col gap-space-md rounded-xl border border-white/[0.08] bg-surface-card p-space-md shadow-xl lg:p-space-lg">
@@ -26,6 +27,6 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
     <div className="flex flex-col gap-2 rounded-lg border border-white/[0.08] bg-surface-container-lowest p-3"><div className="flex items-center justify-between border-b border-white/[0.06] pb-1"><span className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">Escrow Settlement Ledger</span><span className="font-data-mono-md text-[10px] font-semibold text-primary">Tier 1 Pro Liquidity</span></div><div className="flex flex-col gap-1 font-data-mono-md text-xs"><div className="flex justify-between text-text-secondary"><span>Gross Listed Value:</span><span className="font-semibold text-text-primary">${Number(price || 0).toFixed(2)}</span></div><div className="flex justify-between text-text-secondary"><span>Relicto Platform Fee (2.0%):</span><span className="font-semibold text-primary">-${fee.toFixed(2)}</span></div><div className="flex justify-between text-text-secondary"><span>Steam Bot Relay:</span><span className="font-semibold text-status-upcoming">$0.00 (Free)</span></div><div className="my-1 h-px bg-white/[0.06]" /><div className="flex items-center justify-between text-sm"><span className="font-semibold text-text-primary">Net Trader Proceeds:</span><span className="font-data-mono-lg text-base font-bold text-tertiary">${proceeds.toFixed(2)} USD</span></div></div></div>
     <div className="flex flex-col gap-1.5"><span className="font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">Settlement Preferences</span><label className="flex items-center justify-between rounded border border-white/[0.06] bg-surface-container-lowest px-3 py-2"><span className="flex items-center gap-2 font-body-md text-xs text-text-primary"><Checkbox defaultChecked />Instant Crypto Settlement (USDT / Arbitrum)</span><span className="font-label-badge text-[10px] font-bold text-status-upcoming uppercase">Zero Gas</span></label><label className="flex items-center justify-between rounded border border-white/[0.06] bg-surface-container-lowest px-3 py-2"><span className="flex items-center gap-2 font-body-md text-xs text-text-primary"><Checkbox defaultChecked />Allow Counter-Offers (Min: $2,950.00)</span><Icon name="tune" className="text-[15px] text-tertiary" /></label></div>
     <label htmlFor="buyer-note" className="flex flex-col gap-1.5 font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">Trader Buyer Note / Craft Intel<Input id="buyer-note" value={note} onChange={(event) => setNote(event.target.value)} className="h-auto rounded bg-surface-container-lowest px-3 py-1.5 font-data-mono-md text-xs text-text-secondary" /></label>
-    <div className="flex flex-col gap-2 pt-1"><NoticeButton notice={{ title: "Listing queued", description: `${item.name} is ready for escrow review through the ${mode} mock flow.` }} className="h-auto w-full gap-2 rounded bg-primary py-2.5 font-headline-md text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_16px_rgba(244,63,94,0.35)] hover:bg-primary/90"><Icon name="lock" className="text-[18px]" />List Item on Relicto (${Number(price || 0).toFixed(2)})</NoticeButton><div className="flex items-center justify-center gap-1 text-center font-data-mono-md text-[11px] text-text-muted"><Icon name="verified_user" className="text-[13px] text-status-upcoming" />Encrypted Steam P2P Escrow Bot Verification System</div></div>
+    <div className="flex flex-col gap-2 pt-1"><Button variant={null} size={null} disabled={pending} onClick={() => list(item, Number(price), note)} className="h-auto w-full gap-2 rounded bg-primary py-2.5 font-headline-md text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_16px_rgba(244,63,94,0.35)] hover:bg-primary/90"><Icon name="lock" className="text-[18px]" />List Item on Relicto (${Number(price || 0).toFixed(2)})</Button><div className="flex items-center justify-center gap-1 text-center font-data-mono-md text-[11px] text-text-muted"><Icon name="verified_user" className="text-[13px] text-status-upcoming" />Encrypted Steam P2P Escrow Bot Verification System</div></div>
   </aside>;
 }

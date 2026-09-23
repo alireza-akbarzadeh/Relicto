@@ -6,7 +6,7 @@ import { listings, orders, tradeOffers } from "@/lib/db/schema";
 import { draft } from "../notifications/notifications.catalog";
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
-import { usd } from "../wallet/wallet.presenter";
+import { applyCancel } from "./escrow.cancel";
 import * as repo from "./escrow.repository";
 import type { OfferSent } from "./escrow.schema";
 
@@ -16,19 +16,24 @@ import type { OfferSent } from "./escrow.schema";
  */
 export type EscrowResult =
   | { status: "applied"; notices: NotificationRow[] }
-  | { status: "unchanged" | "not-found" };
+  | { status: "unchanged" | "not-found" | "offer-sent" };
+
+type Refusal = Exclude<EscrowResult["status"], "applied">;
+
+const EXPIRED_REASON = "No trade offer was dispatched within the escrow window.";
 
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /** Runs one transition on a locked, still-open escrow. */
-function transition(code: string, apply: (tx: Tx, locked: repo.LockedOrder) => Promise<NotificationRow[] | null>) {
+function transition(code: string, apply: (tx: Tx, locked: repo.LockedOrder) => Promise<NotificationRow[] | Refusal | null>) {
   return db.transaction(async (tx): Promise<EscrowResult> => {
     const locked = await repo.lockOrder(tx, code);
     if (!locked) return { status: "not-found" };
     if (locked.order.state !== "escrow") return { status: "unchanged" };
 
-    const notices = await apply(tx, locked);
-    return notices ? { status: "applied", notices } : { status: "unchanged" };
+    const outcome = await apply(tx, locked);
+    if (typeof outcome === "string") return { status: outcome };
+    return outcome ? { status: "applied", notices: outcome } : { status: "unchanged" };
   });
 }
 
@@ -102,30 +107,49 @@ export const escrowService = {
 
   /** Timed out or failed: the buyer is refunded and the listing goes back on sale. */
   cancelled(code: string, reason: string) {
+    return transition(code, (tx, locked) => applyCancel(tx, locked, reason));
+  },
+
+  /**
+   * The buyer backs out. Allowed until a trade offer is in their hands — after
+   * that the bot decides, through the webhook.
+   */
+  cancelByBuyer(code: string, buyerId: string) {
     return transition(code, async (tx, locked) => {
-      const { order, line } = locked;
-      const now = new Date();
-
-      await tx.update(orders).set({ state: "cancelled", completedAt: now }).where(eq(orders.id, order.id));
-      if (line.listingId) await tx.update(listings).set({ status: "active" }).where(eq(listings.id, line.listingId));
-      await tx.update(tradeOffers).set({ status: "declined" }).where(eq(tradeOffers.orderId, order.id));
-      await repo.setStep(tx, order.id, 2, { state: "done", occurredAt: now, title: "Escrow Cancelled",
-        body: `${reason} ${usd(order.totalCents)} returned to your vault.` });
-      await repo.queueAfter(tx, order.id, 2);
-
-      await repo.settleDebit(tx, order.id);
-      await repo.post(tx, {
-        id: `ledger-chk-${order.code.toLowerCase()}-refund`, userId: order.buyerId, orderId: order.id,
-        direction: "credit", kind: "refund", amountCents: order.totalCents, status: "settled", venue: "steam-escrow",
-        title: "Escrow Refund", assetLabel: line.nameSnapshot, detailLabel: reason, nodeLabel: order.counterpartyName,
-        occurredAt: now,
-      });
-
-      const shared = { code: order.code, item: item(locked), refundCents: order.totalCents, reason };
-      return notificationService.record(tx, [
-        draft.orderCancelled({ ...shared, userId: order.buyerId, role: "buyer" }),
-        ...(order.sellerId ? [draft.orderCancelled({ ...shared, userId: order.sellerId, role: "seller" })] : []),
-      ]);
+      if (locked.order.buyerId !== buyerId) return "not-found";
+      if (await repo.hasDispatchedOffer(tx, locked.order.id)) return "offer-sent";
+      return applyCancel(tx, locked, "Cancelled by the buyer.");
     });
+  },
+
+  /**
+   * Either party freezes the escrow for review. Funds stay locked, the expiry
+   * sweep leaves it alone, and the other side is told.
+   */
+  disputed(code: string, reporterId: string) {
+    return transition(code, async (tx, locked) => {
+      const { order } = locked;
+      if (reporterId !== order.buyerId && reporterId !== order.sellerId) return "not-found";
+
+      await tx.update(orders).set({ state: "disputed" }).where(eq(orders.id, order.id));
+      const other = reporterId === order.buyerId ? order.sellerId : order.buyerId;
+      return other
+        ? notificationService.record(tx, [draft.orderDisputed({ code: order.code, item: item(locked), userId: other })])
+        : [];
+    });
+  },
+
+  /**
+   * Refunds every escrow whose window lapsed without a trade offer — all of
+   * them from the cron, or one trader's when they open their orders or wallet.
+   */
+  async expireOverdue(userId?: string, now = new Date()) {
+    const codes = await repo.findOverdueCodes(db, now, userId);
+    const notices: NotificationRow[] = [];
+    for (const code of codes) {
+      const result = await escrowService.cancelled(code, EXPIRED_REASON);
+      if (result.status === "applied") notices.push(...result.notices);
+    }
+    return { expired: codes.length, notices };
   },
 };

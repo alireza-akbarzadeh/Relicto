@@ -36,6 +36,8 @@ export const walletAccounts = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     balanceCents: integer("balance_cents").notNull().default(0),
     currency: text("currency").notNull().default("USD"),
+    /** Emergency lock: while set, the vault can't pay for orders or cash out. */
+    frozenAt: timestamp("frozen_at"),
     ...timestamps,
   },
   (t) => [uniqueIndex("wallet_accounts_user_idx").on(t.userId)],

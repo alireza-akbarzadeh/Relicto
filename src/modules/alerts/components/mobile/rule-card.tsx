@@ -62,7 +62,14 @@ export function RuleCard({ rule }: { rule: AlertRule }) {
     <article className="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md shadow-md transition-all duration-300">
       <div className="flex items-start justify-between gap-space-sm">
         <div className="flex min-w-0 items-center gap-space-sm">
-          <Image src={rule.image} alt={rule.imageAlt} width={96} height={96} sizes="48px" className="h-12 w-12 shrink-0 rounded-lg bg-surface-dim object-cover" />
+          {rule.image ? (
+            <Image src={rule.image} alt={rule.imageAlt} width={96} height={96} sizes="48px" className="h-12 w-12 shrink-0 rounded-lg bg-surface-dim object-cover" />
+          ) : (
+            // A custom watch has no catalog art yet.
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-surface-dim" aria-hidden>
+              <Icon name="target" className="text-[22px] text-text-muted" />
+            </span>
+          )}
           <div className="min-w-0">
             <div className="flex items-center gap-1 font-label-badge text-label-badge">
               <span className={cn("font-semibold", TONE_TEXT[rule.game.tone])}>{rule.game.label}</span>

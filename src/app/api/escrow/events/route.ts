@@ -1,8 +1,8 @@
-import { timingSafeEqual } from "node:crypto";
 import { after, type NextRequest } from "next/server";
 import { escrowEvent } from "@/server/modules/escrow/escrow.schema";
 import { escrowService } from "@/server/modules/escrow/escrow.service";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
+import { bearerMatches } from "@/server/modules/shared/bearer";
 
 /**
  * Escrow webhook. Trade bots report each step of an order here — offer sent,
@@ -10,16 +10,11 @@ import { notificationService } from "@/server/modules/notifications/notification
  * Authenticated with a shared secret; repeats are safe and answer `unchanged`.
  */
 
-function authorized(request: NextRequest) {
-  const secret = process.env.ESCROW_WEBHOOK_SECRET;
-  const given = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ?? "";
-  if (!secret || given.length !== secret.length) return false;
-  return timingSafeEqual(Buffer.from(given), Buffer.from(secret));
-}
-
 export async function POST(request: NextRequest) {
   if (!process.env.ESCROW_WEBHOOK_SECRET) return Response.json({ error: "escrow webhook disabled" }, { status: 503 });
-  if (!authorized(request)) return Response.json({ error: "unauthorized" }, { status: 401 });
+  if (!bearerMatches(request.headers.get("authorization"), process.env.ESCROW_WEBHOOK_SECRET)) {
+    return Response.json({ error: "unauthorized" }, { status: 401 });
+  }
 
   const parsed = escrowEvent.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "invalid event", issues: parsed.error.issues }, { status: 400 });

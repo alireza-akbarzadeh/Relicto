@@ -21,7 +21,7 @@ export function AlertsBody({ data }: { data: AlertsMobile }) {
         <DispatchChannels channels={data.channels} />
         <NewRuleButton onClick={open} />
       </div>
-      <NewRuleSheet open={composing} onOpenChange={setComposing} fallbackImage={data.rules[0].image} />
+      <NewRuleSheet open={composing} onOpenChange={setComposing} />
     </AlertRulesProvider>
   );
 }

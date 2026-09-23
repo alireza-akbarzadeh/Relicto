@@ -15,7 +15,7 @@ export type SettleInput = { rail: string; promo: boolean; cartIds: string[] };
 export type SettleResult =
   /** `notices` are the sellers' notifications, for push once the transaction has committed. */
   | { status: "placed"; codes: string[]; notices: NotificationRow[] }
-  | { status: "rail-unavailable" | "empty" | "stale" | "insufficient-funds" };
+  | { status: "rail-unavailable" | "empty" | "stale" | "insufficient-funds" | "vault-frozen" };
 
 /** Card, crypto and Steam need a payment provider (backend-plan, Phase 4); the vault settles in-house. */
 const SETTLING_RAILS = new Set(["relicto"]);
@@ -51,6 +51,7 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
 
     const prices = lines.map((line) => line.listing.priceCents);
     const due = quote(prices, input.promo);
+    if (wallet?.frozenAt) return { status: "vault-frozen" };
     if (!wallet || wallet.balanceCents < due.dueCents) return { status: "insufficient-funds" };
 
     const shares = allocate(prices, due.comboCents + due.promoCents);

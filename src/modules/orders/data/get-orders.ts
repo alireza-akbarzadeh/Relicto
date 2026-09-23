@@ -1,5 +1,5 @@
 import "server-only";
-import { requireUserId } from "@/modules/relicto/data/get-session";
+import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { orderService } from "@/server/modules/orders/orders.service";
 import type { LedgerData } from "../types";
 import { active, rows, stats } from "./history.mock";
@@ -29,6 +29,6 @@ const SAMPLE: LedgerData = {
  * sample ledger while the account has no orders, so the screen is never blank.
  */
 export async function getOrderLedger(): Promise<LedgerData> {
-  const ledger = await orderService.ledger(await requireUserId());
+  const ledger = await orderService.ledger(await requireSettledViewer());
   return ledger.counts.all > 0 ? ledger : SAMPLE;
 }

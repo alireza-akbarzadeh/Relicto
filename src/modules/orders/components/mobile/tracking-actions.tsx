@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,14 +14,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { useEscrowActions } from "../../hooks/use-escrow-actions";
 
 /** Accept in the Steam app, or freeze the escrow and open a fraud ticket (confirmed first). */
 export function TrackingActions({ offerUrl, code }: { offerUrl: string; code: string }) {
   const [open, setOpen] = useState(false);
+  const { pending, dispute } = useEscrowActions(code);
 
   const freeze = () => {
     setOpen(false);
-    toast.error("Escrow protocol paused", { description: `Valve API session for ${code} invalidated. Ticket #ESC-4091 opened with the fraud desk.` });
+    dispute();
   };
 
   return (
@@ -40,6 +41,7 @@ export function TrackingActions({ offerUrl, code }: { offerUrl: string; code: st
             <Button
               variant={null}
               size={null}
+              disabled={pending}
               className="h-auto w-full gap-2 rounded-xl border-0 bg-surface-card px-space-md py-3 font-headline-sm text-headline-sm font-semibold tracking-wider text-text-muted uppercase transition-all hover:bg-surface-container-highest hover:text-primary active:scale-[0.98]"
             />
           }

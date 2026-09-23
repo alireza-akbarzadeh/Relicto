@@ -1,4 +1,4 @@
-import { boolean, index, integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgEnum, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
 import { createdAt, primaryId, timestamps } from "./_shared";
 import { user } from "./auth";
 import { items } from "./catalog";
@@ -29,6 +29,10 @@ export const alertRules = pgTable(
      * so the live floor is preferred and this is the fallback.
      */
     currentCents: integer("current_cents"),
+    /** Buy the floor copy the moment the rule fires, instead of only alerting. */
+    autoBuy: boolean("auto_buy").notNull().default(false),
+    /** Upper float bound for CS2 snipes; null means any float. */
+    maxFloat: real("max_float"),
     status: alertStatus("status").notNull().default("armed"),
     lastTriggeredAt: timestamp("last_triggered_at"),
     ...timestamps,

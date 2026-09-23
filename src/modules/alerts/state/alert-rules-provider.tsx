@@ -1,34 +1,16 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
+import { useAlertRulesState } from "../hooks/use-alert-rules-state";
 import type { AlertRule } from "../mobile.types";
 
-type AlertRules = {
-  rules: AlertRule[];
-  armedCount: number;
-  toggle: (id: string) => boolean;
-  add: (rule: AlertRule) => void;
-};
+type AlertRules = ReturnType<typeof useAlertRulesState>;
 
 const AlertRulesContext = createContext<AlertRules | null>(null);
 
-/** Local rule book: arming toggles and newly deployed rules, shared by the deck, list and sheet. */
+/** The trader's rule book, shared by the deck, the list and the new-rule sheet. */
 export function AlertRulesProvider({ initial, children }: { initial: AlertRule[]; children: ReactNode }) {
-  const [rules, setRules] = useState(initial);
-
-  const toggle = (id: string) => {
-    const next = !rules.find((rule) => rule.id === id)?.armed;
-    setRules((current) => current.map((rule) => (rule.id === id ? { ...rule, armed: next } : rule)));
-    return next;
-  };
-
-  return (
-    <AlertRulesContext.Provider
-      value={{ rules, armedCount: rules.filter((rule) => rule.armed).length, toggle, add: (rule) => setRules((current) => [rule, ...current]) }}
-    >
-      {children}
-    </AlertRulesContext.Provider>
-  );
+  return <AlertRulesContext.Provider value={useAlertRulesState(initial)}>{children}</AlertRulesContext.Provider>;
 }
 
 export function useAlertRules() {

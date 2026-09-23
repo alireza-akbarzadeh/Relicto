@@ -18,7 +18,7 @@ import { seedCheckout } from "./seed-checkout";
 import { seedContent } from "./seed-content";
 import { seedOrders } from "./seed-orders";
 import { linkShowcaseItems, seedProfile } from "./seed-profile";
-import { seedSell } from "./seed-sell";
+import { linkInventoryItems, seedSell } from "./seed-sell";
 import { seedTrader, targetEmail } from "./seed-trader";
 import { seedTournaments } from "./seed-tournaments";
 import { seedTracker } from "./seed-tracker";
@@ -178,6 +178,7 @@ async function main() {
   // Last: every catalog item now exists, whichever seed added it.
   await linkShowcaseItems(db);
   await linkAlertItems(db);
+  await linkInventoryItems(db, traderId);
 
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,

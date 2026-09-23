@@ -64,6 +64,18 @@ export const draft = {
     dedupeKey: `${o.code}:item_delivered:${o.buyerId}`,
   }),
 
+  /** The other side: an escrow was frozen for review; funds stay locked. */
+  orderDisputed: (o: Order & { userId: string }): NotificationDraft => ({
+    userId: o.userId,
+    kind: "system",
+    icon: "gavel",
+    tone: "warning",
+    title: `Escrow frozen for ${o.item}`,
+    body: "The other side reported a problem. Funds stay locked in escrow while Relicto reviews the trade.",
+    href: href(o.code),
+    dedupeKey: `${o.code}:order_disputed:${o.userId}`,
+  }),
+
   /** Either side: the escrow was cancelled before the trade completed. */
   orderCancelled: (o: Order & { userId: string; role: "buyer" | "seller"; refundCents: number; reason: string }): NotificationDraft => ({
     userId: o.userId,

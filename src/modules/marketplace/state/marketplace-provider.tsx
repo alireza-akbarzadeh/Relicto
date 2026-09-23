@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
 import { useQueryStates } from "nuqs";
-import { EMPTY_FILTERS, searchListings, toggle, type ListingResults } from "../lib/filters";
+import { EMPTY_FILTERS, searchListings, type ListingResults } from "../lib/filters";
 import { gameReset, marketplaceSearchParams, toFilters, toQuery } from "../lib/search-params";
 import type { EcosystemFilter, Filters, Listing } from "../types";
 
@@ -14,19 +14,17 @@ type MarketplaceState = {
   /** Switching economies also drops the other game's facets. */
   setGame: (game: EcosystemFilter) => void;
   resetAll: () => void;
-  wishlist: Set<string>;
-  toggleWishlist: (id: string) => void;
 };
 
 const MarketplaceContext = createContext<MarketplaceState | null>(null);
 
 /**
  * Every search criterion lives in the URL (nuqs), so a filtered catalog can be
- * shared, bookmarked and restored on reload. Only the wishlist stays local.
+ * shared, bookmarked and restored on reload. The watchlist is app-wide
+ * (`useWatchlist`), not marketplace state.
  */
 export function MarketplaceProvider({ catalog, children }: { catalog: Listing[]; children: ReactNode }) {
   const [query, setQuery] = useQueryStates(marketplaceSearchParams, { history: "replace", shallow: true, clearOnDefault: true });
-  const [wishlist, setWishlist] = useState<Set<string>>(() => new Set());
 
   const filters = useMemo(() => toFilters(query), [query]);
 
@@ -48,14 +46,10 @@ export function MarketplaceProvider({ catalog, children }: { catalog: Listing[];
     void setQuery({ ...toQuery(EMPTY_FILTERS), q: "", page: 1 });
   }, [setQuery]);
 
-  const toggleWishlist = useCallback((id: string) => {
-    setWishlist((current) => new Set(toggle([...current], id)));
-  }, []);
-
   const results = useMemo(() => searchListings(catalog, filters), [catalog, filters]);
   const value = useMemo(
-    () => ({ filters, results, patch, setGame, resetAll, wishlist, toggleWishlist }),
-    [filters, results, patch, setGame, resetAll, wishlist, toggleWishlist],
+    () => ({ filters, results, patch, setGame, resetAll }),
+    [filters, results, patch, setGame, resetAll],
   );
 
   return <MarketplaceContext.Provider value={value}>{children}</MarketplaceContext.Provider>;

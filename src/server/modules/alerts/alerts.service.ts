@@ -8,6 +8,7 @@ import type { AlertsMobile } from "@/modules/alerts/mobile.types";
 import type { PriceAlert } from "@/modules/alerts/types";
 import { findWalletBalance } from "../checkout/checkout.repository";
 import { toAlertsMobile } from "./alerts-mobile.presenter";
+import { createRule, setArmed } from "./alerts.commands";
 import { ago } from "@/server/modules/shared/ago";
 
 const money = (cents: number) =>
@@ -32,6 +33,9 @@ function toAlert(rule: Rule, floorCents: number | undefined, now: Date): PriceAl
 }
 
 export const alertService = {
+  create: createRule,
+  setArmed,
+
   /**
    * A trader's price rules. The "current" column prefers the live floor of the
    * watched item and falls back to the last observed price for items Relicto

@@ -20,7 +20,7 @@ export function TrackingView({ order }: { order: OrderTracking }) {
           <EscrowSteps steps={order.steps} />
           <div className="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">
             <div className="flex flex-col gap-space-lg lg:col-span-8">
-              <TradePanel bot={order.bot} token={order.token} />
+              <TradePanel code={order.code} bot={order.bot} token={order.token} />
               <GuaranteeCard guarantee={order.guarantee} />
             </div>
             <div className="flex flex-col gap-space-lg lg:col-span-4">

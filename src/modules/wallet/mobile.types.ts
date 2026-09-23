@@ -38,4 +38,6 @@ export type WalletMobile = {
   actions: QuickAction[];
   rails: LiquidityRail[];
   ledger: { total: number; entries: LedgerEntry[] };
+  /** The emergency lock is on. */
+  frozen?: boolean;
 };

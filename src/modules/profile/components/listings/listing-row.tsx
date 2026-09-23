@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { NoticeButton } from "@/components/notice-button";
+import { DelistButton } from "@/modules/sell/components/delist-button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -40,13 +41,14 @@ export function ListingRow({ listing }: { listing: Listing }) {
           >
             <Icon name="edit" className="text-[18px]" />
           </NoticeButton>
-          <NoticeButton
-            notice={{ title: `${listing.name} delisted to inventory`, description: "Delisting is simulated until the listings API is wired." }}
+          <DelistButton
+            listingId={listing.id}
+            name={listing.name}
             aria-label={`Delist ${listing.name}`}
             className={cn(ACTION, "text-on-surface-variant hover:bg-status-live/20 hover:text-status-live")}
           >
             <Icon name="close" className="text-[18px]" />
-          </NoticeButton>
+          </DelistButton>
         </div>
       </div>
     </div>

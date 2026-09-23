@@ -3,6 +3,7 @@ import "server-only";
 import type { WalletMobile } from "@/modules/wallet/mobile.types";
 import type { WalletData, WalletRail } from "@/modules/wallet/types";
 import { toWalletMobile } from "./wallet-mobile.presenter";
+import { requestCashout, setFrozen } from "./wallet.commands";
 import { toWalletMetrics } from "./wallet.metrics";
 import { toWalletTransaction, usd } from "./wallet.presenter";
 import * as repository from "./wallet.repository";
@@ -41,6 +42,9 @@ async function loadTotals(account: Account, userId: string) {
 }
 
 export const walletService = {
+  requestCashout,
+  setFrozen,
+
   /** Spendable balance in cents — the header chip on every page. */
   async liquidCents(userId: string) {
     return (await repository.findWallet(userId))?.balanceCents ?? 0;
@@ -64,6 +68,8 @@ export const walletService = {
       depositRails: DEPOSIT_RAILS,
       cashoutRails: CASHOUT_RAILS,
       transactions: entries.map(toWalletTransaction),
+      liquidUsd: totals.liquidCents / 100,
+      frozen: account.frozenAt !== null,
     };
   },
 
@@ -78,6 +84,6 @@ export const walletService = {
       loadTotals(account, userId),
     ]);
 
-    return toWalletMobile(chrome, { ...totals, dayNetCents, changePct }, rows, total);
+    return { ...toWalletMobile(chrome, { ...totals, dayNetCents, changePct }, rows, total), frozen: account.frozenAt !== null };
   },
 };

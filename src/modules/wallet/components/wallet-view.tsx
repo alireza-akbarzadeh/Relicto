@@ -27,7 +27,7 @@ export function WalletView({ data }: { data: WalletData }) {
           <WalletOverview data={data} onDeposit={() => scrollTo(depositRef)} onCashout={() => scrollTo(cashoutRef)} />
           <div className="grid grid-cols-1 gap-space-lg xl:grid-cols-2">
             <div ref={depositRef} id="deposit"><WalletDeposit rails={data.depositRails} /></div>
-            <div ref={cashoutRef}><WalletCashout rails={data.cashoutRails} /></div>
+            <div ref={cashoutRef}><WalletCashout rails={data.cashoutRails} maxUsd={data.liquidUsd ?? 0} /></div>
           </div>
           <WalletAuditLedger transactions={data.transactions} />
           <WalletCompliance />

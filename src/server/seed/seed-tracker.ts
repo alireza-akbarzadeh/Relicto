@@ -2,7 +2,7 @@
  * Tracker terminal, seeded from `tracker.mock`: the watch board, cross-venue
  * depth for the focused asset, and the arbitrage spread rows.
  */
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, notLike } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 import { tracker } from "../../modules/tracker/data/tracker.mock";
@@ -46,6 +46,8 @@ const BOARD: Record<string, string> = {
 const FOCUS = "item-butterfly-doppler";
 
 export async function seedTracker(db: Db, traderId: string) {
+  // Items watched from the app get generated ids; the board re-seeds to the designed four.
+  await db.delete(schema.watchlist).where(and(eq(schema.watchlist.userId, traderId), notLike(schema.watchlist.id, "watch-%")));
   await db.insert(schema.items).values(DRAGON_LORE).onConflictDoUpdate({ target: schema.items.id, set: DRAGON_LORE });
 
   const dragonListing = {

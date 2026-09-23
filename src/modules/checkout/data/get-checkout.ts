@@ -1,5 +1,5 @@
 import "server-only";
-import { requireUserId } from "@/modules/relicto/data/get-session";
+import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { checkoutService } from "@/server/modules/checkout/checkout.service";
 import type { CheckoutMobile } from "../mobile.types";
 import type { CheckoutData, CheckoutItem } from "../types";
@@ -11,12 +11,12 @@ import { checkoutMobile } from "./checkout-mobile.mock";
  * empty; the sample basket only stands in on a database nobody has seeded.
  */
 export async function getCheckout(): Promise<CheckoutData> {
-  return (await checkoutService.basket(await requireUserId())) ?? checkout;
+  return (await checkoutService.basket(await requireSettledViewer())) ?? checkout;
 }
 
 /** The basket lines the header cart starts from on every signed-in page. */
 export async function getCartLines(): Promise<CheckoutItem[]> {
-  return (await checkoutService.lines(await requireUserId())) ?? checkout.items;
+  return (await checkoutService.lines(await requireSettledViewer())) ?? checkout.items;
 }
 
 /**
@@ -24,5 +24,5 @@ export async function getCartLines(): Promise<CheckoutItem[]> {
  * rails, handshake copy and the reservation window stay authored.
  */
 export async function getCheckoutMobile(): Promise<CheckoutMobile> {
-  return { ...checkoutMobile, vaultUsd: (await checkoutService.vaultCents(await requireUserId())) / 100 };
+  return { ...checkoutMobile, vaultUsd: (await checkoutService.vaultCents(await requireSettledViewer())) / 100 };
 }

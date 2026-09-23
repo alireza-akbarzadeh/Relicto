@@ -1,6 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
-import { requireUserId } from "@/modules/relicto/data/get-session";
+import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { orderService } from "@/server/modules/orders/orders.service";
 import type { TrackingMobile } from "../mobile.types";
 import type { OrderTracking } from "../types";
@@ -15,7 +15,7 @@ const orderCode = (orderId: string, fallback: string) => (orderId ? `#${orderId.
  * sample escrow only stands in on a database nobody has seeded.
  */
 export async function getOrderTracking(orderId: string): Promise<OrderTracking> {
-  const live = await orderService.tracking(orderId, await requireUserId());
+  const live = await orderService.tracking(orderId, await requireSettledViewer());
   if (live) return live;
   if (await orderService.hasOrders()) notFound();
   return { ...tracking, code: orderCode(orderId, tracking.code) };
@@ -23,7 +23,7 @@ export async function getOrderTracking(orderId: string): Promise<OrderTracking> 
 
 /** The mobile tracker's view of the same order, with the same access rule. */
 export async function getOrderTrackingMobile(orderId: string): Promise<TrackingMobile> {
-  const live = await orderService.trackingMobile(orderId, await requireUserId());
+  const live = await orderService.trackingMobile(orderId, await requireSettledViewer());
   if (live) return live;
   if (await orderService.hasOrders()) notFound();
   return { ...trackingMobile, code: orderCode(orderId, trackingMobile.code) };

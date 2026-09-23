@@ -2,6 +2,7 @@ import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import type { SentinelBot, TradeToken } from "../../types";
+import { CancelOrderButton } from "./cancel-order-button";
 
 function BotHeader({ bot }: { bot: SentinelBot }) {
   return (
@@ -60,7 +61,7 @@ function TokenBanner({ token }: { token: TradeToken }) {
 }
 
 /** Sentinel bot identity, anti-phishing token, trade actions and instructions. */
-export function TradePanel({ bot, token }: { bot: SentinelBot; token: TradeToken }) {
+export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBot; token: TradeToken }) {
   return (
     <div className="relative flex flex-col gap-space-lg overflow-hidden rounded-xl bg-surface-card p-space-lg shadow-2xl">
       <div className="pointer-events-none absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-primary-container/10 blur-3xl" />
@@ -115,13 +116,7 @@ export function TradePanel({ bot, token }: { bot: SentinelBot; token: TradeToken
             <Icon name="help_center" className="text-[16px]" />
             <span>Need Assistance?</span>
           </NoticeButton>
-          <NoticeButton
-            notice={{ title: "Cancel order?", description: "Cancellation refunds the escrow once the orders API is wired." }}
-            className="inline-flex h-auto gap-1 rounded-none border-0 p-0 font-label-caps text-label-caps text-text-muted uppercase transition-colors hover:text-status-live"
-          >
-            <Icon name="cancel" className="text-[16px]" />
-            <span>Cancel Order</span>
-          </NoticeButton>
+          <CancelOrderButton code={code} />
         </div>
       </div>
     </div>

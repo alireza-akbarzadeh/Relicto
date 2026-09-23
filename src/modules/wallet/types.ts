@@ -39,4 +39,8 @@ export type WalletData = {
   depositRails: WalletRail[];
   cashoutRails: WalletRail[];
   transactions: WalletTransaction[];
+  /** What can leave the vault right now; the cashout panel's maximum. */
+  liquidUsd?: number;
+  /** The emergency lock is on. */
+  frozen?: boolean;
 };

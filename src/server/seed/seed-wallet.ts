@@ -2,6 +2,7 @@
  * Treasury + audit ledger, seeded to mirror `wallet.mock` so `/wallet` renders
  * the same screen against Postgres.
  */
+import { and, eq, like } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 
@@ -71,7 +72,11 @@ export async function seedWallet(db: Db, traderId: string) {
   await db
     .insert(schema.walletAccounts)
     .values(account)
-    .onConflictDoUpdate({ target: schema.walletAccounts.userId, set: { balanceCents: LIQUID_CENTS } });
+    .onConflictDoUpdate({ target: schema.walletAccounts.userId, set: { balanceCents: LIQUID_CENTS, frozenAt: null } });
+
+  // Cashout requests made in the app carry generated ids; drop them so the ledger is the designed one.
+  await db.delete(schema.ledgerEntries).where(and(eq(schema.ledgerEntries.walletId, walletId), like(schema.ledgerEntries.id, "ledger-out-%")));
+  await db.delete(schema.payouts).where(eq(schema.payouts.walletId, walletId));
 
   for (const entry of ENTRIES(Date.now())) {
     const row = {

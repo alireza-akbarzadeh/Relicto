@@ -29,7 +29,7 @@ const KIND = {
 } as const;
 
 const STATUS_TAG: Record<Rule["status"], AlertRule["tags"][number]> = {
-  armed: { label: "Auto-Exec", tone: "emerald" },
+  armed: { label: "Armed", tone: "emerald" },
   triggered: { label: "Triggered", tone: "amber" },
   paused: { label: "Paused", tone: "muted" },
 };
@@ -73,7 +73,12 @@ function toRule(row: MobileRuleRow, pushOn: boolean): AlertRule {
       sparkTone: rising ? "emerald" : "crimson",
       stat: `30D ${move >= 0 ? "+" : ""}${move.toFixed(1)}%`,
     },
-    tags: [...(pushOn ? [{ label: "Push Alert", tone: "muted" as Tone, icon: "notifications_active" as const }] : []), STATUS_TAG[rule.status]],
+    tags: [
+      ...(pushOn ? [{ label: "Push Alert", tone: "muted" as Tone, icon: "notifications_active" as const }] : []),
+      ...(rule.maxFloat !== null ? [{ label: `Float ≤ ${rule.maxFloat}`, tone: "cyan" as Tone }] : []),
+      // An armed auto-buy rule executes on its own; otherwise it only alerts.
+      rule.autoBuy && rule.status === "armed" ? { label: "Auto-Exec", tone: "emerald" } : STATUS_TAG[rule.status],
+    ],
     ping: `${rule.name} monitor online`,
   };
 }

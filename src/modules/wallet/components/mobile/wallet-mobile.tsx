@@ -13,7 +13,7 @@ export function WalletMobile({ wallet }: { wallet: WalletMobileData }) {
     <div className="flex flex-col bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
       <LinkedMobileHeader />
       <main className="relative flex min-h-screen w-full flex-col bg-surface pt-16 pb-24">
-        <VaultFreezeProvider>
+        <VaultFreezeProvider initial={wallet.frozen}>
           <div className="flex w-full flex-col gap-space-md px-margin pb-space-lg">
             <BalanceCard wallet={wallet} />
             <QuickActions actions={wallet.actions} />

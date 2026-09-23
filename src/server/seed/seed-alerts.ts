@@ -3,7 +3,7 @@
  * "current" column comes from the live floor. Strategy kinds follow the mobile
  * sniper terminal, the only screen that shows them.
  */
-import { eq } from "drizzle-orm";
+import { and, eq, notLike } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 import { alerts } from "../../modules/alerts/data/alerts.mock";
@@ -26,6 +26,8 @@ const cents = (label: string) => Math.round(Number(label.replace(/[^0-9.]/g, "")
 
 export async function seedAlerts(db: Db, traderId: string) {
   const now = Date.now();
+  // Rules deployed in the app have generated ids; a re-seed starts from the designed three.
+  await db.delete(schema.alertRules).where(and(eq(schema.alertRules.userId, traderId), notLike(schema.alertRules.id, "alert-%")));
 
   for (const alert of alerts) {
     const meta = RULES[alert.id];
@@ -35,6 +37,8 @@ export async function seedAlerts(db: Db, traderId: string) {
       id: `alert-${alert.id}`,
       userId: traderId,
       kind: meta?.kind ?? "snipe",
+      // The design's Butterfly snipe is the one wired to buy on its own.
+      autoBuy: alert.id === "a1",
       name: alert.item,
       detail: alert.detail,
       icon: alert.icon,

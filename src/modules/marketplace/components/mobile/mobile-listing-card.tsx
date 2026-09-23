@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
+import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import { formatDelta, formatMoney } from "@/lib/format";
 import { useMobileListingAction } from "../../hooks/use-mobile-listing-action";
 import { changeTone } from "../../lib/mobile-filters";
 import type { ListingAction, ListingTagTone, MobileListing } from "../../mobile.types";
-import { useMobileMarket } from "../../state/mobile-market-provider";
 
 const TAG: Record<ListingTagTone, string> = {
   plain: "bg-surface-container-low text-secondary",
@@ -28,9 +28,9 @@ const ACTION: Record<ListingAction, { label: string; icon: "flash_on" | "swap_ho
 
 /** Two-column market card: tag, bookmark, render, price delta and one action. */
 export function MobileListingCard({ listing }: { listing: MobileListing }) {
-  const { isSaved, toggleSaved } = useMobileMarket();
+  const { isWatched, toggle } = useWatchlist();
   const act = useMobileListingAction(listing);
-  const saved = isSaved(listing.slug);
+  const saved = isWatched(listing.slug);
   const action = ACTION[listing.action];
   const href = `/items/${listing.slug}`;
 
@@ -43,7 +43,7 @@ export function MobileListingCard({ listing }: { listing: MobileListing }) {
           size={null}
           aria-label={saved ? `Remove ${listing.name} from watchlist` : `Bookmark ${listing.name}`}
           aria-pressed={saved}
-          onClick={() => toggleSaved(listing.slug)}
+          onClick={() => toggle(listing.slug, listing.name)}
           className={cn("h-6 w-6 rounded border-0 transition-colors", saved ? "text-primary" : "text-text-muted hover:text-primary")}
         >
           <Icon name="favorite" filled={saved} className="text-[16px]" />

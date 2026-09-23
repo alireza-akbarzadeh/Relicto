@@ -2,6 +2,7 @@ import type { WalletData } from "../types";
 
 export const wallet: WalletData = {
   netEquity: "$4,289.50",
+  liquidUsd: 3140,
   equityChange: "+14.8%",
   equityNote: "+$552.10 USD (Past 24h market & trade-ups)",
   metrics: [

@@ -1,0 +1,1 @@
+ALTER TABLE "wallet_accounts" ADD COLUMN "frozen_at" timestamp;

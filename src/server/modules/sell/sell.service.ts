@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { inventoryItems, items, listings, offers, profiles } from "@/lib/db/schema";
 import type { SellMobile } from "@/modules/sell/mobile.types";
 import { toSellMobile } from "./sell-mobile.presenter";
+import { delist, listItem } from "./sell.commands";
 import type { ActiveListing, InventoryItem, SellData, SellGame, SellTone } from "@/modules/sell/types";
 import { ago } from "@/server/modules/shared/ago";
 
@@ -102,6 +103,9 @@ function toActiveListing(row: ActiveRow, now: Date): ActiveListing {
 }
 
 export const sellService = {
+  list: listItem,
+  delist,
+
   /** Seller studio: unlisted inventory plus the trader's newest live listings. */
   async studio(userId: string): Promise<SellData> {
     const now = new Date();

@@ -14,7 +14,7 @@ const NOTICE: Record<Exclude<QuickAction["id"], "freeze">, { title: string; desc
   send: { title: "P2P send", description: "Enter a Relicto handle or Steam ID to transfer vault balance." },
 };
 
-/** Deposit / Cashout / P2P Send / Freeze. Freeze raises the vault lock banner. */
+/** Deposit / Cashout / P2P Send / Freeze. Freeze locks the vault and raises the banner. */
 export function QuickActions({ actions }: { actions: QuickAction[] }) {
   const { freeze } = useVaultFreeze();
 
@@ -47,7 +47,7 @@ export function QuickActions({ actions }: { actions: QuickAction[] }) {
   );
 }
 
-/** Banner shown after Freeze. */
+/** Banner shown while the vault is locked; its ✕ lifts the lock. */
 export function VaultAlert() {
   const { frozen, dismiss } = useVaultFreeze();
   if (!frozen) return null;
@@ -55,9 +55,9 @@ export function VaultAlert() {
     <div role="status" className="flex items-center justify-between rounded-xl bg-secondary-container p-space-sm text-on-secondary-container transition-all">
       <div className="flex items-center gap-2">
         <Icon name="shield_with_heart" className="text-[20px]" />
-        <span className="font-body-sm text-body-sm">Vault Emergency Lock: Standby mode primed.</span>
+        <span className="font-body-sm text-body-sm">Vault Emergency Lock: spending and cashouts are paused.</span>
       </div>
-      <Button variant={null} size={null} aria-label="Dismiss" onClick={dismiss} className="h-auto border-0 font-headline-sm text-headline-sm text-on-secondary-container">
+      <Button variant={null} size={null} aria-label="Lift the emergency lock" onClick={dismiss} className="h-auto border-0 font-headline-sm text-headline-sm text-on-secondary-container">
         ✕
       </Button>
     </div>

@@ -1,7 +1,7 @@
 import "server-only";
 
-import { and, eq, gt, sql } from "drizzle-orm";
-import { escrowEvents, ledgerEntries, orderItems, orders, walletAccounts } from "@/lib/db/schema";
+import { and, eq, gt, inArray, isNotNull, lt, notExists, or, sql } from "drizzle-orm";
+import { escrowEvents, ledgerEntries, orderItems, orders, tradeOffers, walletAccounts } from "@/lib/db/schema";
 import type { Executor } from "../notifications/notifications.repository";
 
 const bare = (code: string) => code.replace(/^#/, "").toUpperCase();
@@ -72,4 +72,40 @@ export async function settleDebit(tx: Executor, orderId: string) {
     .update(ledgerEntries)
     .set({ status: "settled" })
     .where(and(eq(ledgerEntries.orderId, orderId), eq(ledgerEntries.kind, "purchase"), eq(ledgerEntries.status, "pending")));
+}
+
+/**
+ * Open escrows whose window has lapsed with no trade offer dispatched — the bot
+ * never pushed, so the buyer's money goes back. Once an offer is out, Steam's
+ * own offer expiry applies and the bot reports the outcome instead.
+ */
+export async function findOverdueCodes(executor: Executor, now: Date, userId?: string) {
+  const rows = await executor
+    .select({ code: orders.code })
+    .from(orders)
+    .where(
+      and(
+        eq(orders.state, "escrow"),
+        isNotNull(orders.autoCancelSeconds),
+        lt(sql`${orders.placedAt} + make_interval(secs => ${orders.autoCancelSeconds})`, now),
+        notExists(
+          executor
+            .select({ id: tradeOffers.id })
+            .from(tradeOffers)
+            .where(and(eq(tradeOffers.orderId, orders.id), inArray(tradeOffers.status, ["sent", "accepted"]))),
+        ),
+        userId ? or(eq(orders.buyerId, userId), eq(orders.sellerId, userId)) : undefined,
+      ),
+    );
+  return rows.map((row) => row.code);
+}
+
+/** Whether a trade offer for this order is already in the buyer's hands. */
+export async function hasDispatchedOffer(executor: Executor, orderId: string) {
+  const [row] = await executor
+    .select({ id: tradeOffers.id })
+    .from(tradeOffers)
+    .where(and(eq(tradeOffers.orderId, orderId), inArray(tradeOffers.status, ["sent", "accepted"])))
+    .limit(1);
+  return Boolean(row);
 }

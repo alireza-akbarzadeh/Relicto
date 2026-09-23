@@ -14,6 +14,7 @@ const DECLINED = {
   "insufficient-funds": ["Not enough in your vault", "Top up from the wallet, or remove an item from the basket."],
   stale: ["Your basket changed", "Review the updated basket, then authorize again."],
   empty: ["Your basket is empty", "Add an item from the marketplace first."],
+  "vault-frozen": ["Your vault is locked", "Lift the emergency lock in your wallet to pay from the vault."],
 } as const;
 
 const decline = (status: keyof typeof DECLINED) =>

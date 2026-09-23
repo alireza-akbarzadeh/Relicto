@@ -14,10 +14,13 @@ import { LISTINGS } from "../../modules/marketplace/data/listings.mock";
 import * as schema from "../../lib/db/schema";
 import { buildPriceSeries } from "./price-series";
 import { seedAlerts } from "./seed-alerts";
+import { seedCheckout } from "./seed-checkout";
 import { seedContent } from "./seed-content";
 import { seedOrders } from "./seed-orders";
 import { seedProfile } from "./seed-profile";
+import { seedSell } from "./seed-sell";
 import { seedTrader, targetEmail } from "./seed-trader";
+import { seedTracker } from "./seed-tracker";
 import { seedWallet } from "./seed-wallet";
 
 config({ path: ".env.local" });
@@ -138,7 +141,14 @@ async function main() {
       })
       .onConflictDoUpdate({
         target: schema.listings.id,
-        set: { priceCents, offerCount: listing.offers, updatedAt: new Date() },
+        set: {
+          priceCents,
+          offerCount: listing.offers,
+          // The catalog owns the quoted move; other seeds must not overwrite it.
+          changePercent: listing.change.percent,
+          changeWindow: listing.change.window ?? null,
+          updatedAt: new Date(),
+        },
       });
 
     // Price history behind the detail chart, ending at today's price.
@@ -160,6 +170,9 @@ async function main() {
   const content = await seedContent(db);
   const profile = await seedProfile(db, traderId);
   const alerts = await seedAlerts(db, traderId);
+  const board = await seedTracker(db, traderId);
+  const studio = await seedSell(db, traderId, vendorId);
+  const basket = await seedCheckout(db, traderId);
 
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,
@@ -167,6 +180,8 @@ async function main() {
   console.log(`ledger + treasury attached to ${handle} (orders=6 entries=${entries})`);
   console.log(`content posts=${content.posts} guides=${content.guides}`);
   console.log(`profile showcase=${profile.showcase} seller-listings=${profile.listings} alerts=${alerts}`);
+  console.log(`tracker assets=${board.assets} depth=${board.levels} spreads=${board.spreads}`);
+  console.log(`studio inventory=${studio.inventory} active=${studio.active} basket=${basket}`);
   await pool.end();
 }
 

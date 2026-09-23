@@ -26,6 +26,9 @@ export async function findShowcase(profileId: string) {
     .orderBy(asc(showcaseItems.sortOrder));
 }
 
+/** One page of the storefront; the tab expands from `listingsShown` to this. */
+const STOREFRONT_PAGE = 6;
+
 /** The trader's own live listings, as the profile's listings tab renders them. */
 export async function findSellerListings(userId: string) {
   return db
@@ -39,7 +42,8 @@ export async function findSellerListings(userId: string) {
     .from(listings)
     .innerJoin(items, eq(listings.itemId, items.id))
     .where(and(eq(listings.sellerId, userId), eq(listings.status, "active")))
-    .orderBy(desc(listings.listedAt));
+    .orderBy(desc(listings.listedAt))
+    .limit(STOREFRONT_PAGE);
 }
 
 export async function findStatusRows(profileId: string) {

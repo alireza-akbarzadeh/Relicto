@@ -47,6 +47,8 @@ export const profiles = pgTable(
      * profile carries the last known figures.
      */
     inventoryCount: integer("inventory_count").notNull().default(0),
+    /** Steam inventory size per game ({ cs2: 128, dota2: 46 }). */
+    inventoryCounts: jsonb("inventory_counts").$type<Record<string, number>>(),
     portfolioCents: integer("portfolio_cents").notNull().default(0),
     portfolioChangePercent: real("portfolio_change_percent"),
     reviewCount: integer("review_count").notNull().default(0),

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, eq, inArray, min } from "drizzle-orm";
+import { and, desc, eq, inArray, min } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { alertRules, items, listings } from "@/lib/db/schema";
 import type { IconName } from "@/components/ui/icon";
@@ -39,7 +39,7 @@ export const alertService = {
       .select()
       .from(alertRules)
       .where(eq(alertRules.userId, userId))
-      .orderBy(asc(alertRules.createdAt));
+      .orderBy(desc(alertRules.createdAt));
 
     if (rules.length === 0) return [];
 

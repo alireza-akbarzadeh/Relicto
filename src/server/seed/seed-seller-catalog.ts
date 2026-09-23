@@ -113,7 +113,7 @@ export async function seedSellerCatalog(db: Db, traderId: string, mocks: Profile
       sellerId: traderId,
       priceCents: Math.round(mock.priceUsd * 100),
       status: "active" as const,
-      /** Staggered so the studio's newest-first order matches the design. */
+      /** Staggered so the storefront's newest-first order matches the design. */
       listedAt: new Date(now - order * 30 * MINUTE),
       wear: item.wear,
       float: item.float,

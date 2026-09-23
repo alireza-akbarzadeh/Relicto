@@ -50,6 +50,34 @@
       "when": 1790086921547,
       "tag": "0006_profile_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790087708059,
+      "tag": "0007_alert_rule_fields",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790088136133,
+      "tag": "0008_tracker_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790089155431,
+      "tag": "0009_inventory_and_views",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790090408638,
+      "tag": "0010_listing_checkout_fields",
+      "breakpoints": true
     }
   ]
 }

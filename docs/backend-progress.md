@@ -53,9 +53,9 @@ npx tsx --conditions=react-server .verify-x.mts
 | `/community` | `communityService.feed()` | ✅ parity-verified |
 | `/wiki` | `wikiService.codex()` | ✅ parity-verified |
 | `/profile` | `profileService.detail()` | ✅ parity-verified (see step 1 note) |
-| `/alerts` | mock | ☐ step 2 |
-| `/tracker` | mock | ☐ step 3 |
-| `/sell` | mock | ☐ step 4 |
+| `/alerts` | `alertService.list()` | ✅ parity-verified |
+| `/tracker` | `trackerService.terminal()` | ✅ 3 noted divergences |
+| `/sell` | `sellService.studio()` | ✅ parity-verified |
 | `/checkout` | mock | ☐ step 5 |
 | `/tournaments` | mock | ☐ step 6 |
 | mobile compositions | mock | ☐ step 7 |
@@ -87,25 +87,68 @@ is now computed from `orders` and the seed only contains one sale inside the
 window. Everything else in `ProfileData` matches the mock byte for byte.
 
 The six listings on the profile's listings tab are real catalog items owned by
-the trader, so **`/marketplace` now returns 14 cards instead of 8**. The eight
+the trader, so **`/marketplace` now returns more than the original 8 cards**. The eight
 original cards were re-verified and are unchanged.
 
-### Step 2 — `/alerts`
+### ~~Step 2 — `/alerts`~~ ✅ done
 
-Table: `alerts`. Sniper rules, telemetry and dispatch channels. Needs a rule
-model (item + threshold + channel) and a fired-alert log.
+Migration `0007_alert_rule_fields`. `alert_rules` gained `detail`, `icon` and
+`current_cents`. The "current" column prefers the watched item's **live floor**
+and falls back to the cached price, so two of the three sample rules quote real
+marketplace data and the third (AWP | Dragon Lore, outside the catalog at the
+time) uses its cached figure. Parity verified; only the relative stamps drift,
+by the minute between seeding and reading.
 
-### Step 3 — `/tracker`
+### ~~Step 3 — `/tracker`~~ ✅ done
 
-Tables: `price_points`, `watchlist`, `offers`. The depth book and arbitrage
-cards are the first screens that need real time-series aggregation rather than
-row-by-row reads.
+Migration `0008_tracker_tables`. Two new tables (`order_book_levels`,
+`market_spreads`) and board columns on `watchlist` (`label`, `detail`,
+`thumbnail_url`, `icon`, `tone`, `sort_order`). Spread and yield are derived:
+spread is the secondary venue over Relicto's floor, yield is that net of
+`fee_bps`.
 
-### Step 4 — `/sell`
+Three deliberate divergences:
 
-Tables: `listings`, `items`, `trade_up_contracts`. Seller studio: inventory,
-draft listings, trade-up contracts. Needs a Steam inventory stand-in until the
-real sync exists.
+- **Spread row 3 (AK-47 | Fire Serpent)** reads `+$55.00 (+7.4%) / +$46.75`
+  against the mock's `+$45.00 (+6.1%) / +$38.25`. The mock is internally
+  inconsistent there — `$795.00 − $740.00` is `$55.00`, not `$45.00`. The
+  derivation is right; the mock has an arithmetic error.
+- **Board row 2 (Manifold Paradox)** reads `+1.8%` against the tracker mock's
+  `+2.1%`, because the marketplace mock quotes `1.8%` for the same listing. The
+  two mocks disagree and the catalog wins — the catalog seed now owns
+  `change_percent` on upsert so no later seed can drift it.
+- **The chart** is sampled from `price_points` and normalised, so it is a real
+  series rather than the authored zigzag.
+
+Adding AWP | Dragon Lore to the catalog brings `/marketplace` to **15 cards**.
+The eight original cards were re-verified and are unchanged.
+
+### ~~Step 4 — `/sell`~~ ✅ done
+
+Migration `0009_inventory_and_views`. New `inventory_items` table — the Steam
+inventory stand-in the schema never had — plus `listings.view_count` and
+`profiles.inventory_counts`. Parity verified; only the relative stamps drift.
+
+`itemId` on `inventory_items` is nullable on purpose: Steam holds plenty the
+catalog doesn't carry, and the labels it returns ("Tier 2 Gem", "1,420 Kills")
+don't map onto catalog fields.
+
+**The two mocks contradict each other and both had to keep their design.** The
+seller studio's three active listings and the profile storefront's six are nine
+*different* items belonging to the same trader, so no single ordering shows both
+designs. Resolved by giving each panel the filter it actually means:
+
+- **Studio** — listings buyers have reached (`view_count >= 1`), newest first.
+  A listing nobody has opened has nothing for the seller to decide about.
+- **Profile storefront** — every active listing, unfiltered, newest first,
+  capped at a six-row page.
+
+Two formatting quirks the mocks encode and the presenters now reproduce: the
+inventory rail rounds its delta to two decimals while the active panel
+*truncates* to one (`+1.8%`, not `+1.9%`), and offer ceilings are quoted as
+round dollars (`Max $1,580`).
+
+`ago()` gained a day branch (`2d 11h ago`) for the studio's older listings.
 
 ### Step 5 — `/checkout`
 

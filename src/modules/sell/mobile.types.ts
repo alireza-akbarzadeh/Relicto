@@ -1,6 +1,15 @@
 /** Data contracts of the mobile trade-up studio (Stitch: "Lootora Mobile — Inventory Liquidation & Trade-Up"). */
 
-export type ContractItem = { id: string; name: string; priceUsd: number; image: string; imageAlt: string };
+/** A skin that can sit in a contract slot. `rarity` locks the contract: every input shares one grade. */
+export type ContractItem = {
+  id: string;
+  name: string;
+  priceUsd: number;
+  image: string;
+  imageAlt: string;
+  rarity: string;
+  float: number | null;
+};
 
 export type Outcome = {
   id: string;
@@ -16,17 +25,20 @@ export type Outcome = {
 
 export type CashoutRow = { id: string; name: string; wear: string; priceUsd: number; image: string; imageAlt: string; selected: boolean };
 
+export type TradeUpContract = {
+  slots: number;
+  /** Slot-indexed: a gap is an empty slot. */
+  committed: (ContractItem | null)[];
+  /** Eligible skins not yet committed, in the order Smart Fill takes them. */
+  suggestions: ContractItem[];
+  evUsd: number;
+  seed: string;
+  bot: string;
+  outcomes: Outcome[];
+};
+
 export type SellMobile = {
   vault: { units: number; valueUsd: number };
-  contract: {
-    slots: number;
-    committed: ContractItem[];
-    suggestions: ContractItem[];
-    evUsd: number;
-    floatAvg: string;
-    seed: string;
-    bot: string;
-    outcomes: Outcome[];
-  };
+  contract: TradeUpContract;
   cashout: { rows: CashoutRow[]; rail: string; arrival: string };
 };

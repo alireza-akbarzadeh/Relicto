@@ -8,6 +8,7 @@ import { toSellMobile } from "./sell-mobile.presenter";
 import { delist, listItem } from "./sell.commands";
 import type { ActiveListing, InventoryItem, SellData, SellGame, SellTone } from "@/modules/sell/types";
 import { ago } from "@/server/modules/shared/ago";
+import { notCommitted } from "@/server/modules/trade-ups/trade-ups.repository";
 
 const money = (cents: number) =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -114,7 +115,7 @@ export const sellService = {
       db
         .select()
         .from(inventoryItems)
-        .where(and(eq(inventoryItems.userId, userId), isNull(inventoryItems.listingId)))
+        .where(and(eq(inventoryItems.userId, userId), isNull(inventoryItems.listingId), notCommitted()))
         .orderBy(asc(inventoryItems.sortOrder)),
       db
         .select({
@@ -158,7 +159,7 @@ export const sellService = {
       db
         .select()
         .from(inventoryItems)
-        .where(and(eq(inventoryItems.userId, userId), isNull(inventoryItems.listingId)))
+        .where(and(eq(inventoryItems.userId, userId), isNull(inventoryItems.listingId), notCommitted()))
         .orderBy(asc(inventoryItems.sortOrder)),
       db
         .select({ units: profiles.inventoryCount, valueCents: profiles.portfolioCents })

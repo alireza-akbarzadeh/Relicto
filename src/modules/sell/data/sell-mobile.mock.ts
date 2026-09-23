@@ -1,6 +1,7 @@
 import type { SellMobile } from "../mobile.types";
 
 const img = (n: number) => `/images/lootora/sell-mobile-${String(n).padStart(2, "0")}.jpg`;
+const CLASSIFIED = "Classified";
 
 /** Mobile trade-up payload. Input value, ROI, gains and cashout totals are derived from it. */
 export const sellMobile: SellMobile = {
@@ -8,21 +9,20 @@ export const sellMobile: SellMobile = {
   contract: {
     slots: 10,
     committed: [
-      { id: "ak-redline", name: "AK-47", priceUsd: 46.8, image: img(1), imageAlt: "AK-47 Redline" },
-      { id: "awp-wildfire", name: "Wildfire", priceUsd: 64.2, image: img(2), imageAlt: "AWP Wildfire" },
-      { id: "m4a4-emperor", name: "Emperor", priceUsd: 58.4, image: img(3), imageAlt: "M4A4 The Emperor" },
-      { id: "deagle-printstream", name: "Prntstrm", priceUsd: 54.1, image: img(4), imageAlt: "Desert Eagle Printstream" },
-      { id: "usp-kill-confirmed", name: "Kill Conf", priceUsd: 71, image: img(5), imageAlt: "USP-S Kill Confirmed" },
-      { id: "glock-water", name: "Water Elem", priceUsd: 22, image: img(6), imageAlt: "Glock-18 Water Elemental" },
-      { id: "m4a1-hyper-beast", name: "HypBeast", priceUsd: 68, image: img(7), imageAlt: "M4A1-S Hyper Beast" },
+      { id: "ak-redline", name: "AK-47", priceUsd: 46.8, image: img(1), imageAlt: "AK-47 Redline", rarity: CLASSIFIED, float: 0.1203 },
+      { id: "awp-wildfire", name: "Wildfire", priceUsd: 64.2, image: img(2), imageAlt: "AWP Wildfire", rarity: CLASSIFIED, float: 0.0891 },
+      { id: "m4a4-emperor", name: "Emperor", priceUsd: 58.4, image: img(3), imageAlt: "M4A4 The Emperor", rarity: CLASSIFIED, float: 0.165 },
+      { id: "deagle-printstream", name: "Prntstrm", priceUsd: 54.1, image: img(4), imageAlt: "Desert Eagle Printstream", rarity: CLASSIFIED, float: 0.1124 },
+      { id: "usp-kill-confirmed", name: "Kill Conf", priceUsd: 71, image: img(5), imageAlt: "USP-S Kill Confirmed", rarity: CLASSIFIED, float: 0.2011 },
+      { id: "glock-water", name: "Water Elem", priceUsd: 22, image: img(6), imageAlt: "Glock-18 Water Elemental", rarity: CLASSIFIED, float: 0.1402 },
+      { id: "m4a1-hyper-beast", name: "HypBeast", priceUsd: 68, image: img(7), imageAlt: "M4A1-S Hyper Beast", rarity: CLASSIFIED, float: 0.1603 },
     ],
     suggestions: [
-      { id: "awp-asiimov-ft", name: "Asiimov", priceUsd: 52.3, image: img(12), imageAlt: "AWP Asiimov" },
-      { id: "deagle-printstream-mw", name: "Prntstrm", priceUsd: 49.9, image: img(11), imageAlt: "Desert Eagle Printstream" },
-      { id: "glock-high-beam", name: "High Beam", priceUsd: 18.4, image: img(10), imageAlt: "Glock-18 High Beam" },
+      { id: "awp-asiimov-ft", name: "Asiimov", priceUsd: 52.3, image: img(12), imageAlt: "AWP Asiimov", rarity: CLASSIFIED, float: 0.224 },
+      { id: "deagle-printstream-mw", name: "Prntstrm", priceUsd: 49.9, image: img(11), imageAlt: "Desert Eagle Printstream", rarity: CLASSIFIED, float: 0.094 },
+      { id: "glock-high-beam", name: "High Beam", priceUsd: 18.4, image: img(10), imageAlt: "Glock-18 High Beam", rarity: CLASSIFIED, float: 0.0512 },
     ],
     evUsd: 462.1,
-    floatAvg: "0.1412 MW",
     seed: "Seed #09472",
     bot: "Escrow Bot #24",
     outcomes: [

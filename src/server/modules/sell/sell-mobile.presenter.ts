@@ -19,8 +19,8 @@ function toCashoutRow(row: InventoryRow): CashoutRow {
 /**
  * Vault totals are the profile's cached portfolio (the figures the desktop
  * profile shows); the cashout tray is the same unlisted inventory the desktop
- * studio lists. The trade-up contract keeps its authored content — trade-ups
- * aren't backed by the database yet.
+ * studio lists (minus skins committed to a trade-up). The contract itself comes
+ * from `tradeUpService`.
  */
 export function toSellMobile(
   authored: SellMobile,

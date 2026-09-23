@@ -13,7 +13,7 @@ import { SlotDeck } from "./slot-deck";
 export function TradeUpChamber({ contract }: { contract: SellMobile["contract"] }) {
   const tradeUp = useTradeUp(contract);
   const { pct, delta } = tradeUp.roi;
-  const calculating = tradeUp.phase === "calculating";
+  const { calculating, contract: live } = tradeUp;
 
   return (
     <div id="trade-up-chamber" className="mt-space-sm flex scroll-mt-20 flex-col gap-space-md px-margin">
@@ -26,7 +26,7 @@ export function TradeUpChamber({ contract }: { contract: SellMobile["contract"] 
           <div className="flex items-center gap-1 rounded-lg bg-surface-container-lowest px-2 py-1">
             <span className="font-label-badge text-label-badge text-tertiary">SLOTS:</span>
             <span className="font-data-mono-md text-data-mono-md text-text-primary">
-              {tradeUp.filled} / {contract.slots}
+              {tradeUp.filled} / {live.slots}
             </span>
           </div>
         </div>
@@ -38,11 +38,11 @@ export function TradeUpChamber({ contract }: { contract: SellMobile["contract"] 
           </div>
           <div className="flex flex-col">
             <span className="font-label-badge text-label-badge text-text-secondary">EST. EV</span>
-            <span className="font-data-mono-md text-data-mono-md text-tertiary">{formatMoney(contract.evUsd)}</span>
+            <span className="font-data-mono-md text-data-mono-md text-tertiary">{formatMoney(live.evUsd)}</span>
           </div>
           <div className="flex flex-col items-end">
             <span className="font-label-badge text-label-badge text-status-upcoming">FLOAT AVG</span>
-            <span className="font-data-mono-md text-data-mono-md text-status-upcoming">{contract.floatAvg}</span>
+            <span className="font-data-mono-md text-data-mono-md text-status-upcoming">{tradeUp.floatAvg}</span>
           </div>
         </div>
 
@@ -66,7 +66,7 @@ export function TradeUpChamber({ contract }: { contract: SellMobile["contract"] 
         <SlotDeck slots={tradeUp.slots} fillable={tradeUp.fillable} onToggle={tradeUp.toggleSlot} onSmartFill={tradeUp.smartFill} />
       </div>
 
-      <OutcomeOdds outcomes={contract.outcomes} seed={contract.seed} input={tradeUp.input} />
+      <OutcomeOdds outcomes={live.outcomes} seed={live.seed} input={tradeUp.input} />
 
       <div className="flex flex-col gap-2 pt-space-xs">
         <Button
@@ -77,7 +77,7 @@ export function TradeUpChamber({ contract }: { contract: SellMobile["contract"] 
           className="h-auto w-full gap-2 rounded-xl border-0 bg-primary-container py-3 whitespace-normal font-headline-sm text-headline-sm font-semibold tracking-wide text-on-primary uppercase shadow-lg transition-transform active:scale-[0.98] disabled:opacity-100"
         >
           <Icon name={calculating ? "progress_activity" : "whatshot"} className={calculating ? "animate-spin text-[20px]" : "text-[24px]"} />
-          <span>{calculating ? "Calculating Float Matrix..." : `Ignite Contract (${contract.bot})`}</span>
+          <span>{calculating ? "Calculating Float Matrix..." : `Ignite Contract (${live.bot})`}</span>
         </Button>
         <div className="flex items-center justify-center gap-2 text-center">
           <span className="h-2 w-2 rounded-full bg-status-live" />
@@ -85,7 +85,7 @@ export function TradeUpChamber({ contract }: { contract: SellMobile["contract"] 
         </div>
       </div>
 
-      <ForgeResultDialog result={tradeUp.result} input={tradeUp.input} bot={contract.bot} onCollect={tradeUp.collect} />
+      <ForgeResultDialog result={tradeUp.result?.outcome ?? null} input={tradeUp.result?.input ?? 0} bot={live.bot} onCollect={tradeUp.collect} />
     </div>
   );
 }

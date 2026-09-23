@@ -56,7 +56,7 @@ npx tsx --conditions=react-server .verify-x.mts
 | `/alerts` | `alertService.list()` | ✅ parity-verified |
 | `/tracker` | `trackerService.terminal()` | ✅ 3 noted divergences |
 | `/sell` | `sellService.studio()` | ✅ parity-verified |
-| `/checkout` | mock | ☐ step 5 |
+| `/checkout` | `checkoutService.basket()` + `actions/cart.ts` | ✅ reads + writes, 1 noted divergence |
 | `/tournaments` | mock | ☐ step 6 |
 | mobile compositions | mock | ☐ step 7 |
 
@@ -150,10 +150,74 @@ round dollars (`Max $1,580`).
 
 `ago()` gained a day branch (`2d 11h ago`) for the studio's older listings.
 
-### Step 5 — `/checkout`
+### ~~Step 5 — `/checkout`~~ ✅ done
 
-Tables: `cart_items`, `orders`. The first screen that *writes*, so it needs
-Server Actions over the services, not just reads.
+Migrations `0010_listing_checkout_fields` (`bot_name`, `intel`, `checkout` jsonb
+on `listings`) and `0011_listing_photo` (`image_url` / `image_alt` on
+`listings` — the seller's shot of that exact copy; the catalog art is the
+fallback). The first screen that writes.
+
+**Reads.** `(lootora)/layout.tsx` now seeds the client `CartProvider` from the
+live basket instead of `checkout.mock`, so the header badge, the basket drawer
+and `/checkout` all show what Postgres holds. An emptied basket renders empty;
+the mock only stands in when the catalog itself is unseeded.
+
+**Writes** — `src/modules/checkout/actions/cart.ts`, zod-parsed, each checking
+the session itself:
+
+| Action | Does |
+| --- | --- |
+| `addToCart({ ref })` | `ref` is a listing id (that copy) or an item slug (its cheapest copy from *another* seller). Refuses your own listing. |
+| `removeFromCart({ cartId })` / `clearCart()` | Scoped to the caller's rows. |
+| `placeOrder({ rail, promo, cartIds })` | Settles the basket from the vault in one transaction. |
+
+Every action answers with the basket as the server now holds it, and
+`use-cart-state.ts` reconciles its optimistic lines against that. Lines with no
+listing behind them (mobile compositions still on mocks) stay client-only until
+step 7.
+
+`placeOrder` locks the wallet row and every basket listing (`FOR UPDATE`),
+refuses a basket that changed since the buyer saw it (`stale`), then writes
+**one escrow order per line** — the tracker and ledger both read one line per
+order — with the combo/promo discount split across lines in proportion to price
+(`checkout.pricing.ts`, shared with the on-screen quote so they can't disagree).
+Each order gets its line snapshot, a four-step escrow timeline stopped at the
+bot audit (no bots yet, so no `trade_offers` row), and a *pending* vault debit;
+the listings go `reserved`. Liquid balance drops, escrow rises by the same
+amount, net equity is unchanged. Only the vault rail settles — card, crypto and
+Steam answer `rail-unavailable` until a payment provider exists.
+
+Checkout-made rows use `order-chk-` / `ledger-chk-` ids, and `seedCheckout`
+deletes them and re-activates their listings, so `db:seed` still resets to the
+designed state after test purchases.
+
+**Parity.** All three basket lines match `checkout.mock` exactly. Fixes on the
+way:
+
+- The seed had put the trader's **own** AK-47 listing in their basket (and
+  stamped a Steam price onto it, which broke `/profile`'s storefront row). The
+  basket's AK is now a separate Well-Worn copy, float 0.418, from the vault —
+  which is what the checkout mock describes. `/profile` is back to parity.
+- `Manifold Paradox` gets its `ARC` wear chip derived from rarity; the
+  `Butterfly Knife` headline comes from the `checkout.name` override.
+
+**One deliberate divergence:** the vault rail quotes `Avail: $3,140.00`, not
+the mock's `$4,289.50`. The mock quotes `/wallet`'s *net equity*, which
+includes escrowed and clearing funds nobody can spend; checkout must quote the
+liquid balance. Consequently `walletAfter` reads `$508.50 USD Short` for the
+seeded basket (the mock's `$1,243.90 Remaining` is also arithmetically wrong:
+$4,289.50 − $3,648.50 is $641.00).
+
+**Second copies of an item exposed three services that assumed one listing per
+item**, now fixed: the marketplace keyed cards by item slug (duplicate React
+keys; cards now carry `listingId`), the tracker board duplicated a row per copy
+and counted reserved listings in its floor, and the item page read its move and
+open offers from whichever copy sorted first. `/marketplace` now shows
+**19 cards**; the original eight are unchanged.
+
+Verified end to end in the browser against a production build: quick-buy on
+`/marketplace` → live basket → Authorize & Dispatch → `/orders/LT-…` tracker.
+A concurrent double-submit settles exactly once.
 
 ### Step 6 — `/tournaments`
 
@@ -180,6 +244,26 @@ chases them as defects:
   instead of the mock's `$3,250,000`.
 - **Ledger relative stamps drift a minute** between seeding and reading. That is
   live relative time working correctly.
+- **The seeded basket can't be paid from the vault** (`$508.50 USD Short`),
+  because the seeded liquid balance is `/wallet`'s $3,140. Remove the Butterfly
+  Knife and the remaining two lines settle.
+
+## Open issues found during step 5
+
+Not fixed — outside the step, but real:
+
+- **`orderService.tracking(code)` doesn't check ownership.** Its doc comment
+  says "null when it isn't ours", but `findOrderByCode` filters on the code
+  alone, so any signed-in user can open any order's tracker by code.
+- **Nothing enforces the 180-second auto-cancel.** The tracker counts down, but
+  no job cancels the order or refunds the vault. Needs the cron from Phase 4.
+- **Mobile checkout** (`use-mobile-checkout`, `checkoutMobile.vaultUsd`) still
+  reads mocks and has no dispatch — step 7.
+- **Authored copy that now lies on live data:** the checkout breadcrumb's
+  "Active Cart (3)", the combo banner's fixed `-$25.00`, and the dispatch
+  modal's three named Sentinels.
+- **The header wallet chip reads `$0.00`** — `get-session.ts` still hardcodes
+  `walletUsd: 0`.
 
 ## Still missing from `backend-plan.md`
 

@@ -1,0 +1,158 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Relicto PRO Steam Intel Exchange" [ref=e5] [cursor=pointer]:
+          - /url: /marketplace
+          - generic [ref=e12]:
+            - generic [ref=e13]:
+              - generic [ref=e14]: Relicto
+              - generic [ref=e15]: PRO
+            - generic [ref=e16]: Steam Intel Exchange
+        - generic [ref=e17]:
+          - generic [ref=e18]: 256-BIT ESCROW
+          - button "Switch to light mode" [ref=e23] [cursor=pointer]
+          - link "Sign in" [ref=e24] [cursor=pointer]:
+            - /url: /sign-in
+    - main [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e30]: Valve OpenID 2.0 Realtime Gateway
+          - generic [ref=e35]:
+            - generic [ref=e36]: "SLA: 99.98%"
+            - generic [ref=e41]: TX LATENCY < 42MS
+        - generic [ref=e42]:
+          - generic [ref=e43]: Protocol Node 0x48-AEGIS
+          - heading "Join The Valvetech Intel Exchange" [level=1] [ref=e51]
+          - paragraph [ref=e52]: Create your verified trader profile to unlock automated bot escrow, zero maker listing fees for 30 days, and sub-second price delta alerts.
+        - generic [ref=e54]:
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - generic [ref=e58]: "1"
+              - generic [ref=e59]:
+                - generic [ref=e60]: "Step 1: Account Setup"
+                - generic [ref=e61]: In Progress
+            - generic [ref=e62]:
+              - generic [ref=e63]: "2"
+              - generic [ref=e64]:
+                - generic [ref=e65]: "Step 2: Steam Trade Bind"
+                - generic [ref=e66]: Escrow Key Pending
+          - generic [ref=e67]:
+            - generic [ref=e72]:
+              - generic [ref=e73]:
+                - generic [ref=e74]: Fast-Track Onboarding
+                - generic [ref=e75]: RECOMMENDED
+              - paragraph [ref=e76]: Sync your trade inventory & Valve SteamID64 in 1 click without entering a password.
+            - button "Connect with Steam" [ref=e77] [cursor=pointer]
+          - generic [ref=e79]: or register manual credentials
+          - generic [ref=e82]:
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - generic [ref=e85]:
+                  - generic [ref=e86]: Trader Gamertag / Handle
+                  - generic [ref=e87]: Available
+                - textbox "Trader Gamertag / Handle" [ref=e92]:
+                  - /placeholder: e.g. s1mple_trader
+              - generic [ref=e96]:
+                - generic [ref=e97]:
+                  - generic [ref=e98]: Corporate / Email
+                  - generic [ref=e99]: Requires 2FA Confirmation
+                - textbox "Corporate / Email" [ref=e101]:
+                  - /placeholder: alex@majorops.gg
+              - generic [ref=e105]:
+                - generic [ref=e106]: Escrow Master Password
+                - generic [ref=e108]:
+                  - textbox "Escrow Master Password" [ref=e109]:
+                    - /placeholder: Min. 12 characters
+                  - button "Show password" [ref=e110] [cursor=pointer]
+              - generic [ref=e111]:
+                - generic [ref=e112]: Confirm Master Password
+                - textbox "Confirm Master Password" [ref=e115]:
+                  - /placeholder: Re-enter password
+            - generic [ref=e120]:
+              - generic [ref=e121]:
+                - generic [ref=e122]: Vault Entropy Security Matrix
+                - generic [ref=e123]: "Weak: 0% Cryptographic Entropy"
+              - generic [ref=e125]:
+                - generic [ref=e126]: Length ≥ 12
+                - generic [ref=e130]: Symbols (!@#$)
+                - generic [ref=e134]: Numerics
+                - generic [ref=e138]: Upper & Lowercase
+            - generic [ref=e142]:
+              - generic [ref=e143]: Preferred Primary Intel Arena
+              - radiogroup [ref=e144]:
+                - generic [ref=e145] [cursor=pointer]:
+                  - radio [ref=e146]
+                  - radio [aria-hidden] [ref=e147]
+                  - generic [ref=e150]:
+                    - generic [ref=e151]: Dota 2
+                    - generic [ref=e152]: Immortal & Arcana
+                - generic [ref=e153] [cursor=pointer]:
+                  - radio [ref=e154]
+                  - radio [aria-hidden] [ref=e155]
+                  - generic [ref=e162]:
+                    - generic [ref=e163]: Counter-Strike 2
+                    - generic [ref=e164]: Knives & Gloves
+                - generic [ref=e165] [cursor=pointer]:
+                  - radio [checked] [ref=e166]
+                  - radio [checked] [aria-hidden] [ref=e169]
+                  - generic [ref=e176]:
+                    - generic [ref=e177]: Both / Multi-Game
+                    - generic [ref=e178]: Aggregated Portfolio
+            - generic [ref=e179]:
+              - generic [ref=e180]:
+                - generic [ref=e181]: Trader Referral Code (Optional)
+                - generic [ref=e182]: +500 AEGIS BONUS POINTS
+              - textbox "Trader Referral Code (Optional)" [ref=e187]:
+                - /placeholder: e.g. RADIANT-PRO
+            - generic [ref=e191]:
+              - generic [ref=e192] [cursor=pointer]:
+                - checkbox [ref=e193]
+                - checkbox [aria-hidden] [ref=e194]
+                - generic [ref=e195]:
+                  - text: I agree to the Relicto
+                  - button "Terms of Service" [ref=e196]
+                  - text: ","
+                  - button "Privacy Policy" [ref=e197]
+                  - text: ", and Steam Trading Compliance Rules under Valve Subscriber Agreement."
+              - generic [ref=e198] [cursor=pointer]:
+                - checkbox [checked] [ref=e199]
+                - checkbox [checked] [aria-hidden] [ref=e203]
+                - generic [ref=e204]: Enable instant price drop webhooks, tournament skin liquidations, & automated bot escrow sync notifications.
+            - button "Create Relicto Trader Account" [ref=e205] [cursor=pointer]
+          - generic [ref=e207]:
+            - generic [ref=e208]: Already registered on Relicto Escrow?
+            - link "Sign In to Exchange Desk" [ref=e209] [cursor=pointer]:
+              - /url: /sign-in
+        - generic [ref=e210]:
+          - generic [ref=e211]:
+            - generic [ref=e212]:
+              - generic [ref=e213]: FIRST $5,000
+              - heading "0% Maker Listing Fees" [level=3] [ref=e220]
+              - paragraph [ref=e221]: Keep 100% of your earnings on Dota 2 Immortals & CS2 Knives during your first 30 days active.
+              - generic [ref=e222]: Standard fee 2.5% waived
+            - generic [ref=e225]:
+              - generic [ref=e226]: < 60 SEC DELIVERY
+              - heading "Instant Bot Escrow" [level=3] [ref=e232]
+              - paragraph [ref=e233]: Automated Steam trade offer bots dispatch trades instantaneously without API scam vulnerabilities.
+              - generic [ref=e234]: SHA256 encrypted handshake
+            - generic [ref=e237]:
+              - generic [ref=e238]: PATCH 7.38c & CS2
+              - heading "Real-time Telemetry" [level=3] [ref=e244]
+              - paragraph [ref=e245]: Stream dynamic live market depth, price swings, tournament hype surges, and meta weapon trends.
+              - generic [ref=e246]: Millisecond Webhook feeds
+          - generic [ref=e255]:
+            - generic [ref=e256]: Escrow Settlement Volume (24h)
+            - generic [ref=e257]:
+              - generic [ref=e258]: $1,482,920.40 USD
+              - generic [ref=e259]: +14.2%
+    - contentinfo [ref=e265]:
+      - generic [ref=e266]:
+        - generic [ref=e267]:
+          - paragraph [ref=e268]: Not affiliated with Valve Corporation. Steam and the Steam logo are trademarks or registered trademarks of Valve Corporation in the U.S. and/or other countries. All game graphics and logos belong to their respective owners.
+          - generic [ref=e269]: "© 2025 Relicto Pro Intel Technologies. Operational Status: Escrow Vault Active."
+        - generic [ref=e270]:
+          - button "Security SLA" [ref=e271] [cursor=pointer]
+          - button "Terms of Service" [ref=e272] [cursor=pointer]
+          - button "Privacy Policy" [ref=e273] [cursor=pointer]
+  - region "Notifications alt+T"

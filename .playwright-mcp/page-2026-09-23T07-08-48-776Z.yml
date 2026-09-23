@@ -1,0 +1,254 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e3]:
+    - banner [ref=f2e4]:
+      - generic [ref=f2e5]:
+        - generic [ref=f2e6]:
+          - link "RelictoPRO Steam Intel Exchange" [ref=f2e7] [cursor=pointer]:
+            - /url: /marketplace
+            - generic [ref=f2e18]:
+              - generic [ref=f2e19]: RelictoPRO
+              - generic [ref=f2e20]: Steam Intel Exchange
+          - navigation [ref=f2e21]:
+            - generic [ref=f2e22]:
+              - link "Marketplace" [ref=f2e23] [cursor=pointer]:
+                - /url: /marketplace
+              - link "Wiki" [ref=f2e30] [cursor=pointer]:
+                - /url: /wiki
+              - link "Tracker" [ref=f2e35] [cursor=pointer]:
+                - /url: /tracker
+              - link "Inventory" [ref=f2e40] [cursor=pointer]:
+                - /url: /profile
+              - link "Sell Items" [ref=f2e47] [cursor=pointer]:
+                - /url: /sell
+              - link "Wallet & Income" [ref=f2e53] [cursor=pointer]:
+                - /url: /wallet
+              - link "Community" [ref=f2e59] [cursor=pointer]:
+                - /url: /community
+        - generic [ref=f2e68]:
+          - textbox "Search the marketplace" [ref=f2e69]:
+            - /placeholder: Search skins, arcanas, knives, heroes...
+          - generic: ⌘K
+        - generic [ref=f2e70]:
+          - generic [ref=f2e73]:
+            - generic [ref=f2e74]:
+              - generic [ref=f2e75]: "76561198082348819"
+              - generic [ref=f2e76]: VAC CLEAN
+            - generic [ref=f2e77]:
+              - generic [ref=f2e78]: "Steam Wallet:"
+              - generic [ref=f2e79]: $0.00
+          - button "Switch to light mode" [ref=f2e80] [cursor=pointer]
+          - button "Notifications" [ref=f2e81] [cursor=pointer]
+          - button "Open basket with 0 items" [ref=f2e415] [cursor=pointer]
+          - button "Account menu" [ref=f2e88] [cursor=pointer]:
+            - img "ClaudeCheckoutQA profile portrait" [ref=f2e90]
+    - main [ref=f2e91]:
+      - generic [ref=f2e92]:
+        - generic [ref=f2e93]:
+          - generic [ref=f2e94]:
+            - generic [ref=f2e95]:
+              - generic [ref=f2e96]: Marketplace
+              - generic [ref=f2e97]: /
+              - generic [ref=f2e98]: Active Cart (3)
+              - generic [ref=f2e99]: /
+              - generic [ref=f2e100]: Escrow Checkout
+            - generic [ref=f2e101]:
+              - heading "Escrow Checkout & Order Dispatch" [level=1] [ref=f2e102]
+              - generic [ref=f2e103]: "Session Protocol #CHK-75377-ES"
+          - generic [ref=f2e107]:
+            - generic [ref=f2e108]: 14 Bots Active
+            - generic [ref=f2e111]: "|"
+            - generic [ref=f2e112]: 12ms Steam API Ping
+            - generic [ref=f2e116]: "|"
+            - generic [ref=f2e117]: Escrow Vault Locked
+        - generic [ref=f2e121]:
+          - generic [ref=f2e122]:
+            - generic [ref=f2e123]:
+              - generic [ref=f2e124]:
+                - generic [ref=f2e130]:
+                  - generic [ref=f2e131]: Steam Trade Recipient & Security Gate
+                  - generic [ref=f2e132]: Pre-flight check against Valve Trade Ban Registry & Guard Cooldowns
+                - generic [ref=f2e133]: Ready for Instant Bot Push
+              - generic [ref=f2e134]:
+                - generic [ref=f2e135]:
+                  - generic [ref=f2e136]: S1
+                  - generic [ref=f2e140]:
+                    - generic [ref=f2e141]:
+                      - generic [ref=f2e142]: S1mple_CS
+                      - generic [ref=f2e143]: Steam LVL 94
+                      - generic [ref=f2e144]: Prime Tier
+                    - generic [ref=f2e145]: "SteamID64: 76561198082348819 • Bound Since Nov 2017"
+                - button "Change Destination" [ref=f2e146] [cursor=pointer]
+              - generic [ref=f2e147]:
+                - generic [ref=f2e148]:
+                  - generic [ref=f2e149]: Active Partner Trade Token (Steam Web API Handshake)
+                  - generic [ref=f2e150]: handshake_token_valid::0x94f0a
+                - generic [ref=f2e151]:
+                  - generic [ref=f2e152]:
+                    - generic [ref=f2e157]: https://steamcommunity.com/tradeoffer/new/?partner=122068591&token=K98xA40f
+                    - generic [ref=f2e158]: Verified Active (12ms)
+                  - button "Test Ping" [ref=f2e161] [cursor=pointer]
+              - generic [ref=f2e162]:
+                - generic [ref=f2e167]:
+                  - generic [ref=f2e168]: Steam Mobile 2FA
+                  - generic [ref=f2e173]: Active (>120 days bound)
+                - generic [ref=f2e178]:
+                  - generic [ref=f2e179]: Trade Hold Cooldown
+                  - generic [ref=f2e184]: 0 Days (Instant Handoff)
+                - generic [ref=f2e189]:
+                  - generic [ref=f2e190]: API Hijack Watchdog
+                  - generic [ref=f2e195]: Clean (Bot Whitelist Match)
+            - generic [ref=f2e197]:
+              - generic [ref=f2e198]:
+                - heading "Allocated Reserve Items" [level=2] [ref=f2e199]
+                - generic [ref=f2e200]: 0 Items Held
+              - generic [ref=f2e201]:
+                - text: "Cart Vault Reservation:"
+                - generic [ref=f2e205]:
+                  - generic [ref=f2e206]: 14 minutes
+                  - text: 14:38
+            - generic [ref=f2e239]:
+              - generic [ref=f2e247]:
+                - generic [ref=f2e248]:
+                  - generic [ref=f2e249]: Combo Synergy Activated
+                  - generic [ref=f2e250]: Cross-Title Reward
+                - generic [ref=f2e251]: Dota 2 Arcana + CS2 Covert Knife Cart Pair
+                - generic [ref=f2e252]: Unlocked -$25.00 Escrow Instant Rebate & 1x Free Priority Bot Fast-Track Pass.
+              - generic [ref=f2e253]:
+                - generic [ref=f2e254]: Bonus Applied
+                - text: "-$25.00 USD"
+            - generic [ref=f2e255]:
+              - generic [ref=f2e256]: Relicto 100% Escrow Vault Underwriting
+              - paragraph [ref=f2e264]:
+                - text: Funds are locked in a 256-bit institutional smart contract escrow vault. Once authorized, automated Steam Sentinel bots broadcast P2P trade requests directly to your verified Steam Trade URL. If the trade is not successfully pushed or confirmed within
+                - strong [ref=f2e265]: 180 seconds
+                - text: ", your complete settlement balance is returned to your Relicto wallet with 0 cancellation fees."
+              - generic [ref=f2e266]:
+                - generic [ref=f2e267]: SHA-256 Bot Token Audit
+                - generic [ref=f2e271]: Auto-Decline Phishing Clones
+                - generic [ref=f2e274]: Zero-Loss Guarantee
+          - complementary [ref=f2e279]:
+            - generic [ref=f2e280]:
+              - heading "Settlement Rail" [level=2] [ref=f2e281]
+              - generic [ref=f2e282]: Encrypted SSL
+            - radiogroup [ref=f2e283]:
+              - generic [ref=f2e284] [cursor=pointer]:
+                - generic [ref=f2e285]:
+                  - 'radio "Lootora Vault Balance Lootora Vault Balance Fastest Avail: $1,000.00 USD Instant 0% fee execution" [checked] [ref=f2e416]'
+                  - radio [checked] [aria-hidden] [ref=f2e289]
+                  - generic [ref=f2e293]:
+                    - generic [ref=f2e294]:
+                      - text: Lootora Vault Balance
+                      - generic [ref=f2e295]: Fastest
+                    - generic [ref=f2e296]: "Avail: $1,000.00 USD"
+                - generic [ref=f2e297]: Instant 0% fee execution
+              - generic [ref=f2e298] [cursor=pointer]:
+                - generic [ref=f2e299]:
+                  - radio "Web3 Crypto / Steam Pay Web3 Crypto / Steam Pay 0% Gas USDT • BTC • SOL • ETH Immediate on-chain settlement" [ref=f2e417]
+                  - radio [aria-hidden] [ref=f2e301]
+                  - generic [ref=f2e304]:
+                    - generic [ref=f2e305]:
+                      - text: Web3 Crypto / Steam Pay
+                      - generic [ref=f2e306]: 0% Gas
+                    - generic [ref=f2e307]: USDT • BTC • SOL • ETH
+                - generic [ref=f2e308]: Immediate on-chain settlement
+              - generic [ref=f2e309] [cursor=pointer]:
+                - generic [ref=f2e310]:
+                  - radio "Steam Balance Split Steam Balance Split $142.50 Steam + Balance Card Split Rail" [ref=f2e418]
+                  - radio [aria-hidden] [ref=f2e312]
+                  - generic [ref=f2e315]:
+                    - generic [ref=f2e316]: Steam Balance Split
+                    - generic [ref=f2e317]: $142.50 Steam + Balance Card
+                - generic [ref=f2e318]: Split Rail
+              - generic [ref=f2e319] [cursor=pointer]:
+                - generic [ref=f2e320]:
+                  - radio "Credit / Debit Card Credit / Debit Card Visa, Mastercard, Apple Pay 3D Secure" [ref=f2e419]
+                  - radio [aria-hidden] [ref=f2e322]
+                  - generic [ref=f2e325]:
+                    - generic [ref=f2e326]: Credit / Debit Card
+                    - generic [ref=f2e327]: Visa, Mastercard, Apple Pay
+                - generic [ref=f2e328]: 3D Secure
+            - generic [ref=f2e330]:
+              - generic [ref=f2e331]: Wallet Balance After Settlement
+              - generic [ref=f2e332]: $896.50 USD Remaining
+            - generic [ref=f2e336]:
+              - generic [ref=f2e337]: Tournament Promo Code
+              - generic [ref=f2e338]:
+                - generic [ref=f2e339]:
+                  - generic [ref=f2e343]: TI14-MAJOR-VIP
+                  - generic [ref=f2e344]: Applied
+                - button "Remove" [ref=f2e345] [cursor=pointer]
+            - generic [ref=f2e346]:
+              - generic [ref=f2e347]:
+                - generic [ref=f2e348]: Subtotal (0 Items Reserved)
+                - generic [ref=f2e349]: $118.50
+              - generic [ref=f2e350]:
+                - generic [ref=f2e351]: Combo Synergy Discount
+                - generic [ref=f2e355]: "-$0.00"
+              - generic [ref=f2e356]:
+                - generic [ref=f2e357]: VIP Promo Code Discount
+                - generic [ref=f2e360]: "-$15.00"
+              - generic [ref=f2e361]:
+                - generic [ref=f2e362]: Escrow Execution Fee
+                - generic [ref=f2e363]: FREE ($0.00)
+              - generic [ref=f2e364]:
+                - generic [ref=f2e365]: Steam Web API Route Token
+                - generic [ref=f2e366]: $0.00
+              - generic [ref=f2e367]:
+                - generic [ref=f2e368]:
+                  - generic [ref=f2e369]: Total Payable
+                  - generic [ref=f2e370]: Via Relicto Balance
+                - generic [ref=f2e371]: $103.50
+            - generic [ref=f2e372]:
+              - generic [ref=f2e373]:
+                - checkbox "I verify that my registered Steam Trade URL is operational and my Steam Guard 2FA Mobile Authenticator has been active without recent mobile transfers." [checked] [ref=f2e420]
+                - checkbox [checked] [aria-hidden] [ref=f2e378]
+                - generic [ref=f2e379]: I verify that my registered Steam Trade URL is operational and my Steam Guard 2FA Mobile Authenticator has been active without recent mobile transfers.
+              - generic [ref=f2e380]:
+                - checkbox "Authorize immediate bot trade dispatch upon cryptographic wallet debit (Escrow 180s timeout active)." [checked] [ref=f2e421]
+                - checkbox [checked] [aria-hidden] [ref=f2e385]
+                - generic [ref=f2e386]: Authorize immediate bot trade dispatch upon cryptographic wallet debit (Escrow 180s timeout active).
+            - generic [ref=f2e387]:
+              - button "Authorize & Dispatch Bots" [disabled]
+              - generic [ref=f2e390]: Instant P2P bot dispatch in <30s • 256-bit cold escrow
+            - generic [ref=f2e392]:
+              - generic [ref=f2e397]:
+                - generic [ref=f2e398]: Need Steam Guard Help?
+                - generic [ref=f2e399]: 24/7 Live Trade Concierge
+              - button "Chat Now" [ref=f2e400] [cursor=pointer]
+    - contentinfo [ref=f2e401]:
+      - generic [ref=f2e402]:
+        - generic [ref=f2e403]:
+          - generic [ref=f2e404]: © 2025 Relicto EXCHANGE. ALL RIGHTS RESERVED.
+          - generic [ref=f2e405]:
+            - generic [ref=f2e407]: "Operational Status:"
+            - generic [ref=f2e408]: Escrow Vault Active
+        - generic [ref=f2e409]:
+          - button "Terms of Service" [ref=f2e410] [cursor=pointer]
+          - button "Privacy Policy" [ref=f2e411] [cursor=pointer]
+          - button "Steam Web API Policy" [ref=f2e412] [cursor=pointer]
+          - button "Security SLA" [ref=f2e413] [cursor=pointer]
+          - button "Bug Bounty" [ref=f2e414] [cursor=pointer]
+    - generic [ref=f2e423]:
+      - generic [ref=f2e424]:
+        - generic [ref=f2e425]: Dispatching Escrow Fleet
+        - button "Close dispatch dialog" [ref=f2e428] [cursor=pointer]
+      - generic [ref=f2e429]:
+        - generic [ref=f2e430]:
+          - generic [ref=f2e431]: "Bot Dispatch Pipeline:"
+          - generic [ref=f2e432]: 3 of 3 Sentinels Assigned
+        - generic [ref=f2e435]:
+          - generic [ref=f2e436]:
+            - generic [ref=f2e437]: "Sentinel #42 (Phantom Assassin)"
+            - generic [ref=f2e438]: Offer Created
+          - generic [ref=f2e439]:
+            - generic [ref=f2e440]: "Sentinel #09 (Butterfly Doppler)"
+            - generic [ref=f2e441]: Generating Token...
+          - generic [ref=f2e442]:
+            - generic [ref=f2e443]: "Sentinel #14 (AK-47 Case Hardened)"
+            - generic [ref=f2e444]: Queued
+      - generic [ref=f2e448]:
+        - generic [ref=f2e449]: "Action Required: Steam Mobile 2FA"
+        - generic [ref=f2e450]: Open Steam Mobile App > Confirmations > Accept verified bot offers.
+      - button "I Understand, Monitor Trades" [ref=f2e451] [cursor=pointer]
+  - region "Notifications alt+T"
+  - alert [ref=f2e452]

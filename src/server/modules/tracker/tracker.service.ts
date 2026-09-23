@@ -1,6 +1,6 @@
 import "server-only";
 
-import { asc, desc, eq, inArray, min } from "drizzle-orm";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { items, listings, marketSpreads, orderBookLevels, pricePoints, watchlist } from "@/lib/db/schema";
 import type { IconName } from "@/components/ui/icon";
@@ -31,22 +31,28 @@ export const trackerService = {
   /** The trader's tracker terminal: board, depth, spreads and chart. */
   async terminal(userId: string): Promise<TrackerData> {
     const board = await db
-      .select({ row: watchlist, name: items.name, changePercent: listings.changePercent })
+      .select({ row: watchlist, name: items.name })
       .from(watchlist)
       .innerJoin(items, eq(watchlist.itemId, items.id))
-      .leftJoin(listings, eq(listings.itemId, items.id))
       .where(eq(watchlist.userId, userId))
       .orderBy(asc(watchlist.sortOrder));
 
+    // An item can have several copies on offer: the floor is the cheapest one a
+    // buyer can still take, and the quoted move is the first copy that has one.
     const itemIds = [...new Set(board.map((b) => b.row.itemId))];
-    const floors = itemIds.length
+    const offers = itemIds.length
       ? await db
-          .select({ itemId: listings.itemId, floorCents: min(listings.priceCents) })
+          .select({ itemId: listings.itemId, priceCents: listings.priceCents, changePercent: listings.changePercent })
           .from(listings)
-          .where(inArray(listings.itemId, itemIds))
-          .groupBy(listings.itemId)
+          .where(and(inArray(listings.itemId, itemIds), eq(listings.status, "active")))
+          .orderBy(asc(listings.priceCents))
       : [];
-    const floorByItem = new Map(floors.map((f) => [f.itemId, Number(f.floorCents ?? 0)]));
+    const floorByItem = new Map<string, number>();
+    const changeByItem = new Map<string, number>();
+    for (const offer of offers) {
+      if (!floorByItem.has(offer.itemId)) floorByItem.set(offer.itemId, offer.priceCents);
+      if (!changeByItem.has(offer.itemId) && offer.changePercent !== null) changeByItem.set(offer.itemId, offer.changePercent);
+    }
 
     const [book, spreads, series] = await Promise.all([
       db
@@ -64,13 +70,13 @@ export const trackerService = {
         .orderBy(asc(pricePoints.recordedAt)),
     ]);
 
-    const assets: TrackerAsset[] = board.map(({ row, name, changePercent }) => ({
+    const assets: TrackerAsset[] = board.map(({ row, name }) => ({
       id: row.id,
       name: row.label ?? name,
       detail: row.detail ?? "",
       image: row.thumbnailUrl ?? "",
       price: money(floorByItem.get(row.itemId) ?? 0),
-      change: pct(changePercent ?? 0),
+      change: pct(changeByItem.get(row.itemId) ?? 0),
       tone: row.tone as TrackerTone,
       icon: row.icon as IconName,
     }));

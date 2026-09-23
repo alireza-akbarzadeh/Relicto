@@ -1,0 +1,246 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e454]:
+    - banner [ref=f2e455]:
+      - generic [ref=f2e456]:
+        - generic [ref=f2e457]:
+          - link "RelictoPRO Steam Intel Exchange" [ref=f2e458] [cursor=pointer]:
+            - /url: /marketplace
+            - generic [ref=f2e469]:
+              - generic [ref=f2e470]: RelictoPRO
+              - generic [ref=f2e471]: Steam Intel Exchange
+          - navigation [ref=f2e473]:
+            - generic [ref=f2e474]:
+              - link "Marketplace" [ref=f2e475] [cursor=pointer]:
+                - /url: /marketplace
+              - link "Wiki" [ref=f2e478] [cursor=pointer]:
+                - /url: /wiki
+              - link "Tracker" [ref=f2e481] [cursor=pointer]:
+                - /url: /tracker
+              - link "Portfolio / Inventory" [ref=f2e484] [cursor=pointer]:
+                - /url: /profile
+              - link "Community" [ref=f2e487] [cursor=pointer]:
+                - /url: /community
+              - link "Price Alerts" [ref=f2e490] [cursor=pointer]:
+                - /url: /alerts
+        - generic [ref=f2e494]:
+          - textbox "Search the marketplace":
+            - /placeholder: Search skins, weapon tiers, floats or pattern ID...
+          - generic [ref=f2e498]: ⌘K
+        - generic [ref=f2e499]:
+          - generic [ref=f2e500]:
+            - generic [ref=f2e501]:
+              - generic [ref=f2e503]: STEAM SYNCED
+              - generic [ref=f2e504]: 14ms
+            - generic [ref=f2e505]: VAC CLEAN
+          - generic [ref=f2e510]:
+            - button [ref=f2e511] [cursor=pointer]:
+              - link "$0.00" [ref=f2e512]:
+                - /url: /wallet
+            - link "Deposit funds" [ref=f2e519] [cursor=pointer]:
+              - /url: /wallet#deposit
+          - button "Open basket with 0 items" [ref=f2e521] [cursor=pointer]
+          - button "Switch to light mode" [ref=f2e523] [cursor=pointer]
+          - button "Notifications" [ref=f2e524] [cursor=pointer]
+          - button "Account menu" [ref=f2e528] [cursor=pointer]:
+            - generic [ref=f2e529]:
+              - generic [ref=f2e530]:
+                - img "ClaudeCheckoutQA profile portrait" [ref=f2e532]
+                - generic [ref=f2e533]: "1"
+              - generic [ref=f2e534]:
+                - generic [ref=f2e535]: ClaudeCheckoutQA
+                - generic [ref=f2e537]: Trader
+    - main [ref=f2e538]:
+      - generic [ref=f2e539]:
+        - generic [ref=f2e540]:
+          - generic [ref=f2e541]:
+            - generic [ref=f2e542]:
+              - generic [ref=f2e543] [cursor=pointer]: Orders & Escrow
+              - generic [ref=f2e544]: /
+              - generic [ref=f2e545]: Active Trade
+              - generic [ref=f2e546]: /
+              - generic [ref=f2e547]: "#LT-62076-XG"
+            - generic [ref=f2e548]:
+              - heading "Escrow Protocol v4.1.8-node" [level=1] [ref=f2e549]:
+                - generic [ref=f2e550]: Escrow Protocol
+                - generic [ref=f2e551]: v4.1.8-node
+              - generic [ref=f2e552]: Bot Security Audit (Step 2 of 4)
+          - generic [ref=f2e555]:
+            - generic [ref=f2e556]:
+              - generic [ref=f2e557]:
+                - generic [ref=f2e558]: Placed
+                - generic [ref=f2e559]: 0 min ago
+              - generic [ref=f2e561]:
+                - generic [ref=f2e562]: Auto-Cancel In
+                - time [ref=f2e566]: 03:00
+            - button "Proof Hash" [ref=f2e567] [cursor=pointer]
+        - generic [ref=f2e570]:
+          - generic [ref=f2e571]:
+            - generic [ref=f2e572]:
+              - generic [ref=f2e573]: Step 01
+              - generic [ref=f2e578]: 07:08:45 UTC
+            - generic [ref=f2e579]: Escrow Vault Funded
+            - paragraph [ref=f2e580]: $103.50 locked from your Relicto vault balance.
+            - generic [ref=f2e581]: Ledger Locked
+          - generic [ref=f2e586]:
+            - generic [ref=f2e588]:
+              - generic [ref=f2e589]: "2"
+              - generic [ref=f2e590]: Awaiting User Confirmation
+            - generic [ref=f2e592]: Bot Security Audit
+            - paragraph [ref=f2e593]: Queued for a Sentinel bot. Steam Guard API and anti-phishing checks pending.
+            - generic [ref=f2e594]: API Integrity 100%
+          - generic [ref=f2e598]:
+            - generic [ref=f2e599]:
+              - generic [ref=f2e600]:
+                - generic [ref=f2e601]: "3"
+                - generic [ref=f2e602]: Step 03
+              - generic [ref=f2e603]: QUEUED
+            - generic [ref=f2e604]: Trade Offer Dispatched
+            - paragraph [ref=f2e605]: A Steam trade offer goes to your verified Trade URL once the audit clears.
+            - generic [ref=f2e606]: "Match Code: —"
+          - generic [ref=f2e610]:
+            - generic [ref=f2e611]:
+              - generic [ref=f2e612]:
+                - generic [ref=f2e613]: "4"
+                - generic [ref=f2e614]: Step 04
+              - generic [ref=f2e615]: QUEUED
+            - generic [ref=f2e616]: Settlement & Inventory Vault
+            - paragraph [ref=f2e617]: Asset permanently bound to your linked Steam profile and escrow payout released to vendor.
+            - generic [ref=f2e618]: Pending Acceptance
+        - generic [ref=f2e623]:
+          - generic [ref=f2e624]:
+            - generic [ref=f2e625]:
+              - generic [ref=f2e626]:
+                - generic [ref=f2e636]:
+                  - generic [ref=f2e637]:
+                    - generic [ref=f2e638]: Relicto Sentinel Bot
+                    - generic [ref=f2e639]: Steam Lvl —
+                  - generic [ref=f2e640]:
+                    - generic [ref=f2e641]: Official Relicto relay
+                    - generic [ref=f2e643]: Official Relay Node
+                - generic [ref=f2e644]: "Offer ID: —"
+              - generic [ref=f2e648]:
+                - generic [ref=f2e649]:
+                  - generic [ref=f2e655]:
+                    - generic [ref=f2e656]: Anti-Phishing Trade Token
+                    - generic [ref=f2e657]: Verify this exact code matches your Steam Mobile Authenticator prompt.
+                  - generic [ref=f2e658]: —
+                - generic [ref=f2e659]: "Caution: If the trade offer inside your Steam Guard app shows a different verification token or requests your items in return, do NOT confirm. Relicto Sentinel bots will never request your existing inventory."
+              - generic [ref=f2e660]:
+                - link "Open Steam Trade Offer" [ref=f2e661] [cursor=pointer]:
+                  - /url: https://steamcommunity.com/tradeoffer/
+                - button "Re-Send Offer" [ref=f2e663] [cursor=pointer]
+              - generic [ref=f2e665]:
+                - generic [ref=f2e666]: "How to confirm in 30 seconds:"
+                - generic [ref=f2e667]:
+                  - generic [ref=f2e668]:
+                    - generic [ref=f2e669]: "01."
+                    - generic [ref=f2e670]:
+                      - text: Open official
+                      - strong [ref=f2e671]: Steam Mobile App
+                      - text: on iOS or Android.
+                  - generic [ref=f2e672]:
+                    - generic [ref=f2e673]: "02."
+                    - generic [ref=f2e674]:
+                      - text: Tap
+                      - strong [ref=f2e675]: Confirmations
+                      - text: menu tab in navigation.
+                  - generic [ref=f2e676]:
+                    - generic [ref=f2e677]: "03."
+                    - generic [ref=f2e678]:
+                      - text: Match security token
+                      - strong [ref=f2e679]: —
+                      - text: and accept gift trade.
+              - generic [ref=f2e680]:
+                - generic [ref=f2e681]: "Steam Web API Gateway latency: —"
+                - generic [ref=f2e684]:
+                  - button "Need Assistance?" [ref=f2e685] [cursor=pointer]
+                  - button "Cancel Order" [ref=f2e687] [cursor=pointer]
+            - generic [ref=f2e693]:
+              - generic [ref=f2e694]:
+                - generic [ref=f2e695]: 100% Escrow Guarantee
+                - generic [ref=f2e696]: Zero Risk
+              - paragraph [ref=f2e697]: Your funds of $103.50 USD are isolated in the Relicto Escrow smart settlement contract. If the bot fails to transfer the skin within the timer deadline or if Steam trade networks experience an outage, your full payment is immediately returned to your Steam Wallet with zero cancellation penalties.
+          - generic [ref=f2e698]:
+            - generic [ref=f2e699]:
+              - generic [ref=f2e700]:
+                - generic [ref=f2e701]: Dota 2 Arcana
+                - generic [ref=f2e702]: Phantom Assassin • Style 3
+              - img "Phantom Assassin's Manifold Paradox blades on a dark pedestal" [ref=f2e708]
+              - heading "Phantom Assassin Weapon Artifact • Style 3 Unlocked" [level=2] [ref=f2e713]
+              - generic [ref=f2e716]:
+                - generic [ref=f2e717]: Transaction Summary
+                - generic [ref=f2e718]:
+                  - generic [ref=f2e719]: Item Listed Value
+                  - generic [ref=f2e721]: $118.50
+                - generic [ref=f2e722]:
+                  - generic [ref=f2e723]:
+                    - generic [ref=f2e724]: Relicto Escrow Protocol Fee
+                    - generic [ref=f2e725]: 0% PROMO
+                  - generic [ref=f2e726]: $0.00
+                - generic [ref=f2e727]:
+                  - generic [ref=f2e728]: Steam Sync Routing Fee
+                  - generic [ref=f2e730]: $0.00
+                - generic [ref=f2e732]:
+                  - generic [ref=f2e733]:
+                    - generic [ref=f2e734]: Total Paid
+                    - generic [ref=f2e735]: Relicto Vault Balance Deducted
+                  - generic [ref=f2e736]: $103.50
+            - generic [ref=f2e737]:
+              - generic [ref=f2e738]:
+                - generic [ref=f2e739]: Vendor Identity
+                - generic [ref=f2e740]: Verified Merchant
+              - generic [ref=f2e744]:
+                - img "Vendor merchant avatar" [ref=f2e747]
+                - generic [ref=f2e749]:
+                  - generic [ref=f2e750]:
+                    - generic [ref=f2e751]: "Sentinel Bot #42"
+                    - generic [ref=f2e752]: PRO
+                  - generic [ref=f2e753]: Verified Relicto merchant
+              - generic [ref=f2e754]:
+                - generic [ref=f2e755]:
+                  - generic [ref=f2e756]: Fulfillment Avg
+                  - generic [ref=f2e757]: —
+                - generic [ref=f2e758]:
+                  - generic [ref=f2e759]: Merchant Rating
+                  - generic [ref=f2e760]: —
+              - button "View Vendor Inventory" [ref=f2e761] [cursor=pointer]
+        - generic [ref=f2e763]:
+          - generic [ref=f2e764]:
+            - generic [ref=f2e765]:
+              - generic [ref=f2e770]: Relicto Sentinel Telemetry Stream
+              - generic [ref=f2e771]: WS://ESCROW-NODE-04.LIVE
+            - generic [ref=f2e772]:
+              - generic [ref=f2e773]: FEED CONNECTED
+              - generic [ref=f2e776]: "BUFFER: 4/5 EVT"
+          - generic [ref=f2e777]:
+            - generic [ref=f2e778]:
+              - generic [ref=f2e779]: "[07:08:45.054]"
+              - generic [ref=f2e780]: "[AUTH]"
+              - generic [ref=f2e781]: Payment authorization payload for $103.50 USD accepted via Relicto Vault Balance session token.
+            - generic [ref=f2e782]:
+              - generic [ref=f2e783]: "[07:08:45.054]"
+              - generic [ref=f2e784]: "[VAULT]"
+              - generic [ref=f2e785]: "Relicto Escrow Node #04 locked funds in cryptographic multi-sig vault #LT-62076-XG."
+            - generic [ref=f2e786]:
+              - generic [ref=f2e787]: "[07:08:45.054]"
+              - generic [ref=f2e788]: "[BOT_DISPATCH]"
+              - generic [ref=f2e789]: "Relicto Sentinel Bot initiated trade payload with SteamID64: —."
+            - generic [ref=f2e790]:
+              - generic [ref=f2e791]: "[07:08:45.054]"
+              - generic [ref=f2e792]: "[WAIT_CLIENT]"
+              - generic [ref=f2e793]: "Awaiting Steam Mobile Guard 2FA verification from client. Security Token: —. Automatic fail-safe timeout running."
+    - contentinfo [ref=f2e794]:
+      - generic [ref=f2e795]:
+        - generic [ref=f2e796]:
+          - generic [ref=f2e797]: © 2025 Relicto EXCHANGE. ALL RIGHTS RESERVED.
+          - generic [ref=f2e798]:
+            - generic [ref=f2e800]: "Operational Status:"
+            - generic [ref=f2e801]: Escrow Vault Active
+        - generic [ref=f2e802]:
+          - button "Terms of Service" [ref=f2e803] [cursor=pointer]
+          - button "Privacy Policy" [ref=f2e804] [cursor=pointer]
+          - button "Steam Web API Policy" [ref=f2e805] [cursor=pointer]
+          - button "Security SLA" [ref=f2e806] [cursor=pointer]
+          - button "Bug Bounty" [ref=f2e807] [cursor=pointer]
+  - region "Notifications alt+T"
+  - alert [ref=f2e452]: Order Tracking | Relicto

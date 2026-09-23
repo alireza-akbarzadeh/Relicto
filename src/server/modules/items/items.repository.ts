@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, min, ne, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { heroes, itemStyles, items, listings, pricePoints } from "@/lib/db/schema";
 
@@ -45,7 +45,8 @@ export async function findItemListings(itemId: string) {
     })
     .from(listings)
     .where(and(eq(listings.itemId, itemId), eq(listings.status, "active")))
-    .orderBy(asc(listings.priceCents));
+    // Price-time priority: at the same price, the copy listed first leads.
+    .orderBy(asc(listings.priceCents), asc(listings.listedAt));
 }
 
 export async function findItemStyles(itemId: string) {
@@ -68,8 +69,13 @@ export async function findPriceHistory(itemId: string, limit = 30) {
   return rows.reverse();
 }
 
-/** Other items in the same game, for the "related" rail. */
+/**
+ * Other items in the same game, for the "related" rail — one card per item,
+ * priced at its floor, however many copies are on offer.
+ */
 export async function findRelatedItems(excludeSlug: string, gameId: string, limit = 4) {
+  const floorCents = min(listings.priceCents);
+
   return db
     .select({
       slug: items.slug,
@@ -78,12 +84,12 @@ export async function findRelatedItems(excludeSlug: string, gameId: string, limi
       imageUrl: items.imageUrl,
       imageAlt: items.imageAlt,
       presentation: items.presentation,
-      priceCents: listings.priceCents,
+      priceCents: sql<number>`${floorCents}::int`,
     })
     .from(items)
     .innerJoin(listings, and(eq(listings.itemId, items.id), eq(listings.status, "active")))
-    .where(and(eq(items.gameId, gameId)))
-    .orderBy(desc(listings.priceCents))
-    .limit(limit + 1)
-    .then((rows) => rows.filter((row) => row.slug !== excludeSlug).slice(0, limit));
+    .where(and(eq(items.gameId, gameId), ne(items.slug, excludeSlug)))
+    .groupBy(items.id)
+    .orderBy(desc(floorCents))
+    .limit(limit);
 }

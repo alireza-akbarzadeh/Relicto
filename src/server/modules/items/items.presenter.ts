@@ -59,7 +59,11 @@ export function toItemDetail(
 ): ItemDetail {
   const cheapest = itemListings[0];
   const lowestCents = cheapest?.priceCents ?? 0;
-  const changePercent = cheapest?.changePercent ?? 0;
+  // Several copies can be on offer: the item's move is the first one quoted,
+  // and its open offers are every copy's together.
+  const quoted = itemListings.find((row) => row.changePercent !== null);
+  const changePercent = quoted?.changePercent ?? 0;
+  const openOffers = itemListings.reduce((total, row) => total + row.offerCount, 0);
   const rising = changePercent >= 0;
   const gameLabel = GAME_LABEL[item.gameId] ?? item.gameId;
 
@@ -109,13 +113,13 @@ export function toItemDetail(
     price: {
       lowestUsd: usd(lowestCents),
       moveLabel: `${rising ? "+" : ""}${changePercent.toFixed(1)}%`,
-      moveNote: cheapest?.changeWindow ? `past ${cheapest.changeWindow}` : "past 24h",
+      moveNote: quoted?.changeWindow ? `past ${quoted.changeWindow}` : "past 24h",
       trendLabel: rising ? "Trending up" : "Cooling off",
       trendNote: `${itemListings.length} active listing${itemListings.length === 1 ? "" : "s"}`,
       stats: [
         { label: "30d Low", value: money(low), tone: "cyan" },
         { label: "30d High", value: money(high), tone: "amber" },
-        { label: "Open Offers", value: String(cheapest?.offerCount ?? 0), tone: "primary" },
+        { label: "Open Offers", value: String(openOffers), tone: "primary" },
       ],
     },
     escrow: [

@@ -1,8 +1,8 @@
 import "server-only";
 
-import { and, desc, eq, gte, sql } from "drizzle-orm";
+import { and, count, desc, eq, gte, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { ledgerEntries, orders, walletAccounts } from "@/lib/db/schema";
+import { items, ledgerEntries, orderItems, orders, walletAccounts } from "@/lib/db/schema";
 
 export async function findWallet(userId: string) {
   const [row] = await db.select().from(walletAccounts).where(eq(walletAccounts.userId, userId)).limit(1);
@@ -57,4 +57,22 @@ export async function sumLastDay(walletId: string, now = new Date()) {
     .where(and(eq(ledgerEntries.walletId, walletId), gte(ledgerEntries.occurredAt, since)));
 
   return row?.netCents ?? 0;
+}
+
+/** Ledger rows with the traded item's shot and game, for the mobile activity list. */
+export async function findEntriesWithItems(walletId: string, limit = 10) {
+  return db
+    .select({ entry: ledgerEntries, thumbnailUrl: orders.thumbnailUrl, thumbnailAlt: orders.thumbnailAlt, gameId: items.gameId })
+    .from(ledgerEntries)
+    .leftJoin(orders, eq(ledgerEntries.orderId, orders.id))
+    .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
+    .leftJoin(items, eq(orderItems.itemId, items.id))
+    .where(eq(ledgerEntries.walletId, walletId))
+    .orderBy(desc(ledgerEntries.occurredAt))
+    .limit(limit);
+}
+
+export async function countEntries(walletId: string) {
+  const [row] = await db.select({ value: count() }).from(ledgerEntries).where(eq(ledgerEntries.walletId, walletId));
+  return row?.value ?? 0;
 }

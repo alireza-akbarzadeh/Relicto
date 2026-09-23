@@ -42,7 +42,7 @@ function Entry({ entry }: { entry: LedgerEntry }) {
         </div>
       </div>
       <div className="flex shrink-0 flex-col items-end pl-2">
-        <span className={cn("font-data-mono-md text-data-mono-md", TONE_TEXT[entry.amountTone])}>+{formatMoney(entry.amountUsd)}</span>
+        <span className={cn("font-data-mono-md text-data-mono-md", TONE_TEXT[entry.amountTone])}>{entry.amountUsd < 0 ? "-" : "+"}{formatMoney(Math.abs(entry.amountUsd))}</span>
         <span className={cn("font-label-badge text-label-badge", entry.whenTone === "muted" ? "text-text-muted" : "text-text-secondary")}>{entry.when}</span>
       </div>
     </div>

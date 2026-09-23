@@ -2,7 +2,7 @@ import "server-only";
 
 import { and, asc, count, desc, eq, gte, ilike, inArray, lte, min, sum, type SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { heroes, items, listings } from "@/lib/db/schema";
+import { heroes, items, listings, watchlist } from "@/lib/db/schema";
 import type { CreateListingInput, ListListingsInput } from "./listings.schema";
 
 /** Only rows a buyer can actually act on, narrowed by the marketplace facets. */
@@ -129,4 +129,14 @@ export async function markListingSold(id: string) {
     .returning();
 
   return row ?? null;
+}
+
+/** Item slugs on a trader's watchlist — the hearts already filled in on mobile. */
+export async function findWatchedSlugs(userId: string) {
+  const rows = await db
+    .select({ slug: items.slug })
+    .from(watchlist)
+    .innerJoin(items, eq(watchlist.itemId, items.id))
+    .where(eq(watchlist.userId, userId));
+  return rows.map((row) => row.slug);
 }

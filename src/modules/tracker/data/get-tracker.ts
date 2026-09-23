@@ -14,7 +14,7 @@ export async function getTracker(): Promise<TrackerData> {
   return live.assets.length > 0 ? live : tracker;
 }
 
-/** Mobile terminal: ticker tape, tracked asset, depth book and arbitrage cards. */
+/** Mobile terminal: the same board, depth, spreads and history as desktop, with the mobile chrome. */
 export async function getTrackerMobile() {
-  return trackerMobile;
+  return (await trackerService.terminalMobile(await requireUserId(), trackerMobile)) ?? trackerMobile;
 }

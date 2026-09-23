@@ -13,11 +13,11 @@ import { Pool } from "pg";
 import { LISTINGS } from "../../modules/marketplace/data/listings.mock";
 import * as schema from "../../lib/db/schema";
 import { buildPriceSeries } from "./price-series";
-import { seedAlerts } from "./seed-alerts";
+import { linkAlertItems, seedAlerts } from "./seed-alerts";
 import { seedCheckout } from "./seed-checkout";
 import { seedContent } from "./seed-content";
 import { seedOrders } from "./seed-orders";
-import { seedProfile } from "./seed-profile";
+import { linkShowcaseItems, seedProfile } from "./seed-profile";
 import { seedSell } from "./seed-sell";
 import { seedTrader, targetEmail } from "./seed-trader";
 import { seedTournaments } from "./seed-tournaments";
@@ -175,6 +175,9 @@ async function main() {
   const studio = await seedSell(db, traderId, vendorId);
   const basket = await seedCheckout(db, traderId, SELLER.id);
   const arena = await seedTournaments(db);
+  // Last: every catalog item now exists, whichever seed added it.
+  await linkShowcaseItems(db);
+  await linkAlertItems(db);
 
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,

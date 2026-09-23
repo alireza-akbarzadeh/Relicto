@@ -15,7 +15,8 @@ export async function getWallet(): Promise<WalletData> {
   return treasury ?? wallet;
 }
 
-/** Mobile wallet: vault status, balances, rails and recent ledger. */
+/** Mobile wallet: the same balances and ledger as desktop, with the mobile vault chrome, actions and rails. */
 export async function getWalletMobile(): Promise<WalletMobile> {
-  return walletMobile;
+  const { vault, actions, rails } = walletMobile;
+  return (await walletService.treasuryMobile(await requireUserId(), { vault, actions, rails })) ?? walletMobile;
 }

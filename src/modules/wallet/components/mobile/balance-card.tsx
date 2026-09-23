@@ -31,7 +31,7 @@ export function BalanceCard({ wallet }: { wallet: WalletMobile }) {
           <div className="flex items-center justify-between">
             <span className="font-label-caps text-label-caps tracking-widest text-text-secondary uppercase">Portfolio Telemetry</span>
             <div className="flex items-center gap-1 rounded-md bg-surface-container-high/90 px-2 py-0.5">
-              <Icon name="trending_up" className="text-[14px] text-tertiary" />
+              <Icon name={wallet.changePct < 0 ? "trending_down" : "trending_up"} className="text-[14px] text-tertiary" />
               <span className="font-data-mono-md text-data-mono-md text-tertiary">{formatDelta(wallet.changePct)}</span>
               <span className="font-label-badge text-label-badge text-text-muted">(24h)</span>
             </div>
@@ -42,7 +42,7 @@ export function BalanceCard({ wallet }: { wallet: WalletMobile }) {
           </div>
           <div className="flex items-center gap-1.5">
             <span className="font-label-badge text-label-badge text-text-secondary">24h PnL:</span>
-            <span className="font-data-mono-md text-data-mono-md text-tertiary">+{formatMoney(wallet.pnlUsd)}</span>
+            <span className="font-data-mono-md text-data-mono-md text-tertiary">{wallet.pnlUsd < 0 ? "-" : "+"}{formatMoney(Math.abs(wallet.pnlUsd))}</span>
             <span className="h-1 w-1 rounded-full bg-surface-variant" />
             <span className="font-label-badge text-label-badge text-text-secondary">Steam Bot Sync:</span>
             <span className="font-data-mono-md text-data-mono-md text-text-primary">{wallet.sync}</span>

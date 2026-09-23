@@ -2,7 +2,7 @@ import "server-only";
 
 import { and, asc, desc, eq, min, ne, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { heroes, itemStyles, items, listings, pricePoints } from "@/lib/db/schema";
+import { heroes, itemStyles, items, listings, pricePoints, profiles, user } from "@/lib/db/schema";
 
 export async function findItemBySlug(slug: string) {
   const [row] = await db
@@ -93,3 +93,16 @@ export async function findRelatedItems(excludeSlug: string, gameId: string, limi
     .orderBy(desc(floorCents))
     .limit(limit);
 }
+
+/** Everyone selling this item right now, cheapest first, with who they are. */
+export async function findItemSellers(itemId: string) {
+  return db
+    .select({ listing: listings, name: user.name, verified: user.emailVerified, profile: profiles })
+    .from(listings)
+    .innerJoin(user, eq(listings.sellerId, user.id))
+    .leftJoin(profiles, eq(profiles.userId, user.id))
+    .where(and(eq(listings.itemId, itemId), eq(listings.status, "active")))
+    .orderBy(asc(listings.priceCents), asc(listings.listedAt));
+}
+
+export type SellerRow = Awaited<ReturnType<typeof findItemSellers>>[number];

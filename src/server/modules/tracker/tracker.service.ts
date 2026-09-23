@@ -1,10 +1,11 @@
 import "server-only";
 
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { items, listings, marketSpreads, orderBookLevels, pricePoints, watchlist } from "@/lib/db/schema";
+import type { marketSpreads } from "@/lib/db/schema";
 import type { IconName } from "@/components/ui/icon";
 import type { OrderLevel, SpreadRow, TrackerAsset, TrackerData, TrackerTone } from "@/modules/tracker/types";
+import type { TrackerMobileData } from "@/modules/tracker/mobile.types";
+import { toArbitrage, toAsset, toCandleChart, toDepth, toFeed } from "./tracker-mobile.presenter";
+import * as repository from "./tracker.repository";
 
 const money = (cents: number) =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -30,53 +31,20 @@ function toChart(points: { priceCents: number }[], buckets = 12): number[] {
 export const trackerService = {
   /** The trader's tracker terminal: board, depth, spreads and chart. */
   async terminal(userId: string): Promise<TrackerData> {
-    const board = await db
-      .select({ row: watchlist, name: items.name })
-      .from(watchlist)
-      .innerJoin(items, eq(watchlist.itemId, items.id))
-      .where(eq(watchlist.userId, userId))
-      .orderBy(asc(watchlist.sortOrder));
-
-    // An item can have several copies on offer: the floor is the cheapest one a
-    // buyer can still take, and the quoted move is the first copy that has one.
-    const itemIds = [...new Set(board.map((b) => b.row.itemId))];
-    const offers = itemIds.length
-      ? await db
-          .select({ itemId: listings.itemId, priceCents: listings.priceCents, changePercent: listings.changePercent })
-          .from(listings)
-          .where(and(inArray(listings.itemId, itemIds), eq(listings.status, "active")))
-          .orderBy(asc(listings.priceCents))
-      : [];
-    const floorByItem = new Map<string, number>();
-    const changeByItem = new Map<string, number>();
-    for (const offer of offers) {
-      if (!floorByItem.has(offer.itemId)) floorByItem.set(offer.itemId, offer.priceCents);
-      if (!changeByItem.has(offer.itemId) && offer.changePercent !== null) changeByItem.set(offer.itemId, offer.changePercent);
-    }
-
-    const [book, spreads, series] = await Promise.all([
-      db
-        .select({ level: orderBookLevels })
-        .from(orderBookLevels)
-        .innerJoin(items, eq(orderBookLevels.itemId, items.id))
-        .where(eq(items.slug, FOCUS_SLUG))
-        .orderBy(desc(orderBookLevels.priceCents)),
-      db.select().from(marketSpreads).orderBy(asc(marketSpreads.sortOrder)),
-      db
-        .select({ priceCents: pricePoints.priceCents })
-        .from(pricePoints)
-        .innerJoin(items, eq(pricePoints.itemId, items.id))
-        .where(eq(items.slug, FOCUS_SLUG))
-        .orderBy(asc(pricePoints.recordedAt)),
+    const [board, book, spreads, series] = await Promise.all([
+      repository.findBoard(userId),
+      repository.findBook(FOCUS_SLUG),
+      repository.findSpreads(),
+      repository.findSeries(FOCUS_SLUG),
     ]);
 
-    const assets: TrackerAsset[] = board.map(({ row, name }) => ({
+    const assets: TrackerAsset[] = board.map(({ row, name, floorCents, changePercent }) => ({
       id: row.id,
       name: row.label ?? name,
       detail: row.detail ?? "",
       image: row.thumbnailUrl ?? "",
-      price: money(floorByItem.get(row.itemId) ?? 0),
-      change: pct(changeByItem.get(row.itemId) ?? 0),
+      price: money(floorCents),
+      change: pct(changePercent),
       tone: row.tone as TrackerTone,
       icon: row.icon as IconName,
     }));
@@ -88,7 +56,36 @@ export const trackerService = {
       side: level.side,
     }));
 
-    return { assets, orderBook, spreads: spreads.map(toSpread), chart: toChart(series) };
+    return { assets, orderBook, spreads: spreads.map(({ spread }) => toSpread(spread)), chart: toChart(series) };
+  },
+
+  /**
+   * The same board, book, spreads and price history in the mobile terminal's
+   * shape. `authored` supplies what isn't recorded yet: telemetry, relay copy,
+   * volume bars and the other Doppler phases.
+   */
+  async terminalMobile(userId: string, authored: TrackerMobileData): Promise<TrackerMobileData | null> {
+    const [board, book, spreads, series, focus] = await Promise.all([
+      repository.findBoard(userId),
+      repository.findBook(FOCUS_SLUG),
+      repository.findSpreads(),
+      repository.findSeries(FOCUS_SLUG),
+      repository.findFocus(FOCUS_SLUG),
+    ]);
+    if (board.length === 0 || !focus) return null;
+
+    return {
+      ...authored,
+      feed: toFeed(board),
+      asset: toAsset(focus, authored.asset),
+      chart: toCandleChart(series.map((point) => point.priceCents), authored.chart),
+      // The listed copy's phase trades at the live floor; the others aren't carried.
+      phases: authored.phases.map((phase) =>
+        phase.id === authored.defaultPhase ? { ...phase, priceUsd: focus.listing.priceCents / 100 } : phase,
+      ),
+      depth: toDepth(book),
+      arbitrage: { ...authored.arbitrage, cards: toArbitrage(spreads) },
+    };
   },
 };
 

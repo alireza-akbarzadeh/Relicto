@@ -1,5 +1,6 @@
 import "server-only";
 
+import { toMobileFeed } from "./listings-mobile.presenter";
 import { toListingView } from "./listings.presenter";
 import * as repository from "./listings.repository";
 import { createListingInput, listListingsInput, type CreateListingInput, type ListListingsInput } from "./listings.schema";
@@ -27,6 +28,16 @@ export const listingService = {
     const input = listListingsInput.parse({ perPage: 96, ...rawInput });
     const { rows } = await repository.findListings(input);
     return rows.map(toListingView);
+  },
+
+  /** The mobile trading feed (one card per item, biggest movers first) and the liquidity its ticker quotes. */
+  async mobileFeed(userId: string) {
+    const [catalog, watched, liquidityCents] = await Promise.all([
+      listingService.catalog({ sort: "recent" }),
+      repository.findWatchedSlugs(userId),
+      repository.sumActiveLiquidityCents(),
+    ]);
+    return { listings: toMobileFeed(catalog, watched), liquidityUsd: liquidityCents / 100 };
   },
 
   /** Live market figures the hub quotes (liquidity, per-item floors). */

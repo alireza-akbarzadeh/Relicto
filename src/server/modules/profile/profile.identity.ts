@@ -7,7 +7,7 @@ export const money = (cents: number) =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 /** Reputation tiers, so the badge tracks the rating instead of being pinned. */
-function ratingTier(rating: number) {
+export function ratingTier(rating: number) {
   if (rating >= 4.9) return "Tier-1 Elite";
   if (rating >= 4.5) return "Tier-2 Trusted";
   return "Rising Trader";

@@ -15,7 +15,7 @@ export async function getAlerts(): Promise<PriceAlert[]> {
   return live.length > 0 ? live : alerts;
 }
 
-/** Mobile sniper terminal: telemetry, trigger rules and dispatch channels. */
+/** Mobile sniper terminal: the same rules as desktop, with live floors, price lines and push status. */
 export async function getAlertsMobile(): Promise<AlertsMobile> {
-  return alertsMobile;
+  return (await alertService.mobile(await requireUserId(), alertsMobile)) ?? alertsMobile;
 }

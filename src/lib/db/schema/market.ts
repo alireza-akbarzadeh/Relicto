@@ -170,6 +170,8 @@ export const marketSpreads = pgTable(
     steamCents: integer("steam_cents").notNull(),
     /** Best price on the secondary venues Relicto scrapes. */
     secondaryCents: integer("secondary_cents").notNull(),
+    /** Which venue that best price is on ("Skinport", "Buff163"). */
+    secondaryVenue: text("secondary_venue"),
     /** Platform take on the round trip, in basis points. */
     feeBps: integer("fee_bps").notNull().default(1200),
     tone: text("tone").notNull().default("muted"),

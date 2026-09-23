@@ -1,6 +1,10 @@
 import "server-only";
 
+import type { ProfileMobile } from "@/modules/profile/mobile.types";
 import type { ProfileData } from "@/modules/profile/types";
+import { sumEscrowHolds } from "../wallet/wallet.repository";
+import { toProfileMobile, type ProfileChrome } from "./profile-mobile.presenter";
+import * as mobileRepository from "./profile-mobile.repository";
 import { toIdentity, toStats } from "./profile.identity";
 import { toEndorsement, toReview, toSellerListing, toShowcase, toStatusRow } from "./profile.presenter";
 import * as repository from "./profile.repository";
@@ -42,5 +46,19 @@ export const profileService = {
       inventoryCount: profile.inventoryCount,
       reviewCount: profile.reviewCount,
     };
+  },
+
+  /** The same trader in the mobile profile's shape; `chrome` is the screen's authored furniture. */
+  async mobile(userId: string, chrome: ProfileChrome): Promise<ProfileMobile | null> {
+    const profile = await repository.findProfile(userId);
+    if (!profile) return null;
+
+    const [cards, activity, escrow] = await Promise.all([
+      mobileRepository.findShowcaseCards(profile.id, userId),
+      mobileRepository.countActivity(userId),
+      sumEscrowHolds(userId),
+    ]);
+
+    return toProfileMobile(chrome, profile, cards, activity, escrow);
   },
 };

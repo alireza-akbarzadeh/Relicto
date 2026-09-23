@@ -121,13 +121,27 @@ async function seedBook(db: Db) {
   );
 }
 
+/**
+ * Catalog item and best secondary venue behind each spread row. The venues are
+ * the ones the mobile arbitrage cards name at those same prices.
+ */
+const SPREAD_SOURCES: Record<string, { slug?: string; venue?: string }> = {
+  bfk: { slug: "butterfly-doppler", venue: "Buff163" },
+  pa: { slug: "manifold-paradox", venue: "Skinport" },
+  ak: {},
+  awp: { slug: "awp-fade" },
+};
+
 async function seedSpreads(db: Db) {
   for (const [order, spread] of tracker.spreads.entries()) {
     const stated = cents(spread.spread.split(" ")[0]);
     const net = cents(spread.yield);
 
+    const source = SPREAD_SOURCES[spread.id] ?? {};
     const row = {
       id: `spread-${spread.id}`,
+      itemId: source.slug ? `item-${source.slug}` : null,
+      secondaryVenue: source.venue ?? null,
       asset: spread.asset,
       detail: spread.detail,
       floorCents: cents(spread.floor),

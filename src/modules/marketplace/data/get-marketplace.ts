@@ -1,5 +1,6 @@
 import "server-only";
 
+import { requireUserId } from "@/modules/relicto/data/get-session";
 import { listingService } from "@/server/modules/listings/listings.service";
 import { LISTINGS } from "./listings.mock";
 import { marketMobile } from "./market-mobile.mock";
@@ -13,7 +14,16 @@ export async function getMarketplaceCatalog() {
   return listings.length > 0 ? listings : LISTINGS;
 }
 
-/** Mobile trading feed (trending rank, spike alert, engine ticker). */
+const usd = (value: number) =>
+  `${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+
+/**
+ * Mobile trading feed: the live catalog, one card per item ranked by move, and
+ * the same liquidity the hub quotes in the engine ticker. Search copy, category
+ * pills and the meta-spike banner stay authored.
+ */
 export async function getMarketplaceMobile() {
-  return marketMobile;
+  const feed = await listingService.mobileFeed(await requireUserId());
+  if (feed.listings.length === 0) return marketMobile;
+  return { ...marketMobile, listings: feed.listings, ticker: { ...marketMobile.ticker, pool: usd(feed.liquidityUsd) } };
 }

@@ -23,6 +23,8 @@ const ENTRIES = (now: number) => [
     amountCents: 315000, balanceAfterCents: LIQUID_CENTS + 85000, occurredAt: new Date(now - 9 * HOUR),
     title: "P2P Skin Sale Credit", assetLabel: "★ Butterfly Knife | Doppler (Phase 4)",
     detailLabel: "Buyer: @Kuro_Vault (Verified)", nodeLabel: "Steam Escrow Bot #14",
+    // The payout for order LT-87219-DL, so the ledger row can show the knife it paid for.
+    orderId: "order-lt-87219-dl",
   },
   {
     hash: "#TX-9839912", direction: "credit", kind: "deposit", venue: "stripe", status: "settled",

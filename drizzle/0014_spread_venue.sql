@@ -1,0 +1,1 @@
+ALTER TABLE "market_spreads" ADD COLUMN "secondary_venue" text;

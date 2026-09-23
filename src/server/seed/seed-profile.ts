@@ -88,6 +88,21 @@ async function seedShowcase(db: Db, profileId: string) {
   }
 }
 
+/**
+ * Links each showcase card to its catalog item — the card's id is the item's
+ * slug. Runs after every seed that adds catalog items, so it resolves the same
+ * way on a fresh database as on a re-run.
+ */
+export async function linkShowcaseItems(db: Db) {
+  for (const card of showcase) {
+    const [item] = await db.select({ id: schema.items.id }).from(schema.items).where(eq(schema.items.slug, card.id));
+    await db
+      .update(schema.showcaseItems)
+      .set({ itemId: item?.id ?? null })
+      .where(eq(schema.showcaseItems.id, `showcase-${card.id}`));
+  }
+}
+
 async function seedStatusRows(db: Db, profileId: string) {
   const groups = [
     ["security", security],

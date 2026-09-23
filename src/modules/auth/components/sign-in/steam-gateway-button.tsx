@@ -1,17 +1,18 @@
 "use client";
 
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { useSteamSignIn } from "../../hooks/use-steam-sign-in";
 import { SteamLogo } from "../ui/steam-logo";
 
 /** Primary "Sign In via Steam" OpenID call to action with its guarantees. */
 export function SteamGatewayButton() {
+  const signIn = useSteamSignIn();
   return (
     <div className="flex flex-col gap-2">
       <Button
         type="button"
-        onClick={() => toast("Steam OpenID", { description: "The Steam gateway connects in the backend phase." })}
+        onClick={signIn}
         className="group relative h-auto w-full justify-between overflow-hidden rounded-xl whitespace-normal border border-status-upcoming/30 bg-linear-to-r/srgb from-steam-ink via-steam-navy to-steam-slate p-4 text-left shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-all duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-[0_0_30px_rgba(42,71,94,0.6)]"
       >
         <div className="absolute inset-0 bg-linear-to-r/srgb from-primary-container/10 via-transparent to-status-upcoming/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

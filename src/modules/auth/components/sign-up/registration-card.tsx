@@ -1,7 +1,7 @@
 "use client";
 
+import { useSteamSignIn } from "@/modules/auth/hooks/use-steam-sign-in";
 import Link from "next/link";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { DividerLabel } from "../ui/divider-label";
@@ -29,6 +29,7 @@ function OnboardingSteps() {
 }
 
 function FastTrackBanner() {
+  const signInWithSteam = useSteamSignIn();
   return (
     <div className="mb-6 flex flex-col items-center justify-between gap-4 rounded-xl border border-status-upcoming/30 bg-surface-deep/95 p-4 shadow-[0_4px_20px_rgba(6,182,212,0.08)] transition-all hover:border-status-upcoming/50 sm:flex-row lg:mb-4 lg:gap-3 lg:p-3">
       <div className="flex items-center gap-3.5 lg:gap-3">
@@ -49,7 +50,7 @@ function FastTrackBanner() {
       </div>
       <Button
         type="button"
-        onClick={() => toast("Steam OpenID", { description: "The Steam gateway connects in the backend phase." })}
+        onClick={signInWithSteam}
         className="h-auto w-full shrink-0 gap-2 rounded-lg border border-steam-blue/40 bg-linear-to-r/srgb from-steam-ink to-steam-slate px-4 py-2.5 font-headline-sm text-xs tracking-wider text-white uppercase shadow-[0_0_15px_rgba(102,192,244,0.25)] hover:from-steam-slate hover:to-steam-steel active:scale-[0.98] sm:w-auto"
       >
         <Icon name="bolt" className="text-[18px] text-steam-blue" />

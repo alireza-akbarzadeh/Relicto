@@ -1,6 +1,6 @@
 "use client";
 
-import { toast } from "sonner";
+import { useSteamSignIn } from "@/modules/auth/hooks/use-steam-sign-in";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import type { GatewayMobile } from "../../data/gateway-mobile.mock";
@@ -8,6 +8,7 @@ import { SteamLogo } from "../ui/steam-logo";
 
 /** Sync status, the gateway title and the Steam OpenID fast-track card. */
 export function SteamFastTrack({ data }: { data: GatewayMobile }) {
+  const signInWithSteam = useSteamSignIn();
   return (
     <>
       <div className="flex flex-col gap-space-sm pt-space-xs">
@@ -46,7 +47,7 @@ export function SteamFastTrack({ data }: { data: GatewayMobile }) {
           <Button
             variant={null}
             size={null}
-            onClick={() => toast("Redirecting to Steam", { description: "Steam OpenID sign-in connects in the backend phase." })}
+            onClick={signInWithSteam}
             className="h-auto w-full justify-between rounded-lg border-0 bg-linear-to-r/srgb from-surface-bright to-surface-container-highest px-4 py-3.5 text-text-primary shadow-md transition-all active:scale-[0.98]"
           >
             <span className="flex items-center gap-2.5">

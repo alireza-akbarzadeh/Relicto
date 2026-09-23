@@ -4,6 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 import { dash } from "@better-auth/infra";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { steamAuth } from "@/lib/steam/steam-auth-plugin";
 
 /**
  * Where this instance actually runs. Vercel injects `VERCEL_URL` per
@@ -34,6 +35,7 @@ export const auth = betterAuth({
     dash({
       apiKey: process.env.BETTER_AUTH_API_KEY,
     }),
+    steamAuth(),
     nextCookies(),
   ],
 });

@@ -1,17 +1,14 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-
+import { createContext, useContext, type ReactNode } from "react";
+import { useCartState } from "@/modules/relicto/hooks/use-cart-state";
 import type { CheckoutItem } from "@/modules/checkout/types";
-type CartState = {
-  items: CheckoutItem[];
-  count: number;
-  addItem: (item: CheckoutItem) => void;
-  removeItem: (id: string) => void;
-  clearCart: () => void;
-};
+
+type CartState = ReturnType<typeof useCartState>;
+
 const CartContext = createContext<CartState | null>(null);
 
+/** Shares the live basket across the signed-in app; `initialItems` comes from the server render. */
 export function CartProvider({
   initialItems,
   children,
@@ -19,23 +16,7 @@ export function CartProvider({
   initialItems: CheckoutItem[];
   children: ReactNode;
 }) {
-  const [items, setItems] = useState(initialItems);
-
-  const value = useMemo(
-    () => ({
-      items,
-      count: items.length,
-      addItem: (item: CheckoutItem) =>
-        setItems((current) =>
-          current.some((entry) => entry.id === item.id) ? current : [...current, item]
-        ),
-      removeItem: (id: string) =>
-        setItems((current) => current.filter((item) => item.id !== id)),
-      clearCart: () => setItems([]),
-    }),
-    [items]
-  );
-
+  const value = useCartState(initialItems);
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 

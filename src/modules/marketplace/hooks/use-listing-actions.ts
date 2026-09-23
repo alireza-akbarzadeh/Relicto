@@ -7,15 +7,12 @@ import { formatMoney } from "@/lib/format";
 import type { CheckoutItem } from "@/modules/checkout/types";
 import type { Listing } from "../types";
 
-const CART_IDS: Record<string, string> = {
-  "manifold-paradox": "manifold",
-  "butterfly-doppler": "butterfly",
-  "ak-case-hardened": "case-hardened",
-};
-
+/** The optimistic line shown until the server answers with the reserved copy. */
 function checkoutItemFromListing(listing: Listing): CheckoutItem {
   return {
-    id: CART_IDS[listing.id] ?? listing.id,
+    id: listing.listingId ?? listing.id,
+    listingId: listing.listingId,
+    slug: listing.id,
     image: listing.image,
     imageAlt: listing.imageAlt,
     badge: listing.badge.label,
@@ -34,9 +31,10 @@ function checkoutItemFromListing(listing: Listing): CheckoutItem {
 
 export function useListingActions(listing: Listing) {
   const router = useRouter();
-  const { items, addItem } = useCart();
-  const cartItem = checkoutItemFromListing(listing);
-  const inBasket = items.some((item) => item.id === cartItem.id);
+  const { has, addItem } = useCart();
+  // The exact copy on the card when the catalog is live; otherwise its cheapest copy.
+  const ref = listing.listingId ?? listing.id;
+  const inBasket = has(ref);
 
   const viewOffers = () => router.push(`/items/${listing.id}`);
 
@@ -45,7 +43,7 @@ export function useListingActions(listing: Listing) {
       toast(`${listing.name} is already in your basket`, { description: "Open the basket to continue to checkout." });
       return;
     }
-    addItem(cartItem);
+    addItem(checkoutItemFromListing(listing), ref);
     toast.success(`${listing.name} added to basket`, {
       description: `${formatMoney(listing.priceUsd)} reserved for secure escrow checkout.`,
       action: { label: "Checkout", onClick: () => router.push("/checkout") },

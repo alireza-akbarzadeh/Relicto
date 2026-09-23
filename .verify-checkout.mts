@@ -6,7 +6,7 @@ const { checkout } = await import("@/modules/checkout/data/checkout.mock");
 const stable = (v: unknown): string => JSON.stringify(v, (_k, x) =>
   x && typeof x === "object" && !Array.isArray(x)
     ? Object.fromEntries(Object.entries(x).sort(([a],[b]) => a.localeCompare(b))) : x);
-const drop = (o: Record<string, unknown>) => Object.fromEntries(Object.entries(o).filter(([k]) => k !== "id"));
+const drop = (o: Record<string, unknown>) => Object.fromEntries(Object.entries(o).filter(([k]) => !["id", "listingId", "slug"].includes(k)));
 let bad = 0;
 const check = (l: string, a: unknown, b: unknown) => {
   if (stable(a) === stable(b)) return;

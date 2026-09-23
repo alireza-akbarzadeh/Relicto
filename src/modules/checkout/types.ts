@@ -2,6 +2,9 @@ import { IconName } from "@/components/ui/icon";
 
 export type CheckoutItem = {
   id: string;
+  /** The reserved copy and its item — how buy buttons recognise a line already in the basket. */
+  listingId?: string;
+  slug?: string;
   image: string;
   imageAlt: string;
   badge: string;

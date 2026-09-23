@@ -29,11 +29,11 @@ function toCheckoutItem(listing: MobileListing): CheckoutItem {
 /** The card's action: escrow adds to the basket, trade adds and opens checkout, inspect opens the item. */
 export function useMobileListingAction(listing: MobileListing) {
   const router = useRouter();
-  const { items, addItem } = useCart();
+  const { has, addItem } = useCart();
 
   const reserve = () => {
-    if (items.some((item) => item.id === listing.slug)) return false;
-    addItem(toCheckoutItem(listing));
+    if (has(listing.slug)) return false;
+    addItem(toCheckoutItem(listing), listing.slug);
     return true;
   };
 

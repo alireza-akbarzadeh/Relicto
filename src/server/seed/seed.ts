@@ -172,7 +172,7 @@ async function main() {
   const alerts = await seedAlerts(db, traderId);
   const board = await seedTracker(db, traderId);
   const studio = await seedSell(db, traderId, vendorId);
-  const basket = await seedCheckout(db, traderId);
+  const basket = await seedCheckout(db, traderId, SELLER.id);
 
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,

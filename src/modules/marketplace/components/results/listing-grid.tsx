@@ -34,7 +34,7 @@ export function ListingGrid() {
   return (
     <div className={cn(LAYOUT[filters.view])}>
       {results.items.map((listing, i) => (
-        <ListingCard key={listing.id} listing={listing} priority={i < 4} />
+        <ListingCard key={listing.listingId ?? listing.id}listing={listing} priority={i < 4} />
       ))}
     </div>
   );

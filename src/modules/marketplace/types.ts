@@ -21,7 +21,10 @@ export type MediaBadge =
   | { kind: "fx"; label: string; icon: IconName; accent: Accent };
 
 export type Listing = {
+  /** The item slug — cards link to `/items/[id]`. */
   id: string;
+  /** The exact copy on offer. An item can have several, so this is the card's identity. */
+  listingId?: string;
   name: string;
   game: Ecosystem;
   rarity: RarityKey | null;

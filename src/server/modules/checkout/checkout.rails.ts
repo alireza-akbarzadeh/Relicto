@@ -1,7 +1,5 @@
 import type { PaymentRail } from "@/modules/checkout/types";
-
-const money = (cents: number) =>
-  `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+import { usd } from "../wallet/wallet.presenter";
 
 /**
  * Rails are platform configuration, the same for every trader — only the vault
@@ -11,7 +9,7 @@ export const PAYMENT_RAILS = (balanceCents: number): PaymentRail[] => [
   {
     id: "relicto",
     title: "Lootora Vault Balance",
-    detail: `Avail: ${money(balanceCents)} USD`,
+    detail: `Avail: ${usd(balanceCents)} USD`,
     note: "Instant 0% fee execution",
     icon: "account_balance_wallet",
     badge: "Fastest",

@@ -37,6 +37,7 @@ export function toListingView(row: ListingRow): Listing {
 
   return {
     id: row.item.slug,
+    listingId: row.id,
     name: row.item.name,
     game: row.item.gameId as Ecosystem,
     rarity: row.item.rarity && UI_RARITIES.has(row.item.rarity) ? (row.item.rarity as RarityKey) : null,

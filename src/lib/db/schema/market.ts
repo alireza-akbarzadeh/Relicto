@@ -65,6 +65,12 @@ export const listings = pgTable(
     botName: text("bot_name"),
     /** Per-copy notes the basket surfaces: nametags, stickers, gems, vendor. */
     intel: jsonb("intel").$type<string[]>(),
+    /**
+     * The seller's shot of this exact copy. Two copies of one skin differ in
+     * wear and pattern, so the catalog art is only the fallback.
+     */
+    imageUrl: text("image_url"),
+    imageAlt: text("image_alt"),
     checkout: jsonb("checkout").$type<CheckoutPresentation>(),
     ...timestamps,
   },

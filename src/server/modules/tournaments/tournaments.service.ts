@@ -1,6 +1,8 @@
 import "server-only";
 
 import type { ArenaCard, Broadcast, FeedMatch, HeroEvent } from "@/modules/tournaments/types";
+import type { BracketCardData, RadarMatch } from "@/modules/tournaments/mobile.types";
+import { toBracketCard, toRadarMatch } from "./tournaments-mobile.presenter";
 import { toArenaCard, toBroadcast, toFeedMatch, toHeroEvent } from "./tournaments.presenter";
 import * as repository from "./tournaments.repository";
 
@@ -28,6 +30,18 @@ export const tournamentService = {
       openEvents: events.length,
       broadcast: featured ? toBroadcast(featured) : null,
       feeds: games.filter((row) => !row.match.featured).map(toFeedMatch),
+    };
+  },
+
+  /** The same tournaments and live matches in the mobile hub's bracket list and radar. */
+  async arenaMobile(now = new Date()): Promise<{ brackets: BracketCardData[]; radar: RadarMatch[]; openEvents: number } | null> {
+    const [events, games] = await Promise.all([repository.findOpenTournaments(), repository.findActiveMatches()]);
+    if (events.length === 0) return null;
+
+    return {
+      brackets: present(events.map((row) => toBracketCard(row, now))),
+      radar: games.filter((row) => row.match.status === "live").map(toRadarMatch),
+      openEvents: events.length,
     };
   },
 };

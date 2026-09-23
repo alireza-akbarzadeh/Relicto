@@ -1,6 +1,8 @@
 import "server-only";
 
+import type { ItemMobile } from "@/modules/items/mobile.types";
 import type { ItemDetail } from "@/modules/items/types";
+import { toItemMobile } from "./items-mobile.presenter";
 import { toItemDetail } from "./items.presenter";
 import * as repository from "./items.repository";
 
@@ -18,6 +20,13 @@ export const itemService = {
     ]);
 
     return toItemDetail(item, itemListings, styles, history, related);
+  },
+
+  /** An authored mobile inspector with live floor, move and seller book for the viewer. */
+  async mobile(authored: ItemMobile, viewerId: string): Promise<ItemMobile> {
+    const item = await repository.findItemBySlug(authored.slug);
+    if (!item) return authored;
+    return toItemMobile(authored, await repository.findItemSellers(item.id), viewerId);
   },
 
   async exists(slug: string) {

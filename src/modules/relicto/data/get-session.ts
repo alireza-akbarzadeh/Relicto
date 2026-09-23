@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
+import { walletService } from "@/server/modules/wallet/wallet.service";
 import type { AppNotification, SessionUser } from "../session-types";
 
 /**
@@ -14,8 +15,9 @@ import type { AppNotification, SessionUser } from "../session-types";
 const EXPIRED = "/sign-in?expired=1";
 
 /**
- * Wallet balance and trader level/role belong to domain tables that aren't
- * read here yet. Every signed-in trader gets these defaults until they are.
+ * Trader level and role belong to the profile, which isn't read here yet —
+ * every signed-in trader gets these defaults until it is. The wallet balance
+ * is filled in by `getSession`.
  */
 function toSessionUser(user: { name: string; image?: string | null; emailVerified: boolean }): SessionUser {
   return {
@@ -34,7 +36,11 @@ function toSessionUser(user: { name: string; image?: string | null; emailVerifie
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
   const result = await auth.api.getSession({ headers: await headers() });
   if (!result) return null;
-  return { user: toSessionUser(result.user), notifications: await notificationService.feed(result.user.id) };
+  const [notifications, walletCents] = await Promise.all([
+    notificationService.feed(result.user.id),
+    walletService.liquidCents(result.user.id),
+  ]);
+  return { user: { ...toSessionUser(result.user), walletUsd: walletCents / 100 }, notifications };
 }
 
 /**

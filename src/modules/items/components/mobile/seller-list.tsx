@@ -55,7 +55,7 @@ export function SellerList({ item }: { item: ItemMobile }) {
       </div>
 
       {shown.map((seller) => (
-        <SellerCard key={seller.id} seller={seller} floor={seller.id === floor.id} onBuy={buyFrom} />
+        <SellerCard key={seller.id} seller={seller} floor={seller.id === floor?.id} onBuy={buyFrom} />
       ))}
     </div>
   );

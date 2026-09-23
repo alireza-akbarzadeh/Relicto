@@ -169,7 +169,7 @@ async function main() {
   await seedOrders(db, traderId, SELLER.id, vendorId);
   const entries = await seedWallet(db, traderId);
   const content = await seedContent(db);
-  const profile = await seedProfile(db, traderId);
+  const profile = await seedProfile(db, traderId, targetEmail(process.argv) ? handle : undefined);
   const alerts = await seedAlerts(db, traderId);
   const board = await seedTracker(db, traderId);
   const studio = await seedSell(db, traderId, vendorId);

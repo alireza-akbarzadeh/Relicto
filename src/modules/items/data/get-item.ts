@@ -1,4 +1,5 @@
 import "server-only";
+import { requireUserId } from "@/modules/relicto/data/get-session";
 import { itemService } from "@/server/modules/items/items.service";
 import type { ItemMobile } from "../mobile.types";
 import type { ItemDetail } from "../types";
@@ -17,7 +18,11 @@ export async function getItem(slug: string): Promise<ItemDetail | null> {
   return AUTHORED[slug] ?? (await itemService.detail(slug));
 }
 
-/** The mobile inspector's payload for the same item, when one exists. */
+/**
+ * The mobile inspector for items that have an authored mobile design, with the
+ * market facts live. Other items use the responsive desktop view on phones.
+ */
 export async function getItemMobile(slug: string): Promise<ItemMobile | null> {
-  return MOBILE[slug] ?? null;
+  const authored = MOBILE[slug];
+  return authored ? itemService.mobile(authored, await requireUserId()) : null;
 }

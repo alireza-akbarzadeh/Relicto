@@ -51,7 +51,23 @@ export async function getHub(): Promise<HubData> {
   };
 }
 
-/** Mobile hub: live arena per tournament, battles, surge index and meta picks. */
+/**
+ * Mobile hub. Like the desktop hub, the esports and meta picks stay editorial;
+ * the surge cards quote catalog items, so their price and move are the live
+ * floor copy's — the same figures the marketplace sells at.
+ */
 export async function getHubMobile(): Promise<HubMobileData> {
-  return hubMobile;
+  const catalog = await listingService.catalog({ sort: "recent" });
+  const floor = new Map<string, (typeof catalog)[number]>();
+  for (const listing of catalog) {
+    const best = floor.get(listing.id);
+    if (!best || listing.priceUsd < best.priceUsd) floor.set(listing.id, listing);
+  }
+
+  const items = hubMobile.surge.items.map((item) => {
+    const live = floor.get(item.slug);
+    return live ? { ...item, price: money(live.priceUsd), changePct: live.change.percent } : item;
+  });
+
+  return { ...hubMobile, surge: { ...hubMobile.surge, items } };
 }

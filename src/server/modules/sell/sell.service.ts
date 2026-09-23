@@ -3,6 +3,8 @@ import "server-only";
 import { and, asc, count, desc, eq, gte, isNull, max } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { inventoryItems, items, listings, offers, profiles } from "@/lib/db/schema";
+import type { SellMobile } from "@/modules/sell/mobile.types";
+import { toSellMobile } from "./sell-mobile.presenter";
 import type { ActiveListing, InventoryItem, SellData, SellGame, SellTone } from "@/modules/sell/types";
 import { ago } from "@/server/modules/shared/ago";
 
@@ -145,5 +147,22 @@ export const sellService = {
       readyToList: inventory.length,
     };
   },
-};
 
+  /** Mobile studio: portfolio totals and the unlisted inventory as the cashout tray. */
+  async mobile(userId: string, authored: SellMobile): Promise<SellMobile | null> {
+    const [inventory, [profile]] = await Promise.all([
+      db
+        .select()
+        .from(inventoryItems)
+        .where(and(eq(inventoryItems.userId, userId), isNull(inventoryItems.listingId)))
+        .orderBy(asc(inventoryItems.sortOrder)),
+      db
+        .select({ units: profiles.inventoryCount, valueCents: profiles.portfolioCents })
+        .from(profiles)
+        .where(eq(profiles.userId, userId))
+        .limit(1),
+    ]);
+    if (inventory.length === 0 && !profile) return null;
+    return toSellMobile(authored, inventory, profile ?? null);
+  },
+};

@@ -80,7 +80,7 @@ export function toWalletMobile(
     changePct: totals.changePct,
     pnlUsd: totals.dayNetCents / 100,
     // Read on this request, so it is exactly as fresh as the page.
-    sync: "just now",
+    sync: "live",
     availableUsd: totals.liquidCents / 100,
     escrowUsd: totals.escrowCents / 100,
     escrowNote: totals.escrowHolds === 0 ? "No open escrows" : `${totals.escrowHolds} open escrow${totals.escrowHolds === 1 ? "" : "s"}`,

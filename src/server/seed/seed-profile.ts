@@ -22,13 +22,17 @@ const cents = (usd: number) => Math.round(usd * 100);
 /** First number in a label: "+8.4% 30d" → 8.4, "(1,482 TRADES)" → 1482. */
 const num = (text: string) => Number(text.replace(/,/g, "").match(/-?\d+(\.\d+)?/)?.[0] ?? 0);
 
-export async function seedProfile(db: Db, traderId: string) {
+/**
+ * `ownHandle` is set when seeding onto a real account (`--user`): handles are
+ * unique, so that account keeps its own name instead of the demo trader's.
+ */
+export async function seedProfile(db: Db, traderId: string, ownHandle?: string) {
   const profileId = `profile-${traderId}`;
 
   const row = {
     id: profileId,
     userId: traderId,
-    handle: identity.handle,
+    handle: ownHandle ?? identity.handle,
     realName: identity.realName,
     alias: identity.alias,
     role: identity.role,

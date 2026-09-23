@@ -41,6 +41,11 @@ async function loadTotals(account: Account, userId: string) {
 }
 
 export const walletService = {
+  /** Spendable balance in cents — the header chip on every page. */
+  async liquidCents(userId: string) {
+    return (await repository.findWallet(userId))?.balanceCents ?? 0;
+  },
+
   /** Treasury snapshot for one trader, or null when they have no wallet yet. */
   async treasury(userId: string): Promise<WalletData | null> {
     const account = await repository.findWallet(userId);

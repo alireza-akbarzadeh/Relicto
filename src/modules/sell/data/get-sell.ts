@@ -15,7 +15,7 @@ export async function getSell(): Promise<SellData> {
   return studio.inventory.length > 0 ? studio : sell;
 }
 
-/** Mobile trade-up contract and bulk cashout tray. */
+/** Mobile studio: live vault totals and cashout tray; the trade-up contract stays authored for now. */
 export async function getSellMobile(): Promise<SellMobile> {
-  return sellMobile;
+  return (await sellService.mobile(await requireUserId(), sellMobile)) ?? sellMobile;
 }

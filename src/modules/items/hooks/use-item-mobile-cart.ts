@@ -7,9 +7,12 @@ import { useCart } from "@/modules/relicto/state/cart-provider";
 import { formatMoney } from "@/lib/format";
 import type { ItemMobile, MobileSeller, SynergyItem } from "../mobile.types";
 
+/** The optimistic line for one seller's copy; the server answers with the reserved listing. */
 function sellerLine(item: ItemMobile, seller: MobileSeller): CheckoutItem {
   return {
-    id: item.cartId,
+    id: seller.id,
+    listingId: seller.id,
+    slug: item.slug,
     image: item.image,
     imageAlt: item.imageAlt,
     badge: item.rarity,
@@ -49,17 +52,20 @@ function synergyLine(item: ItemMobile, entry: SynergyItem, discountPct = 0): Che
 /** Basket actions of the mobile inspector: instant buy, bag, per-seller buy, kit pairs and the combo. */
 export function useItemMobileCart(item: ItemMobile) {
   const router = useRouter();
-  const { items, addItem } = useCart();
-  const has = (id: string) => items.some((line) => line.id === id);
+  const { has, addItem } = useCart();
   const checkoutAction = { label: "Checkout", onClick: () => router.push("/checkout") };
-  const floor = item.sellers.reduce((best, seller) => (seller.priceUsd < best.priceUsd ? seller : best), item.sellers[0]);
+  const floor: MobileSeller | undefined = item.sellers.reduce<MobileSeller | undefined>(
+    (best, seller) => (!best || seller.priceUsd < best.priceUsd ? seller : best),
+    undefined,
+  );
 
   const buyFrom = (seller: MobileSeller) => {
-    if (has(item.cartId)) {
+    if (has(item.slug)) {
       toast(`${item.name} is already in your basket`, { description: "Swap sellers at checkout.", action: checkoutAction });
       return;
     }
-    addItem(sellerLine(item, seller));
+    // Reserve this seller's exact copy.
+    addItem(sellerLine(item, seller), seller.id);
     toast.success(`Trade opened with ${seller.name}`, { description: `${formatMoney(seller.priceUsd)} locked in escrow.`, action: checkoutAction });
   };
 
@@ -67,10 +73,10 @@ export function useItemMobileCart(item: ItemMobile) {
     floor,
     buyFrom,
     instantBuy: () => {
-      if (!has(item.cartId)) addItem(sellerLine(item, floor));
+      if (floor && !has(item.slug)) addItem(sellerLine(item, floor), floor.id);
       router.push("/checkout");
     },
-    addToBag: () => buyFrom(floor),
+    addToBag: () => (floor ? buyFrom(floor) : toast(`No one is selling ${item.name} right now`)),
     addPair: (entry: SynergyItem) => {
       if (!has(entry.id)) addItem(synergyLine(item, entry));
       toast.success(`${entry.name} added to your basket`, { action: checkoutAction });

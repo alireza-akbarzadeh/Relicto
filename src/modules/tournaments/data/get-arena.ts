@@ -45,14 +45,25 @@ export async function getArenaDesktop() {
   };
 }
 
+/**
+ * Mobile arena: the same tournaments and live matches as desktop, as bracket
+ * cards and the radar; championship banner, quick match and chrome stay authored.
+ */
 export async function getArenaMobile() {
+  await connection();
+  const live = await tournamentService.arenaMobile();
+
   return {
     shell: mobileShell,
     gameTabs: mobileGameTabs,
     championship,
     search: { placeholder: searchPlaceholder, chips: quickChips },
-    brackets: { section: bracketsSection, cards: bracketCards, quickMatch },
-    radar: { section: radarSection, matches: radarMatches },
+    brackets: {
+      section: live ? { ...bracketsSection, meta: `${live.openEvents} Live Events` } : bracketsSection,
+      cards: live?.brackets ?? bracketCards,
+      quickMatch,
+    },
+    radar: { section: radarSection, matches: live?.radar ?? radarMatches },
     infrastructure: { section: infrastructureSection, items: bentoItems, server: serverStatus },
   };
 }

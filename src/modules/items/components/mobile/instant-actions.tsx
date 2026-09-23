@@ -16,10 +16,11 @@ export function InstantActions({ item }: { item: ItemMobile }) {
         variant={null}
         size={null}
         onClick={instantBuy}
+        disabled={!floor}
         className="h-auto flex-1 gap-space-xs rounded-xl border-0 bg-primary-container px-space-md py-3.5 font-label-caps text-label-caps font-bold text-on-primary uppercase shadow-[0_0_16px_rgba(244,63,94,0.4)] transition-all active:scale-[0.98]"
       >
         <Icon name="bolt" className="text-[18px]" />
-        <span>Instant Buy with Escrow · {formatMoney(floor.priceUsd)}</span>
+        <span>{floor ? `Instant Buy with Escrow · ${formatMoney(floor.priceUsd)}` : "No sellers right now"}</span>
       </Button>
       <Button
         variant={null}

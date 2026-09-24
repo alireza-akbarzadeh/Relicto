@@ -141,14 +141,11 @@ export function toItemDetail(
       modes: ["LINE", "CANDLE"],
       activeMode: "LINE",
       points: history.map((point, index) => ({
-        x: index,
-        y: usd(point.priceCents),
+        at: point.recordedAt.getTime(),
+        price: usd(point.priceCents),
         ...(index === history.length - 1 ? { marker: "now" as const } : {}),
       })),
       annotations: [],
-      axis: history
-        .filter((_, index) => index % 7 === 0)
-        .map((point) => ({ label: point.recordedAt.toLocaleDateString("en-US", { month: "short", day: "numeric" }) })),
       stats: [
         { label: "Floor", value: money(lowestCents), note: "lowest active listing", tone: "primary" },
         { label: "30d Range", value: `${money(low)} – ${money(high)}`, note: "observed", tone: "amber" },

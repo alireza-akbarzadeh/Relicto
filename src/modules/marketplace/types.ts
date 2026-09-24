@@ -69,6 +69,28 @@ export type FloatBand = "any" | "under001" | "under01" | "over01";
 /** CS2 inventory metadata; absent on Dota 2 cosmetics. */
 export type Cs2Spec = { wear: WearKey; float: number; stattrak: boolean; pattern: number };
 
+/**
+ * How many active listings sit behind each facet, from the same query that
+ * built the page. Keys are game ids, rarity keys, slot names and hero names.
+ */
+export type FacetCounts = {
+  games: Record<string, number>;
+  rarities: Record<string, number>;
+  slots: Record<string, number>;
+  heroes: Record<string, number>;
+  total: number;
+};
+
+/** One page of the grid plus every tally rendered around it. */
+export type MarketplaceResults = {
+  items: Listing[];
+  total: number;
+  pages: number;
+  from: number;
+  to: number;
+  facets: FacetCounts;
+};
+
 export type Filters = {
   query: string;
   ecosystem: EcosystemFilter;

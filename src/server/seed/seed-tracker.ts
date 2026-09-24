@@ -29,7 +29,8 @@ const DRAGON_LORE = {
     detail: { label: "Weapon", accent: "neutral" },
     glow: { blob: "primary", shadow: "crimson-20" },
     mediaBadge: { kind: "float" as const, value: "0.0140" },
-    safeguards: ["escrow"],
+    /* Must be `SafeguardKey`s — the marketplace filters on these. */
+    safeguards: ["instantEscrow", "verifiedSellers"],
     meta: ["Floor: $5,200.00", "6 active offers"],
   },
 } satisfies typeof schema.items.$inferInsert;

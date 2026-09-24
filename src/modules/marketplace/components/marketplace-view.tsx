@@ -1,7 +1,7 @@
 import { MarketFooter } from "@/modules/relicto/components/shell/footers";
 import { LISTINGS_ANCHOR } from "../lib/scroll";
 import { MarketplaceProvider } from "../state/marketplace-provider";
-import type { Listing } from "../types";
+import type { MarketplaceResults } from "../types";
 import { FilterSidebar } from "./filters/filter-sidebar";
 import { MarketHero } from "./hero/market-hero";
 import { TrendingMovers } from "./movers/trending-movers";
@@ -12,12 +12,12 @@ import { PaginationBar } from "./results/pagination-bar";
 import { ResultsToolbar } from "./results/results-toolbar";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 
-type MarketplaceViewProps = { catalog: Listing[] };
+type MarketplaceViewProps = { results: MarketplaceResults };
 
 /** Stitch: "Relicto — Marketplace Item Discovery & Trading Hub". */
-export function MarketplaceView({ catalog }: MarketplaceViewProps) {
+export function MarketplaceView({ results }: MarketplaceViewProps) {
   return (
-    <MarketplaceProvider catalog={catalog}>
+    <MarketplaceProvider results={results}>
       <div className="bg-canvas-base font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
         <StudioHeader />
         <main className="min-h-screen w-full bg-canvas-base pt-20">

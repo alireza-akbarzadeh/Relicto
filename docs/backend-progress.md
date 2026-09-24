@@ -45,8 +45,8 @@ npx tsx --conditions=react-server .verify-x.mts
 | Route | Source | State |
 | --- | --- | --- |
 | `/` | `listingService.marketStats()` | ✅ live liquidity + spotlight floors |
-| `/marketplace` | `listingService.catalog()` | ✅ parity-verified |
-| `/items/[slug]` | `itemService.detail()` | ✅ authored mock takes precedence |
+| `/marketplace` | `listingService.search()` | ✅ filters, totals and facets in Postgres (phase 5) |
+| `/items/[slug]` | `itemService.detail()` | ✅ authored mock takes precedence; all 162 resolve |
 | `/orders` | `orderService.ledger()` | ✅ 6 rows, derived stats |
 | `/orders/[id]` | `orderService.tracking()` | ✅ escrow, bot, token, telemetry |
 | `/wallet` | `walletService.treasury()` | ✅ metrics + audit ledger |
@@ -402,6 +402,103 @@ draw distribution (18.5 / 34.5 / 47.0%), and in the browser at 390×844 against
 the dev server — Smart Fill → Ignite → result dialog → outcome in the cashout
 tray, no console errors.
 
+## Phase 5 — the buying flow on a real catalog
+
+The database the app pointed at held only the four Better Auth tables — no
+domain tables, no migrations — so every page was rendering its mock fallback.
+`0000_baseline_auth` was recorded as applied (the tables already existed) and
+migrations `0001`–`0017` then ran clean.
+
+### Catalog depth
+
+`seed-catalog.ts` adds **144 generated items** behind the 18 designed ones, so
+the marketplace counts something real: **163 active listings**, 3 ecosystems,
+20 heroes, every wear tier and all four price bands populated — 7 pages at 24
+per page. Definitions live in `seed/catalog/{dota,cs2,tf2}-items.ts` as tuples;
+art direction, 24h move, offer count and age are derived from a hash of the
+slug, so a re-seed is byte-identical. Ids are prefixed `item-cat-` /
+`listing-cat-`, keeping depth separable from the designed catalog.
+
+Writes are bulk (`excluded.*` upserts, chunked): row-by-row over a remote Neon
+branch took minutes, and a seed nobody re-runs stops being run.
+
+**Artwork repeats.** There are eight item shots in `public/`; generated rows
+pick one by game and slot. Real per-item art is a content job.
+
+### Filters now run in Postgres
+
+`/marketplace` was handing the browser a 96-row page and filtering it in
+memory, over invented totals (`CATALOG_META` claimed 1,248 items / 64 pages).
+The repository's `buildFilters` had been written for this and never wired up.
+
+The page now reads the same nuqs contract the sidebar writes, and
+`listingService.search()` answers with one page, the real total and live facet
+tallies. `shallow: false` makes a criterion change re-run the server component.
+Added on the way: `safeguards` (jsonb containment), the `change` and `volume`
+sorts, a `minFloat` bound, hero-name search, an id tiebreaker so paging can't
+repeat a row, and `countFacets()` behind the sidebar's counts.
+
+**The designed default state was a fiction.** The Stitch sidebar shows Dota 2 +
+Arcana/Immortal + two safeguards ticked over a grid of unfiltered cards —
+no honest query produces that, and applied for real it returned 2 listings. The
+old code faked it by ignoring filters until one was touched. `/marketplace` now
+lands unfiltered with an empty sidebar; ticking those boxes reproduces the
+designed sidebar exactly, and the grid then shows what it actually selects.
+
+### Payment is mocked
+
+`checkout.payment.ts` stands in for the provider that hasn't been chosen. The
+vault rail settles as before; card, crypto and Steam are authorized instantly
+and fund the vault for exactly what's due, so the rest of checkout — locking,
+escrow orders, ledger, notifications — is the same code path a real provider
+will run. Nothing is charged, and the ledger says so. Swapping `authorize()`
+for a real call is the whole integration.
+
+Mock authorizations are **off in production** unless `CHECKOUT_MOCK_PAYMENTS=true`
+is set deliberately; on everywhere else unless set to `false`.
+
+### The price chart is a real chart
+
+`PriceChart` drew a hand-placed SVG polyline against a fixed `viewBox`. The
+Postgres presenter fed it `{ x: index, y: dollars }` while the mock fed it SVG
+coordinates — so **every database-backed item's chart was drawn wrong**.
+
+`PricePoint` is now `{ at, price }` — real epoch ms and real dollars — and
+`price-plot.tsx` draws it with Recharts through the shadcn `ChartContainer`
+that was installed but unused. Both axes scale from the data, the tooltip
+works, annotations are `ReferenceLine`s on the time axis instead of hardcoded
+CSS percentages, and the range pills (24H…ALL) actually select a slice —
+they were inert. `CANDLE` renders daily closes as bars; there is no OHLC behind
+it, because the catalog stores one close per day.
+
+The authored mock's decorative coordinates became real prices that agree with
+its own stats — the $108.20 low on Oct 29 and the $139.00 peak on Nov 18.
+
+### Fixed
+
+- **Every generated item's page 500'd.** `StyleProgression` read `styles[0].id`,
+  and only authored items have style rows. All 162 item pages now return 200.
+- **Seven listings matched no safeguard filter.** `seed-seller-catalog.ts` and
+  `seed-tracker.ts` wrote `safeguards: ["escrow"]`, which is not a
+  `SafeguardKey`. Long-standing — the old client-side filter excluded them too —
+  but now that the filter is real it was silently hiding rows.
+
+### Verified
+
+- `.verify-flow.mts` — 21 checks: filtered list → item detail → basket (by
+  listing id and by item slug) → checkout on the mocked card rail → escrow
+  orders → listing reserved.
+- `.verify-chart.mts` — 32 checks across both producers: real timestamps,
+  ordered series, dollar-scale prices, every range pill drawable.
+- Through HTTP against the dev server: `game=cs2&wear=fn` → 20,
+  `game=dota2&rarity=arcana` → 10, `game=tf2` → 20, `q=dragon` → 3,
+  `min=500` → 27, `page=7` → "Showing 145 - 161 of 161". All 162 item pages 200.
+- `tsc`, `eslint` and `next build` clean.
+
+**Not visually checked.** There is no Chrome or Chromium on this machine, so
+the Recharts render was verified by data contract and HTTP status, not by
+looking at it. Worth a browser pass.
+
 ## Known data artifacts
 
 These are consequences of the seeded sample data, not bugs. Flagged so nobody
@@ -446,8 +543,13 @@ Still open:
   There is no PNG brand icon in `public/` yet, so OS notifications use the
   site default.
 - **Authored copy that now lies on live data:** the checkout breadcrumb's
-  "Active Cart (3)", the combo banner's fixed `-$25.00`, and the dispatch
-  modal's three named Sentinels.
+  "Active Cart (3)", the combo banner's fixed `-$25.00`, the dispatch modal's
+  three named Sentinels, and the results toolbar's "Telemetry updated 3 seconds
+  ago via Steam Trading Node #8" (nothing measures it).
+- **Facet counts ignore sibling facets.** `countFacets()` is scoped to the
+  selected ecosystem only, so a rarity tally doesn't narrow when a wear tier is
+  ticked. Proper faceted counts need one query per facet.
+- **Generated catalog art repeats** — eight images across 144 items.
 - **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
   rules use fixed ids, so seeding a second trader collides with the demo one.
   The handle collision is fixed; re-keying those rows per trader is not.

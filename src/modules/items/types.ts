@@ -38,12 +38,13 @@ export type Offer = {
   best?: boolean;
 };
 
-export type PricePoint = { x: number; y: number; marker?: "patch" | "event" | "now" };
+/** One observed price. `at` is epoch ms; the chart scales both axes from these. */
+export type PricePoint = { at: number; price: number; marker?: "patch" | "event" | "now" };
 
 export type ChartAnnotation = {
   id: string;
-  /** Percentage across the plot area. */
-  left: string;
+  /** When it happened — the chart puts the marker on the time axis itself. */
+  at: number;
   label: string;
   tone: "crimson" | "cyan";
   title: string;
@@ -61,7 +62,6 @@ export type PriceIntelligence = {
   activeMode: ChartMode;
   points: PricePoint[];
   annotations: ChartAnnotation[];
-  axis: { label: string; strong?: boolean }[];
   stats: { label: string; value: string; note: string; tone: "primary" | "amber" | "emerald"; badge?: string }[];
 };
 

@@ -23,23 +23,33 @@ export const PER_PAGE_VALUES = [24, 48, 96] as const;
 export const WEAR_VALUES = ["fn", "mw", "ft", "ww", "bs"] as const;
 export const FLOAT_VALUES = ["any", "under001", "under01", "over01"] as const;
 
+/** No criterion is worth filtering on; the ceiling doubles as "no maximum". */
+export const NO_PRICE_CEILING = 100_000;
+
 /**
- * The marketplace URL contract. Defaults mirror the Stitch screen, and nuqs
- * omits any value still at its default, so the designed state has a clean URL.
+ * The marketplace URL contract. Postgres applies these for real, so the
+ * defaults are the *unfiltered* catalog: what the sidebar shows ticked is
+ * always what narrowed the grid.
+ *
+ * The Stitch screen was drawn with Dota 2 + Arcana/Immortal + two safeguards
+ * ticked over a grid of unfiltered cards — a state no honest query produces.
+ * Ticking those boxes reproduces that sidebar exactly; the grid then shows
+ * what it actually selects. nuqs omits any value still at its default, so the
+ * landing URL stays clean.
  */
 export const marketplaceSearchParams = {
   q: parseAsString.withDefault(""),
-  game: parseAsStringLiteral(ECOSYSTEM_VALUES).withDefault("dota2"),
-  heroes: parseAsArrayOf(parseAsString, ",").withDefault(["Phantom Assassin"]),
-  rarity: parseAsArrayOf(parseAsStringLiteral(RARITY_VALUES), ",").withDefault(["arcana", "immortal"]),
+  game: parseAsStringLiteral(ECOSYSTEM_VALUES).withDefault("all"),
+  heroes: parseAsArrayOf(parseAsString, ",").withDefault([]),
+  rarity: parseAsArrayOf(parseAsStringLiteral(RARITY_VALUES), ",").withDefault([]),
   slots: parseAsArrayOf(parseAsString, ",").withDefault([]),
   wear: parseAsArrayOf(parseAsStringLiteral(WEAR_VALUES), ",").withDefault([]),
   float: parseAsStringLiteral(FLOAT_VALUES).withDefault("any"),
   stattrak: parseAsBoolean.withDefault(false),
   min: parseAsFloat.withDefault(0),
-  max: parseAsFloat.withDefault(1000),
+  max: parseAsFloat.withDefault(NO_PRICE_CEILING),
   preset: parseAsStringLiteral(PRESET_VALUES),
-  safe: parseAsArrayOf(parseAsStringLiteral(SAFEGUARD_VALUES), ",").withDefault(["instantEscrow", "verifiedSellers"]),
+  safe: parseAsArrayOf(parseAsStringLiteral(SAFEGUARD_VALUES), ",").withDefault([]),
   sort: parseAsStringLiteral(SORT_VALUES).withDefault("change"),
   view: parseAsStringLiteral(VIEW_VALUES).withDefault("grid"),
   page: parseAsInteger.withDefault(1),

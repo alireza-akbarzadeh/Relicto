@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, count, desc, eq, gte, ilike, inArray, lte, min, sum, type SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, ilike, inArray, lt, lte, min, or, sql, sum, type SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { heroes, items, listings, watchlist } from "@/lib/db/schema";
 import type { CreateListingInput, ListListingsInput } from "./listings.schema";
@@ -9,7 +9,11 @@ import type { CreateListingInput, ListListingsInput } from "./listings.schema";
 function buildFilters(input: ListListingsInput): SQL[] {
   const filters: SQL[] = [eq(listings.status, "active")];
 
-  if (input.query) filters.push(ilike(items.name, `%${input.query}%`));
+  if (input.query) {
+    /* The sidebar's box searches the item and its hero, as the client did. */
+    const like = `%${input.query}%`;
+    filters.push(or(ilike(items.name, like), ilike(heroes.name, like))!);
+  }
   if (input.gameId) filters.push(eq(items.gameId, input.gameId));
   if (input.heroSlugs?.length) filters.push(inArray(heroes.slug, input.heroSlugs));
   if (input.rarities?.length) filters.push(inArray(items.rarity, input.rarities));
@@ -17,8 +21,14 @@ function buildFilters(input: ListListingsInput): SQL[] {
   if (input.minCents !== undefined) filters.push(gte(listings.priceCents, input.minCents));
   if (input.maxCents !== undefined) filters.push(lte(listings.priceCents, input.maxCents));
   if (input.wear?.length) filters.push(inArray(listings.wear, input.wear));
-  if (input.maxFloat !== undefined) filters.push(lte(listings.float, input.maxFloat));
+  /* Exclusive: the band reads "under 0.01". NULL floats (Dota) drop out here, as intended. */
+  if (input.maxFloat !== undefined) filters.push(lt(listings.float, input.maxFloat));
+  if (input.minFloat !== undefined) filters.push(gte(listings.float, input.minFloat));
   if (input.stattrak) filters.push(eq(listings.stattrak, true));
+  if (input.safeguards?.length) {
+    /* Art direction is a jsonb blob; containment keeps this one indexable predicate. */
+    filters.push(sql`${items.presentation} -> 'safeguards' @> ${JSON.stringify(input.safeguards)}::jsonb`);
+  }
 
   return filters;
 }
@@ -26,6 +36,8 @@ function buildFilters(input: ListListingsInput): SQL[] {
 function orderBy(sort: ListListingsInput["sort"]) {
   if (sort === "price-asc") return asc(listings.priceCents);
   if (sort === "price-desc") return desc(listings.priceCents);
+  if (sort === "change") return desc(listings.changePercent);
+  if (sort === "volume") return desc(listings.offerCount);
   return desc(listings.listedAt);
 }
 
@@ -63,7 +75,8 @@ export async function findListings(input: ListListingsInput) {
     .innerJoin(items, eq(listings.itemId, items.id))
     .leftJoin(heroes, eq(items.heroId, heroes.id))
     .where(where)
-    .orderBy(orderBy(input.sort))
+    /* Id breaks ties, so paging never repeats or drops a row. */
+    .orderBy(orderBy(input.sort), asc(listings.id))
     .limit(input.perPage)
     .offset(offset);
 

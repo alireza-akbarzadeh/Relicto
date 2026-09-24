@@ -2,6 +2,8 @@ import "server-only";
 
 import { requireUserId } from "@/modules/relicto/data/get-session";
 import { listingService } from "@/server/modules/listings/listings.service";
+import { searchListings } from "../lib/filters";
+import type { Filters } from "../types";
 import { LISTINGS } from "./listings.mock";
 import { marketMobile } from "./market-mobile.mock";
 
@@ -12,6 +14,21 @@ import { marketMobile } from "./market-mobile.mock";
 export async function getMarketplaceCatalog() {
   const listings = await listingService.catalog({ sort: "recent" });
   return listings.length > 0 ? listings : LISTINGS;
+}
+
+/**
+ * One page of the grid, filtered and counted by Postgres. The client no longer
+ * filters a catalog it was handed — it drives the URL, and this runs again.
+ *
+ * On an unseeded database it falls back to searching the mock in memory, so the
+ * screen still renders its designed state.
+ */
+export async function getMarketplaceResults(filters: Filters) {
+  const results = await listingService.search(filters);
+  if (results.facets.total > 0) return results;
+
+  const fallback = searchListings(LISTINGS, filters);
+  return { ...fallback, facets: { games: {}, rarities: {}, slots: {}, heroes: {}, total: 0 } };
 }
 
 const usd = (value: number) =>

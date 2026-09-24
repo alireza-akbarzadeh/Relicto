@@ -7,6 +7,7 @@ import { draft, type NotificationDraft } from "../notifications/notifications.ca
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
 import { buildOrderRows, orderCode } from "./checkout.order-rows";
+import { authorize, depositRow, isExternalRail, mockPaymentsEnabled, railLabel, VAULT_RAIL } from "./checkout.payment";
 import { allocate, quote } from "@/modules/checkout/lib/pricing";
 import { cartLinesWhere, LINE } from "./checkout.repository";
 
@@ -17,10 +18,14 @@ export type SettleResult =
   | { status: "placed"; codes: string[]; notices: NotificationRow[] }
   | { status: "rail-unavailable" | "empty" | "stale" | "insufficient-funds" | "vault-frozen" };
 
-/** Card, crypto and Steam need a payment provider (backend-plan, Phase 4); the vault settles in-house. */
-const SETTLING_RAILS = new Set(["relicto"]);
-
 const key = (ids: string[]) => [...ids].sort().join("|");
+
+/**
+ * The vault always settles. Card, crypto and Steam settle through the mock
+ * provider until a real one is chosen — and nowhere at all if mock payments
+ * are off, which is the default in production.
+ */
+const canSettle = (rail: string) => rail === VAULT_RAIL || (isExternalRail(rail) && mockPaymentsEnabled());
 
 /**
  * Turns the basket into one escrow order per line, paid from the vault. The
@@ -28,7 +33,7 @@ const key = (ids: string[]) => [...ids].sort().join("|");
  * or two buyers — can't spend the same balance or reserve the same copy.
  */
 export async function settle(userId: string, input: SettleInput): Promise<SettleResult> {
-  if (!SETTLING_RAILS.has(input.rail)) return { status: "rail-unavailable" };
+  if (!canSettle(input.rail)) return { status: "rail-unavailable" };
 
   return db.transaction(async (tx): Promise<SettleResult> => {
     const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, userId)).for("update");
@@ -52,13 +57,29 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
     const prices = lines.map((line) => line.listing.priceCents);
     const due = quote(prices, input.promo);
     if (wallet?.frozenAt) return { status: "vault-frozen" };
-    if (!wallet || wallet.balanceCents < due.dueCents) return { status: "insufficient-funds" };
+    if (!wallet) return { status: "insufficient-funds" };
+
+    const now = new Date();
+    let balance = wallet.balanceCents;
+
+    /*
+     * An external rail is authorized by the mock provider and funds the vault
+     * for exactly what's due, so the purchase debits below are the same rows a
+     * vault payment writes. Nothing is charged — see checkout.payment.ts.
+     */
+    const auth = authorize(input.rail, due.dueCents);
+    if (auth) {
+      balance += due.dueCents;
+      await tx.insert(ledgerEntries).values(
+        depositRow({ walletId: wallet.id, auth, amountCents: due.dueCents, balanceAfterCents: balance, now }),
+      );
+    }
+
+    if (balance < due.dueCents) return { status: "insufficient-funds" };
 
     const shares = allocate(prices, due.comboCents + due.promoCents);
-    const now = new Date();
     const codes: string[] = [];
     const drafts: NotificationDraft[] = [];
-    let balance = wallet.balanceCents;
 
     for (const [index, line] of lines.entries()) {
       const totalCents = prices[index] - shares[index];
@@ -67,6 +88,7 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
 
       const rows = buildOrderRows(line, {
         buyerId: userId, code, totalCents, walletId: wallet.id, balanceAfterCents: balance, now,
+        fundingLabel: railLabel(input.rail),
       });
 
       await tx.insert(orders).values(rows.order);

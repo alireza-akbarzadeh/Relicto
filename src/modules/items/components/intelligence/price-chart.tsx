@@ -1,48 +1,17 @@
 "use client";
 
+import { useMemo } from "react";
 import { useQueryStates } from "nuqs";
 import { itemSearchParams } from "../../lib/search-params";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
+import { withinRange } from "../../lib/chart-range";
 import { STAT_TONE } from "../../lib/tones";
 import type { PriceIntelligence } from "../../types";
+import { PricePlot } from "./price-plot";
 
-const MARKER_FILL = { patch: "fill-rose-500", event: "fill-cyan-500", now: "fill-tertiary" };
 const PILL = "h-auto rounded border-0 px-2 py-1 font-data-mono-md text-xs transition-colors";
-
-function Plot({ data }: { data: PriceIntelligence }) {
-  const line = data.points.map((point) => `${point.x},${point.y}`).join(" ");
-  const area = `${line} 960,280 40,280`;
-  return (
-    <svg className="h-full w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 1000 300" aria-hidden>
-      <defs>
-        <linearGradient id="item-chart-fill" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" style={{ stopColor: "var(--color-tertiary)", stopOpacity: 0.35 }} />
-          <stop offset="100%" style={{ stopColor: "var(--color-tertiary)", stopOpacity: 0 }} />
-        </linearGradient>
-      </defs>
-      <polygon fill="url(#item-chart-fill)" points={area} />
-      <polyline className="stroke-tertiary" fill="none" points={line} strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
-      {data.points.map((point) =>
-        point.marker ? (
-          <circle
-            key={point.x}
-            cx={point.x}
-            cy={point.y}
-            r="5.5"
-            className={cn("stroke-white", MARKER_FILL[point.marker])}
-            strokeWidth="2"
-          />
-        ) : (
-          <circle key={point.x} cx={point.x} cy={point.y} r="4.5" className="fill-surface stroke-tertiary" strokeWidth="2" />
-        ),
-      )}
-      <line className="stroke-rose-500" opacity="0.8" strokeDasharray="4 4" strokeWidth="1.5" x1="420" x2="420" y1="30" y2="175" />
-      <line className="stroke-cyan-500" opacity="0.8" strokeDasharray="4 4" strokeWidth="1.5" x1="700" x2="700" y1="30" y2="110" />
-    </svg>
-  );
-}
 
 /** Historical price telemetry with patch annotations and range switches. */
 export function PriceChart({ data }: { data: PriceIntelligence }) {
@@ -50,6 +19,9 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
     { range: itemSearchParams.range, chart: itemSearchParams.chart },
     { history: "replace", clearOnDefault: true },
   );
+
+  /* The range pills used to be inert; they now pick the slice the chart draws. */
+  const series = useMemo(() => withinRange(data.points, range ?? data.activeRange), [data.points, data.activeRange, range]);
 
   return (
     <section id="intelligence" className="flex w-full scroll-mt-40 flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 shadow-xl">
@@ -101,44 +73,34 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
         </div>
       </div>
 
-      <div className="relative flex h-72 w-full flex-col justify-between overflow-hidden rounded-lg border border-border-subtle bg-surface-container-lowest p-4 sm:h-80">
-        <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6 opacity-10">
-          {[0, 1, 2, 3].map((line) => (
-            <div key={line} className="h-px w-full bg-on-surface" />
-          ))}
-        </div>
-        <div className="relative flex h-full w-full items-center justify-center">
-          <Plot data={data} />
+      <div className="relative flex h-72 w-full flex-col overflow-hidden rounded-lg border border-border-subtle bg-surface-container-lowest p-4 sm:h-80">
+        <PricePlot points={series} annotations={data.annotations} mode={mode ?? data.activeMode} />
+      </div>
+
+      {data.annotations.length > 0 && (
+        <div className="flex flex-wrap items-start gap-2">
           {data.annotations.map((note) => (
-            <div key={note.id} className="group absolute top-5 flex -translate-x-1/2 cursor-pointer flex-col items-center" style={{ left: note.left }}>
-              <div
-                className={cn(
-                  "flex items-center gap-1.5 rounded border bg-surface-card px-2 py-1 shadow-lg transition-all group-hover:scale-105",
-                  note.tone === "crimson" ? "border-primary/40" : "border-status-upcoming/40",
-                )}
-              >
-                <span className={cn("h-2 w-2 rounded-full", note.tone === "crimson" ? "animate-ping bg-status-live" : "bg-status-upcoming")} />
+            <div
+              key={note.id}
+              className={cn(
+                "flex flex-col gap-0.5 rounded border bg-surface-card px-2.5 py-1.5 shadow-lg",
+                note.tone === "crimson" ? "border-primary/40" : "border-status-upcoming/40",
+              )}
+            >
+              <span className="flex items-center gap-1.5">
+                <span className={cn("h-2 w-2 rounded-full", note.tone === "crimson" ? "bg-status-live" : "bg-status-upcoming")} />
                 <span className={cn("font-data-mono-md text-[10px] font-bold", note.tone === "crimson" ? "text-primary-fixed" : "text-status-upcoming")}>
                   {note.label}
                 </span>
-              </div>
-              <div className="pointer-events-none z-30 mt-1 hidden w-52 flex-col rounded border border-border-subtle bg-surface-card p-2 text-center shadow-2xl group-hover:flex">
-                <span className="font-label-badge text-[10px] font-bold text-text-primary">{note.title}</span>
-                <span className={cn("font-body-sm text-[10px] font-semibold", note.detailTone === "emerald" ? "text-emerald-400" : "text-tertiary")}>
-                  {note.detail}
-                </span>
-              </div>
+              </span>
+              <span className="font-label-badge text-[10px] font-bold text-text-primary">{note.title}</span>
+              <span className={cn("font-body-sm text-[10px] font-semibold", note.detailTone === "emerald" ? "text-emerald-400" : "text-tertiary")}>
+                {note.detail}
+              </span>
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-between border-t border-border-subtle/30 pt-2 font-data-mono-md text-[10px] text-text-muted">
-          {data.axis.map((tick) => (
-            <span key={tick.label} className={tick.strong ? "font-bold text-tertiary" : undefined}>
-              {tick.label}
-            </span>
-          ))}
-        </div>
-      </div>
+      )}
 
       <div className="grid grid-cols-2 gap-3 pt-1 lg:grid-cols-4">
         {data.stats.map((stat) => (

@@ -17,8 +17,15 @@ export const listListingsInput = z.object({
   wear: z.array(wearSchema).optional(),
   /** CS2 float ceiling, e.g. 0.01 for "under 0.01". */
   maxFloat: z.number().min(0).max(1).optional(),
+  /** CS2 float floor, for the "0.10+" band. */
+  minFloat: z.number().min(0).max(1).optional(),
   stattrak: z.boolean().optional(),
-  sort: z.enum(["price-asc", "price-desc", "recent"]).default("recent"),
+  /**
+   * Every safeguard listed must be present on the item — the sidebar's checks
+   * narrow, they don't widen.
+   */
+  safeguards: z.array(z.enum(["instantEscrow", "verifiedSellers", "gems", "allStyles"])).optional(),
+  sort: z.enum(["price-asc", "price-desc", "recent", "change", "volume"]).default("recent"),
   page: z.number().int().min(1).default(1),
   perPage: z.union([z.literal(24), z.literal(48), z.literal(96)]).default(24),
 });

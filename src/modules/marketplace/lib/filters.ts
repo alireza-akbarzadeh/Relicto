@@ -1,15 +1,19 @@
 import { CATALOG_META, ECOSYSTEMS, RARITIES, SAFEGUARDS } from "../data/facets.mock";
 import type { Filters, FloatBand, Listing, SortKey } from "../types";
 
-/** The criteria selected on the designed screen. */
+/**
+ * The landing state: the whole catalog, nothing narrowed. Mirrors the defaults
+ * in `search-params.ts` — the URL contract is the source of truth, and this is
+ * the same state as an object for the server and the mock fallback.
+ */
 export const DEFAULT_FILTERS: Filters = {
   query: "",
-  ecosystem: "dota2",
-  heroes: ["Phantom Assassin"],
-  rarities: ["arcana", "immortal"],
+  ecosystem: "all",
+  heroes: [],
+  rarities: [],
   slots: [],
-  price: { min: 0, max: 1000, preset: "100to500" },
-  safeguards: ["instantEscrow", "verifiedSellers"],
+  price: { min: 0, max: 100_000, preset: null },
+  safeguards: [],
   sort: "change",
   view: "grid",
   page: 1,
@@ -19,15 +23,8 @@ export const DEFAULT_FILTERS: Filters = {
   stattrak: false,
 };
 
-/** Everything cleared ("Reset All"). */
-export const EMPTY_FILTERS: Filters = {
-  ...DEFAULT_FILTERS,
-  ecosystem: "all",
-  heroes: [],
-  rarities: [],
-  price: { min: 0, max: 100_000, preset: null },
-  safeguards: [],
-};
+/** "Reset All" returns to the landing state — there is nothing stricter to clear to. */
+export const EMPTY_FILTERS: Filters = DEFAULT_FILTERS;
 
 const criteriaKey = ({ query, ecosystem, heroes, rarities, slots, price, safeguards, wear, float, stattrak }: Filters) =>
   JSON.stringify({ query, ecosystem, heroes, rarities, slots, price, safeguards, wear, float, stattrak });

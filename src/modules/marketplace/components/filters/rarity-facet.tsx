@@ -8,7 +8,7 @@ import { useMarketplace } from "../../state/marketplace-provider";
 import { CheckMark, CheckRow } from "./check-row";
 
 export function RarityFacet() {
-  const { filters, patch } = useMarketplace();
+  const { filters, patch, results } = useMarketplace();
 
   return (
     <div className="mb-space-md">
@@ -34,7 +34,10 @@ export function RarityFacet() {
                   {rarity.label}
                 </span>
               </div>
-              <span className="font-data-mono-md text-data-mono-md text-text-muted">{formatCount(rarity.count)}</span>
+              {/* The live tally for the selected economy; `rarity.count` is the unseeded fallback. */}
+              <span className="font-data-mono-md text-data-mono-md text-text-muted">
+                {formatCount(results.facets.total ? (results.facets.rarities[rarity.value] ?? 0) : rarity.count)}
+              </span>
             </CheckRow>
           );
         })}

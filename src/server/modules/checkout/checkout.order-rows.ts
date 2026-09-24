@@ -41,6 +41,8 @@ type Placement = {
   walletId: string;
   balanceAfterCents: number;
   now: Date;
+  /** The rail the buyer paid on, as the tracker and ledger name it. */
+  fundingLabel: string;
 };
 
 /**
@@ -66,7 +68,7 @@ export function buildOrderRows(line: CartLine, at: Placement) {
     totalCents: at.totalCents,
     placedAt: at.now,
     autoCancelSeconds: AUTO_CANCEL_SECONDS,
-    fundingLabel: "Relicto Vault Balance",
+    fundingLabel: at.fundingLabel,
     settlementNote: "Fee $0.00 (Escrow)",
     counterpartyKind: "bot",
     counterpartyName: bot,
@@ -96,7 +98,7 @@ export function buildOrderRows(line: CartLine, at: Placement) {
     step: step.step,
     state: step.state,
     title: step.title,
-    body: "body" in step ? step.body : `${usd(at.totalCents)} locked from your Relicto vault balance.`,
+    body: "body" in step ? step.body : `${usd(at.totalCents)} locked via ${at.fundingLabel}.`,
     occurredAt: at.now,
   })) satisfies (typeof escrowEvents.$inferInsert)[];
 

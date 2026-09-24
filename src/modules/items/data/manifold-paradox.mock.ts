@@ -1,5 +1,9 @@
 import type { ItemDetail } from "../types";
 
+const DAY = 86_400_000;
+/** "Today" for this fixture, chosen so the chart's dates match the stats' wording. */
+const DAY_ZERO = Date.UTC(2025, 10, 28);
+
 /** The Stitch reference item: Phantom Assassin's Manifold Paradox arcana. */
 export const manifoldParadox: ItemDetail = {
   slug: "manifold-paradox",
@@ -140,20 +144,26 @@ export const manifoldParadox: ItemDetail = {
     activeRange: "30D",
     modes: ["LINE", "CANDLE"],
     activeMode: "LINE",
+    /**
+     * Real observations, so the chart scales itself. The design drew this
+     * series as hand-placed SVG coordinates, which said nothing about price;
+     * these reproduce its shape while agreeing with the stats below — the
+     * $108.20 low on Oct 29 and the $139.00 peak on Nov 18.
+     */
     points: [
-      { x: 40, y: 240 },
-      { x: 160, y: 225 },
-      { x: 280, y: 245 },
-      { x: 420, y: 175, marker: "patch" },
-      { x: 560, y: 190 },
-      { x: 700, y: 110, marker: "event" },
-      { x: 840, y: 135 },
-      { x: 960, y: 80, marker: "now" },
+      { at: DAY_ZERO - 30 * DAY, price: 108.2 },
+      { at: DAY_ZERO - 25 * DAY, price: 111.4 },
+      { at: DAY_ZERO - 20 * DAY, price: 110.1 },
+      { at: DAY_ZERO - 15 * DAY, price: 114.2, marker: "patch" },
+      { at: DAY_ZERO - 10 * DAY, price: 139.0 },
+      { at: DAY_ZERO - 7 * DAY, price: 124.5, marker: "event" },
+      { at: DAY_ZERO - 3 * DAY, price: 121.3 },
+      { at: DAY_ZERO, price: 118.5, marker: "now" },
     ],
     annotations: [
       {
         id: "patch",
-        left: "42%",
+        at: DAY_ZERO - 15 * DAY,
         label: "PATCH 7.38c",
         tone: "crimson",
         title: "Stifling Dagger Buff",
@@ -162,19 +172,13 @@ export const manifoldParadox: ItemDetail = {
       },
       {
         id: "crownfall",
-        left: "70%",
+        at: DAY_ZERO - 7 * DAY,
         label: "CROWNFALL ACT IV",
         tone: "cyan",
         title: "Assassin Token Synergy",
         detail: "Demand spikes 240+ volume units",
         detailTone: "amber",
       },
-    ],
-    axis: [
-      { label: "30 Days Ago • $109.00" },
-      { label: "15 Days Ago • $114.20 (Patch 7.38c)" },
-      { label: "7 Days Ago • $124.50" },
-      { label: "Today • $118.50", strong: true },
     ],
     stats: [
       { label: "30-Day Peak High", value: "$139.00 USD", note: "Recorded on Nov 18", tone: "primary" },

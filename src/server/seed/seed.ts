@@ -14,6 +14,7 @@ import { LISTINGS } from "../../modules/marketplace/data/listings.mock";
 import * as schema from "../../lib/db/schema";
 import { buildPriceSeries } from "./price-series";
 import { linkAlertItems, seedAlerts } from "./seed-alerts";
+import { seedCatalogDepth } from "./seed-catalog";
 import { seedCheckout } from "./seed-checkout";
 import { seedContent } from "./seed-content";
 import { seedOrders } from "./seed-orders";
@@ -166,6 +167,9 @@ async function main() {
     );
   }
 
+  /* Depth behind the designed cards, so facets and pagination count real rows. */
+  const depth = await seedCatalogDepth(db, SELLER.id);
+
   const { traderId, vendorId, handle } = await seedTrader(db, targetEmail(process.argv));
   await seedOrders(db, traderId, SELLER.id, vendorId);
   const entries = await seedWallet(db, traderId);
@@ -185,6 +189,7 @@ async function main() {
   console.log(
     `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,
   );
+  console.log(`catalog depth items=${depth.items} heroes=${depth.heroes}`);
   console.log(`ledger + treasury attached to ${handle} (orders=6 entries=${entries})`);
   console.log(`content posts=${content.posts} guides=${content.guides}`);
   console.log(`profile showcase=${profile.showcase} seller-listings=${profile.listings} alerts=${alerts}`);

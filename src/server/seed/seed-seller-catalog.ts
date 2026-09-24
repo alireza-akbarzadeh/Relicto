@@ -79,7 +79,8 @@ function presentationFor(mock: ProfileListing, item: SellerItem): schema.ItemPre
       item.float !== null
         ? { kind: "float", value: item.float.toFixed(4) }
         : { kind: "escrow", label: "Instant Escrow" },
-    safeguards: ["escrow"],
+    /* Must be `SafeguardKey`s — the marketplace filters on these. */
+    safeguards: ["instantEscrow", "verifiedSellers"],
     meta: [mock.note, `${item.offers} active offers`],
   };
 }

@@ -1,9 +1,12 @@
 import "server-only";
 
+import type { Filters } from "@/modules/marketplace/types";
+import { countFacets } from "./listings.facets";
 import { toMobileFeed } from "./listings-mobile.presenter";
 import { toListingView } from "./listings.presenter";
 import * as repository from "./listings.repository";
 import { createListingInput, listListingsInput, type CreateListingInput, type ListListingsInput } from "./listings.schema";
+import { toListingQuery } from "./listings.search";
 
 /**
  * Transport-agnostic. Server Components import this directly; Server Actions
@@ -28,6 +31,30 @@ export const listingService = {
     const input = listListingsInput.parse({ perPage: 96, ...rawInput });
     const { rows } = await repository.findListings(input);
     return rows.map(toListingView);
+  },
+
+  /**
+   * One page of the marketplace grid plus the tallies around it — the numbers
+   * the toolbar, the pagination bar and the sidebar all quote.
+   */
+  async search(filters: Filters) {
+    const input = listListingsInput.parse(toListingQuery(filters));
+    const [{ rows, total }, facets] = await Promise.all([
+      repository.findListings(input),
+      countFacets(input.gameId),
+    ]);
+
+    const pages = Math.max(1, Math.ceil(total / input.perPage));
+    const from = rows.length ? (input.page - 1) * input.perPage + 1 : 0;
+
+    return {
+      items: rows.map(toListingView),
+      total,
+      pages,
+      from,
+      to: from ? from + rows.length - 1 : 0,
+      facets,
+    };
   },
 
   /** The mobile trading feed (one card per item, biggest movers first) and the liquidity its ticker quotes. */

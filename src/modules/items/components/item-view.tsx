@@ -29,7 +29,8 @@ export function ItemView({ item }: { item: ItemDetail }) {
           <div className="relative z-10 mx-auto grid max-w-[1440px] grid-cols-1 gap-8 lg:grid-cols-12">
             <div className="flex flex-col gap-4 lg:col-span-6">
               <ItemViewer item={item} />
-              <StyleProgression styles={item.styles} unlocked={item.stylesUnlocked} />
+              {/* Most of the catalog has no authored styles; the panel is only about them. */}
+              {item.styles.length > 0 && <StyleProgression styles={item.styles} unlocked={item.stylesUnlocked} />}
             </div>
             <PricePanel item={item} />
           </div>

@@ -6,7 +6,10 @@ import { toggle } from "../../lib/filters";
 import { useMarketplace } from "../../state/marketplace-provider";
 
 export function SlotFacet() {
-  const { filters, patch } = useMarketplace();
+  const { filters, patch, results } = useMarketplace();
+  /* Live tallies for the selected economy; the mock counts stand in when unseeded. */
+  const countFor = (slot: (typeof SLOTS)[number]) =>
+    results.facets.total ? (results.facets.slots[slot.value] ?? 0) : slot.count;
 
   return (
     <div className="mb-space-md">
@@ -27,7 +30,7 @@ export function SlotFacet() {
                   : "bg-surface-container-low text-text-secondary hover:bg-surface-container hover:text-text-primary",
               )}
             >
-              {slot.value} ({slot.count})
+              {slot.value} ({countFor(slot)})
             </button>
           );
         })}

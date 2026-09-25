@@ -632,6 +632,12 @@ Still open:
   selected ecosystem only, so a rarity tally doesn't narrow when a wear tier is
   ticked. Proper faceted counts need one query per facet.
 - **Generated catalog art repeats** — eight images across 144 items.
+- **Mobile has no watchlist tab or share button.** Phase 6 is desktop-only; the
+  mobile profile composition still shows its own quick-links.
+- **`watchlistService.watchers()` has no UI.** The count is queryable; nothing
+  renders "N watching" yet.
+- **The drawer assumes the promo is applied**, as the checkout panel does. If a
+  buyer removes it at checkout the total rises by $15 from what the drawer showed.
 - **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
   rules use fixed ids, so seeding a second trader collides with the demo one.
   The handle collision is fixed; re-keying those rows per trader is not.

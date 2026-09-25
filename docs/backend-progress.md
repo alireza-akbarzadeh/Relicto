@@ -52,7 +52,7 @@ npx tsx --conditions=react-server .verify-x.mts
 | `/wallet` | `walletService.treasury()` | ✅ metrics + audit ledger |
 | `/community` | `communityService.feed()` | ✅ parity-verified |
 | `/wiki` | `wikiService.codex()` | ✅ parity-verified |
-| `/profile` | `profileService.detail()` | ✅ parity-verified (see step 1 note) |
+| `/profile` | `profileService.detail()` + `watchlistService.watched()` | ✅ parity-verified; watchlist tab (phase 6) |
 | `/alerts` | `alertService.list()` | ✅ parity-verified |
 | `/tracker` | `trackerService.terminal()` | ✅ 3 noted divergences |
 | `/sell` | `sellService.studio()` | ✅ parity-verified |
@@ -498,6 +498,88 @@ its own stats — the $108.20 low on Oct 29 and the $139.00 peak on Nov 18.
 **Not visually checked.** There is no Chrome or Chromium on this machine, so
 the Recharts render was verified by data contract and HTTP status, not by
 looking at it. Worth a browser pass.
+
+## Phase 6 — likes, sharing and the basket
+
+### The watchlist is a list, not just hearts
+
+Hearts already wrote to `watchlist`, but the only place to *see* what you watch
+was the tracker board. `watchlist.repository.ts` now returns watched items as
+cards — art, grade, the cheapest active copy, its 24h move, seller count — and
+the profile gained a **Watchlist tab** beside Showcase and Listings.
+
+It is **private**: buying intent, never shown on someone else's profile.
+
+Each card links to the item, unwatches with its heart, and adds the quoted copy
+to the basket. An item nobody is selling reads *No sellers / Unavailable*
+rather than quoting a stale price — `floorUsd` and `listingId` are null together.
+
+`getProfile()` loads the watchlist itself rather than taking it from
+`profileService.detail()`. The watchlist is keyed on the user and exists without
+a `profiles` row, so a fresh sign-up — which falls back to the sample profile —
+still sees its own watched items instead of an empty tab.
+
+`watchlistService.watchers(slugs)` counts watchers per item, ready for a
+"N watching" line on the item page. Nothing renders it yet.
+
+### Share
+
+`useShare` + `ShareButton`: the OS share sheet where the browser offers one
+(`navigator.share`), else the link on the clipboard with a toast, else a hidden
+textarea for older Safari and non-secure origins. A dismissed sheet reports as
+`AbortError` and passes silently — that's a change of mind, not a failure.
+
+On every marketplace card and on the item page's action row.
+
+### The basket drawer
+
+`shell/cart-button.tsx` was 300+ lines in one file, with native `<button>`s and
+Tailwind palette colors (`white/10`, `emerald-400`, `black/80`) against a
+project rule that forbids both. Split into `relicto/components/cart/`
+(`cart-button`, `cart-line`, `cart-summary`, `cart-assurances`, `cart-empty`),
+all under 135 lines, on shadcn controls and design tokens.
+
+Behaviour fixed along with the design:
+
+- **The drawer quoted the wrong total.** It printed `Total = subtotal` with a
+  "$0.00 (0% PROMO)" fee row, silently dropping the $25 combo relief the server
+  applies at three items. The seeded basket read **$3,688.50** in the drawer and
+  charged **$3,648.50**. `CartSummary` now calls the same `quote()` the charge
+  uses.
+- **"Lock Escrow & Execute Trade" was theatre** — a 1.2s `setTimeout` spinner
+  reading "Dispatching Bot Offer…" that dispatched nothing, then navigated to
+  `/checkout`. It now says what it does: *Review & settle escrow*.
+- The empty state offers a way out (browse the marketplace) instead of a dead panel.
+
+### Fixed in phase 6
+
+- **Every item added from a detail page was labelled as the designed arcana.**
+  `PricePanel` hardcoded `badge: "Arcana"`, `game: "Dota 2"`,
+  `detail: "Phantom Assassin Weapon Artifact • Style 3 Unlocked"` and a kills
+  gem, so an AK-47 added there landed in the basket as a Dota arcana. Every buy
+  button now builds its line through `checkout/lib/optimistic-line.ts` from the
+  item's own facts; Dota grades get a chip (`ARC`) where CS2 has a wear.
+- **The checkout total could go negative.** `settlement-panel.tsx` computed
+  `subtotal − combo − promo` by hand instead of calling `quote()`, which clamps
+  at zero. A basket cheaper than the $40 of discounts displayed a negative
+  *Total Payable* while `placeOrder` charged $0. The panel now uses `quote()`,
+  and the discount lines show capped amounts so they reconcile with the total.
+
+### Verified in phase 6
+
+`.verify-lists.mts` — 26 checks: watched cards carry real facts, a floor implies
+a buyable copy, slugs and cards agree, watcher counts, the line a watchlist buy
+builds keeps its own game/grade, and the drawer's total equals the checkout
+panel's and never goes negative.
+
+Through HTTP: the watchlist tab renders its empty state for a new account, then
+4 cards once seeded — including one *Unavailable* after its only listing was
+flipped to sold and restored. 24 share buttons on a marketplace page.
+
+`tsc`, `eslint` and `next build` clean; the flow (21) and chart (32) suites
+still pass.
+
+**Not visually checked** — still no Chrome or Chromium on this machine.
 
 ## Known data artifacts
 

@@ -7,7 +7,7 @@ import { MarketBrand } from "./brand";
 import { MarketHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 import { WalletChip } from "./wallet-chip";
-import { CartButton } from "./cart-button";
+import { CartButton } from "../cart/cart-button";
 
 /** Shared marketplace shell for ledger, order and profile screens. */
 export function LedgerHeader() {

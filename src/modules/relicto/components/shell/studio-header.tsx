@@ -6,7 +6,7 @@ import { STUDIO_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
-import { CartButton } from "./cart-button";
+import { CartButton } from "../cart/cart-button";
 import { StudioHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 import { WalletChip } from "./wallet-chip";

@@ -8,6 +8,8 @@ import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { ESCROW_TONE, STAT_TONE } from "../../lib/tones";
 import type { ItemDetail } from "../../types";
+import { optimisticLine } from "@/modules/checkout/lib/optimistic-line";
+import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 
@@ -19,23 +21,24 @@ export function PricePanel({ item }: { item: ItemDetail }) {
   const { addItem } = useCart();
   const { isWatched, toggle } = useWatchlist();
   const watched = isWatched(item.slug);
+  /**
+   * The line is built from this item's own facts. It used to be hardcoded to
+   * the designed arcana, so every skin added here landed in the basket
+   * labelled "Arcana / Dota 2 / Phantom Assassin Weapon Artifact".
+   */
   const addToCart = () => {
-    addItem({
-      id: item.slug,
-      image: item.hero.image,
-      imageAlt: item.hero.imageAlt,
-      badge: "Arcana",
-      badgeTone: "bg-primary-container text-on-primary-container",
-      game: "Dota 2",
-      gameTone: "text-secondary",
-      name: item.name,
-      detail: "Phantom Assassin Weapon Artifact • Style 3 Unlocked",
-      intel: ["1,420 Recorded Kills Gem", "Vendor: KuroSkins (99.8% Trust)"],
-      bot: "Sentinel Bot #42",
-      price: price.lowestUsd,
-      marker: "Style 3",
-      markerTone: "text-text-primary",
-    });
+    addItem(
+      optimisticLine({
+        slug: item.slug,
+        name: item.name,
+        subtitle: [item.eyebrow.hero, item.eyebrow.slot].filter(Boolean).join(" • "),
+        image: item.hero.image,
+        imageAlt: item.hero.imageAlt,
+        gameLabel: item.eyebrow.game,
+        rarityLabel: item.badges[0]?.label,
+        priceUsd: price.lowestUsd,
+      }),
+    );
     toast.success("Added to cart", { description: `${item.name} is reserved for escrow checkout.` });
   };
   return (
@@ -120,6 +123,12 @@ export function PricePanel({ item }: { item: ItemDetail }) {
             >
               <Icon name="notifications_active" className="text-[20px]" />
             </NoticeButton>
+            <ShareButton
+              title={item.name}
+              text={item.description}
+              path={`/items/${item.slug}`}
+              className={cn(ACTION, "px-3.5 text-text-secondary hover:text-tertiary")}
+            />
           </div>
         </div>
       </div>

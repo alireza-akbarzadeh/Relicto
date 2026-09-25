@@ -7,7 +7,7 @@ import { useSession } from "../../state/session-provider";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
-import { CartButton } from "./cart-button";
+import { CartButton } from "../cart/cart-button";
 import { VaultHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 

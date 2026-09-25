@@ -84,7 +84,29 @@ export type Endorsement = { label: string; value: string; pct: number; tone: Ton
 
 export type Review = { id: string; author: string; age: string; quote: string };
 
-export type ProfileTab = "showcase" | "listings" | "reviews" | "linked" | "safeguards";
+export type ProfileTab = "showcase" | "listings" | "watchlist" | "reviews" | "linked" | "safeguards";
+
+/**
+ * One item on the trader's watchlist. Private to them — this is buying intent,
+ * not a public collection. The floor is the cheapest copy on sale right now, so
+ * `floorUsd` is null when nobody is selling.
+ */
+export type WatchedItem = {
+  slug: string;
+  name: string;
+  subtitle: string;
+  image: string;
+  imageAlt: string;
+  gameLabel: string;
+  rarityLabel: string;
+  tone: Tone;
+  floorUsd: number | null;
+  changePercent: number | null;
+  /** The copy "Add to basket" would reserve; null when none is on sale. */
+  listingId: string | null;
+  sellerCount: number;
+  watchedAgo: string;
+};
 
 export type ProfileData = {
   identity: TraderIdentity;
@@ -93,6 +115,7 @@ export type ProfileData = {
   listings: Listing[];
   /** Listings visible on the default tab. */
   listingsShown: number;
+  watchlist: WatchedItem[];
   security: StatusRow[];
   lastHandshake: string;
   endorsements: Endorsement[];

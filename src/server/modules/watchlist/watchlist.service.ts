@@ -3,6 +3,8 @@ import "server-only";
 import { and, eq, max } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { items, watchlist } from "@/lib/db/schema";
+import { toWatchedItem } from "./watchlist.presenter";
+import { countWatchersBySlug, findWatchedItems } from "./watchlist.repository";
 
 /**
  * A trader's watched items. The same rows are the tracker board, so watching
@@ -17,6 +19,15 @@ export const watchlistService = {
       .where(eq(watchlist.userId, userId));
     return rows.map((row) => row.slug);
   },
+
+  /** The watched items as cards, newest board position last. */
+  async watched(userId: string) {
+    const rows = await findWatchedItems(userId);
+    return rows.map(toWatchedItem);
+  },
+
+  /** How many traders watch each slug. */
+  watchers: (slugs: string[]) => countWatchersBySlug(slugs),
 
   /** Idempotent either way. Returns false when the slug isn't a catalog item. */
   async set(userId: string, slug: string, watched: boolean): Promise<boolean> {

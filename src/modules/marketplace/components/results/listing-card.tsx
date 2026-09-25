@@ -8,6 +8,7 @@ import { useListingActions } from "../../hooks/use-listing-actions";
 import { ListingMedia } from "./listing-media";
 import { PriceDelta } from "./price-delta";
 import { WishlistButton } from "./wishlist-button";
+import { ShareButton } from "@/modules/relicto/components/share-button";
 
 export function ListingCard({ listing, priority }: { listing: Listing; priority?: boolean }) {
   const { viewOffers, quickBuy, inBasket } = useListingActions(listing);
@@ -31,7 +32,10 @@ export function ListingCard({ listing, priority }: { listing: Listing; priority?
               {listing.tag.label}
             </span>
           </div>
-          <WishlistButton listing={listing} />
+          <div className="flex items-center gap-0.5">
+            <ShareButton title={listing.name} text={listing.subtitle} path={`/items/${listing.id}`} />
+            <WishlistButton listing={listing} />
+          </div>
         </div>
         <ListingMedia listing={listing} priority={priority} />
         <div className="mb-space-xs">

@@ -37,6 +37,8 @@ export const profileService = {
       showcase: showcase.map(toShowcase),
       listings: sellerListings.map(toSellerListing),
       listingsShown: LISTINGS_SHOWN,
+      /** Not part of the profile aggregate — it exists without one. `getProfile` overlays it. */
+      watchlist: [],
       security: byGroup("security"),
       lastHandshake: profile.lastHandshake ?? "",
       endorsements: endorsements.map(toEndorsement),

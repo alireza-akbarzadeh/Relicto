@@ -10,9 +10,11 @@ import { LiquidationCard } from "./sidebar/liquidation-card";
 import { SecurityPanel } from "./sidebar/security-panel";
 import { LinkedPanel, ReviewsPanel, SafeguardsPanel } from "./tabs/tab-panels";
 import { ProfileTabs } from "./tabs/profile-tabs";
+import { WatchlistSection } from "./watchlist/watchlist-section";
 
 function Panel({ tab, data }: { tab: ProfileTab; data: ProfileData }) {
   if (tab === "listings") return <ListingsSection listings={data.listings} total={data.listings.length} />;
+  if (tab === "watchlist") return <WatchlistSection items={data.watchlist} />;
   if (tab === "reviews") return <ReviewsPanel data={data} />;
   if (tab === "linked") return <LinkedPanel data={data} />;
   if (tab === "safeguards") return <SafeguardsPanel data={data} />;
@@ -35,6 +37,7 @@ export function ProfileBoard({ data }: { data: ProfileData }) {
         onChange={(next) => void setTab(next)}
         inventoryCount={data.inventoryCount}
         listingCount={data.listings.length}
+        watchlistCount={data.watchlist.length}
         reviewCount={data.reviewCount}
       />
       <main className="w-full px-gutter-desktop py-space-lg">

@@ -7,7 +7,7 @@ import { MarketBrand } from "./brand";
 import { MarketHeaderSearch } from "./header-search";
 import { NavLinks } from "./nav-link";
 import { WalletChip } from "./wallet-chip";
-import { CartButton } from "./cart-button";
+import { CartButton } from "../cart/cart-button";
 
 /** Header of the marketplace screen. */
 export function MarketHeader() {

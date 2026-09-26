@@ -6,7 +6,7 @@
  *   npm run db:seed
  */
 import { config } from "dotenv";
-import { eq } from "drizzle-orm";
+import { and, eq, notLike } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
@@ -159,7 +159,8 @@ async function main() {
 
     // Price history behind the detail chart, ending at today's price.
     const series = buildPriceSeries(priceCents, listing.change.percent, listing.id);
-    await db.delete(schema.pricePoints).where(eq(schema.pricePoints.itemId, itemId));
+    // Only the generated series — real market snapshots and settled sales survive a re-seed.
+    await db.delete(schema.pricePoints).where(and(eq(schema.pricePoints.itemId, itemId), eq(schema.pricePoints.venue, "relicto"), notLike(schema.pricePoints.id, "pp-%")));
     await db.insert(schema.pricePoints).values(
       series.map((point) => ({
         itemId,

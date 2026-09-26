@@ -12,7 +12,8 @@ import { walletMobile } from "./wallet-mobile.mock";
  */
 export async function getWallet(): Promise<WalletData> {
   const treasury = await walletService.treasury(await requireSettledViewer());
-  return treasury ?? wallet;
+  // A trader without a vault sees the sample treasury, but may still make the first (test) deposit.
+  return treasury ?? { ...wallet, testDeposits: walletService.testDeposits() };
 }
 
 /** Mobile wallet: the same balances and ledger as desktop, with the mobile vault chrome, actions and rails. */

@@ -20,7 +20,14 @@ const GAME_GAP_MS = 1500;
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export type SyncResult =
-  | { status: "ok"; itemCount: number; removed: number; cancelled: number }
+  | {
+      status: "ok";
+      itemCount: number;
+      removed: number;
+      cancelled: number;
+      /** Games Steam didn't answer this time (rate limit, outage); their mirror is left as it was. */
+      skipped: string[];
+    }
   | {
       status:
         "private" | "rate-limited" | "unavailable" | "no-steam" | "throttled";
@@ -89,7 +96,10 @@ export const inventorySyncService = {
       rows,
       failure ?? "ok",
     );
-    return { status: "ok", itemCount: rows.length, ...applied };
+    const skipped = STEAM_GAMES.map((game) => game.gameId).filter(
+      (id) => !answered.includes(id),
+    );
+    return { status: "ok", itemCount: rows.length, skipped, ...applied };
   },
 
   /** Re-pulls in the background of a studio visit when the mirror has gone stale. */

@@ -58,6 +58,16 @@ const PAGE_SIZE = 2000;
 /** 10,000 items per game is well past any real trader; it bounds a runaway loop. */
 const MAX_PAGES = 5;
 
+/**
+ * Steam answers 429 to Node's default `User-Agent` on the first request, while
+ * the same request with a named agent succeeds — so identify ourselves.
+ */
+const HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (compatible; RelictoInventorySync/1.0; +https://relicto.gg)",
+  Accept: "application/json",
+};
+
 /** Every item in one game's inventory (context 2 is the tradable one for CS2, Dota 2 and TF2). */
 export async function fetchSteamInventory(
   steamId: string,
@@ -77,6 +87,7 @@ export async function fetchSteamInventory(
     let response: Response;
     try {
       response = await fetch(url, {
+        headers: HEADERS,
         signal: AbortSignal.timeout(15_000),
         cache: "no-store",
       });

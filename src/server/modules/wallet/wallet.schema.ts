@@ -9,3 +9,11 @@ export const cashoutInput = z.object({
 });
 
 export const freezeInput = z.object({ frozen: z.boolean() });
+
+/** Money rails the deposit panel offers. "skins" is liquidation, which the sell studio handles. */
+export const DEPOSIT_RAILS = ["crypto", "cards", "bank"] as const;
+
+export const depositInput = z.object({
+  rail: z.enum(DEPOSIT_RAILS),
+  amountUsd: z.number().min(10).max(10_000),
+});

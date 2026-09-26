@@ -9,7 +9,7 @@
  * Everything is written in bulk: 145 items over a remote branch is minutes of
  * round trips row by row, and a seed nobody wants to re-run stops being run.
  */
-import { inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, notLike, sql } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 import { artworkFor, hash, presentationFor } from "./catalog/catalog-presentation";
@@ -134,10 +134,15 @@ export async function seedCatalogDepth(db: Db, sellerId: string) {
   }
 
   /* The detail page's chart reads this series. Replaced, not appended. */
+  // Only the generated series: real market snapshots (Skinport) and settled sales survive a re-seed.
   await db.delete(schema.pricePoints).where(
-    inArray(
-      schema.pricePoints.itemId,
-      itemRows.map((row) => row.id!),
+    and(
+      inArray(
+        schema.pricePoints.itemId,
+        itemRows.map((row) => row.id!),
+      ),
+      eq(schema.pricePoints.venue, "relicto"),
+      notLike(schema.pricePoints.id, "pp-%"),
     ),
   );
   for (const rows of chunk(pricePoints, 2000)) {

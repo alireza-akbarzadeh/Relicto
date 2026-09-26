@@ -4,6 +4,7 @@ import type { WalletMobile } from "@/modules/wallet/mobile.types";
 import type { WalletData, WalletRail } from "@/modules/wallet/types";
 import { toWalletMobile } from "./wallet-mobile.presenter";
 import { requestCashout, setFrozen } from "./wallet.commands";
+import { deposit, testDepositsEnabled } from "./wallet.deposit";
 import { toWalletMetrics } from "./wallet.metrics";
 import { toWalletTransaction, usd } from "./wallet.presenter";
 import * as repository from "./wallet.repository";
@@ -43,6 +44,9 @@ async function loadTotals(account: Account, userId: string) {
 
 export const walletService = {
   requestCashout,
+  deposit,
+  /** True where deposits are simulated (no provider yet); false where they're refused. */
+  testDeposits: testDepositsEnabled,
   setFrozen,
 
   /** Spendable balance in cents — the header chip on every page. */
@@ -66,6 +70,7 @@ export const walletService = {
       equityNote: `${dayNetCents >= 0 ? "+" : "-"}${usd(Math.abs(dayNetCents))} USD (Past 24h market & trade-ups)`,
       metrics: toWalletMetrics(totals),
       depositRails: DEPOSIT_RAILS,
+      testDeposits: testDepositsEnabled(),
       cashoutRails: CASHOUT_RAILS,
       transactions: entries.map(toWalletTransaction),
       liquidUsd: totals.liquidCents / 100,

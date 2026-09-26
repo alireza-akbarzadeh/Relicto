@@ -41,6 +41,8 @@ export type WalletData = {
   transactions: WalletTransaction[];
   /** What can leave the vault right now; the cashout panel's maximum. */
   liquidUsd?: number;
+  /** Deposits are simulated here (no payment provider yet); nothing is charged. */
+  testDeposits?: boolean;
   /** The emergency lock is on. */
   frozen?: boolean;
 };

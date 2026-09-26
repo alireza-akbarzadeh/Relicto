@@ -76,6 +76,8 @@ export async function seedWallet(db: Db, traderId: string) {
 
   // Cashout requests made in the app carry generated ids; drop them so the ledger is the designed one.
   await db.delete(schema.ledgerEntries).where(and(eq(schema.ledgerEntries.walletId, walletId), like(schema.ledgerEntries.id, "ledger-out-%")));
+  // Test deposits too — the balance itself is reset above.
+  await db.delete(schema.ledgerEntries).where(and(eq(schema.ledgerEntries.walletId, walletId), like(schema.ledgerEntries.id, "ledger-dep-%")));
   await db.delete(schema.payouts).where(eq(schema.payouts.walletId, walletId));
 
   for (const entry of ENTRIES(Date.now())) {

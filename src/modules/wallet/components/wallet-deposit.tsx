@@ -2,18 +2,21 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import type { WalletRail as WalletRailType } from "../types";
+import { isMoneyRail, useDeposit } from "../hooks/use-deposit";
 import { WalletRail } from "./wallet-rail";
 
-export function WalletDeposit({ rails }: { rails: WalletRailType[] }) {
+export function WalletDeposit({ rails, testMode = false }: { rails: WalletRailType[]; testMode?: boolean }) {
   const [rail, setRail] = useState("crypto");
   const [amount, setAmount] = useState("250.00");
+  const { pending, deposit } = useDeposit();
   const numericAmount = Number(amount) || 0;
-  const credited = (numericAmount * 1.02).toFixed(2);
+  // The +2% booster is for skin liquidation; a money deposit credits exactly what's sent.
+  const skins = !isMoneyRail(rail);
+  const credited = (skins ? numericAmount * 1.02 : numericAmount).toFixed(2);
   const copyAddress = async () => {
     await navigator.clipboard.writeText("0x71C92a46B9f76D2189CB91823B492");
     toast.success("Deposit address copied");
@@ -33,13 +36,18 @@ export function WalletDeposit({ rails }: { rails: WalletRailType[] }) {
         </div>
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">Deposit Amount (USD)<div className="flex items-center rounded-lg bg-surface-container-lowest px-space-md"><span className="font-data-mono-lg text-text-muted">$</span><Input type="number" value={amount} onChange={(event) => setAmount(event.target.value)} className="h-auto border-0 bg-transparent p-space-sm font-data-mono-lg text-text-primary focus-visible:ring-0" /><span className="font-data-mono-md text-text-secondary">USD</span></div></label>
         <div className="flex flex-wrap items-center gap-space-xs">{[50, 100, 250, 500, 1000].map((value) => <Button key={value} variant={null} size={null} onClick={() => setAmount(value.toFixed(2))} className="h-auto rounded bg-surface-container-high px-2 py-1 font-data-mono-md text-[12px] text-text-secondary hover:bg-surface-container-highest hover:text-text-primary">+${value}</Button>)}</div>
-        <div className="flex flex-col gap-1 rounded-lg bg-surface-container-lowest/70 p-space-sm font-data-mono-md text-body-sm"><div className="flex justify-between text-text-muted"><span>Subtotal</span><span>${numericAmount.toFixed(2)} USD</span></div><div className="flex justify-between text-text-muted"><span>Network Protocol Ingress Fee</span><span className="text-tertiary">0.00 USD (PROMO)</span></div><div className="flex justify-between text-text-muted"><span>Liquidation Booster Tier</span><span className="text-primary">+2.0% (${(numericAmount * 0.02).toFixed(2)} USD)</span></div><div className="flex justify-between border-t border-surface-variant pt-1 font-bold text-text-primary"><span>Total Balance Credited</span><span className="text-tertiary">${credited} USD</span></div></div>
+        <div className="flex flex-col gap-1 rounded-lg bg-surface-container-lowest/70 p-space-sm font-data-mono-md text-body-sm"><div className="flex justify-between text-text-muted"><span>Subtotal</span><span>${numericAmount.toFixed(2)} USD</span></div><div className="flex justify-between text-text-muted"><span>Network Protocol Ingress Fee</span><span className="text-tertiary">0.00 USD (PROMO)</span></div><div className="flex justify-between text-text-muted"><span>Liquidation Booster Tier</span><span className="text-primary">{skins ? `+2.0% ($${(numericAmount * 0.02).toFixed(2)} USD)` : "Skin rail only"}</span></div><div className="flex justify-between border-t border-surface-variant pt-1 font-bold text-text-primary"><span>Total Balance Credited</span><span className="text-tertiary">${credited} USD</span></div></div>
       </div>
-      <NoticeButton notice={{ title: "Ingress queued", description: `A ${credited} USD deposit confirmation is ready for the wallet API.` }} className="h-auto w-full gap-space-xs rounded-lg border-0 bg-primary py-space-md font-headline-sm text-[14px] text-on-primary uppercase shadow-[0_0_20px_rgba(244,63,94,0.35)] hover:bg-primary/90"><Icon name="verified" className="text-[18px]" /><span>Confirm &amp; Execute Ingress</span></NoticeButton>
+      <div className="flex flex-col gap-space-xs">{testMode && <TestModeStrip />}<Button variant={null} size={null} disabled={pending} onClick={() => deposit(rail, numericAmount)} className="h-auto w-full gap-space-xs rounded-lg border-0 bg-primary py-space-md font-headline-sm text-[14px] text-on-primary uppercase shadow-[0_0_20px_rgba(244,63,94,0.35)] hover:bg-primary/90"><Icon name="verified" className="text-[18px]" /><span>{pending ? "Crediting vault…" : skins ? "Liquidate in Sell Studio" : "Confirm & Execute Ingress"}</span></Button></div>
     </section>
   );
 }
 
 function StationTitle({ icon, title, subtitle, badge }: { icon: "account_balance" | "bolt"; title: string; subtitle: string; badge: string }) {
   return <div className="flex items-center justify-between gap-space-md"><div className="flex items-center gap-space-xs"><div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-container-high text-primary"><Icon name={icon} className="text-[20px]" /></div><div className="flex flex-col"><h3 className="font-headline-sm text-headline-sm text-text-primary">{title}</h3><span className="font-label-badge text-label-badge text-text-muted">{subtitle}</span></div></div><span className="rounded bg-primary-container/20 px-2 py-1 font-label-badge text-[11px] text-primary-container">{badge}</span></div>;
+}
+
+/** Says out loud that nothing is charged here — deposits are simulated until a payment provider is connected. */
+function TestModeStrip() {
+  return <div className="flex items-center gap-space-xs rounded-lg bg-status-upcoming/10 px-space-sm py-2 font-body-sm text-[11px] text-status-upcoming"><Icon name="info" className="text-[14px]" /><span>Test mode: deposits are credited instantly and nothing is charged. No payment provider is connected yet.</span></div>;
 }

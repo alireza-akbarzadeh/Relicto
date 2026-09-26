@@ -354,10 +354,13 @@ images — including a real mobile payment that produced a new escrow order.
 | Escrow buyer actions (`orders/actions/escrow.ts`) | ✅ cancel + dispute |
 | Escrow auto-cancel | ✅ expired on read + `/api/cron/escrow-timeouts` (daily on Vercel) |
 | **Trade-ups** | ✅ see below |
-| Steam sign-in | 🟡 plugin + buttons in `79f8b3d`; round trip unverified (needs the VPN) |
+| Steam sign-in | 🟡 redirect + forged-assertion rejection verified (phase 8); a real Steam login click-through still needs a human, and `STEAM_API_KEY` is empty |
 | Profile edits | ☐ no design yet — the hero button still toasts "on the roadmap" |
 | Make an offer | ✅ Phase 7 — bid, revise, withdraw, accept → escrow, decline |
-| Dota datafeed / Steam inventory / price feeds + cron | ☐ needs the VPN |
+| Steam inventory sync | ✅ phase 8 — `/sell` mirrors CS2, Dota 2 and TF2 inventories |
+| Price feed + cron | ✅ phase 8 — daily Skinport snapshot, Relicto sales recorded |
+| Wallet deposits | ✅ phase 8 — simulated outside production (`CHECKOUT_MOCK_PAYMENTS`) |
+| Dota datafeed | ☐ not started |
 
 ### Trade-ups ✅
 
@@ -679,6 +682,103 @@ cleared first; accepted-offer orders are `order-chk-` with the trader as
 - A stale credential account `claude-qa-demo-login` on the demo trader (from an
   earlier QA session) is still in the dev DB; it blocks password sign-in for
   other temporary QA credentials. Safe to delete.
+
+## Phase 8 — Steam, real prices, search and deposits
+
+### Steam sign-in and inventory sync
+
+- **Sign-in** (`src/lib/steam/`): the redirect to Steam and the rejection of a
+  forged assertion (Steam's own `check_authentication` says no →
+  `/sign-in?error=steam_unverified`) are verified. A real login needs a human
+  at Steam's page. `STEAM_API_KEY` is empty, so new traders are named "Steam
+  trader NNNN" with no avatar until it's set (steamcommunity.com/dev/apikey).
+- **Steam CDN images**: `next.config.ts` now allows Steam's avatar and item-icon
+  hosts. Before this, a Steam user's avatar would have crashed every page's
+  header (`next/image` refuses unlisted hosts).
+- **Inventory sync** — migration `0019_steam_inventory_sync` (`inventory_syncs`,
+  one row per trader: Steam id, last status, count, time). `src/lib/steam/inventory.ts`
+  pulls `steamcommunity.com/inventory/{id}/{730|570|440}/2`; `inventory-sync/`
+  mirrors marketable items into `inventory_items` (asset ids `730-…`), matches the
+  catalog by name for floors, and in one transaction prunes copies that left
+  Steam — cancelling their active listing — while never touching seeded or
+  trade-up-forged rows or a game Steam didn't answer.
+  - First `/sell` visit pulls inline; later visits refresh a >15-min mirror in
+    `after()`; the rail's "Steam Sync: 4m ago" is a button (≤1 pull/min).
+  - A Steam trader always sees their own studio (an empty one says why:
+    private inventory, or nothing marketable); only non-Steam accounts get the
+    sample studio.
+  - **Steam 429s Node's default User-Agent** on the first request; the client
+    sends a named one. Games are pulled 1.5 s apart, and a game Steam skips is
+    reported (`skipped`) and left as it was.
+
+### Real price history
+
+`/items/[slug]` charted the seed's generated series (or nothing: 10 items had
+none). Now:
+
+- **Daily market snapshot** — `/api/cron/price-feed` (04:30 daily, `vercel.json`)
+  records each catalog item's lowest Skinport ask as a `skinport` price point,
+  one id per item per day (re-runs update). CS2 is quoted at the exterior
+  Relicto sells. First run: 68/71 CS2, 8/20 TF2, 5/71 Dota 2 (the generated Dota
+  names mostly don't exist on real markets).
+- **Relicto sales** — `escrow delivered` records the settled price (`pp-sale-<code>`).
+- **The chart** plots only those: the market line, sales as markers, stats that
+  name their source. With fewer than two observations it says "Price history is
+  building" instead of drawing an empty frame. It fills in a day at a time.
+- Tracker and alerts are pinned to `venue = 'relicto'`, so their seeded series
+  don't mix with market data. `db:seed` no longer deletes real observations.
+- Empty "Item specification" cards and the replay clip (an unrelated AK
+  screenshot) are hidden on catalog-built items; "SET PING" creates a real alert rule.
+
+**No free backfill exists**: Steam's `pricehistory` needs a logged-in Steam
+cookie, and its listing page no longer embeds history for anonymous visitors.
+
+### Search
+
+`GET /api/search?q=&game=&rarity=&wear=&min=&limit=` (signed-in) returns items
+with a live copy (cheapest copy, float, seed, Relicto floor vs Steam/Skinport
+reference), traders by handle, tournaments by name, and per-game counts.
+Multi-word queries match every term against item or hero name; `%`/`_` are
+escaped. An empty query returns the biggest movers.
+
+The command palette (`src/modules/search/`, from `docs/design/`) opens from
+every header's field — the whole box is the trigger, since some headers squeeze
+the input to 0 px — and from ⌘K / Ctrl+K and "/". ↑↓ move, Enter opens (or
+searches the marketplace), Tab baskets the cheapest copy, recents live in
+localStorage. Deviations from the design: a TF2 pill instead of the
+"Pro Traders"/"Tournaments" scope pills; the sticker/trade-hold/escrow chips are
+omitted (no data behind them); the footer shows measured query time instead of
+authored telemetry; traders' "View Backpack" is a roadmap notice (no public
+storefront page yet).
+
+### Wallet deposits (test mode)
+
+`walletService.deposit` credits the vault when `mockPaymentsEnabled()` — outside
+production unless `CHECKOUT_MOCK_PAYMENTS=false`, and in production only with
+`CHECKOUT_MOCK_PAYMENTS=true`. Otherwise it answers `rail-unavailable`: balance is
+never minted in production by accident. $10–$10,000; opens a vault for a new
+trader; refuses a frozen one; ledger row "… Deposit (simulated) — nothing was
+charged" (`ledger-dep-` ids, undone by the seed). The deposit panel shows a
+test-mode strip; the +2% booster applies to the skins rail only, which points to
+the Sell Studio.
+
+### Verified in phase 8
+
+`.verify-steam-sync.mts` (real Steam: 231 items, pruning, listing cancel,
+forged rows kept, private inventory), `.verify-price-feed.mts`,
+`.verify-search.mts`, `.verify-deposit.mts` (10 checks incl. the production
+guard). In Chromium: palette via ⌘K and header click, ↓ highlight, trader
+cards, Blaze chart empty state, a $100 test deposit ($3,140 → $3,240). No
+console errors. `tsc`, `eslint`, `next build` clean.
+
+### Open after phase 8
+
+- **Seeded prices are far from the market** (Dragon Lore $5,200 vs $11,538 on
+  Skinport); the search shows those gaps honestly.
+- New Steam traders get no `profiles` row or wallet until they act (the first
+  deposit opens the wallet); profile bootstrap on sign-up is next.
+- Mobile has no palette trigger beyond the hotkeys; mobile deposit is untouched.
+- Public trader storefronts, a Stitch design each: see the design list.
 
 ## Known data artifacts
 

@@ -58,6 +58,8 @@ async function clearCheckoutOrders(db: Db, buyerId: string) {
     }
 
     await db.delete(schema.ledgerEntries).where(inArray(schema.ledgerEntries.orderId, orderIds));
+    // A test delivery also recorded its sale as a price observation.
+    await db.delete(schema.pricePoints).where(inArray(schema.pricePoints.id, reserved.map((row) => `pp-sale-${row.code.toLowerCase()}`)));
     await db
       .delete(schema.notifications)
       .where(or(...reserved.map((row) => like(schema.notifications.dedupeKey, `${row.code}:%`))));

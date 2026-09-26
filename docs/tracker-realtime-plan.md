@@ -83,6 +83,30 @@ listings / offers / price_points ──trigger──▶ pg_notify('market', item
 8. **Verify** — script: place a bid / list a copy / buy it and watch the stream
    deliver each snapshot; browser check of both panels.
 
+## Status — implemented (2026-09-26)
+
+| Step | Where | State |
+| --- | --- | --- |
+| 1 Triggers | `drizzle/0021_market_notify.sql` | ✅ applied on dev |
+| 2 Real book | `server/modules/tracker/tracker.book.ts`; `findBook` now derives from it | ✅ desktop and mobile depth |
+| 3 Chart + stats | `tracker.live.ts`, `components/live/live-chart.tsx` | ✅ empty state until 2 daily points |
+| 4 Focus | `?asset=<slug>`, ticker items are buttons | ✅ |
+| 5 Listener | `server/realtime/market-listener.ts` | ✅ closes 60 s after the last watcher |
+| 6 Stream | `app/api/tracker/stream/route.ts` | ✅ 250 ms debounce, 20 s heartbeat, 15 s safety poll |
+| 7 Client | `hooks/use-live-book.ts`, `components/live/*` | ✅ Live / Polling / Connecting / Offline badge |
+| 8 Verify | curl on the stream + Chromium | ✅ see below |
+
+**Verified.** A `curl -N` on the stream received the opening book, `status:
+{push:true}`, then a new `book` for a placed bid and for its withdrawal — the
+withdrawal 2.2 s after the write began (remote Neon round-trips dominate),
+well before the 15 s safety poll, so it came from the trigger. In Chromium a
+bid placed from outside appeared in the open page's book without a reload. No
+console errors; `tsc`, `eslint`, `next build` clean.
+
+**Mind in production.** Each server instance holds one direct connection while
+anyone watches (Neon won't scale to zero during that time). Vercel ends a
+stream at `maxDuration` (300 s) and the browser reconnects.
+
 ## Not in this pass
 
 - Candles: the history is one observation a day, so there is no intraday OHLC.

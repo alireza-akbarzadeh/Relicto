@@ -9,9 +9,10 @@ import { trackerMobile } from "./tracker-mobile.mock";
  * Arbitrage terminal for the signed-in trader, from Postgres. Falls back to the
  * sample board until the account follows anything.
  */
-export async function getTracker(): Promise<TrackerData> {
-  const live = await trackerService.terminal(await requireUserId());
-  return live.assets.length > 0 ? live : tracker;
+export async function getTracker(asset = ""): Promise<TrackerData> {
+  const terminal = await trackerService.terminal(await requireUserId(), asset || undefined);
+  // Without a board, the sample board shows — but the focused item's book and chart are always real.
+  return terminal.assets.length > 0 ? terminal : { ...tracker, live: terminal.live };
 }
 
 /** Mobile terminal: the same board, depth, spreads and history as desktop, with the mobile chrome. */

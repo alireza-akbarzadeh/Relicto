@@ -1,8 +1,9 @@
 import "server-only";
 
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { items, listings, marketSpreads, orderBookLevels, pricePoints, watchlist } from "@/lib/db/schema";
+import { items, listings, marketSpreads, pricePoints, watchlist } from "@/lib/db/schema";
+import { findBookRows, findFocusItem } from "./tracker.book";
 
 /**
  * The trader's board: each watched item with its floor (cheapest copy a buyer
@@ -10,7 +11,7 @@ import { items, listings, marketSpreads, orderBookLevels, pricePoints, watchlist
  */
 export async function findBoard(userId: string) {
   const board = await db
-    .select({ row: watchlist, name: items.name })
+    .select({ row: watchlist, name: items.name, slug: items.slug })
     .from(watchlist)
     .innerJoin(items, eq(watchlist.itemId, items.id))
     .where(eq(watchlist.userId, userId))
@@ -32,9 +33,10 @@ export async function findBoard(userId: string) {
     if (!changeByItem.has(offer.itemId) && offer.changePercent !== null) changeByItem.set(offer.itemId, offer.changePercent);
   }
 
-  return board.map(({ row, name }) => ({
+  return board.map(({ row, name, slug }) => ({
     row,
     name,
+    slug,
     floorCents: floorByItem.get(row.itemId) ?? 0,
     changePercent: changeByItem.get(row.itemId) ?? 0,
   }));
@@ -42,14 +44,26 @@ export async function findBoard(userId: string) {
 
 export type BoardRow = Awaited<ReturnType<typeof findBoard>>[number];
 
-/** Cross-venue depth for one item, best bid first. */
+/**
+ * Relicto's real book for one item as price levels, highest first: listings
+ * (asks, "sell") above open offers (bids, "buy"). Replaces the seeded
+ * cross-venue table; the mobile depth panel reads this same shape.
+ */
 export async function findBook(slug: string) {
-  return db
-    .select({ level: orderBookLevels })
-    .from(orderBookLevels)
-    .innerJoin(items, eq(orderBookLevels.itemId, items.id))
-    .where(eq(items.slug, slug))
-    .orderBy(desc(orderBookLevels.priceCents));
+  const item = await findFocusItem(slug);
+  if (!item) return [];
+  const { asks, bids } = await findBookRows(item.id);
+  const level = (side: "buy" | "sell", row: { priceCents: number; quantity: number }) => ({
+    level: {
+      priceCents: row.priceCents,
+      source: side === "sell" ? `${row.quantity} listed` : `${row.quantity} bid${row.quantity === 1 ? "" : "s"}`,
+      totalCents: row.priceCents * row.quantity,
+      side,
+    },
+  });
+  return [...asks.map((row) => level("sell", row)), ...bids.map((row) => level("buy", row))].sort(
+    (a, b) => b.level.priceCents - a.level.priceCents,
+  );
 }
 
 /** Arbitrage rows, with the item's art where the row is linked to one. */

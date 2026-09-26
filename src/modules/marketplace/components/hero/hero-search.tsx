@@ -49,9 +49,9 @@ function SearchField({ initial, onCommit }: FieldProps) {
         </div>
         <button
           type="submit"
-          className="flex items-center gap-space-xs rounded-lg bg-primary-container px-space-lg py-3 font-headline-sm text-headline-sm text-on-primary-container shadow-md transition-all hover:bg-primary active:scale-95"
+          className="flex items-center gap-space-xs text-base rounded-lg bg-primary-container px-space-lg py-3 font-headline-sm -tracking-normal text-on-primary-container shadow-md transition-all hover:bg-primary active:scale-95"
         >
-          <span>EXPLORE</span>
+          <span>Explore</span>
           <Icon name="arrow_forward" className="text-[18px]" />
         </button>
       </div>

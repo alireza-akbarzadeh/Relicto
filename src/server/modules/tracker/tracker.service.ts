@@ -6,6 +6,9 @@ import type { OrderLevel, SpreadRow, TrackerAsset, TrackerData, TrackerTone } fr
 import type { TrackerMobileData } from "@/modules/tracker/mobile.types";
 import { toArbitrage, toAsset, toCandleChart, toDepth, toFeed } from "./tracker-mobile.presenter";
 import * as repository from "./tracker.repository";
+import { findPriceHistory } from "../items/items.repository";
+import { findBookRows, findFocusItem, toLiveBook } from "./tracker.book";
+import { toTrackerLive } from "./tracker.live";
 
 const money = (cents: number) =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -30,16 +33,21 @@ function toChart(points: { priceCents: number }[], buckets = 12): number[] {
 
 export const trackerService = {
   /** The trader's tracker terminal: board, depth, spreads and chart. */
-  async terminal(userId: string): Promise<TrackerData> {
-    const [board, book, spreads, series] = await Promise.all([
+  async terminal(userId: string, focusSlug: string = FOCUS_SLUG): Promise<TrackerData> {
+    const focusItem = (await findFocusItem(focusSlug)) ?? (await findFocusItem(FOCUS_SLUG));
+    const slug = focusItem?.slug ?? FOCUS_SLUG;
+    const [board, book, spreads, series, bookRows, history] = await Promise.all([
       repository.findBoard(userId),
-      repository.findBook(FOCUS_SLUG),
+      repository.findBook(slug),
       repository.findSpreads(),
-      repository.findSeries(FOCUS_SLUG),
+      repository.findSeries(slug),
+      focusItem ? findBookRows(focusItem.id) : null,
+      focusItem ? findPriceHistory(focusItem.id) : [],
     ]);
 
-    const assets: TrackerAsset[] = board.map(({ row, name, floorCents, changePercent }) => ({
+    const assets: TrackerAsset[] = board.map(({ row, name, slug: itemSlug, floorCents, changePercent }) => ({
       id: row.id,
+      slug: itemSlug,
       name: row.label ?? name,
       detail: row.detail ?? "",
       image: row.thumbnailUrl ?? "",
@@ -56,7 +64,9 @@ export const trackerService = {
       side: level.side,
     }));
 
-    return { assets, orderBook, spreads: spreads.map(({ spread }) => toSpread(spread)), chart: toChart(series) };
+    // Real panels for the focused item: the live book, the market series and computed tiles.
+    const live = focusItem && bookRows ? toTrackerLive(focusItem, toLiveBook(focusItem.slug, bookRows), history) : undefined;
+    return { assets, orderBook, spreads: spreads.map(({ spread }) => toSpread(spread)), chart: toChart(series), live };
   },
 
   /**

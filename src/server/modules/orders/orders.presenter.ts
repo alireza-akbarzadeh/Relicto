@@ -52,9 +52,9 @@ export function whenLabel(at: Date, now = new Date()): string {
 }
 
 /** What a trader can still do with a settled row, by flow and ecosystem. */
-function actionsFor(row: LedgerOrderRow): RowAction[] {
+function actionsFor(row: LedgerOrderRow, sold: boolean): RowAction[] {
   if (row.state === "escrow") return ["track"];
-  if (row.flow === "sell") return ["receipt", "inspect"];
+  if (row.flow === "sell" || sold) return ["receipt", "inspect"];
   if (row.flow === "liquidate") return ["receipt", "fingerprint"];
 
   return ["receipt", row.gameId === "cs2" ? "inspect-label" : "sell-back"];
@@ -100,6 +100,6 @@ export function toLedgerRow(row: LedgerOrderRow, viewerId: string, now = new Dat
     },
     state: row.state,
     stateLabel: stateLabel(row, sold),
-    actions: actionsFor(row),
+    actions: actionsFor(row, sold),
   };
 }

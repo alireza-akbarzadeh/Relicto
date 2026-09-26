@@ -97,7 +97,8 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
       await tx.insert(ledgerEntries).values(rows.debit);
       codes.push(code);
       drafts.push(
-        draft.orderReceived({ code, item: line.name, sellerId: line.listing.sellerId, totalCents }),
+        // The seller is paid the listed price; basket discounts are Relicto's, not theirs.
+        draft.orderReceived({ code, item: line.name, sellerId: line.listing.sellerId, totalCents: prices[index] }),
         draft.orderPlaced({ code, item: line.name, buyerId: userId, totalCents }),
       );
     }

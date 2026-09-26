@@ -34,17 +34,28 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
             <span className="font-data-mono-md text-data-mono-md text-text-primary">{order.placedAgo}</span>
           </div>
           <div className="h-8 w-px bg-surface-variant" />
-          <div className="flex flex-col">
-            <span className="flex items-center gap-1 font-label-badge text-label-badge font-bold tracking-wider text-status-live uppercase">
-              <Icon name="timer" className="text-[14px]" />
-              Auto-Cancel In
-            </span>
-            <CountdownText
-              seconds={order.autoCancelSeconds}
-              format="clock"
-              className="font-data-mono-lg text-data-mono-lg font-bold tracking-wider text-status-live"
-            />
-          </div>
+          {/* The clock only runs while escrow is waiting on the seller; once the offer is out (or the order settled) nothing auto-cancels. */}
+          {order.autoCancelSeconds > 0 ? (
+            <div className="flex flex-col">
+              <span className="flex items-center gap-1 font-label-badge text-label-badge font-bold tracking-wider text-status-live uppercase">
+                <Icon name="timer" className="text-[14px]" />
+                Auto-Cancel In
+              </span>
+              <CountdownText
+                seconds={order.autoCancelSeconds}
+                format="clock"
+                className="font-data-mono-lg text-data-mono-lg font-bold tracking-wider text-status-live"
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <span className="flex items-center gap-1 font-label-badge text-label-badge font-bold tracking-wider text-status-upcoming uppercase">
+                <Icon name="shield" className="text-[14px]" />
+                Escrow
+              </span>
+              <span className="font-data-mono-md text-data-mono-md font-bold text-text-primary">Held until settled</span>
+            </div>
+          )}
         </div>
         <NoticeButton
           notice={{ title: "Escrow proof hash", description: "The settlement receipt opens once the escrow API is wired." }}

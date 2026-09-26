@@ -15,11 +15,22 @@ self.addEventListener("push", (event) => {
     data = { body: event.data ? event.data.text() : "" };
   }
 
-  const { title = "Relicto", body = "", href = "/orders", tag } = data;
+  const { title = "Relicto", body = "", href = "/orders", tag, action, sticky = false } = data;
 
   event.waitUntil(
     (async () => {
-      await self.registration.showNotification(title, { body, tag, renotify: Boolean(tag), data: { href } });
+      await self.registration.showNotification(title, {
+        body,
+        tag,
+        renotify: Boolean(tag),
+        icon: "/icons/icon-192.png",
+        badge: "/icons/badge-96.png",
+        // A trade waiting on this person stays up until they deal with it, with a button naming the step.
+        requireInteraction: sticky,
+        actions: action ? [{ action: "open", title: action }] : [],
+        vibrate: sticky ? [120, 60, 120] : [80],
+        data: { href },
+      });
       const tabs = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
       for (const tab of tabs) tab.postMessage({ type: "notifications:refresh" });
     })(),

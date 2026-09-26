@@ -5,7 +5,23 @@ import * as repository from "./notifications.repository";
 import type { NotificationRow } from "./notifications.repository";
 
 /** What the service worker receives; `public/sw.js` reads exactly these keys. */
-export type PushPayload = { title: string; body: string; href: string; tag: string };
+export type PushPayload = {
+  title: string;
+  body: string;
+  href: string;
+  tag: string;
+  /** Button label on the notification, when it asks the recipient to act. */
+  action?: string;
+  /** Stays on screen until handled, instead of fading with routine updates. */
+  sticky: boolean;
+};
+
+/** Events that put the next move in the recipient's hands, and the button that says what it is. */
+const CALL_TO_ACTION: Partial<Record<NotificationRow["kind"], string>> = {
+  order_received: "Send trade offer",
+  trade_offer_sent: "Accept & confirm",
+  offer_received: "Review offer",
+};
 
 let configured: boolean | null = null;
 
@@ -41,7 +57,8 @@ export async function sendPush(rows: NotificationRow[]) {
       subscriptions
         .filter((sub) => sub.userId === row.userId)
         .map(async (sub) => {
-          const payload: PushPayload = { title: row.title, body: row.body, href: row.href ?? "/orders", tag: row.id };
+          const action = CALL_TO_ACTION[row.kind];
+          const payload: PushPayload = { title: row.title, body: row.body, href: row.href ?? "/orders", tag: row.id, action, sticky: Boolean(action) };
           try {
             await webpush.sendNotification(
               { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },

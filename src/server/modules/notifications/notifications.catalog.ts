@@ -7,6 +7,7 @@ export type NotificationDraft = Required<
 >;
 
 type Order = { code: string; item: string };
+type Bid = { offerId: string; item: string; bidCents: number };
 const href = (code: string) => `/orders/${code}`;
 
 /**
@@ -74,6 +75,46 @@ export const draft = {
     body: "The other side reported a problem. Funds stay locked in escrow while Relicto reviews the trade.",
     href: href(o.code),
     dedupeKey: `${o.code}:order_disputed:${o.userId}`,
+  }),
+
+  /** Seller: a buyer bid on one of their listings. A revised bid notifies again. */
+  offerReceived: (o: Bid & { sellerId: string; askCents: number }): NotificationDraft => ({
+    userId: o.sellerId,
+    kind: "offer_received",
+    icon: "sell",
+    tone: "info",
+    title: `${usd(o.bidCents)} offer on ${o.item}`,
+    body: `You're asking ${usd(o.askCents)}. Accept to open escrow at the offer price, or decline.`,
+    href: "/sell#offers",
+    dedupeKey: `offer:${o.offerId}:received:${o.bidCents}`,
+  }),
+
+  /** Buyer: the seller took the bid; escrow is funded from their vault. */
+  offerAccepted: (o: Bid & { buyerId: string; code: string }): NotificationDraft => ({
+    userId: o.buyerId,
+    kind: "offer_accepted",
+    icon: "check_circle",
+    tone: "success",
+    title: `Offer accepted for ${o.item}`,
+    body: `${usd(o.bidCents)} moved from your vault into escrow. A Sentinel bot will send the trade offer.`,
+    href: href(o.code),
+    dedupeKey: `offer:${o.offerId}:accepted:${o.buyerId}`,
+  }),
+
+  /** Buyer: the bid is off the table — declined, outsold, or unfunded when accepted. */
+  offerDeclined: (o: Bid & { buyerId: string; slug: string; reason: "declined" | "sold" | "short" }): NotificationDraft => ({
+    userId: o.buyerId,
+    kind: "offer_declined",
+    icon: "cancel",
+    tone: o.reason === "short" ? "alert" : "warning",
+    title: o.reason === "sold" ? `${o.item} sold to another bidder` : `Offer on ${o.item} not taken`,
+    body: {
+      declined: `The seller declined your ${usd(o.bidCents)} offer. Nothing left your vault.`,
+      sold: `The seller accepted a different offer. Nothing left your vault.`,
+      short: `The seller accepted, but your vault couldn't cover ${usd(o.bidCents)}, so the offer lapsed.`,
+    }[o.reason],
+    href: `/items/${o.slug}`,
+    dedupeKey: `offer:${o.offerId}:closed:${o.buyerId}`,
   }),
 
   /** Either side: the escrow was cancelled before the trade completed. */

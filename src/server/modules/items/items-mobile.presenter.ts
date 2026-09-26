@@ -1,10 +1,6 @@
 import type { ItemMobile, MobileSeller } from "@/modules/items/mobile.types";
+import { initials } from "../shared/initials";
 import type { SellerRow } from "./items.repository";
-
-const initials = (name: string) => {
-  const parts = name.split(/[\s_]+/).filter(Boolean);
-  return (parts.length > 1 ? parts[0][0] + parts[1][0] : name.slice(0, 2)).toUpperCase();
-};
 
 /** One real listing as a seller card; buying from it reserves that exact copy. */
 function toSeller({ listing, name, verified, profile }: SellerRow): MobileSeller {

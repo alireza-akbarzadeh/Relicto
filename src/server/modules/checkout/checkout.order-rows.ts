@@ -43,6 +43,11 @@ type Placement = {
   now: Date;
   /** The rail the buyer paid on, as the tracker and ledger name it. */
   fundingLabel: string;
+  /**
+   * The price the two sides agreed, when it isn't the ask — an accepted offer.
+   * It becomes the subtotal, which is what the seller is paid on delivery.
+   */
+  agreedCents?: number;
 };
 
 /**
@@ -52,6 +57,7 @@ type Placement = {
  */
 export function buildOrderRows(line: CartLine, at: Placement) {
   const { listing } = line;
+  const priceCents = at.agreedCents ?? listing.priceCents;
   const p = listing.checkout;
   const orderId = `order-chk-${at.code.toLowerCase()}`;
   const bot = listing.botName ?? "Relicto Sentinel";
@@ -63,7 +69,7 @@ export function buildOrderRows(line: CartLine, at: Placement) {
     sellerId: listing.sellerId,
     flow: "buy",
     state: "escrow",
-    subtotalCents: listing.priceCents,
+    subtotalCents: priceCents,
     feeCents: 0,
     totalCents: at.totalCents,
     placedAt: at.now,
@@ -84,7 +90,7 @@ export function buildOrderRows(line: CartLine, at: Placement) {
     itemId: listing.itemId,
     nameSnapshot: line.name,
     detailSnapshot: p?.detail ?? null,
-    priceCents: listing.priceCents,
+    priceCents,
     wear: listing.wear,
     float: listing.float,
     paintSeed: listing.paintSeed,

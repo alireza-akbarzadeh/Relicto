@@ -7,16 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { Label } from "@/components/ui/label";
+import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
-import type { Offer } from "../../types";
+import { useItemBuy } from "../../hooks/use-item-buy";
+import type { ItemDetail, Offer } from "../../types";
 import { OfferRow } from "./offer-row";
 
 const COLUMNS = ["Seller Authority", "Variant & Inscribed Gems", "Fulfillment Mode", "Listing Price", "Quick Checkout"];
 
-type OffersSectionProps = { offers: Offer[]; note: string; styles: string[] };
+type OffersSectionProps = { item: ItemDetail };
 
-/** Live seller offers with the style filter and escrow toggles. */
-export function OffersSection({ offers, note, styles }: OffersSectionProps) {
+/** The live seller book with the style filter and escrow toggles; every row trades a real copy. */
+export function OffersSection({ item }: OffersSectionProps) {
+  const { offers, offersNote: note, offerStyles: styles } = item;
+  const { buyNow, addToBasket } = useItemBuy(item);
   const [{ offers: style, bot: botOnly, verified: verifiedOnly }, setQuery] = useQueryStates(
     { offers: itemSearchParams.offers, bot: itemSearchParams.bot, verified: itemSearchParams.verified },
     { history: "replace", clearOnDefault: true },
@@ -100,12 +104,12 @@ export function OffersSection({ offers, note, styles }: OffersSectionProps) {
           </thead>
           <tbody className="divide-y divide-border-subtle font-body-sm text-xs">
             {visible.map((offer) => (
-              <OfferRow key={offer.id} offer={offer} />
+              <OfferRow key={offer.id} offer={offer} itemName={item.name} onBuy={(row) => void buyNow(row)} onAdd={addToBasket} />
             ))}
             {visible.length === 0 && (
               <tr>
                 <td colSpan={COLUMNS.length} className="px-4 py-10 text-center font-body-sm text-xs text-text-muted">
-                  No offers match these filters.
+                  {offers.length === 0 ? "No one else is selling this right now." : "No copies match these filters."}
                 </td>
               </tr>
             )}
@@ -115,15 +119,15 @@ export function OffersSection({ offers, note, styles }: OffersSectionProps) {
 
       <div className="flex items-center justify-between font-body-sm text-xs text-text-muted">
         <span>
-          Showing {visible.length} of 124 offers available worldwide
+          Showing {visible.length} of {offers.length} {offers.length === 1 ? "copy" : "copies"} on the market
         </span>
-        <NoticeButton
-          notice={{ title: "All 124 listings", description: "The full offer book opens with the marketplace API." }}
+        <LinkButton
+          href={`/marketplace?q=${encodeURIComponent(item.name)}`}
           className="inline-flex h-auto gap-1 rounded-none border-0 p-0 font-label-caps text-xs font-bold text-tertiary transition-colors hover:text-text-primary"
         >
-          <span>VIEW ALL 124 LISTINGS</span>
+          <span>BROWSE SIMILAR LISTINGS</span>
           <Icon name="arrow_forward" className="text-[16px]" />
-        </NoticeButton>
+        </LinkButton>
       </div>
     </section>
   );

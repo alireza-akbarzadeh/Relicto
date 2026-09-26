@@ -24,10 +24,14 @@ const BASKET: Record<string, { listingId: string; copyOf?: string }> = {
 
 /**
  * Purchases made through the real checkout carry a `chk` id prefix. Undo them
- * so a re-seed always starts from the designed state.
+ * so a re-seed always starts from the designed state — including the trader's
+ * sales, which is where an accepted offer lands (a bidder buying from them).
  */
 async function clearCheckoutOrders(db: Db, buyerId: string) {
-  const mine = and(eq(schema.orders.buyerId, buyerId), like(schema.orders.id, "order-chk-%"));
+  const mine = and(
+    or(eq(schema.orders.buyerId, buyerId), eq(schema.orders.sellerId, buyerId)),
+    like(schema.orders.id, "order-chk-%"),
+  );
   const reserved = await db
     .select({ orderId: schema.orders.id, code: schema.orders.code, listingId: schema.orderItems.listingId })
     .from(schema.orderItems)

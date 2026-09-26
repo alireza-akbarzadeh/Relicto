@@ -1,6 +1,7 @@
 import { after, type NextRequest } from "next/server";
 import { escrowService } from "@/server/modules/escrow/escrow.service";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
+import { offerService } from "@/server/modules/offers/offers.service";
 import { bearerMatches } from "@/server/modules/shared/bearer";
 
 /**
@@ -15,6 +16,8 @@ export async function GET(request: NextRequest) {
   }
 
   const { expired, notices } = await escrowService.expireOverdue();
+  // Lapsed bids ride along: the same daily sweep, so no second cron slot.
+  const lapsedOffers = await offerService.expireLapsed();
   after(() => notificationService.deliver(notices));
-  return Response.json({ expired });
+  return Response.json({ expired, lapsedOffers });
 }

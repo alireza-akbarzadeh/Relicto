@@ -1,12 +1,14 @@
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { SELLER_TONE } from "../../lib/tones";
 import type { Offer } from "../../types";
+import { OfferActions } from "./offer-actions";
 
-/** One seller offer: authority, variant, fulfilment mode, price and checkout. */
-export function OfferRow({ offer }: { offer: Offer }) {
+type OfferRowProps = { offer: Offer; itemName: string; onBuy: (offer: Offer) => void; onAdd: (offer: Offer) => void };
+
+/** One seller's copy: authority, variant, fulfilment mode, price and the trade actions. */
+export function OfferRow({ offer, itemName, onBuy, onAdd }: OfferRowProps) {
   const bot = offer.fulfilment === "bot";
   return (
     <tr className="transition-colors hover:bg-surface-container-high/40">
@@ -63,28 +65,7 @@ export function OfferRow({ offer }: { offer: Offer }) {
         </div>
       </td>
       <td className="px-4 py-3.5 text-right">
-        <div className="flex items-center justify-end gap-2">
-          <NoticeButton
-            notice={{ title: `Buying from ${offer.seller.name}`, description: "Checkout opens once escrow payments are wired." }}
-            className={cn(
-              "h-auto rounded border-0 px-4 py-2 font-label-caps text-xs font-bold transition-all",
-              offer.best
-                ? "bg-tertiary text-on-tertiary-container shadow-sm hover:bg-tertiary-fixed hover:shadow-md"
-                : "border border-border-subtle bg-surface-container text-text-primary hover:bg-tertiary hover:text-on-tertiary-container",
-            )}
-          >
-            BUY NOW
-          </NoticeButton>
-          {offer.best && (
-            <NoticeButton
-              notice={{ title: "Added to cart", description: "The cart drawer arrives with the checkout screen." }}
-              aria-label={`Add ${offer.seller.name}'s offer to cart`}
-              className="h-auto rounded border-border-subtle bg-surface-container p-2 text-text-secondary transition-all hover:bg-surface-container-high hover:text-text-primary"
-            >
-              <Icon name="add_shopping_cart" className="text-[18px]" />
-            </NoticeButton>
-          )}
-        </div>
+        <OfferActions offer={offer} itemName={itemName} onBuy={onBuy} onAdd={onAdd} />
       </td>
     </tr>
   );

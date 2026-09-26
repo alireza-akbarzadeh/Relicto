@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SellMobile } from "@/modules/sell/components/mobile/sell-mobile";
 import { SellView } from "@/modules/sell/components/sell-view";
+import { getIncomingOffers } from "@/modules/offers/data/get-incoming-offers";
 import { getSell, getSellMobile } from "@/modules/sell/data/get-sell";
 
 export const metadata: Metadata = {
@@ -10,14 +11,14 @@ export const metadata: Metadata = {
 
 /** Separate mobile and desktop compositions; CSS picks one at `md`. */
 export default async function SellPage() {
-  const [data, mobile] = await Promise.all([getSell(), getSellMobile()]);
+  const [data, mobile, offers] = await Promise.all([getSell(), getSellMobile(), getIncomingOffers()]);
   return (
     <>
       <div className="md:hidden">
         <SellMobile data={mobile} />
       </div>
       <div className="hidden md:block">
-        <SellView data={data} />
+        <SellView data={data} offers={offers} />
       </div>
     </>
   );

@@ -26,23 +26,30 @@ export function useCartState(initialItems: CheckoutItem[]) {
 
   const dropLocal = (id: string) => setLocal((current) => current.filter((item) => item.id !== id));
 
-  /** `ref` names what to reserve: a listing id, or a slug for its cheapest copy. */
-  const addItem = (item: CheckoutItem, ref = item.id) => {
-    if (has(ref) || has(item.id)) return;
+  /**
+   * `ref` names what to reserve: a listing id, or a slug for its cheapest copy.
+   * Resolves true once the server holds the line, so a caller heading straight
+   * to checkout can wait for it instead of racing the reservation.
+   */
+  const addItem = (item: CheckoutItem, ref = item.id): Promise<boolean> => {
+    if (has(ref) || has(item.id)) return Promise.resolve(false);
     setLocal((current) => [...current, item]);
 
-    addToCart({ ref })
+    return addToCart({ ref })
       .then((result) => {
-        if (result.status === "not-listed" || !result.items) return;
+        if (result.status === "not-listed" || !result.items) return false;
         dropLocal(item.id);
         setSaved(result.items);
         if (result.status === "own-listing") {
           toast.error(`${item.name} is your own listing`, { description: "Manage it from the seller studio instead." });
+          return false;
         }
+        return true;
       })
       .catch(() => {
         dropLocal(item.id);
         failed(`Couldn't reserve ${item.name}`);
+        return false;
       });
   };
 

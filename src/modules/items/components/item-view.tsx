@@ -37,7 +37,7 @@ export function ItemView({ item }: { item: ItemDetail }) {
         </section>
         <SectionNav sections={item.sections} />
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-10 px-4 py-10 lg:px-8">
-          <OffersSection offers={item.offers} note={item.offersNote} styles={item.offerStyles} />
+          <OffersSection item={item} />
           <PriceChart data={item.intelligence} />
           <RevenueConvertor item={item.name} sell={item.sell} />
           <section id="lore-specs" className="grid w-full scroll-mt-40 grid-cols-1 gap-8 lg:grid-cols-12">

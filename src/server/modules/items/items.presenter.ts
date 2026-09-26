@@ -1,4 +1,5 @@
-import type { ItemBadge, ItemDetail, Offer, RarityVariant, RelatedItem } from "@/modules/items/types";
+import type { ItemBadge, ItemDetail, RarityVariant, RelatedItem } from "@/modules/items/types";
+import type { SellerBook } from "./items.book";
 import type { ItemRow, ItemStyleRow, ListingRow, PricePointRow, RelatedRow } from "./items.types";
 
 const usd = (cents: number) => cents / 100;
@@ -10,27 +11,6 @@ const toVariant = (rarity: string | null): RarityVariant =>
   rarity && BADGE_VARIANTS.has(rarity) ? (rarity as RarityVariant) : "cache";
 
 const GAME_LABEL: Record<string, string> = { dota2: "Dota 2", cs2: "Counter-Strike 2", tf2: "Team Fortress 2" };
-
-function toOffer(row: ListingRow, index: number, itemName: string): Offer {
-  return {
-    id: row.id,
-    seller: {
-      initials: itemName.slice(0, 2).toUpperCase(),
-      name: "Relicto Vault",
-      rating: "99.4%",
-      tone: index === 0 ? "emerald" : "neutral",
-      verified: true,
-    },
-    style: { label: row.stattrak ? "StatTrak™" : "Standard", tone: row.stattrak ? "amber" : "cyan" },
-    quality: row.wear ? row.wear.toUpperCase() : "Standard",
-    gems: row.paintSeed ? `Seed #${row.paintSeed}` : "—",
-    fulfilment: "bot",
-    fulfilmentNote: "Instant bot escrow",
-    priceUsd: usd(row.priceCents),
-    priceNote: row.float ? `Float ${row.float.toFixed(4)}` : "Verified escrow",
-    ...(index === 0 ? { best: true } : {}),
-  };
-}
 
 function toRelated(row: RelatedRow): RelatedItem {
   return {
@@ -53,6 +33,7 @@ function toRelated(row: RelatedRow): RelatedItem {
 export function toItemDetail(
   item: ItemRow,
   itemListings: ListingRow[],
+  book: SellerBook,
   styles: ItemStyleRow[],
   history: PricePointRow[],
   related: RelatedRow[],
@@ -132,9 +113,7 @@ export function toItemDetail(
       { id: "intelligence", label: "Price Intelligence" },
       { id: "related", label: "Related" },
     ],
-    offers: itemListings.map((row, index) => toOffer(row, index, item.name)),
-    offersNote: `${itemListings.length} verified seller${itemListings.length === 1 ? "" : "s"}`,
-    offerStyles: ["All styles"],
+    ...book,
     intelligence: {
       ranges: ["24H", "7D", "30D", "90D", "1Y", "ALL"],
       activeRange: "30D",

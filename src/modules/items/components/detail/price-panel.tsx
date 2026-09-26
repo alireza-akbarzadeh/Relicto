@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -8,9 +7,8 @@ import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { ESCROW_TONE, STAT_TONE } from "../../lib/tones";
 import type { ItemDetail } from "../../types";
-import { optimisticLine } from "@/modules/checkout/lib/optimistic-line";
+import { useItemBuy } from "../../hooks/use-item-buy";
 import { ShareButton } from "@/modules/relicto/components/share-button";
-import { useCart } from "@/modules/relicto/state/cart-provider";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 
 const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3 font-headline-sm text-sm transition-all hover:bg-surface-container-high";
@@ -18,29 +16,9 @@ const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3
 /** Title, description, live valuation and the buy / watch actions. */
 export function PricePanel({ item }: { item: ItemDetail }) {
   const { price } = item;
-  const { addItem } = useCart();
   const { isWatched, toggle } = useWatchlist();
   const watched = isWatched(item.slug);
-  /**
-   * The line is built from this item's own facts. It used to be hardcoded to
-   * the designed arcana, so every skin added here landed in the basket
-   * labelled "Arcana / Dota 2 / Phantom Assassin Weapon Artifact".
-   */
-  const addToCart = () => {
-    addItem(
-      optimisticLine({
-        slug: item.slug,
-        name: item.name,
-        subtitle: [item.eyebrow.hero, item.eyebrow.slot].filter(Boolean).join(" • "),
-        image: item.hero.image,
-        imageAlt: item.hero.imageAlt,
-        gameLabel: item.eyebrow.game,
-        rarityLabel: item.badges[0]?.label,
-        priceUsd: price.lowestUsd,
-      }),
-    );
-    toast.success("Added to cart", { description: `${item.name} is reserved for escrow checkout.` });
-  };
+  const { floor, pending, buyNow, addToBasket } = useItemBuy(item);
   return (
     <div className="flex flex-col justify-between gap-4 lg:col-span-6">
       <div>
@@ -89,17 +67,22 @@ export function PricePanel({ item }: { item: ItemDetail }) {
           </div>
 
           <div className="flex flex-col items-stretch gap-2.5 pt-1 sm:flex-row">
-            <NoticeButton
-              notice={{ title: `Reserved ${item.name}`, description: "Instant buy completes once escrow payments are wired." }}
-              className="h-auto flex-1 gap-2 rounded-lg border-0 bg-tertiary px-6 py-3 font-headline-sm text-sm font-bold tracking-wider text-on-tertiary-container uppercase shadow-[0_0_24px_rgba(245,158,11,0.35)] transition-all hover:bg-tertiary-fixed hover:shadow-[0_0_32px_rgba(245,158,11,0.5)] active:scale-[0.99]"
-            >
-              <Icon name="bolt" className="text-[20px]" />
-              <span>Instant Buy — {formatMoney(price.lowestUsd)}</span>
-            </NoticeButton>
+            {/* Quotes the copy it will actually reserve — the cheapest one the viewer can buy. */}
             <Button
               variant={null}
               size={null}
-              onClickCapture={addToCart}
+              onClick={() => void buyNow()}
+              disabled={pending || !floor}
+              className="h-auto flex-1 gap-2 rounded-lg border-0 bg-tertiary px-6 py-3 font-headline-sm text-sm font-bold tracking-wider text-on-tertiary-container uppercase shadow-[0_0_24px_rgba(245,158,11,0.35)] transition-all hover:bg-tertiary-fixed hover:shadow-[0_0_32px_rgba(245,158,11,0.5)] active:scale-[0.99]"
+            >
+              <Icon name="bolt" className="text-[20px]" />
+              <span>{floor ? `Instant Buy — ${formatMoney(floor.priceUsd)}` : "No sellers right now"}</span>
+            </Button>
+            <Button
+              variant={null}
+              size={null}
+              onClick={() => addToBasket()}
+              disabled={!floor}
               aria-label="Add to cart"
               className={cn(ACTION, "gap-2 px-4 font-semibold text-text-primary")}
             >

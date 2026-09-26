@@ -9,6 +9,7 @@ import { delist, listItem } from "./sell.commands";
 import type { ActiveListing, InventoryItem, SellData, SellGame, SellTone } from "@/modules/sell/types";
 import { ago } from "@/server/modules/shared/ago";
 import { notCommitted } from "@/server/modules/trade-ups/trade-ups.repository";
+import { liveOffer } from "../offers/offers.repository";
 
 const money = (cents: number) =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -128,7 +129,8 @@ export const sellService = {
         })
         .from(listings)
         .innerJoin(items, eq(listings.itemId, items.id))
-        .leftJoin(offers, and(eq(offers.listingId, listings.id), eq(offers.status, "pending")))
+        // Only bids the seller can still act on — the same rule as the offers inbox.
+        .leftJoin(offers, and(eq(offers.listingId, listings.id), liveOffer(now)))
         .where(
           and(
             eq(listings.sellerId, userId),

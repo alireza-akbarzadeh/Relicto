@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/ui/icon";
+import type { MyBid } from "@/modules/offers/types";
 
 /** Rarity chips over the viewer and on related cards. */
 export type RarityVariant = "arcana" | "exalted" | "immortal" | "persona" | "helm" | "cache";
@@ -36,6 +37,10 @@ export type Offer = {
   priceUsd: number;
   priceNote: string;
   best?: boolean;
+  /** The exact copy behind the row; absent on authored sample rows. */
+  listingId?: string;
+  /** The viewer's open bid on this copy. */
+  myBid?: MyBid;
 };
 
 /** One observed price. `at` is epoch ms; the chart scales both axes from these. */

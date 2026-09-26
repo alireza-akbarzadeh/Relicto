@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { boolean, index, integer, jsonb, pgEnum, pgTable, real, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
 import { createdAt, primaryId, timestamps } from "./_shared";
 import { user } from "./auth";
@@ -7,7 +8,8 @@ import { itemStyles, items } from "./catalog";
 export const itemWear = pgEnum("item_wear", ["fn", "mw", "ft", "ww", "bs"]);
 export const listingStatus = pgEnum("listing_status", ["active", "reserved", "sold", "cancelled"]);
 export const offerFulfilment = pgEnum("offer_fulfilment", ["bot", "p2p"]);
-export const offerStatus = pgEnum("offer_status", ["pending", "accepted", "declined", "expired"]);
+/** `withdrawn` is the buyer pulling their own bid; `declined` is the seller saying no. */
+export const offerStatus = pgEnum("offer_status", ["pending", "accepted", "declined", "expired", "withdrawn"]);
 
 /**
  * How a listing is merchandised in the basket — badge wording, tone classes,
@@ -99,12 +101,19 @@ export const offers = pgTable(
     status: offerStatus("status").notNull().default("pending"),
     note: text("note"),
     expiresAt: timestamp("expires_at"),
+    /**
+     * The escrow order an accepted bid became. Plain text rather than a foreign
+     * key: `orders` already imports this module, and the link is one-way.
+     */
+    orderId: text("order_id"),
     ...timestamps,
   },
   (t) => [
     index("offers_listing_idx").on(t.listingId),
     index("offers_buyer_idx").on(t.buyerId),
     index("offers_status_idx").on(t.status),
+    // A buyer holds one open bid per copy; bidding again revises it.
+    uniqueIndex("offers_open_bid_idx").on(t.listingId, t.buyerId).where(sql`${t.status} = 'pending'`),
   ],
 );
 

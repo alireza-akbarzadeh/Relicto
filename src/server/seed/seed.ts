@@ -16,6 +16,7 @@ import { buildPriceSeries } from "./price-series";
 import { linkAlertItems, seedAlerts } from "./seed-alerts";
 import { seedCatalogDepth } from "./seed-catalog";
 import { seedCheckout } from "./seed-checkout";
+import { clearOfferWrites } from "./seed-offers";
 import { seedContent } from "./seed-content";
 import { seedOrders } from "./seed-orders";
 import { linkShowcaseItems, seedProfile } from "./seed-profile";
@@ -55,6 +56,8 @@ async function main() {
   const db = drizzle(pool, { schema });
 
   await db.insert(schema.user).values(SELLER).onConflictDoNothing();
+  // Before the catalog upserts, which restore the cached offer counts app-made bids moved.
+  await clearOfferWrites(db);
 
   await db
     .insert(schema.games)

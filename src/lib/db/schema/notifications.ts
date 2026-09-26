@@ -11,6 +11,9 @@ export const notificationKind = pgEnum("notification_kind", [
   "item_sold",
   "item_delivered",
   "order_cancelled",
+  "offer_received",
+  "offer_accepted",
+  "offer_declined",
   "system",
 ]);
 

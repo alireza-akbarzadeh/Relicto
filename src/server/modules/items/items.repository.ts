@@ -28,27 +28,6 @@ export async function findItemBySlug(slug: string) {
   return row ?? null;
 }
 
-/** Every active listing of an item, cheapest first — these are the page's offers. */
-export async function findItemListings(itemId: string) {
-  return db
-    .select({
-      id: listings.id,
-      priceCents: listings.priceCents,
-      wear: listings.wear,
-      float: listings.float,
-      paintSeed: listings.paintSeed,
-      stattrak: listings.stattrak,
-      offerCount: listings.offerCount,
-      changePercent: listings.changePercent,
-      changeWindow: listings.changeWindow,
-      listedAt: listings.listedAt,
-    })
-    .from(listings)
-    .where(and(eq(listings.itemId, itemId), eq(listings.status, "active")))
-    // Price-time priority: at the same price, the copy listed first leads.
-    .orderBy(asc(listings.priceCents), asc(listings.listedAt));
-}
-
 export async function findItemStyles(itemId: string) {
   return db
     .select()
@@ -94,7 +73,11 @@ export async function findRelatedItems(excludeSlug: string, gameId: string, limi
     .limit(limit);
 }
 
-/** Everyone selling this item right now, cheapest first, with who they are. */
+/**
+ * Everyone selling this item right now, cheapest first, with who they are —
+ * the page's price facts and its seller book. Price-time priority: at the same
+ * price, the copy listed first leads.
+ */
 export async function findItemSellers(itemId: string) {
   return db
     .select({ listing: listings, name: user.name, verified: user.emailVerified, profile: profiles })

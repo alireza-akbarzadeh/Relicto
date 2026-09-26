@@ -6,6 +6,7 @@ import { and, eq, notLike } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 import { sell } from "../../modules/sell/data/sell.mock";
+import { offerRows, seedBidders } from "./seed-offers";
 
 type Db = NodePgDatabase<typeof schema>;
 type Rarity = (typeof schema.itemRarity.enumValues)[number];
@@ -79,10 +80,10 @@ export async function linkInventoryItems(db: Db, traderId: string) {
   }
 }
 
-export async function seedSell(db: Db, traderId: string, buyerId: string) {
+export async function seedSell(db: Db, traderId: string, vendorId: string) {
   await clearStudioWrites(db, traderId);
   await seedInventory(db, traderId);
-  await seedActiveListings(db, traderId, buyerId);
+  await seedActiveListings(db, traderId, vendorId);
 
   await db
     .update(schema.profiles)
@@ -122,7 +123,8 @@ async function seedInventory(db: Db, traderId: string) {
 }
 
 /** These three must be the trader's newest listings so the studio shows them. */
-async function seedActiveListings(db: Db, traderId: string, buyerId: string) {
+async function seedActiveListings(db: Db, traderId: string, vendorId: string) {
+  const bidders = await seedBidders(db, vendorId);
   const now = Date.now();
 
   for (const entry of ACTIVE) {
@@ -150,6 +152,7 @@ async function seedActiveListings(db: Db, traderId: string, buyerId: string) {
       floorCents: entry.floorCents,
       status: "active" as const,
       viewCount: entry.views,
+      offerCount: entry.offers.length,
       listedAt: new Date(now - entry.ageHours * HOUR),
     } satisfies typeof schema.listings.$inferInsert;
 
@@ -157,9 +160,7 @@ async function seedActiveListings(db: Db, traderId: string, buyerId: string) {
 
     await db.delete(schema.offers).where(eq(schema.offers.listingId, listing.id));
     if (entry.offers.length) {
-      await db.insert(schema.offers).values(
-        entry.offers.map((priceCents) => ({ listingId: listing.id, buyerId, priceCents, status: "pending" as const })),
-      );
+      await db.insert(schema.offers).values(offerRows(listing.id, entry.slug, entry.offers, bidders, now));
     }
   }
 }

@@ -127,6 +127,13 @@
       "when": 1790167987857,
       "tag": "0017_trade_up_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1790405369913,
+      "tag": "0018_offer_book",
+      "breakpoints": true
     }
   ]
 }

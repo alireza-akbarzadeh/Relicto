@@ -356,7 +356,7 @@ images — including a real mobile payment that produced a new escrow order.
 | **Trade-ups** | ✅ see below |
 | Steam sign-in | 🟡 plugin + buttons in `79f8b3d`; round trip unverified (needs the VPN) |
 | Profile edits | ☐ no design yet — the hero button still toasts "on the roadmap" |
-| Make an offer | ☐ no write path (see open issues) |
+| Make an offer | ✅ Phase 7 — bid, revise, withdraw, accept → escrow, decline |
 | Dota datafeed / Steam inventory / price feeds + cron | ☐ needs the VPN |
 
 ### Trade-ups ✅
@@ -581,6 +581,105 @@ still pass.
 
 **Not visually checked** — still no Chrome or Chromium on this machine.
 
+## Phase 7 — buying from the item page, and offers
+
+### The desktop item page buys for real
+
+Until now the desktop item page couldn't buy anything: *Instant Buy* and every
+seller-book *BUY NOW* were toasts ("completes once escrow payments are wired"),
+and the book itself was fiction — every row read "Relicto Vault · 99.4%".
+
+- **The seller book is the real one.** `items.book.ts` builds it from
+  `findItemSellers` (real handle, trust, trade count, bot, intel), cheapest
+  first, **without the viewer's own copies** — as on mobile. The hand-authored
+  Manifold Paradox page keeps its lore and art but trades on the live book;
+  its sample sellers stay only when the catalog doesn't carry the item.
+- **Every button reserves a copy.** `use-item-buy.ts`: BUY NOW reserves that
+  row's listing and opens `/checkout`; the basket icon (now on every row, not
+  only the best) reserves it and stays; Instant Buy quotes and reserves the
+  cheapest copy the viewer can buy. `addItem` now resolves once the server
+  holds the line, so "buy now" waits for the reservation instead of racing it.
+- The footer's authored "124 offers" is the real copy count, and *View all*
+  links to the marketplace search. Style pills come from the rows — generated
+  items' single "All styles" pill used to hide every row when clicked.
+- `getItem` is wrapped in `cache()`: metadata and page no longer query twice.
+
+### Offers (bids)
+
+Migration `0018_offer_book`: `offer_status` gains `withdrawn`, `offers.order_id`
+(plain text — `orders` already imports `market`), one open bid per buyer per
+copy (partial unique index), and three notification kinds. The migration
+collapses older duplicate pending bids first (keeps the highest).
+
+Server module `src/server/modules/offers/`; actions `offers/actions/offers.ts`;
+the rules both sides apply live in `offers/lib/bid-rules.ts`.
+
+| Step | What happens |
+| --- | --- |
+| **Bid** (item page, tag icon on a row) | Copy locked; must be someone else's, active, ≥ 50% of the ask and below it. The vault must cover the bid *now* but **nothing is held**. Bidding again revises the same row. Expires in 72h. Seller notified (`offer_received`, once per distinct amount). |
+| **Withdraw** | Buyer only, from the same dialog. |
+| **Decline** (studio inbox) | Seller only; buyer notified. |
+| **Accept** (studio inbox) | One transaction, locks wallet → listing → offer (checkout's order, so no deadlock with a purchase of the same copy): an escrow order **at the bid price** from `buildOrderRows` — so the tracker, ledger, escrow webhook and payout are unchanged — the buyer's vault debited, the copy reserved, every rival bid declined and told "sold to another bidder". |
+| **Buyer can't cover it** at accept time | The bid lapses (`expired`), buyer told; nothing moves. |
+| **Lapsed** | Ignored on read; `/api/cron/escrow-timeouts` also retires them (`lapsedOffers` in its answer). |
+
+`buildOrderRows` takes an optional `agreedCents`, which becomes the order's
+subtotal — and the subtotal is what `escrow delivered` pays the seller, so an
+accepted $X bid pays out $X, not the ask.
+
+`listings.offer_count` is recounted from live rows on every bid write, so a
+listing that has been bid on through the app quotes a real "Open Offers" rather
+than its seeded number. The studio's "N Offers (Max $X)" now ignores lapsed bids.
+
+**Surfaces.** Item page: the tag icon per row opens the offer dialog; your open
+bid shows under the row ("Your offer $95.50 · 2d 23h left"). Seller studio:
+an *Incoming Offers* table under the active listings (`/sell#offers`, where
+the notification links) with the top bid per copy flagged. No Stitch design
+exists for either; both reuse the surrounding tables' language.
+
+**Seed.** Bids now come from three funded bidders (KuroSkins plus two new seed
+bidders, $5,000 vaults each) — the old seed had one buyer bid three times on
+the same copy. App-made bids (`offer-bid-` ids) and their notifications are
+cleared first; accepted-offer orders are `order-chk-` with the trader as
+*seller*, so `seedCheckout` now clears those too.
+
+### Verified in phase 7
+
+- `.verify-offers.mts` — 41 checks: inbox, refusals (own / too low / at ask),
+  place, revise, recount, notifications, book row carries the bid, own copies
+  excluded, withdraw, stranger can't decline, decline, accept (order at the bid,
+  vault debit, reserved, rival declined + told, double-accept refused),
+  delivery pays the seller the bid, buyer-short, expired, sweep.
+- In a browser (Playwright, 1440×900, dev server): offer dialog validation
+  ("Bids start at $53.65"), bid sent → row shows the bid; BUY NOW → `/checkout`
+  with that copy reserved server-side; studio *Accept $1,580* → toast with the
+  order code, inbox drops both Talon bids. No console errors.
+- Re-seed restores the designed state (no app bids, orders or notifications;
+  studio counts 2/0/3). `tsc`, `eslint`, `next build` clean; the escrow suite
+  passes.
+
+### Open after phase 7
+
+- **Mobile can't bid or answer bids yet.** The mobile seller cards buy; there's
+  no offer button, and the mobile studio has no inbox.
+- **No buyer-side list of open bids.** A bid is visible only on its item page
+  and in notifications. A profile tab (like the watchlist) would fix it.
+- **Bids aren't held.** Funds are checked at bid time and debited at accept; a
+  buyer who spends the vault in between gets `buyer-short`. Holding funds would
+  need a ledger hold per bid.
+- **Counter-offers** (the studio's "Allow Counter-Offers (Min: $2,950)" toggle)
+  are still authored; there's no per-listing minimum, so the global 50% floor
+  applies.
+- **"Verified Traders (99%+)" is ticked by default** (the design's default), so
+  a new trader's copies are hidden from the desktop book until it's unticked.
+- `.verify-writes.mts` fails "unknown names stay a custom watch": phase 5's
+  catalog added *M4A4 | Howl*, so "Howl" now resolves. Stale test data.
+- The checkout suite's one mismatch is the documented vault-balance divergence.
+- `seed.ts` is 209 lines (206 before this phase) — over the 200-line rule.
+- A stale credential account `claude-qa-demo-login` on the demo trader (from an
+  earlier QA session) is still in the dev DB; it blocks password sign-in for
+  other temporary QA credentials. Safe to delete.
+
 ## Known data artifacts
 
 These are consequences of the seeded sample data, not bugs. Flagged so nobody
@@ -619,8 +718,8 @@ Fixed since step 5:
 
 Still open:
 
-- **Offers don't notify yet** — there is no "make an offer" write path. When
-  one lands, add an `offer_received` kind to the catalog.
+- ~~Offers don't notify yet.~~ Phase 7: `offer_received`, `offer_accepted`,
+  `offer_declined`.
 - **iOS push needs an installed web app**: a manifest and 192/512px icons.
   There is no PNG brand icon in `public/` yet, so OS notifications use the
   site default.

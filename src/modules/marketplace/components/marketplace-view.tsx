@@ -25,12 +25,12 @@ export function MarketplaceView({ results }: MarketplaceViewProps) {
             {/* overflow-x-clip (not overflow-hidden) so the sticky filter rail keeps working. */}
             <div className="relative w-full overflow-x-clip">
               <div className="pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-primary-container/10 blur-3xl" />
-              <div className="pointer-events-none absolute -top-20 right-1/4 h-80 w-[500px] rounded-full bg-[rgb(245_158_11/0.1)] blur-3xl" />
+              <div className="pointer-events-none absolute -top-20 right-1/4 h-80 w-125 rounded-full bg-[rgb(245_158_11/0.1)] blur-3xl" />
               <div className="pointer-events-none absolute top-48 left-10 h-72 w-72 rounded-full bg-[rgb(99_102_241/0.1)] blur-3xl" />
               <MarketHero />
               <TrendingMovers />
               <div className="w-full px-margin-desktop py-space-lg">
-                <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-space-lg lg:flex-row">
+                <div className="mx-auto flex w-full max-w-[1600px] flex-col items-start gap-space-lg lg:flex-row">
                   <FilterSidebar />
                   <section id={LISTINGS_ANCHOR} className="flex w-full min-w-0 flex-1 scroll-mt-20 flex-col">
                     <ResultsToolbar />

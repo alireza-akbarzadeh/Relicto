@@ -20,7 +20,7 @@ export function FilterSidebar() {
   const dota = filters.ecosystem !== "cs2";
 
   return (
-    <aside className="sticky top-24 w-full self-start overflow-y-auto rounded-xl bg-surface-card p-space-md shadow-lg lg:max-h-[calc(100vh-7rem)] lg:w-72 lg:shrink-0 [scrollbar-width:thin]">
+    <aside className="sticky top-24 w-full self-start overflow-y-auto rounded-xl bg-surface-card p-space-md shadow-lg lg:max-h-[calc(100vh-7rem)] lg:w-92 lg:shrink-0 [scrollbar-width:thin]">
       <div className="mb-space-md flex items-center justify-between pb-space-sm">
         <div className="flex items-center gap-2">
           <Icon name="tune" className="text-[20px] text-primary" />

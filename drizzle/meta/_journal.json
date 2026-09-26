@@ -148,6 +148,13 @@
       "when": 1790423254435,
       "tag": "0020_order_placed_notice",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1790430250121,
+      "tag": "0021_market_notify",
+      "breakpoints": true
     }
   ]
 }

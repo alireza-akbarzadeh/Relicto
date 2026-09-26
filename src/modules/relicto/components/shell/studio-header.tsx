@@ -87,7 +87,7 @@ export function StudioHeader() {
           </div>
 
           <NotificationsMenu trigger="square" />
-          <UserMenu trigger="studio" />
+          <UserMenu trigger="mobile" />
         </div>
       </div>
     </header>

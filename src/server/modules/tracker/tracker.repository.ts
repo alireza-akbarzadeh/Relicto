@@ -63,13 +63,13 @@ export async function findSpreads() {
 
 export type SpreadRow = Awaited<ReturnType<typeof findSpreads>>[number];
 
-/** Price history of one item, oldest first. */
+/** Relicto's own price history of one item, oldest first. Outside venues (the daily market feed) are the item page's to plot. */
 export async function findSeries(slug: string) {
   return db
     .select({ priceCents: pricePoints.priceCents })
     .from(pricePoints)
     .innerJoin(items, eq(pricePoints.itemId, items.id))
-    .where(eq(items.slug, slug))
+    .where(and(eq(items.slug, slug), eq(pricePoints.venue, "relicto")))
     .orderBy(asc(pricePoints.recordedAt));
 }
 

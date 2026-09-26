@@ -68,6 +68,10 @@ export type PriceIntelligence = {
   points: PricePoint[];
   annotations: ChartAnnotation[];
   stats: { label: string; value: string; note: string; tone: "primary" | "amber" | "emerald"; badge?: string }[];
+  /** Where the series comes from, shown under the chart. Authored pages leave it out. */
+  source?: string;
+  /** What the panel says instead of a chart when there are fewer than two observations. */
+  emptyNote?: string;
 };
 
 export type SellConversion = {

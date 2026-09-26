@@ -4,17 +4,21 @@ import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
-import type { InventoryItem, SellGame } from "../types";
+import type { InventoryItem, SellGame, SteamSync } from "../types";
+import { InventoryEmpty } from "./inventory-empty";
+import { SteamSyncStatus } from "./steam-sync-status";
 
 const TONE = { primary: "bg-primary", amber: "bg-tertiary", cyan: "bg-status-upcoming", indigo: "bg-secondary", muted: "bg-text-muted" };
 const TEXT = { primary: "text-primary", amber: "text-tertiary", cyan: "text-status-upcoming", indigo: "text-secondary", muted: "text-text-muted" };
 
-export function InventoryList({ items, selected, onToggle, game, totalInventory, readyToList }: { items: InventoryItem[]; selected: string[]; onToggle: (id: string, checked: boolean) => void; game: SellGame; totalInventory: number; readyToList: number }) {
+export function InventoryList({ items, selected, onToggle, game, totalInventory, readyToList, steam }: { items: InventoryItem[]; selected: string[]; onToggle: (id: string, checked: boolean) => void; game: SellGame; totalInventory: number; readyToList: number; steam: SteamSync }) {
+  // The sample studio quotes the design's figure; a Steam trader's is the sum of what they hold.
+  const backpackUsd = steam.linked ? items.reduce((total, item) => total + item.price, 0) : 10474.5;
   return (
     <section className="flex flex-col gap-space-sm">
-      <div className="flex flex-col justify-between gap-space-xs sm:flex-row sm:items-center"><div className="flex items-center gap-space-sm"><h2 className="font-headline-md text-base font-bold tracking-wide text-text-primary uppercase">Backpack Inventory</h2><span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-data-mono-md text-[10px] font-semibold text-primary">{readyToList} Ready To List</span></div><span className="font-data-mono-md text-xs text-text-secondary">Steam Sync: <span className="text-tertiary">30s ago</span></span></div>
-      <div className="flex flex-col gap-space-sm">{items.map((item) => <InventoryRow key={item.id} item={item} checked={selected.includes(item.id)} onCheckedChange={(checked) => onToggle(item.id, checked)} />)}</div>
-      <div className="flex flex-col items-center justify-between gap-space-sm rounded-lg border border-white/[0.06] bg-surface-container-lowest px-space-md py-2.5 text-xs sm:flex-row"><span className="font-data-mono-md text-text-secondary">Showing {items.length} of {totalInventory} tradable items</span><div className="flex items-center gap-space-sm"><span className="font-label-badge text-[11px] text-text-muted uppercase">Backpack Est. Value:</span><span className="font-data-mono-lg text-sm font-bold text-tertiary">$10,474.50 USD</span></div></div>
+      <div className="flex flex-col justify-between gap-space-xs sm:flex-row sm:items-center"><div className="flex items-center gap-space-sm"><h2 className="font-headline-md text-base font-bold tracking-wide text-text-primary uppercase">Backpack Inventory</h2><span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-data-mono-md text-[10px] font-semibold text-primary">{readyToList} Ready To List</span></div><SteamSyncStatus steam={steam} /></div>
+      <div className="flex flex-col gap-space-sm">{items.map((item) => <InventoryRow key={item.id} item={item} checked={selected.includes(item.id)} onCheckedChange={(checked) => onToggle(item.id, checked)} />)}{items.length === 0 && <InventoryEmpty steam={steam} />}</div>
+      <div className="flex flex-col items-center justify-between gap-space-sm rounded-lg border border-white/[0.06] bg-surface-container-lowest px-space-md py-2.5 text-xs sm:flex-row"><span className="font-data-mono-md text-text-secondary">Showing {items.length} of {totalInventory} tradable items</span><div className="flex items-center gap-space-sm"><span className="font-label-badge text-[11px] text-text-muted uppercase">Backpack Est. Value:</span><span className="font-data-mono-lg text-sm font-bold text-tertiary">{formatMoney(backpackUsd)} USD</span></div></div>
     </section>
   );
 }

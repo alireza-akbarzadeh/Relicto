@@ -41,6 +41,18 @@ export type SellData = {
   gameCounts: Record<SellGame, number>;
   totalInventory: number;
   readyToList: number;
+  steam: SteamSync;
 };
 
-export type SellRail = { id: string; label: string; icon: IconName };
+/** Where the studio's mirror of the trader's Steam inventory stands. */
+export type SteamSync = {
+  /** False for accounts that didn't sign in with Steam — the sample studio. */
+  linked: boolean;
+  /** Last pull's outcome; null before the first one. */
+  status: "ok" | "private" | "rate-limited" | "unavailable" | null;
+  /** "4m ago", or null before the first pull. */
+  synced: string | null;
+  itemCount: number;
+};
+
+export type SellRail ={ id: string; label: string; icon: IconName };

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, desc, eq, min, ne, sql } from "drizzle-orm";
+import { and, asc, desc, eq, like, min, ne, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { heroes, itemStyles, items, listings, pricePoints, profiles, user } from "@/lib/db/schema";
 
@@ -36,12 +36,17 @@ export async function findItemStyles(itemId: string) {
     .orderBy(asc(itemStyles.sortOrder));
 }
 
-/** Oldest-first price series for the intelligence chart. */
-export async function findPriceHistory(itemId: string, limit = 30) {
+/**
+ * Real observations only, oldest first: the daily market snapshot (Skinport's
+ * lowest ask) and Relicto's own settled sales. The seed's generated series
+ * are left out — they belong to the tracker's sample board, not to a chart
+ * that claims to be history. A year of dailies covers every range pill.
+ */
+export async function findPriceHistory(itemId: string, limit = 400) {
   const rows = await db
-    .select({ priceCents: pricePoints.priceCents, recordedAt: pricePoints.recordedAt })
+    .select({ priceCents: pricePoints.priceCents, recordedAt: pricePoints.recordedAt, venue: pricePoints.venue })
     .from(pricePoints)
-    .where(eq(pricePoints.itemId, itemId))
+    .where(and(eq(pricePoints.itemId, itemId), or(eq(pricePoints.venue, "skinport"), like(pricePoints.id, "pp-sale-%"))))
     .orderBy(desc(pricePoints.recordedAt))
     .limit(limit);
 

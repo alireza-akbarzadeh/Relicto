@@ -1,4 +1,4 @@
-import { index, integer, pgTable, real, text, uniqueIndex } from "drizzle-orm/pg-core";
+import { index, integer, pgEnum, pgTable, real, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
 import { primaryId, timestamps } from "./_shared";
 import { user } from "./auth";
 import { games, items } from "./catalog";
@@ -51,3 +51,22 @@ export const inventoryItems = pgTable(
     uniqueIndex("inventory_items_user_asset_idx").on(t.userId, t.assetId),
   ],
 );
+
+/** How the last pull of a trader's Steam inventory went. */
+export const inventorySyncStatus = pgEnum("inventory_sync_status", ["ok", "private", "rate-limited", "unavailable"]);
+
+/**
+ * One row per trader: when their Steam inventory was last pulled, and what
+ * Steam said. The studio reads it for its "Steam Sync" line, and it throttles
+ * syncs so a refresh-happy trader can't get the server rate-limited by Steam.
+ */
+export const inventorySyncs = pgTable("inventory_syncs", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  steamId: text("steam_id").notNull(),
+  status: inventorySyncStatus("status").notNull(),
+  /** Marketable items Steam returned, across every game. */
+  itemCount: integer("item_count").notNull().default(0),
+  syncedAt: timestamp("synced_at").notNull().defaultNow(),
+});

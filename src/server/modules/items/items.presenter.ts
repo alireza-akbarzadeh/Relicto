@@ -1,5 +1,6 @@
 import type { ItemBadge, ItemDetail, RarityVariant, RelatedItem } from "@/modules/items/types";
 import type { SellerBook } from "./items.book";
+import { toIntelligence } from "./items.intelligence";
 import type { ItemRow, ItemStyleRow, ListingRow, PricePointRow, RelatedRow } from "./items.types";
 
 const usd = (cents: number) => cents / 100;
@@ -48,9 +49,10 @@ export function toItemDetail(
   const rising = changePercent >= 0;
   const gameLabel = GAME_LABEL[item.gameId] ?? item.gameId;
 
-  const prices = history.map((p) => p.priceCents);
-  const low = prices.length ? Math.min(...prices) : lowestCents;
-  const high = prices.length ? Math.max(...prices) : lowestCents;
+  // The 30-day band is the market's; before any observation it collapses to the Relicto floor.
+  const { intelligence, low: bandLow, high: bandHigh } = toIntelligence(history, lowestCents);
+  const low = bandLow ?? lowestCents;
+  const high = bandHigh ?? lowestCents;
 
   return {
     slug: item.slug,
@@ -114,22 +116,7 @@ export function toItemDetail(
       { id: "related", label: "Related" },
     ],
     ...book,
-    intelligence: {
-      ranges: ["24H", "7D", "30D", "90D", "1Y", "ALL"],
-      activeRange: "30D",
-      modes: ["LINE", "CANDLE"],
-      activeMode: "LINE",
-      points: history.map((point, index) => ({
-        at: point.recordedAt.getTime(),
-        price: usd(point.priceCents),
-        ...(index === history.length - 1 ? { marker: "now" as const } : {}),
-      })),
-      annotations: [],
-      stats: [
-        { label: "Floor", value: money(lowestCents), note: "lowest active listing", tone: "primary" },
-        { label: "30d Range", value: `${money(low)} – ${money(high)}`, note: "observed", tone: "amber" },
-      ],
-    },
+    intelligence,
     sell: {
       detected: item.name,
       style: item.presentation?.detail.label ?? "Standard",

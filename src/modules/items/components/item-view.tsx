@@ -41,8 +41,9 @@ export function ItemView({ item }: { item: ItemDetail }) {
           <PriceChart data={item.intelligence} />
           <RevenueConvertor item={item.name} sell={item.sell} />
           <section id="lore-specs" className="grid w-full scroll-mt-40 grid-cols-1 gap-8 lg:grid-cols-12">
-            <EngineMods mods={item.mods} />
-            <VfxReplay replay={item.replay} />
+            {/* Catalog-built items have no authored spec sheet or lore; skip the empty card. */}
+            {(item.mods.items.length > 0 || item.mods.lore.quote) && <EngineMods mods={item.mods} />}
+            <VfxReplay replay={item.replay} itemName={item.name} />
           </section>
           <RelatedItems related={item.related} />
         </div>

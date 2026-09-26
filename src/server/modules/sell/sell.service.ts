@@ -109,7 +109,7 @@ export const sellService = {
   delist,
 
   /** Seller studio: unlisted inventory plus the trader's newest live listings. */
-  async studio(userId: string): Promise<SellData> {
+  async studio(userId: string): Promise<Omit<SellData, "steam">> {
     const now = new Date();
 
     const [inventory, active, profile] = await Promise.all([

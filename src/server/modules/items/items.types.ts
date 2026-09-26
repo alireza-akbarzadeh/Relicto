@@ -38,7 +38,8 @@ export type ItemStyleRow = {
   note: string | null;
 };
 
-export type PricePointRow = { priceCents: number; recordedAt: Date };
+/** `skinport` rows are the daily market snapshot; `relicto` rows are settled sales. */
+export type PricePointRow = { priceCents: number; recordedAt: Date; venue: string };
 
 export type RelatedRow = {
   slug: string;

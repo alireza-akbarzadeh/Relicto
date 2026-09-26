@@ -74,8 +74,18 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
       </div>
 
       <div className="relative flex h-72 w-full flex-col overflow-hidden rounded-lg border border-border-subtle bg-surface-container-lowest p-4 sm:h-80">
-        <PricePlot points={series} annotations={data.annotations} mode={mode ?? data.activeMode} />
+        {/* A line needs two observations; with fewer, say what exists instead of drawing an empty frame. */}
+        {series.length >= 2 ? (
+          <PricePlot points={series} annotations={data.annotations} mode={mode ?? data.activeMode} />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+            <Icon name="query_stats" className="text-[32px] text-text-muted" />
+            <span className="font-headline-sm text-sm font-semibold text-text-primary">Price history is building</span>
+            <span className="max-w-md font-body-sm text-xs text-text-muted">{data.emptyNote}</span>
+          </div>
+        )}
       </div>
+      {data.source && <span className="-mt-2 font-body-sm text-[11px] text-text-muted">Source: {data.source}</span>}
 
       {data.annotations.length > 0 && (
         <div className="flex flex-wrap items-start gap-2">

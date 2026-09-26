@@ -1,45 +1,41 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, type KeyboardEvent } from "react";
-
-/** Keyboard shortcut that focuses the field: ⌘K / Ctrl+K, or a bare "/" outside other fields. */
-export type SearchHotkey = "mod+k" | "slash";
-
-function isTypingTarget(target: EventTarget | null) {
-  return target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
-}
-
-function matches(event: globalThis.KeyboardEvent, hotkey: SearchHotkey) {
-  if (hotkey === "slash") return event.key === "/" && !isTypingTarget(event.target);
-  return (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
-}
+import type { KeyboardEvent } from "react";
+import { useSearchDialog } from "@/modules/search/state/search-provider";
 
 /**
- * The hotkey focuses the field; Enter searches the marketplace.
- * Returns props to spread on the search input.
+ * Turns a header's search field into the command palette's trigger. The
+ * field keeps its design but never holds text itself: a click, Enter, or the
+ * first typed character opens the palette (carrying that character over).
+ * Not on focus — the dialog hands focus back to the field when it closes,
+ * which would reopen it. The ⌘K and "/" hotkeys live in `SearchProvider`.
  */
-export function useCommandSearch(hotkey: SearchHotkey = "mod+k") {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const onKey = (event: globalThis.KeyboardEvent) => {
-      if (!matches(event, hotkey)) return;
-      event.preventDefault();
-      inputRef.current?.focus();
-      inputRef.current?.select();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [hotkey]);
+export function useCommandSearch() {
+  const { open } = useSearchDialog();
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Escape") event.currentTarget.blur();
-    if (event.key !== "Enter") return;
-    const query = event.currentTarget.value.trim();
-    router.push(query ? `/marketplace?q=${encodeURIComponent(query)}` : "/marketplace");
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      open();
+    } else if (event.key.length === 1) {
+      event.preventDefault();
+      open(event.key);
+    }
   };
 
-  return { ref: inputRef, onKeyDown, type: "text" as const, enterKeyHint: "search" as const, "aria-label": "Search the marketplace" };
+  return {
+    // The whole field opens the palette: some headers squeeze the input down to
+    // its icon and hotkey badge, leaving nothing of the input itself to click.
+    trigger: { onClick: () => open() },
+    input: {
+      readOnly: true,
+      onKeyDown,
+      type: "text" as const,
+      role: "combobox" as const,
+      "aria-haspopup": "dialog" as const,
+      "aria-expanded": false,
+      "aria-label": "Search items, traders and tournaments",
+    },
+  };
 }

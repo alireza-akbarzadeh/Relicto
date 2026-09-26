@@ -3,6 +3,8 @@ import type { SellData } from "../types";
 export const sell: SellData = {
   totalInventory: 128,
   readyToList: 6,
+  /** The design's "Steam Sync: 30s ago"; the sample studio has no Steam account behind it. */
+  steam: { linked: false, status: "ok", synced: "30s ago", itemCount: 0 },
   gameCounts: { cs2: 128, dota2: 46, tf2: 12 },
   inventory: [
     { id: "butterfly", game: "cs2", image: "/images/lootora/sell-items-01.jpg", imageAlt: "Butterfly Knife Doppler Phase 4", marker: "P4", name: "★ Butterfly Knife | Doppler", rarity: "Covert", wear: "Factory New", float: "0.0112", rank: "Rank #18", price: 3150, floor: 3135, delta: "+ $15.00 (+0.48%)", deltaTone: "cyan", wearPct: 11, tone: "primary" },

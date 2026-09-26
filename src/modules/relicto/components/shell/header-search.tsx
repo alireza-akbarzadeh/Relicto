@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { useCommandSearch } from "../../hooks/use-command-search";
 
 export function MarketHeaderSearch() {
-  const input = useCommandSearch();
+  const { trigger, input } = useCommandSearch();
   return (
     <div className="mx-space-md hidden max-w-md flex-1 lg:block">
-      <div className="group relative flex h-10 items-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3.5 backdrop-blur-md transition-all duration-200 focus-within:border-tertiary/50 focus-within:ring-1 focus-within:ring-tertiary/20 hover:border-white/20 hover:bg-surface-container-high">
+      <div {...trigger} className="group cursor-pointer relative flex h-10 items-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3.5 backdrop-blur-md transition-all duration-200 focus-within:border-tertiary/50 focus-within:ring-1 focus-within:ring-tertiary/20 hover:border-white/20 hover:bg-surface-container-high">
         <Icon
           name="search"
           className="mr-2.5 text-[18px] text-text-muted transition-colors group-focus-within:text-tertiary group-hover:text-text-primary"
@@ -28,10 +28,10 @@ export function MarketHeaderSearch() {
 }
 
 export function LedgerHeaderSearch() {
-  const input = useCommandSearch();
+  const { trigger, input } = useCommandSearch();
   return (
     <div className="mx-space-sm hidden max-w-md flex-1 items-center gap-space-md lg:flex">
-      <div className="group relative flex h-10 w-full items-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3.5 backdrop-blur-md transition-all duration-200 focus-within:border-tertiary/50 focus-within:ring-1 focus-within:ring-tertiary/20 hover:border-white/20 hover:bg-surface-container-high">
+      <div {...trigger} className="group cursor-pointer relative flex h-10 w-full items-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3.5 backdrop-blur-md transition-all duration-200 focus-within:border-tertiary/50 focus-within:ring-1 focus-within:ring-tertiary/20 hover:border-white/20 hover:bg-surface-container-high">
         <Icon
           name="search"
           className="mr-2.5 text-[18px] text-text-muted transition-colors group-focus-within:text-tertiary group-hover:text-text-primary"
@@ -50,10 +50,10 @@ export function LedgerHeaderSearch() {
 }
 
 export function StudioHeaderSearch() {
-  const input = useCommandSearch();
+  const { trigger, input } = useCommandSearch();
   return (
     <div className="relative hidden max-w-xs flex-1 lg:block">
-      <div className="group flex h-10 items-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3.5 backdrop-blur-md transition-all duration-200 focus-within:border-secondary/50 focus-within:ring-1 focus-within:ring-secondary/20 hover:border-white/20 hover:bg-surface-container-high">
+      <div {...trigger} className="group cursor-pointer flex h-10 items-center rounded-xl border border-white/10 bg-surface-container-low/80 px-3.5 backdrop-blur-md transition-all duration-200 focus-within:border-secondary/50 focus-within:ring-1 focus-within:ring-secondary/20 hover:border-white/20 hover:bg-surface-container-high">
         <Icon
           name="search"
           className="mr-2 text-[18px] text-text-muted transition-colors group-focus-within:text-secondary group-hover:text-text-primary"
@@ -73,9 +73,9 @@ export function StudioHeaderSearch() {
 }
 
 export function HubHeaderSearch() {
-  const input = useCommandSearch("slash");
+  const { trigger, input } = useCommandSearch();
   return (
-    <div className="group relative hidden items-center md:flex">
+    <div {...trigger} className="group cursor-pointer relative hidden items-center md:flex">
       <Search className="absolute left-3.5 size-4 text-text-muted transition-colors group-focus-within:text-primary group-hover:text-text-primary" />
       <Input
         {...input}
@@ -90,10 +90,10 @@ export function HubHeaderSearch() {
 }
 
 export function VaultHeaderSearch() {
-  const input = useCommandSearch();
+  const { trigger, input } = useCommandSearch();
   return (
     <div className="mx-4 hidden max-w-md flex-1 items-center lg:flex">
-      <div className="group relative w-full">
+      <div {...trigger} className="group cursor-pointer relative w-full">
         <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
           <Icon
             name="search"

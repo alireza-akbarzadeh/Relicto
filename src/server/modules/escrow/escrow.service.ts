@@ -6,6 +6,7 @@ import { listings, orders, tradeOffers } from "@/lib/db/schema";
 import { draft } from "../notifications/notifications.catalog";
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
+import { priceFeedService } from "../price-feed/price-feed.service";
 import { applyCancel } from "./escrow.cancel";
 import * as repo from "./escrow.repository";
 import type { OfferSent } from "./escrow.schema";
@@ -85,6 +86,8 @@ export const escrowService = {
       for (const step of [2, 3, 4]) await repo.setStep(tx, order.id, step, { state: "done", occurredAt: now });
 
       await repo.settleDebit(tx, order.id);
+      // A settled trade is a real price for the item's chart — at what the seller was paid.
+      if (line.itemId) await priceFeedService.recordSale(tx, { orderCode: order.code, itemId: line.itemId, priceCents: payoutCents, at: now });
       const notices: NotificationRow[] = [];
       if (order.sellerId) {
         await repo.post(tx, {

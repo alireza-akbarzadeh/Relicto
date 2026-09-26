@@ -90,7 +90,7 @@ export const alertService = {
         : [],
       itemIds.length
         ? db.select({ itemId: pricePoints.itemId, priceCents: pricePoints.priceCents }).from(pricePoints)
-            .where(and(inArray(pricePoints.itemId, itemIds), gte(pricePoints.recordedAt, since))).orderBy(asc(pricePoints.recordedAt))
+            .where(and(inArray(pricePoints.itemId, itemIds), eq(pricePoints.venue, "relicto"), gte(pricePoints.recordedAt, since))).orderBy(asc(pricePoints.recordedAt))
         : [],
       db.select({ id: pushSubscriptions.id }).from(pushSubscriptions).where(eq(pushSubscriptions.userId, userId)).limit(1),
       findWalletBalance(userId),

@@ -21,13 +21,25 @@ export const draft = {
     kind: "order_received",
     icon: "shopping_bag",
     tone: "success",
-    title: `Someone is buying ${o.item}`,
-    body: `${usd(o.totalCents)} is locked in escrow. A Sentinel bot will request the item from your Steam inventory.`,
+    title: `Sold: ${o.item} — send the trade offer`,
+    body: `${usd(o.totalCents)} is locked in escrow. Send the Steam trade offer within 12 hours, then mark it sent on the order.`,
     href: href(o.code),
     dedupeKey: `${o.code}:order_received:${o.sellerId}`,
   }),
 
-  /** Buyer: the bot sent the Steam trade offer; they have to accept it. */
+  /** Buyer: their payment is in escrow and the seller has been asked to send the item. */
+  orderPlaced: (o: Order & { buyerId: string; totalCents: number }): NotificationDraft => ({
+    userId: o.buyerId,
+    kind: "order_placed",
+    icon: "shopping_bag",
+    tone: "info",
+    title: `Order placed: ${o.item}`,
+    body: `${usd(o.totalCents)} is safe in escrow. The seller has 12 hours to send the Steam trade offer, or you're refunded.`,
+    href: href(o.code),
+    dedupeKey: `${o.code}:order_placed:${o.buyerId}`,
+  }),
+
+  /** Buyer: the seller sent the Steam trade offer; they have to accept it. */
   tradeOfferSent: (o: Order & { buyerId: string; token: string | null }): NotificationDraft => ({
     userId: o.buyerId,
     kind: "trade_offer_sent",
@@ -36,7 +48,7 @@ export const draft = {
     title: `Trade offer ready for ${o.item}`,
     body: o.token
       ? `Accept it in Steam Mobile. Only confirm if the security token reads ${o.token}.`
-      : "Accept it in the Steam Mobile app to receive your item.",
+      : "Accept it in Steam, then confirm receipt on the order to release the seller's payout.",
     href: href(o.code),
     dedupeKey: `${o.code}:trade_offer_sent:${o.buyerId}`,
   }),
@@ -96,7 +108,7 @@ export const draft = {
     icon: "check_circle",
     tone: "success",
     title: `Offer accepted for ${o.item}`,
-    body: `${usd(o.bidCents)} moved from your vault into escrow. A Sentinel bot will send the trade offer.`,
+    body: `${usd(o.bidCents)} moved from your vault into escrow. The seller has 12 hours to send the Steam trade offer.`,
     href: href(o.code),
     dedupeKey: `offer:${o.offerId}:accepted:${o.buyerId}`,
   }),

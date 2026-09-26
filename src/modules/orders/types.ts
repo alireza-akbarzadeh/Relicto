@@ -72,8 +72,31 @@ export type LogLine = {
   active?: boolean;
 };
 
+/**
+ * Where a peer-to-peer trade stands for the person looking at it, and what
+ * they can do next. The seller sends the Steam trade offer; the buyer accepts
+ * it in Steam and confirms receipt here.
+ */
+export type Fulfilment = {
+  role: "buyer" | "seller";
+  stage: "awaiting-offer" | "offer-sent" | "completed" | "cancelled" | "disputed";
+  /** The other side's name. */
+  counterparty: string;
+  /** Seconds left in the seller's dispatch window, while waiting on them (server-computed, so it hydrates cleanly). */
+  secondsLeft: number | null;
+  /** The buyer's Steam trade URL — shown to the seller, who sends the offer to it. */
+  buyerTradeUrl: string | null;
+  /** The sent offer, for the buyer to open in Steam. */
+  offerUrl: string | null;
+  /** Test mode: the buyer may play the seller's part. */
+  canSimulate: boolean;
+  /** A Relicto bot is handling this trade, so the bot panel applies instead. */
+  bot: boolean;
+};
+
 export type OrderTracking = {
   code: string;
+  fulfilment?: Fulfilment;
   protocol: string;
   version: string;
   status: string;
@@ -94,7 +117,7 @@ export type OrderTracking = {
 /* ----------------------------------------------------------------------- */
 
 export type OrderFlow = "buy" | "sell" | "liquidate";
-export type OrderState = "escrow" | "completed" | "disputed";
+export type OrderState = "escrow" | "completed" | "disputed" | "cancelled";
 export type OrderGame = "DOTA 2" | "CS2";
 export type RowAction = "track" | "receipt" | "inspect" | "inspect-label" | "sell-back" | "fingerprint";
 

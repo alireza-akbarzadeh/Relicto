@@ -18,6 +18,9 @@ export type LedgerOrderRow = Pick<
   | "counterpartyNote"
   | "thumbnailUrl"
   | "thumbnailAlt"
+  | "buyerId"
+  | "sellerId"
+  | "subtotalCents"
 > & {
   nameSnapshot: string | null;
   detailSnapshot: string | null;
@@ -25,6 +28,8 @@ export type LedgerOrderRow = Pick<
   rarity: string | null;
   /** Highest escrow step reached, for the "Step 3/4" label. */
   escrowStep: number | null;
+  buyerName: string | null;
+  sellerName: string | null;
 };
 
 export type LedgerCounts = {

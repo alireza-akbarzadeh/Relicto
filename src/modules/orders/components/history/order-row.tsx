@@ -151,8 +151,13 @@ export function OrderRow({ row, alt }: { row: LedgerRow; alt: boolean }) {
             <span>{row.stateLabel}</span>
           </div>
         ) : (
-          <div className="inline-flex items-center gap-space-xs rounded-full bg-surface-container px-space-sm py-1 font-label-badge text-label-badge font-bold text-tertiary">
-            <Icon name="check_circle" className="text-[14px]" />
+          <div
+            className={cn(
+              "inline-flex items-center gap-space-xs rounded-full bg-surface-container px-space-sm py-1 font-label-badge text-label-badge font-bold",
+              row.state === "cancelled" ? "text-text-muted" : row.state === "disputed" ? "text-status-live" : "text-tertiary",
+            )}
+          >
+            <Icon name={row.state === "cancelled" ? "cancel" : row.state === "disputed" ? "gavel" : "check_circle"} className="text-[14px]" />
             <span>{row.stateLabel}</span>
           </div>
         )}

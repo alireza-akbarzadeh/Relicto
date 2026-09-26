@@ -4,28 +4,29 @@ import { usd } from "../wallet/wallet.presenter";
 import type { CartLine } from "./checkout.repository";
 
 /**
- * Escrow bots and Steam trade offers are out of scope until trading is
- * validated (backend-plan, Phase 4), so a fresh escrow stops at the audit and
- * no trade offer row exists yet.
+ * Trades run peer to peer until Relicto's escrow bots exist: the seller sends
+ * the Steam trade offer themselves, the buyer accepts it in Steam and confirms
+ * here, and only then is the seller paid. A fresh escrow waits on the seller.
  */
 const ESCROW_STEPS = [
   { step: 1, state: "done", title: "Escrow Vault Funded" },
   {
-    step: 2, state: "active", title: "Bot Security Audit",
-    body: "Queued for a Sentinel bot. Steam Guard API and anti-phishing checks pending.",
+    step: 2, state: "active", title: "Seller Dispatch",
+    body: "Waiting for the seller to send the Steam trade offer. They have 12 hours, or escrow refunds automatically.",
   },
   {
-    step: 3, state: "queued", title: "Trade Offer Dispatched",
-    body: "A Steam trade offer goes to your verified Trade URL once the audit clears.",
+    step: 3, state: "queued", title: "Trade Offer Sent",
+    body: "The seller's Steam trade offer arrives at your Trade URL. Accept it in Steam, then confirm receipt here.",
   },
   {
     step: 4, state: "queued", title: "Settlement & Inventory Vault",
-    body: "Asset permanently bound to your linked Steam profile and escrow payout released to vendor.",
+    body: "Once you confirm receipt, the item is yours and escrow releases the payout to the seller.",
   },
 ] as const;
 
-/** Mirrors the escrow window the checkout promises (180 seconds). */
-const AUTO_CANCEL_SECONDS = 180;
+/** The seller's window to send the trade offer before escrow refunds the buyer. */
+export const DISPATCH_WINDOW_SECONDS = 12 * 60 * 60;
+const AUTO_CANCEL_SECONDS = DISPATCH_WINDOW_SECONDS;
 
 const LETTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ";
 
@@ -60,7 +61,6 @@ export function buildOrderRows(line: CartLine, at: Placement) {
   const priceCents = at.agreedCents ?? listing.priceCents;
   const p = listing.checkout;
   const orderId = `order-chk-${at.code.toLowerCase()}`;
-  const bot = listing.botName ?? "Relicto Sentinel";
 
   const order = {
     id: orderId,
@@ -76,9 +76,10 @@ export function buildOrderRows(line: CartLine, at: Placement) {
     autoCancelSeconds: AUTO_CANCEL_SECONDS,
     fundingLabel: at.fundingLabel,
     settlementNote: "Fee $0.00 (Escrow)",
-    counterpartyKind: "bot",
-    counterpartyName: bot,
-    counterpartyNote: "Auto Handoff",
+    // Peer to peer: the other side is the seller, named from their profile wherever it's shown.
+    counterpartyKind: "user",
+    counterpartyName: null,
+    counterpartyNote: "Seller · P2P Steam trade",
     thumbnailUrl: listing.imageUrl ?? line.imageUrl,
     thumbnailAlt: listing.imageAlt ?? line.imageAlt ?? line.name,
   } satisfies typeof orders.$inferInsert;
@@ -116,14 +117,14 @@ export function buildOrderRows(line: CartLine, at: Placement) {
     kind: "purchase",
     amountCents: at.totalCents,
     balanceAfterCents: at.balanceAfterCents,
-    // Pending until the bot hands the item over; the escrow card counts the hold.
+    // Pending until the buyer confirms receipt; the escrow card counts the hold.
     status: "pending",
     hash: `#TX-${randomInt(1_000_000, 10_000_000)}`,
     venue: "steam-escrow",
     title: "Marketplace Item Acquire",
     assetLabel: p?.subname ? `${line.name} (${p.subname})` : line.name,
     detailLabel: p?.detail ?? null,
-    nodeLabel: bot,
+    nodeLabel: "P2P Steam Escrow",
     occurredAt: at.now,
   } satisfies typeof ledgerEntries.$inferInsert;
 

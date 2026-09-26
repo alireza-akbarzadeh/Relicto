@@ -85,6 +85,8 @@ export async function acceptOffer(sellerId: string, offerId: string): Promise<Ac
 
     const drafts: NotificationDraft[] = [
       draft.offerAccepted({ ...bid, buyerId: offer.buyerId, code }),
+      // The seller accepted here, but the "send the trade offer" to-do belongs in their bell with a link.
+      draft.orderReceived({ code, item: line.name, sellerId, totalCents: offer.priceCents }),
       ...outbid.map((other) =>
         draft.offerDeclined({ offerId: other.id, item: line.name, bidCents: other.priceCents, buyerId: other.buyerId, slug: line.slug, reason: "sold" }),
       ),

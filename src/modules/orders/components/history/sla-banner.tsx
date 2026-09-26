@@ -18,7 +18,7 @@ export function SlaBanner() {
           </div>
           <p className="font-body-sm text-body-sm text-text-secondary">
             All transactions are strictly protected up to <strong className="text-text-primary">$10,000.00 USD</strong> via our 256-Bit Cold Escrow Vault. If a
-            bot trade fails Steam confirmation, your funds are automatically restored within 180 seconds.
+            seller doesn't send the Steam trade offer within 12 hours, your funds are automatically restored to your vault.
           </p>
         </div>
       </div>

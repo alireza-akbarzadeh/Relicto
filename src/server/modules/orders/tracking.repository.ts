@@ -2,7 +2,7 @@ import "server-only";
 
 import { and, asc, eq, or } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { escrowEvents, games, items, orderItems, orders, profiles, tradeOffers } from "@/lib/db/schema";
+import { escrowEvents, games, items, orderItems, orders, profiles, tradeOffers, user } from "@/lib/db/schema";
 
 /** Codes are shown with a `#`, stored without one. */
 const bare = (code: string) => code.replace(/^#/, "").toUpperCase();
@@ -53,3 +53,17 @@ export async function hasOrders() {
   const [row] = await db.select({ id: orders.id }).from(orders).limit(1);
   return Boolean(row);
 }
+
+/** One side of an order as the tracker names it, plus their Steam trade URL for the seller to send to. */
+export async function findParty(userId: string | null) {
+  if (!userId) return null;
+  const [row] = await db
+    .select({ name: user.name, handle: profiles.handle, tradeUrl: profiles.tradeUrl })
+    .from(user)
+    .leftJoin(profiles, eq(profiles.userId, user.id))
+    .where(eq(user.id, userId))
+    .limit(1);
+  return row ?? null;
+}
+
+export type Party = NonNullable<Awaited<ReturnType<typeof findParty>>>;

@@ -9,9 +9,21 @@ import type { LedgerCounts, LedgerOrderRow } from "./orders.types";
 /** Every order the trader is a party to, either side of the trade. */
 const mine = (userId: string) => or(eq(orders.buyerId, userId), eq(orders.sellerId, userId)) as SQL;
 
-function filterFor(filter: LedgerFilter): SQL | undefined {
-  if (filter === "purchases") return eq(orders.flow, "buy");
-  if (filter === "sales") return inArray(orders.flow, ["sell", "liquidate"]);
+/**
+ * The viewer's side of an order. A marketplace order is a `buy` from its
+ * buyer's side and a sale from its seller's; `sell` and `liquidate` orders are
+ * the trader cashing out to Relicto, so always theirs to earn from.
+ */
+const boughtBy = (userId: string) => and(eq(orders.buyerId, userId), eq(orders.flow, "buy")) as SQL;
+const soldBy = (userId: string) =>
+  or(and(eq(orders.sellerId, userId), eq(orders.flow, "buy")), and(eq(orders.buyerId, userId), inArray(orders.flow, ["sell", "liquidate"]))) as SQL;
+
+/** What the seller is paid on a marketplace order (the agreed price), or the cash-out total. */
+const earned = sql`case when ${orders.flow} = 'buy' then ${orders.subtotalCents} else ${orders.totalCents} end`;
+
+function filterFor(filter: LedgerFilter, userId: string): SQL | undefined {
+  if (filter === "purchases") return boughtBy(userId);
+  if (filter === "sales") return soldBy(userId);
   if (filter === "escrow") return eq(orders.state, "escrow");
   if (filter === "disputed") return eq(orders.state, "disputed");
   return undefined;
@@ -49,10 +61,16 @@ const LEDGER_COLUMNS = {
   gameId: items.gameId,
   rarity: sql<string | null>`${items.rarity}`,
   escrowStep: escrowStep.step,
+  buyerId: orders.buyerId,
+  sellerId: orders.sellerId,
+  subtotalCents: orders.subtotalCents,
+  // Both parties by name, so each side can see who they traded with.
+  buyerName: sql<string | null>`(select coalesce(p.handle, u.name) from "user" u left join profiles p on p.user_id = u.id where u.id = ${orders.buyerId})`,
+  sellerName: sql<string | null>`(select coalesce(p.handle, u.name) from "user" u left join profiles p on p.user_id = u.id where u.id = ${orders.sellerId})`,
 };
 
 export async function findLedgerRows(userId: string, filter: LedgerFilter, page: number, perPage: number) {
-  const where = and(mine(userId), filterFor(filter));
+  const where = and(mine(userId), filterFor(filter, userId));
 
   const rows = (await db
     .select(LEDGER_COLUMNS)
@@ -75,8 +93,8 @@ export async function countLedger(userId: string): Promise<LedgerCounts> {
   const [row] = await db
     .select({
       all: count(),
-      purchases: sql<number>`count(*) filter (where ${orders.flow} = 'buy')::int`,
-      sales: sql<number>`count(*) filter (where ${orders.flow} in ('sell', 'liquidate'))::int`,
+      purchases: sql<number>`count(*) filter (where ${boughtBy(userId)})::int`,
+      sales: sql<number>`count(*) filter (where ${soldBy(userId)})::int`,
       escrow: sql<number>`count(*) filter (where ${orders.state} = 'escrow')::int`,
       disputed: sql<number>`count(*) filter (where ${orders.state} = 'disputed')::int`,
     })
@@ -90,12 +108,13 @@ export async function aggregateLedger(userId: string) {
   const [row] = await db
     .select({
       volumeCents: sum(orders.totalCents),
-      purchases: sql<number>`count(*) filter (where ${orders.flow} = 'buy')::int`,
-      liquidated: sql<number>`count(*) filter (where ${orders.flow} in ('sell', 'liquidate'))::int`,
+      purchases: sql<number>`count(*) filter (where ${boughtBy(userId)})::int`,
+      liquidated: sql<number>`count(*) filter (where ${soldBy(userId)})::int`,
       settled: sql<number>`count(*) filter (where ${orders.state} = 'completed')::int`,
       disputed: sql<number>`count(*) filter (where ${orders.state} = 'disputed')::int`,
-      spentCents: sql<number>`coalesce(sum(${orders.totalCents}) filter (where ${orders.flow} = 'buy'), 0)::int`,
-      earnedCents: sql<number>`coalesce(sum(${orders.totalCents}) filter (where ${orders.flow} in ('sell', 'liquidate')), 0)::int`,
+      // Refunded orders cost and earned nothing.
+      spentCents: sql<number>`coalesce(sum(${orders.totalCents}) filter (where ${boughtBy(userId)} and ${orders.state} <> 'cancelled'), 0)::int`,
+      earnedCents: sql<number>`coalesce(sum(${earned}) filter (where ${soldBy(userId)} and ${orders.state} <> 'cancelled'), 0)::int`,
     })
     .from(orders)
     .where(mine(userId));

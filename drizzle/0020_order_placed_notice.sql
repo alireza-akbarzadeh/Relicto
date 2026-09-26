@@ -1,0 +1,1 @@
+ALTER TYPE "public"."notification_kind" ADD VALUE 'order_placed' BEFORE 'trade_offer_sent';

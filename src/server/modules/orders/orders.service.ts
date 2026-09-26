@@ -8,6 +8,8 @@ import { ledgerInput, type LedgerInput } from "./orders.schema";
 import { toLedgerStats } from "./orders.stats";
 import type { LedgerOrderRow } from "./orders.types";
 import { toTrackingMobile } from "./tracking-mobile.presenter";
+import { p2pTestMode } from "../escrow/escrow.p2p";
+import { toFulfilment } from "./tracking.fulfilment";
 import { toOrderTracking, type TrackingInput } from "./tracking.presenter";
 import * as tracking from "./tracking.repository";
 
@@ -64,7 +66,7 @@ export const orderService = {
       active: escrow
         ? toActiveEscrow(escrow, counts.escrow)
         : { count: "0 Active Escrows", step: "IDLE", code: "—", item: "No open escrow", href: "/orders" },
-      rows: rows.map((row) => toLedgerRow(row, now)),
+      rows: rows.map((row) => toLedgerRow(row, userId, now)),
       total,
       pages: Math.max(1, Math.ceil(total / input.perPage)),
       counts,
@@ -77,7 +79,9 @@ export const orderService = {
   /** Live escrow state for one order code, or null when it doesn't exist or isn't the viewer's. */
   async tracking(code: string, viewerId: string): Promise<OrderTracking | null> {
     const input = await loadTracking(code, viewerId);
-    return input ? toOrderTracking(input) : null;
+    if (!input) return null;
+    const [buyer, seller] = await Promise.all([tracking.findParty(input.order.buyerId), tracking.findParty(input.order.sellerId)]);
+    return { ...toOrderTracking(input), fulfilment: toFulfilment(input, viewerId, { buyer, seller }, p2pTestMode()) };
   },
 
   /** The same order in the mobile tracker's shape. */

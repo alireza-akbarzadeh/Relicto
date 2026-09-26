@@ -66,7 +66,11 @@ export function toOrderTracking(input: TrackingInput, now = new Date()): OrderTr
     version: PROTOCOL_VERSION,
     status: active ? `${active.title} (Step ${active.step} of 4)` : "Settled",
     placedAgo: minutesAgo(order.placedAt, now),
-    autoCancelSeconds: order.autoCancelSeconds ?? 0,
+    // Time left, not the whole window — and none once an offer is out or the order settled.
+    autoCancelSeconds:
+      order.state === "escrow" && order.autoCancelSeconds && !offer
+        ? Math.max(0, Math.round((order.placedAt.getTime() + order.autoCancelSeconds * 1000 - now.getTime()) / 1000))
+        : 0,
     steps: input.events.map((event) => toStep(event, token)),
     bot: {
       name: botName,

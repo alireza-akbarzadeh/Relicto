@@ -24,3 +24,6 @@ export type EscrowEvent = z.infer<typeof escrowEvent>;
 
 /** A trader acting on one of their own orders. */
 export const orderCodeInput = z.object({ code: orderCode });
+
+/** The seller reporting the trade offer they sent: its Steam link or bare id. */
+export const dispatchInput = z.object({ code: orderCode, offer: z.string().trim().min(6).max(300) });

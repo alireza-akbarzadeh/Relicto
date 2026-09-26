@@ -36,7 +36,7 @@ export async function clearCart() {
 
 /**
  * Settles the basket into escrow orders. Orders, wallet and the marketplace all
- * move, and each seller is notified — pushed to their devices after the response.
+ * move, and both sides are notified — pushed to their devices after the response.
  */
 export async function placeOrder(input: z.input<typeof placeOrderInput>) {
   const parsed = placeOrderInput.parse(input);
@@ -47,7 +47,7 @@ export async function placeOrder(input: z.input<typeof placeOrderInput>) {
   if (result.status !== "placed") return { status: result.status, items };
 
   revalidatePath("/", "layout");
-  // Sellers' notifications stay server-side; the buyer only learns the codes.
+  // Notifications stay server-side; the buyer only learns the codes here.
   after(() => notificationService.deliver(result.notices));
   return { status: result.status, codes: result.codes, items };
 }

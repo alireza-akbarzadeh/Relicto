@@ -14,7 +14,7 @@ import { cartLinesWhere, LINE } from "./checkout.repository";
 export type SettleInput = { rail: string; promo: boolean; cartIds: string[] };
 
 export type SettleResult =
-  /** `notices` are the sellers' notifications, for push once the transaction has committed. */
+  /** `notices` are both sides' notifications, for push once the transaction has committed. */
   | { status: "placed"; codes: string[]; notices: NotificationRow[] }
   | { status: "rail-unavailable" | "empty" | "stale" | "insufficient-funds" | "vault-frozen" };
 
@@ -96,7 +96,10 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
       await tx.insert(escrowEvents).values(rows.events);
       await tx.insert(ledgerEntries).values(rows.debit);
       codes.push(code);
-      drafts.push(draft.orderReceived({ code, item: line.name, sellerId: line.listing.sellerId, totalCents }));
+      drafts.push(
+        draft.orderReceived({ code, item: line.name, sellerId: line.listing.sellerId, totalCents }),
+        draft.orderPlaced({ code, item: line.name, buyerId: userId, totalCents }),
+      );
     }
 
     await tx
@@ -106,7 +109,7 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
     await tx.update(walletAccounts).set({ balanceCents: balance }).where(eq(walletAccounts.id, wallet.id));
     await tx.delete(cartItems).where(inArray(cartItems.id, lines.map((line) => line.cartId)));
 
-    // Sellers hear about it in the same transaction, so a rolled-back order never notifies.
+    // Both sides hear about it in the same transaction, so a rolled-back order never notifies.
     const notices = await notificationService.record(tx, drafts);
 
     return { status: "placed", codes, notices };

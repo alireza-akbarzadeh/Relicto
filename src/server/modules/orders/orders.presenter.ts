@@ -60,16 +60,24 @@ function actionsFor(row: LedgerOrderRow): RowAction[] {
   return ["receipt", row.gameId === "cs2" ? "inspect-label" : "sell-back"];
 }
 
-function stateLabel(row: LedgerOrderRow): string {
+function stateLabel(row: LedgerOrderRow, sold: boolean): string {
   if (row.state === "escrow") return `In Escrow (Step ${row.escrowStep ?? 1}/4)`;
   if (row.state === "disputed") return "Disputed";
+  if (row.state === "cancelled") return sold ? "Cancelled · Relisted" : "Cancelled · Refunded";
   return "Completed";
 }
 
-/** Rebuilds the `LedgerRow` contract the trade-ledger table already renders. */
-export function toLedgerRow(row: LedgerOrderRow, now = new Date()): LedgerRow {
-  const inbound = row.flow === "sell" || row.flow === "liquidate";
-  const party = PARTY[row.counterpartyKind ?? "user"] ?? PARTY.user;
+/**
+ * Rebuilds the `LedgerRow` contract the trade-ledger table already renders,
+ * from the viewer's side: a marketplace order reads as a purchase to its buyer
+ * and as a sale — paid the agreed price, from that buyer — to its seller.
+ */
+export function toLedgerRow(row: LedgerOrderRow, viewerId: string, now = new Date()): LedgerRow {
+  const sold = row.flow === "buy" && row.sellerId === viewerId;
+  const inbound = sold || row.flow === "sell" || row.flow === "liquidate";
+  const party = sold ? PARTY.user : (PARTY[row.counterpartyKind ?? "user"] ?? PARTY.user);
+  // Authored rows name their counterparty; peer-to-peer orders leave it to the other side's name.
+  const partyName = sold ? row.buyerName : (row.counterpartyName ?? row.sellerName);
 
   return {
     id: row.id,
@@ -81,16 +89,17 @@ export function toLedgerRow(row: LedgerOrderRow, now = new Date()): LedgerRow {
     tag: TAG[row.rarity ?? ""] ?? { label: "ITEM", variant: "indigo" },
     itemName: row.nameSnapshot ?? "",
     itemDetail: row.detailSnapshot ?? "",
-    flow: row.flow,
-    flowNote: row.fundingLabel ?? "",
-    party: { ...party, name: row.counterpartyName ?? "Relicto", note: row.counterpartyNote ?? "" },
+    flow: sold ? "sell" : row.flow,
+    flowNote: sold ? "Marketplace sale" : (row.fundingLabel ?? ""),
+    party: { ...party, name: partyName ?? "Relicto", note: sold ? "Buyer" : (row.counterpartyNote ?? "") },
     settlement: {
-      amount: `${inbound ? "+" : ""}${money(row.totalCents)}`,
+      // A seller is paid the agreed price; basket discounts are Relicto's.
+      amount: `${inbound ? "+" : ""}${money(sold ? row.subtotalCents : row.totalCents)}`,
       tone: inbound ? "amber" : "primary",
-      note: row.settlementNote ?? "",
+      note: row.state === "cancelled" ? "Not charged" : (row.settlementNote ?? ""),
     },
-    state: row.state === "cancelled" ? "completed" : row.state,
-    stateLabel: stateLabel(row),
+    state: row.state,
+    stateLabel: stateLabel(row, sold),
     actions: actionsFor(row),
   };
 }

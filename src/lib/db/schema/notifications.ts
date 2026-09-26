@@ -7,6 +7,7 @@ export const notificationTone = pgEnum("notification_tone", ["success", "warning
 /** What happened — drives the copy, and lets traders mute a kind later. */
 export const notificationKind = pgEnum("notification_kind", [
   "order_received",
+  "order_placed",
   "trade_offer_sent",
   "item_sold",
   "item_delivered",

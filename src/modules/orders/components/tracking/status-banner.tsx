@@ -41,7 +41,7 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
             </span>
             <CountdownText
               seconds={order.autoCancelSeconds}
-              format="timer"
+              format="clock"
               className="font-data-mono-lg text-data-mono-lg font-bold tracking-wider text-status-live"
             />
           </div>

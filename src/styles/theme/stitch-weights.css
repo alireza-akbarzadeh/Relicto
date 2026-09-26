@@ -9,6 +9,9 @@
  * family names (next/font would merge them into the full "Space Grotesk"
  * family), and the classes point the font roles at them.
  * Combine the classes to match an export's font <link>.
+ *
+ * Relicto now ships Geist + Geist Mono everywhere, so these scopes point their
+ * roles at those faces too; the classes stay so existing markup keeps working.
  */
 
 @font-face {
@@ -62,27 +65,27 @@
 
 /* Space Grotesk 600/700 only. */
 .stitch-heavy-grotesk {
-  --font-label-caps: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-sm: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-md: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-lg: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-xl: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-lg-mobile: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-xl-mobile: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-display-hero: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-display-hero-mobile: "Stitch Space Grotesk", var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-label-caps: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-xl: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-xl-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display-hero: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display-hero-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* JetBrains Mono 500/600/700 only. */
 .stitch-medium-mono {
-  --font-label-badge: "Stitch JetBrains Mono", var(--font-jetbrains-mono), ui-monospace, monospace;
-  --font-data-mono-md: "Stitch JetBrains Mono", var(--font-jetbrains-mono), ui-monospace, monospace;
-  --font-data-mono-lg: "Stitch JetBrains Mono", var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-label-badge: var(--font-geist-mono), ui-monospace, monospace;
+  --font-data-mono-md: var(--font-geist-mono), ui-monospace, monospace;
+  --font-data-mono-lg: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 /* Geist 400/500/600 only. */
 .stitch-lite-geist {
-  --font-body-sm: "Stitch Geist", var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-body-md: "Stitch Geist", var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-body-lg: "Stitch Geist", var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 }

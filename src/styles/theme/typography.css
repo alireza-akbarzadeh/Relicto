@@ -3,27 +3,32 @@
  * Each `--text-*` token carries its own line-height, tracking and weight,
  * so `font-<role> text-<role>` reproduces the design exactly.
  * Font roles are real CSS variables (not inlined) so page scopes can swap faces.
+ *
+ * Two faces: Geist for everything a person reads (headlines, labels, body) and
+ * Geist Mono for everything a trader reads as a number (prices, deltas, codes,
+ * floats). Hierarchy comes from size, weight and tracking, not more families.
  */
 @theme {
   --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-label-caps: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-sm: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-md: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-lg: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-xl: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-lg-mobile: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-headline-xl-mobile: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-display-hero: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-display-hero-mobile: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-label-badge: var(--font-jetbrains-mono), ui-monospace, monospace;
-  --font-data-mono-md: var(--font-jetbrains-mono), ui-monospace, monospace;
-  --font-data-mono-lg: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-label-caps: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-xl: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-xl-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display-hero: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display-hero-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-label-badge: var(--font-geist-mono), ui-monospace, monospace;
+  --font-data-mono-md: var(--font-geist-mono), ui-monospace, monospace;
+  --font-data-mono-lg: var(--font-geist-mono), ui-monospace, monospace;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-display: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-heading: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-data: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @theme {
@@ -103,4 +108,15 @@
   --radius-lg: 0.25rem;
   --radius-xl: 0.5rem;
   --radius-full: 0.75rem;
+}
+
+/* Numbers a trader compares should line up column to column: prices, deltas, counts. */
+@layer base {
+  .font-data,
+  .font-mono,
+  .font-data-mono-md,
+  .font-data-mono-lg,
+  .font-label-badge {
+    font-variant-numeric: tabular-nums;
+  }
 }

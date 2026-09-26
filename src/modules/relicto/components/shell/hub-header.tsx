@@ -1,10 +1,9 @@
 import { ThemeToggle } from "@/components/theme-toggle";
-import { HUB_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
 import { HubBrand } from "./brand";
 import { HubHeaderSearch } from "./header-search";
-import { NavLinks } from "./nav-link";
+import { MainNav } from "./main-nav";
 import { WalletChip } from "./wallet-chip";
 import { CartButton } from "../cart/cart-button";
 
@@ -16,7 +15,7 @@ export function HubHeader() {
         <div className="flex items-center gap-8">
           <HubBrand />
           <nav className="hidden items-center gap-1 text-xs font-semibold xl:flex">
-            <NavLinks items={HUB_NAV} variant="hub" />
+            <MainNav />
           </nav>
         </div>
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">

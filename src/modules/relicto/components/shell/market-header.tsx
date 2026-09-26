@@ -1,11 +1,10 @@
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Icon } from "@/components/ui/icon";
-import { MARKET_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
 import { MarketHeaderSearch } from "./header-search";
-import { NavLinks } from "./nav-link";
+import { MainNav } from "./main-nav";
 import { WalletChip } from "./wallet-chip";
 import { CartButton } from "../cart/cart-button";
 
@@ -18,7 +17,7 @@ export function MarketHeader() {
           <MarketBrand />
           <div className="hidden h-6 w-[1px] bg-border-subtle xl:block" />
           <nav className="hidden items-center gap-space-xs xl:flex">
-            <NavLinks items={MARKET_NAV} variant="market" />
+            <MainNav />
           </nav>
         </div>
         <MarketHeaderSearch />

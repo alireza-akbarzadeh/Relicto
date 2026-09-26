@@ -13,21 +13,21 @@
   --radius-full: 9999px;
 }
 
-/* All auth screens: Inter body copy on the deep canvas. */
+/* All auth screens: the deep canvas (Geist, like the rest of the app). */
 .theme-auth {
-  --font-sans: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
-  --font-body-sm: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
-  --font-body-md: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
-  --font-body-lg: var(--font-inter), var(--font-geist), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   font-family: var(--font-sans);
 }
 
-/* Game hub: Space Grotesk throughout and a brighter crimson / amber palette. */
+/* Game hub: Geist throughout and a brighter crimson / amber palette. */
 .theme-hub {
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-body-sm: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-body-md: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --font-body-lg: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   font-family: var(--font-sans);
   --color-primary: #f43f5e;
   --color-primary-container: #f43f5e;

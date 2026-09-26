@@ -8,7 +8,7 @@ import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
 import { CartButton } from "../cart/cart-button";
 import { StudioHeaderSearch } from "./header-search";
-import { NavLinks } from "./nav-link";
+import { MainNav } from "./main-nav";
 import { WalletChip } from "./wallet-chip";
 import { SheetContent, SheetTrigger ,Sheet} from "@/components/ui/sheet";
 
@@ -70,7 +70,7 @@ export function StudioHeader() {
 
           {/* Desktop Navigation Link Bar (>= xl) */}
           <nav className="hidden items-center gap-space-xs xl:flex">
-            <NavLinks items={STUDIO_NAV} variant="studio" />
+            <MainNav />
           </nav>
         </div>
 

@@ -2,14 +2,13 @@
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { formatMoney } from "@/lib/format";
-import { STUDIO_NAV } from "../../data/navigation";
 import { useSession } from "../../state/session-provider";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
 import { CartButton } from "../cart/cart-button";
 import { VaultHeaderSearch } from "./header-search";
-import { NavLinks } from "./nav-link";
+import { MainNav } from "./main-nav";
 
 /** Header of the item vault (detail) screens: Steam identity chip, cart and avatar. */
 export function VaultHeader({ steamId }: { steamId: string }) {
@@ -21,7 +20,7 @@ export function VaultHeader({ steamId }: { steamId: string }) {
         <div className="flex shrink-0 items-center gap-6">
         <MarketBrand />
           <nav className="hidden items-center gap-1 rounded-lg border border-border-subtle bg-surface-container-lowest/90 p-1 xl:flex">
-            <NavLinks items={STUDIO_NAV} variant="vault" />
+            <MainNav />
           </nav>
         </div>
         <VaultHeaderSearch />

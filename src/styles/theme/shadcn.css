@@ -37,6 +37,7 @@
   --color-sidebar-accent-foreground: var(--color-text-primary);
   --color-sidebar-border: var(--color-border-subtle);
   --color-sidebar-ring: var(--color-border-focus);
+  /* Font tokens (Geist + Geist Mono) live in typography.css, the one place type roles are defined. */
 }
 
 /* Raw variables for components that read them directly (e.g. sonner, charts). */

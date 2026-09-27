@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           `beforeInteractive` injects it into the server HTML; a raw <script> in
           the tree trips React's "script tag while rendering" error on the client.
         */}
-        <Script id="relicto-theme" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {/* <Script id="relicto-theme" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /> */}
         <NuqsAdapter>{children}</NuqsAdapter>
         <Toaster />
       </body>

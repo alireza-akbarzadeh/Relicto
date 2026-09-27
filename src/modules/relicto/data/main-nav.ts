@@ -34,7 +34,6 @@ export const MAIN_NAV: MainNavSection[] = [
       { href: "/profile", label: "Inventory", description: "Your showcase, storefront and watchlist.", icon: "inventory_2" },
     ],
   },
-  { id: "wallet", label: "Wallet", icon: "account_balance_wallet", href: "/wallet" },
   {
     id: "community",
     label: "Community",

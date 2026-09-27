@@ -21,6 +21,7 @@ export function WalletView({ data }: { data: WalletData }) {
 
   const depositRef = useRef<HTMLDivElement>(null);
   const cashoutRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollTo = (
     ref: RefObject<HTMLDivElement | null>,
@@ -38,10 +39,12 @@ export function WalletView({ data }: { data: WalletData }) {
 
   const handleDeposit = () => {
     scrollTo(depositRef, "deposit");
+    inputRef.current?.focus()
   };
 
   const handleCashout = () => {
     scrollTo(cashoutRef, "cashout");
+    inputRef.current?.focus()
   };
 
   const handleToSteam = () => {
@@ -101,6 +104,7 @@ export function WalletView({ data }: { data: WalletData }) {
               className="scroll-mt-24"
             >
               <WalletCashout
+               inputRef={inputRef}
                 rails={data.cashoutRails}
                 maxUsd={data.liquidUsd ?? 0}
               />

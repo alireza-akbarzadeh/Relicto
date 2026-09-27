@@ -22,7 +22,7 @@ export function WalletChip() {
               href="/wallet"
               className="group flex items-center gap-2 rounded-full px-2.5 py-1 transition-colors hover:bg-surface-container-high"
             >
-              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-tertiary/10 text-tertiary transition-transform group-hover:scale-110">
+              <div className="flex h-6 w-5 items-center justify-center rounded-full bg-tertiary/10 text-tertiary transition-transform group-hover:scale-110">
                 <Icon name="account_balance_wallet" className="text-[14px]" />
               </div>
               <span className="font-data-mono-md text-xs font-semibold tracking-tight text-text-primary">

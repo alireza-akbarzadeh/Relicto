@@ -174,7 +174,7 @@ export function UserMenu({ trigger }: UserMenuProps) {
   if (isMobile) {
     return (
       <Drawer showSwipeHandle>
-        <DrawerTrigger render={renderTrigger} />
+        <DrawerTrigger  render={renderTrigger} />
         <DrawerContent className="bg-menu-panel border-t border-white/10 p-2">
           <UserMenuInnerContent />
         </DrawerContent>
@@ -184,7 +184,7 @@ export function UserMenu({ trigger }: UserMenuProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={renderTrigger} />
+    <DropdownMenuTrigger  render={renderTrigger} />
       <DropdownMenuContent
         align="end"
         className="w-80 border border-white/10 bg-menu-panel/95 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden p-0"

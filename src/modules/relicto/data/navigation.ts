@@ -35,7 +35,6 @@ export const HUB_NAV: NavItem[] = [
   { id: "tracker", label: "Tracker", href: "/tracker" },
   { id: "inventory", label: "Inventory", href: "/profile" },
   { id: "sell", label: "Sell Items", href: "/sell" },
-  { id: "wallet", label: "Wallet & Income", href: "/wallet" },
   { id: "hub", label: "Game Hub", href: "/" },
   { id: "community", label: "Community", href: "/community" },
 ];

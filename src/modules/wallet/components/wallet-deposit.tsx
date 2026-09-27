@@ -20,7 +20,6 @@ export function WalletDeposit({
   const [amount, setAmount] = useState("250.00");
   const { pending, deposit } = useDeposit();
   const numericAmount = Number(amount) || 0;
-  // The +2% booster is for skin liquidation; a money deposit credits exactly what's sent.
   const skins = !isMoneyRail(rail);
   const credited = (skins ? numericAmount * 1.02 : numericAmount).toFixed(2);
   const copyAddress = async () => {
@@ -75,15 +74,34 @@ export function WalletDeposit({
         </div>
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
           Deposit Amount (USD)
-          <div className="flex items-center rounded-lg bg-surface-container-lowest px-space-md">
-            <span className="font-data-mono-lg text-text-muted">$</span>
+          <div className="group flex h-14 items-center rounded-lg border border-transparent bg-surface-container-lowest px-space-md transition-colors focus-within:border-primary/30 focus-within:bg-surface-container-low">
+            <span className="mr-space-sm font-data-mono-xl text-text-muted">
+              $
+            </span>
+
             <Input
               type="number"
+              inputMode="decimal"
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
-              className="h-auto border-0 bg-transparent p-space-sm font-data-mono-lg text-text-primary focus-visible:ring-0"
+              className="
+        h-full min-w-0 flex-1
+        border-0 bg-transparent p-0
+        font-data-mono-xl font-medium
+        text-text-primary
+        placeholder:text-text-muted
+        focus-visible:ring-0
+        focus-visible:ring-offset-0
+        [appearance:textfield]
+        [&::-webkit-inner-spin-button]:appearance-none
+        [&::-webkit-outer-spin-button]:appearance-none
+      "
+              placeholder="0.00"
             />
-            <span className="font-data-mono-md text-text-secondary">USD</span>
+
+            <span className="ml-space-sm font-data-mono-md text-text-secondary">
+              USD
+            </span>
           </div>
         </label>
         <div className="flex flex-wrap items-center gap-space-xs">

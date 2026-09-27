@@ -13,11 +13,9 @@ import { WalletRail } from "./wallet-rail";
 export function WalletCashout({
   rails,
   maxUsd,
-  inputRef,
 }: {
   rails: WalletRailType[];
   maxUsd: number;
-  inputRef:Ref<HTMLInputElement> 
 }) {
   const { pending, request } = useCashout();
   const [rail, setRail] = useState("usdt");
@@ -93,7 +91,6 @@ export function WalletCashout({
           <div className="flex items-center rounded-lg bg-surface-container-lowest px-space-md">
             <span className="font-data-mono-lg text-text-muted">$</span>
             <Input
-            ref={inputRef}
               type="number"
               value={amount}
               onChange={(event) => setAmount(event.target.value)}

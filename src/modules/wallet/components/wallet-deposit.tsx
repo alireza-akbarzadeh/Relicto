@@ -1,27 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
-import type { WalletRail as WalletRailType } from "../types";
+import { Ref, useState } from "react";
+import { toast } from "sonner";
 import { isMoneyRail, useDeposit } from "../hooks/use-deposit";
+import type { WalletRail as WalletRailType } from "../types";
+import { WalletAction } from "./wallet-action-button";
 import { WalletRail } from "./wallet-rail";
+import { WalletSummary } from "./wallet-summary";
 
 export function WalletDeposit({
   rails,
   testMode = false,
+  inputRef,
+  activeAction,
 }: {
   rails: WalletRailType[];
   testMode?: boolean;
+  inputRef: Ref<HTMLInputElement>;
+  activeAction: WalletAction;
 }) {
   const [rail, setRail] = useState("crypto");
   const [amount, setAmount] = useState("250.00");
   const { pending, deposit } = useDeposit();
   const numericAmount = Number(amount) || 0;
   const skins = !isMoneyRail(rail);
-  const credited = (skins ? numericAmount * 1.02 : numericAmount).toFixed(2);
   const copyAddress = async () => {
     await navigator.clipboard.writeText("0x71C92a46B9f76D2189CB91823B492");
     toast.success("Deposit address copied");
@@ -83,19 +88,20 @@ export function WalletDeposit({
               type="number"
               inputMode="decimal"
               value={amount}
+              ref={inputRef}
               onChange={(event) => setAmount(event.target.value)}
               className="
-        h-full min-w-0 flex-1
-        border-0 bg-transparent p-0
-        font-data-mono-xl font-medium
-        text-text-primary
-        placeholder:text-text-muted
-        focus-visible:ring-0
-        focus-visible:ring-offset-0
-        [appearance:textfield]
-        [&::-webkit-inner-spin-button]:appearance-none
-        [&::-webkit-outer-spin-button]:appearance-none
-      "
+                  h-full min-w-0 flex-1
+                  border-0 bg-transparent p-0
+                  font-data-mono-xl font-medium
+                  text-text-primary
+                  placeholder:text-text-muted
+                  focus-visible:ring-0
+                  focus-visible:ring-offset-0
+                  [appearance:textfield]
+                  [&::-webkit-inner-spin-button]:appearance-none
+                  [&::-webkit-outer-spin-button]:appearance-none
+                   "
               placeholder="0.00"
             />
 
@@ -117,28 +123,7 @@ export function WalletDeposit({
             </Button>
           ))}
         </div>
-        <div className="flex flex-col gap-1 rounded-lg bg-surface-container-lowest/70 p-space-sm font-data-mono-md text-body-sm">
-          <div className="flex justify-between text-text-muted">
-            <span>Subtotal</span>
-            <span>${numericAmount.toFixed(2)} USD</span>
-          </div>
-          <div className="flex justify-between text-text-muted">
-            <span>Network Protocol Ingress Fee</span>
-            <span className="text-tertiary">0.00 USD (PROMO)</span>
-          </div>
-          <div className="flex justify-between text-text-muted">
-            <span>Liquidation Booster Tier</span>
-            <span className="text-primary">
-              {skins
-                ? `+2.0% ($${(numericAmount * 0.02).toFixed(2)} USD)`
-                : "Skin rail only"}
-            </span>
-          </div>
-          <div className="flex justify-between border-t border-surface-variant pt-1 font-bold text-text-primary">
-            <span>Total Balance Credited</span>
-            <span className="text-tertiary">${credited} USD</span>
-          </div>
-        </div>
+       <WalletSummary activeAction={activeAction} numericAmount={numericAmount} skins={skins} />
       </div>
       <div className="flex flex-col gap-space-xs">
         {testMode && <TestModeStrip />}

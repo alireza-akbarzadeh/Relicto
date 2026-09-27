@@ -93,6 +93,8 @@ export function WalletView({ data }: { data: WalletData }) {
               className="scroll-mt-24"
             >
               <WalletDeposit
+                activeAction={activeAction}
+                inputRef={inputRef}
                 rails={data.depositRails}
                 testMode={data.testDeposits}
               />
@@ -104,7 +106,6 @@ export function WalletView({ data }: { data: WalletData }) {
               className="scroll-mt-24"
             >
               <WalletCashout
-               inputRef={inputRef}
                 rails={data.cashoutRails}
                 maxUsd={data.liquidUsd ?? 0}
               />

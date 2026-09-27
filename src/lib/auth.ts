@@ -5,6 +5,7 @@ import { dash } from "@better-auth/infra";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { steamAuth } from "@/lib/steam/steam-auth-plugin";
+import { bootstrapTrader } from "@/server/modules/profile/profile.bootstrap";
 
 /**
  * Where this instance actually runs. Vercel injects `VERCEL_URL` per
@@ -30,6 +31,21 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        /**
+         * Runs after the sign-up transaction commits. A failure must not fail the
+         * sign-up that already succeeded; the profile page opens it lazily instead.
+         */
+        after: async (created) => {
+          await bootstrapTrader(db, created.id).catch((error) => {
+            console.error(`[auth] trader bootstrap failed for ${created.id}`, error);
+          });
+        },
+      },
+    },
   },
   plugins: [
     dash({

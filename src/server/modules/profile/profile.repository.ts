@@ -12,10 +12,18 @@ import {
   reviews,
   showcaseItems,
 } from "@/lib/db/schema";
+import { bootstrapTrader } from "./profile.bootstrap";
 
 export async function findProfile(userId: string) {
   const [row] = await db.select().from(profiles).where(eq(profiles.userId, userId)).limit(1);
   return row ?? null;
+}
+
+/** As `findProfile`, but opens one for an account that predates the sign-up hook. */
+export async function findOrOpenProfile(userId: string) {
+  const found = await findProfile(userId);
+  if (found) return found;
+  return (await bootstrapTrader(db, userId)) === "missing" ? null : findProfile(userId);
 }
 
 export async function findShowcase(profileId: string) {

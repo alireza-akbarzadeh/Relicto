@@ -13,19 +13,22 @@ export function ratingTier(rating: number) {
   return "Rising Trader";
 }
 
+/** A fresh trader has no art of their own yet; the hero needs a banner to render. */
+const DEFAULT_BANNER = "/images/lootora/user-profile-01.jpg";
+
 export function toIdentity(profile: Profile): TraderIdentity {
   return {
     handle: profile.handle,
     realName: profile.realName ?? "",
     alias: profile.alias ?? `@${profile.handle.toLowerCase()}`,
     role: profile.role,
-    tier: profile.tier ?? "",
+    tier: profile.tier ?? ratingTier(profile.ratingHundredths / 100),
     steamId: profile.steamId ?? "",
-    openId: profile.openId ?? "",
+    openId: profile.openId ?? (profile.steamId ? "STEAM OPENID 2.0 SYNCED" : "STEAM NOT LINKED"),
     avatar: profile.avatar ?? "/images/lootora/avatar.jpg",
     avatarAlt: profile.avatarAlt ?? `${profile.handle} profile portrait`,
-    banner: profile.banner ?? "",
-    bannerAlt: profile.bannerAlt ?? "",
+    banner: profile.banner ?? DEFAULT_BANNER,
+    bannerAlt: profile.bannerAlt ?? "Neon esports lattice behind the trader's profile",
     telemetry: (profile.telemetry ?? []) as TraderIdentity["telemetry"],
     ranks: (profile.ranks ?? []) as TraderIdentity["ranks"],
     trust: {
@@ -33,7 +36,7 @@ export function toIdentity(profile: Profile): TraderIdentity {
       trades: `(${profile.tradeCount.toLocaleString("en-US")} TRADES)`,
     },
     tradeUrl: profile.tradeUrl ?? "",
-    handshake: profile.handshakeLabel ?? "",
+    handshake: profile.handshakeLabel ?? "No bot handshake yet",
   };
 }
 

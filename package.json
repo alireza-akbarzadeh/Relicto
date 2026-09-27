@@ -11,6 +11,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/server/seed/seed.ts",
+    "db:backfill-traders": "tsx src/server/seed/backfill-traders.ts",
     "db:pull": "drizzle-kit introspect",
     "db:studio": "drizzle-kit studio",
     "db:check": "drizzle-kit check"

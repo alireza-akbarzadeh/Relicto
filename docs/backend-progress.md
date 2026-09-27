@@ -775,10 +775,48 @@ console errors. `tsc`, `eslint`, `next build` clean.
 
 - **Seeded prices are far from the market** (Dragon Lore $5,200 vs $11,538 on
   Skinport); the search shows those gaps honestly.
-- New Steam traders get no `profiles` row or wallet until they act (the first
-  deposit opens the wallet); profile bootstrap on sign-up is next.
+- ~~New Steam traders get no `profiles` row or wallet until they act.~~ Fixed
+  by the profile bootstrap below.
 - Mobile has no palette trigger beyond the hotkeys; mobile deposit is untouched.
 - Public trader storefronts, a Stitch design each: see the design list.
+
+## Profile bootstrap (2026-09-27)
+
+Every account now gets its own trading profile and a $0.00 vault the moment
+it exists. Before this, a fresh sign-up (email or Steam) saw the **sample
+trader's** profile, and it had no vault until its first deposit.
+`inventory-sync` and trade-ups also updated a `profiles` row that wasn't there.
+
+`profile.bootstrap.ts` → `bootstrapTrader(db, userId)`, which runs in three places:
+
+| Path | When |
+| --- | --- |
+| Better Auth `databaseHooks.user.create.after` | Every new account, after the sign-up transaction commits. A failure is logged and doesn't fail the sign-up. |
+| `findOrOpenProfile` (profile service, desktop + mobile) | First profile read by an account that has none: older accounts, or a failed hook. |
+| `npm run db:backfill-traders` | One-off for existing accounts; skips `seed-*` users. Run it on production at release. |
+
+- **Idempotent.** An existing profile or vault is never touched. Ids are
+  `profile-<userId>` / `wallet-<userId>`, the same ones the seed uses, so
+  `db:seed -- --user` upserts onto a bootstrapped row.
+- **Handle**: `user.name` with whitespace → `_`, symbols stripped, ≤ 24 chars.
+  A taken handle gets a suffix from the account id (`KuroSkins_ab12`).
+- **Steam** accounts get their SteamID64 (from `<id>@steam.invalid`) and their avatar.
+- **Presenter defaults** so an empty profile renders cleanly: the default banner,
+  the tier from the rating (`Rising Trader`), `STEAM NOT LINKED` / `STEAM OPENID
+  2.0 SYNCED`, and `No bot handshake yet`.
+- The house seller (`seed-seller-relicto`) keeps having no profile on purpose:
+  its book rows read "House inventory".
+
+Verified: `.verify-bootstrap.mts` (12 checks: hook opens profile + vault, handle
+collision suffix, re-run no-op, unknown account, lazy reopen, identity defaults,
+empty collections, mobile). The backfill on dev opened 2 profiles, and a second
+run changed nothing. In Chromium, a fresh account's `/profile` returned 200 at
+1440 and 390 with its own handle, no sample data and no console errors.
+
+**Still open.** Empty sections show only their heading, since there is no
+empty-state design. The session header prints `user.name` ("Fresh Trader"),
+not the profile handle, and `SessionUser.level/role` are still fixed defaults:
+`getSession` doesn't read the profile yet.
 
 ## Known data artifacts
 

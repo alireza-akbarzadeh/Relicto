@@ -13,9 +13,9 @@ import * as repository from "./profile.repository";
 const LISTINGS_SHOWN = 3;
 
 export const profileService = {
-  /** The signed-in trader's own profile, or null when they have none yet. */
+  /** The signed-in trader's own profile, opened on first read; null only for an unknown account. */
   async detail(userId: string): Promise<ProfileData | null> {
-    const profile = await repository.findProfile(userId);
+    const profile = await repository.findOrOpenProfile(userId);
     if (!profile) return null;
 
     const now = new Date();
@@ -52,7 +52,7 @@ export const profileService = {
 
   /** The same trader in the mobile profile's shape; `chrome` is the screen's authored furniture. */
   async mobile(userId: string, chrome: ProfileChrome): Promise<ProfileMobile | null> {
-    const profile = await repository.findProfile(userId);
+    const profile = await repository.findOrOpenProfile(userId);
     if (!profile) return null;
 
     const [cards, activity, escrow] = await Promise.all([

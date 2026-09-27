@@ -30,6 +30,7 @@ export function useDeposit() {
       try {
         const result = await depositFunds({ rail, amountUsd });
         if (result.status === "credited") {
+          router.refresh();
           toast.success(`${formatMoney(amountUsd)} added to your vault`, {
             description: `Test deposit — nothing was charged. Vault balance ${formatMoney(result.balanceCents / 100)}.`,
           });

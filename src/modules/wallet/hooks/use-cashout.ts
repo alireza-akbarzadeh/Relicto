@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
@@ -16,18 +17,28 @@ const REFUSED = {
 
 /** Files a cashout request: the amount leaves the vault now and pays out once the rail settles. */
 export function useCashout() {
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  const request = (rail: string, amountUsd: number) => {
+  const request = (rail: string, amountUsd: number, maxUsd: number, steamToken: string) => {
     if (!RAILS.includes(rail as Rail)) return toast.error("Pick a cashout rail");
     if (!(amountUsd > 0)) return toast.error("Enter an amount to withdraw");
+    if (amountUsd > maxUsd) {
+      return toast.error("Amount exceeds available balance", {
+        description: `You can withdraw up to ${formatMoney(maxUsd)} right now.`,
+      });
+    }
+    if (steamToken.trim().length < 5) {
+      return toast.error("Steam Guard token required", { description: "Enter the 5-character code from your Steam Mobile app." });
+    }
 
     startTransition(async () => {
       try {
         const { status } = await requestCashout({ rail: rail as Rail, amountUsd });
         if (status === "requested") {
+          router.refresh();
           toast.success("Cashout requested", {
-            description: `${formatMoney(amountUsd)} is held for payout and shows as processing in your ledger.`,
+            description: `${formatMoney(amountUsd)} is held for payout and shows as PROCESSING in your ledger.`,
           });
         } else {
           toast.error(REFUSED[status][0], { description: REFUSED[status][1] });

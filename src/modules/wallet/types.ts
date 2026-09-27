@@ -15,6 +15,8 @@ export type WalletMetric = {
 
 export type WalletRail = { id: string; label: string; icon: IconName };
 
+export type WalletLedgerKind = "deposit" | "withdrawal" | "purchase" | "sale" | "adjustment" | "fee";
+
 export type WalletTransaction = {
   id: string;
   icon: IconName;
@@ -27,6 +29,8 @@ export type WalletTransaction = {
   amountTone: "primary" | "amber";
   status: string;
   statusTone: "live" | "cyan" | "amber";
+  statusHint: string;
+  kind: WalletLedgerKind;
   action: string;
   actionIcon: IconName;
 };
@@ -45,4 +49,6 @@ export type WalletData = {
   testDeposits?: boolean;
   /** The emergency lock is on. */
   frozen?: boolean;
+  /** Sample treasury shown until the first deposit opens a real vault. */
+  isPreview?: boolean;
 };

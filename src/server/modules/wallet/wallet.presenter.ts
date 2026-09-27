@@ -25,12 +25,25 @@ function iconFor(entry: Entry): IconName {
 }
 
 /** Settled money reads differently depending on what it bought. */
-function statusFor(entry: Entry): Pick<WalletTransaction, "status" | "statusTone"> {
-  if (entry.status === "failed") return { status: "FAILED", statusTone: "amber" };
-  if (entry.status === "pending") return { status: "PROCESSING", statusTone: "live" };
-  if (entry.kind === "purchase") return { status: "DELIVERED", statusTone: "cyan" };
-  if (entry.kind === "sale") return { status: "SETTLED", statusTone: "live" };
-  return { status: "COMPLETED", statusTone: "live" };
+function statusFor(entry: Entry): Pick<WalletTransaction, "status" | "statusTone" | "statusHint"> {
+  if (entry.status === "failed") {
+    return { status: "FAILED", statusTone: "amber", statusHint: "Payout rejected — funds returned to vault" };
+  }
+  if (entry.status === "pending") {
+    if (entry.kind === "withdrawal") {
+      return { status: "PROCESSING", statusTone: "live", statusHint: "Held for rail dispatch — balance already debited" };
+    }
+    return { status: "PROCESSING", statusTone: "live", statusHint: "Awaiting settlement confirmation" };
+  }
+  if (entry.kind === "deposit") {
+    return { status: "CREDITED", statusTone: "cyan", statusHint: "Available in your liquid balance" };
+  }
+  if (entry.kind === "withdrawal") {
+    return { status: "DISPATCHED", statusTone: "live", statusHint: "Sent to destination rail" };
+  }
+  if (entry.kind === "purchase") return { status: "DELIVERED", statusTone: "cyan", statusHint: "Item released from escrow" };
+  if (entry.kind === "sale") return { status: "SETTLED", statusTone: "live", statusHint: "Proceeds credited to vault" };
+  return { status: "COMPLETED", statusTone: "live", statusHint: "Recorded on-chain audit log" };
 }
 
 export const usd = (cents: number) =>
@@ -50,6 +63,7 @@ export function toWalletTransaction(entry: Entry): WalletTransaction {
     node: entry.nodeLabel ?? "",
     amount: `${credit ? "+" : "-"}${usd(entry.amountCents)}`,
     amountTone: credit ? "amber" : "primary",
+    kind: entry.kind as WalletTransaction["kind"],
     ...statusFor(entry),
     ...(ACTION[entry.venue] ?? ACTION.internal),
   };

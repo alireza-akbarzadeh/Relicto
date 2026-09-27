@@ -9,7 +9,10 @@ import { walletService } from "@/server/modules/wallet/wallet.service";
 /** Holds the amount and files a payout request; the header balance and ledger move with it. */
 export async function requestCashout(input: z.input<typeof cashoutInput>) {
   const result = await walletService.requestCashout(await requireUserId(), cashoutInput.parse(input));
-  if (result.status === "requested") revalidatePath("/", "layout");
+  if (result.status === "requested") {
+    revalidatePath("/", "layout");
+    revalidatePath("/wallet");
+  }
   return { status: result.status };
 }
 
@@ -24,6 +27,9 @@ export async function setVaultFrozen(input: z.input<typeof freezeInput>) {
 /** Tops up the vault — simulated until a payment provider is connected, and refused in production. */
 export async function depositFunds(input: z.input<typeof depositInput>) {
   const result = await walletService.deposit(await requireUserId(), depositInput.parse(input));
-  if (result.status === "credited") revalidatePath("/", "layout");
+  if (result.status === "credited") {
+    revalidatePath("/", "layout");
+    revalidatePath("/wallet");
+  }
   return result;
 }

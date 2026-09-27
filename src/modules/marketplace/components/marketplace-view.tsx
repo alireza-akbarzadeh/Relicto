@@ -1,4 +1,4 @@
-import { MarketFooter } from "@/modules/relicto/components/shell/footers";
+import { StudioFooter } from "@/modules/relicto/components/shell/footers";
 import { LISTINGS_ANCHOR } from "../lib/scroll";
 import { MarketplaceProvider } from "../state/marketplace-provider";
 import type { MarketplaceResults } from "../types";
@@ -44,7 +44,7 @@ export function MarketplaceView({ results }: MarketplaceViewProps) {
             </div>
           </div>
         </main>
-        <MarketFooter />
+        <StudioFooter />
       </div>
     </MarketplaceProvider>
   );

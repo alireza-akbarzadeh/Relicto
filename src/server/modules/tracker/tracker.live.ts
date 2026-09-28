@@ -1,5 +1,7 @@
 import type { LiveBook, SeriesPoint, TrackerLive } from "@/modules/tracker/types";
 import type { PricePointRow } from "../items/items.types";
+import { simulatedHistory } from "./tracker.sim-history";
+import { simulateVenues, venueQuotes } from "./tracker.venues";
 
 const DAY = 86_400_000;
 const money = (usd: number | null) =>
@@ -21,9 +23,16 @@ type Focus = { slug: string; name: string; gameId: string; rarity: string | null
  * market series with Relicto's sales on it, and stat tiles computed from both —
  * nothing here is authored.
  */
-export function toTrackerLive(focus: Focus, book: LiveBook, history: PricePointRow[], now = new Date()): TrackerLive {
+export function toTrackerLive(focus: Focus, book: LiveBook, history: PricePointRow[], now = new Date(), simulate = simulateVenues()): TrackerLive {
   const point = (row: PricePointRow): SeriesPoint => ({ at: row.recordedAt.getTime(), price: row.priceCents / 100 });
-  const series = history.filter((row) => row.venue === "skinport").map(point);
+  const observed = history.filter((row) => row.venue === "skinport");
+  const real = observed.map(point);
+
+  // Test mode, too little history to draw: walk back from today's simulated quote (the ticker's figure).
+  const venueRow = book.bestAsk === null ? null : { slug: focus.slug, floorCents: Math.round(book.bestAsk * 100), steamCents: null, feedCents: observed.at(-1)?.priceCents ?? null };
+  const today = simulate && real.length < 2 && venueRow ? venueQuotes(venueRow, now.getTime(), true).secondary.usd : null;
+  const simulated = today !== null;
+  const series = simulated ? simulatedHistory(focus.slug, today, now.getTime()) : real;
   const sales = history.filter((row) => row.venue === "relicto").map(point);
   const month = series.filter((p) => now.getTime() - p.at <= 30 * DAY);
   const high = month.length ? Math.max(...month.map((p) => p.price)) : null;
@@ -40,6 +49,7 @@ export function toTrackerLive(focus: Focus, book: LiveBook, history: PricePointR
     book,
     series,
     sales,
+    simulated,
     stats: [
       { label: "Best Bid", value: money(book.bestBid), tone: "cyan" },
       { label: "Best Ask", value: money(book.bestAsk), tone: "primary" },

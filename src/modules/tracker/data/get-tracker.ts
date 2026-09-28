@@ -1,6 +1,8 @@
 import "server-only";
 import { requireUserId } from "@/modules/relicto/data/get-session";
+import { marketSnapshot } from "@/server/modules/tracker/tracker.feed";
 import { trackerService } from "@/server/modules/tracker/tracker.service";
+import type { MarketSnapshot, TrackerMarket } from "../market.types";
 import type { TrackerData } from "../types";
 import { tracker } from "./tracker.mock";
 import { trackerMobile } from "./tracker-mobile.mock";
@@ -13,6 +15,11 @@ export async function getTracker(asset = ""): Promise<TrackerData> {
   const terminal = await trackerService.terminal(await requireUserId(), asset || undefined);
   // Without a board, the sample board shows — but the focused item's book and chart are always real.
   return terminal.assets.length > 0 ? terminal : { ...tracker, live: terminal.live };
+}
+
+/** The market panels' first frame; the market stream takes over in the browser. */
+export async function getTrackerMarket(market: TrackerMarket, focus: string | null): Promise<MarketSnapshot> {
+  return marketSnapshot(await requireUserId(), market, focus);
 }
 
 /** Mobile terminal: the same board, depth, spreads and history as desktop, with the mobile chrome. */

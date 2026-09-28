@@ -5,13 +5,16 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { TRACKER_SPANS } from "../../lib/search-params";
-import type { TrackerLive } from "../../types";
+import type { SeriesPoint, TrackerLive } from "../../types";
 import { LiveChart } from "./live-chart";
 
 const TONE = { primary: "text-primary", cyan: "text-status-upcoming", amber: "text-tertiary", muted: "text-text-primary" };
 
-/** The focused item's header, computed stat tiles, span pills and real chart. */
-export function LiveTerminal({ live, span, setSpan }: { live: TrackerLive; span: string; setSpan: (span: string) => void }) {
+/**
+ * The focused item's header, computed stat tiles, span pills and chart. The
+ * market stream's current quote for it (`now`) is the line's live end point.
+ */
+export function LiveTerminal({ live, now, span, setSpan }: { live: TrackerLive; now?: SeriesPoint; span: string; setSpan: (span: string) => void }) {
   const { focus, book } = live;
   return (
     <section className="flex flex-col gap-space-md rounded-xl border border-white/8 bg-surface-card p-space-lg shadow-xl">
@@ -57,11 +60,14 @@ export function LiveTerminal({ live, span, setSpan }: { live: TrackerLive; span:
             </Button>
           ))}
         </div>
-        <span className="font-body-sm text-[11px] text-text-muted">Daily lowest Skinport ask · dots are Relicto sales</span>
+        <span className="font-body-sm text-[11px] text-text-muted">
+          {live.simulated ? "SIM daily ask (test mode, no feed history yet)" : "Daily lowest Skinport ask · dots are Relicto sales"}
+          {now && " · live end point"}
+        </span>
       </div>
 
       <div className="relative h-64 overflow-hidden rounded-lg border border-white/6 bg-surface-container-lowest p-3">
-        <LiveChart series={live.series} sales={live.sales} span={span} />
+        <LiveChart series={live.series} sales={live.sales} span={span} live={now} />
       </div>
     </section>
   );

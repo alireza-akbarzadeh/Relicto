@@ -49,6 +49,8 @@ export type TrackerLive = {
   series: SeriesPoint[];
   /** Relicto's settled sales. */
   sales: SeriesPoint[];
+  /** `series` is test-mode drift (no market observations yet), not recorded history. */
+  simulated: boolean;
   stats: { label: string; value: string; tone: "primary" | "cyan" | "amber" | "muted" }[];
 };
 

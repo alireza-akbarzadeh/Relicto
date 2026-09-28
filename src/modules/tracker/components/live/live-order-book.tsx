@@ -4,15 +4,9 @@ import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
-import { useLiveBook, type StreamState } from "../../hooks/use-live-book";
+import { useLiveBook } from "../../hooks/use-live-book";
+import { STREAM_STATE } from "../../lib/terminal-format";
 import type { BookLevel, LiveBook } from "../../types";
-
-const STATE: Record<StreamState, { label: string; tone: string; dot: string }> = {
-  live: { label: "Live", tone: "text-status-upcoming", dot: "bg-status-upcoming animate-pulse" },
-  polling: { label: "Polling", tone: "text-tertiary", dot: "bg-tertiary" },
-  connecting: { label: "Connecting", tone: "text-text-muted", dot: "bg-text-muted animate-pulse" },
-  offline: { label: "Offline", tone: "text-status-live", dot: "bg-status-live" },
-};
 
 function Level({ level, side, widest }: { level: BookLevel; side: "ask" | "bid"; widest: number }) {
   const ask = side === "ask";
@@ -37,7 +31,7 @@ function Level({ level, side, widest }: { level: BookLevel; side: "ask" | "bid";
 export function LiveOrderBook({ initial }: { initial: LiveBook }) {
   const { book, state, changedAt } = useLiveBook(initial);
   const widest = Math.max(1, ...book.asks.map((l) => l.quantity), ...book.bids.map((l) => l.quantity));
-  const status = STATE[state];
+  const status = STREAM_STATE[state];
 
   return (
     <section className="flex flex-col gap-space-md rounded-xl border border-white/8 bg-surface-card p-space-md shadow-xl">

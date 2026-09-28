@@ -13,13 +13,15 @@ const WINDOW: Record<string, number | null> = { "7D": 7 * DAY, "30D": 30 * DAY, 
 const day = (at: number) => new Date(at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 /**
- * The focused item's real price history: the daily market ask as the line,
- * Relicto's settled sales as dots on it. Axes scale from the data.
+ * The focused item's price history: the daily market ask as the line,
+ * Relicto's settled sales as dots on it, and the stream's current quote as a
+ * pulsing end point that moves with every frame. Axes scale from the data.
  */
-export function LiveChart({ series, sales, span }: { series: SeriesPoint[]; sales: SeriesPoint[]; span: string }) {
+export function LiveChart({ series, sales, span, live }: { series: SeriesPoint[]; sales: SeriesPoint[]; span: string; live?: SeriesPoint }) {
   const window = WINDOW[span] ?? null;
-  const newest = series.at(-1)?.at ?? 0;
-  const shown = window ? series.filter((point) => newest - point.at <= window) : series;
+  const all = live && live.at > (series.at(-1)?.at ?? 0) ? [...series, live] : series;
+  const newest = all.at(-1)?.at ?? 0;
+  const shown = window ? all.filter((point) => newest - point.at <= window) : all;
 
   if (shown.length < 2) {
     return (
@@ -65,6 +67,7 @@ export function LiveChart({ series, sales, span }: { series: SeriesPoint[]; sale
         {visibleSales.map((sale) => (
           <ReferenceDot key={sale.at} x={sale.at} y={sale.price} r={4} className="fill-status-upcoming stroke-canvas-base" />
         ))}
+        {live && shown.at(-1) === live && <ReferenceDot x={live.at} y={live.price} r={4} className="animate-pulse fill-primary stroke-canvas-base" />}
       </AreaChart>
     </ChartContainer>
   );

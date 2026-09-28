@@ -4,15 +4,18 @@ import { Client } from "pg";
 
 /**
  * One `LISTEN market` connection per server instance, fanned out to every
- * stream watching an item. Postgres triggers (migration 0021) notify with the
- * item id whenever its listings, offers or price points change.
+ * stream watching an item — or the whole market. Postgres triggers (migration
+ * 0021) notify with the item id whenever its listings, offers or price points change.
  *
  * LISTEN needs a session connection, so this uses the direct (unpooled) URL —
  * Neon's pooler runs in transaction mode. The connection closes a minute
  * after the last watcher leaves, so an idle app lets the database sleep.
  */
 
-type Watcher = () => void;
+type Watcher = (itemId: string) => void;
+
+/** Key for streams that want every item's changes. */
+const ALL = "*";
 
 const watchers = new Map<string, Set<Watcher>>();
 let client: Client | null = null;
@@ -27,6 +30,11 @@ function drop() {
   old?.end().catch(() => {});
 }
 
+function dispatch(itemId: string) {
+  watchers.get(itemId)?.forEach((notify) => notify(itemId));
+  watchers.get(ALL)?.forEach((notify) => notify(itemId));
+}
+
 async function connect(): Promise<boolean> {
   if (client) return true;
   if (connecting) return connecting;
@@ -39,7 +47,7 @@ async function connect(): Promise<boolean> {
       await next.connect();
       await next.query("LISTEN market");
       next.on("notification", (message) => {
-        if (message.channel === "market" && message.payload) watchers.get(message.payload)?.forEach((notify) => notify());
+        if (message.channel === "market" && message.payload) dispatch(message.payload);
       });
       // A dropped connection is replaced on the next subscribe; streams keep a slow poll meanwhile.
       next.on("error", drop);
@@ -58,24 +66,20 @@ async function connect(): Promise<boolean> {
   return connecting;
 }
 
-/**
- * Calls `notify` whenever the item's market changes. `live` says whether push
- * is working; when it isn't, the caller should poll.
- */
-export async function watchItem(itemId: string, notify: Watcher): Promise<{ live: boolean; stop: () => void }> {
+async function watch(key: string, notify: Watcher): Promise<{ live: boolean; stop: () => void }> {
   if (idleTimer) {
     clearTimeout(idleTimer);
     idleTimer = null;
   }
-  const set = watchers.get(itemId) ?? new Set<Watcher>();
+  const set = watchers.get(key) ?? new Set<Watcher>();
   set.add(notify);
-  watchers.set(itemId, set);
+  watchers.set(key, set);
 
   const live = await connect();
 
   const stop = () => {
     set.delete(notify);
-    if (set.size === 0) watchers.delete(itemId);
+    if (set.size === 0) watchers.delete(key);
     if (watchers.size === 0 && !idleTimer) {
       idleTimer = setTimeout(() => {
         idleTimer = null;
@@ -85,3 +89,12 @@ export async function watchItem(itemId: string, notify: Watcher): Promise<{ live
   };
   return { live, stop };
 }
+
+/**
+ * Calls `notify` whenever the item's market changes. `live` says whether push
+ * is working; when it isn't, the caller should poll.
+ */
+export const watchItem = (itemId: string, notify: () => void) => watch(itemId, () => notify());
+
+/** Calls `notify(itemId)` whenever any item's market changes. */
+export const watchMarket = (notify: Watcher) => watch(ALL, notify);

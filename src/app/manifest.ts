@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 
 /**
  * Installable web app. Besides the home-screen icon, iOS only delivers Web
@@ -7,9 +8,9 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Relicto — Steam Skin Exchange",
-    short_name: "Relicto",
-    description: "Buy, sell and trade CS2, Dota 2 and TF2 items with escrow protection.",
+    name: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    short_name: SITE_NAME,
+    description: SITE_DESCRIPTION,
     start_url: "/marketplace",
     display: "standalone",
     background_color: "#0a0d14",

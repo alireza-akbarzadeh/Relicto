@@ -8,7 +8,7 @@ export function InspectorHeader() {
       <div className="flex h-16 items-center justify-between gap-space-sm px-space-md">
         <div className="flex items-center gap-space-sm">
           <MobileBackButton fallback="/marketplace" className="rounded-lg bg-surface-card/60 text-text-secondary hover:text-text-primary" />
-          <h1 className="font-headline-sm text-headline-sm tracking-wide text-text-primary uppercase">Item Inspector</h1>
+          <p className="font-headline-sm text-headline-sm tracking-wide text-text-primary uppercase">Item Inspector</p>
         </div>
         <div className="flex items-center gap-space-sm">
           <UserMenu trigger="mobile" />

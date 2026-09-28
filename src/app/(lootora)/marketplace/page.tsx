@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { MarketplaceView } from "@/modules/marketplace/components/marketplace-view";
 import { MarketplaceMobile } from "@/modules/marketplace/components/mobile/marketplace-mobile";
 import { getMarketplaceMobile, getMarketplaceResults } from "@/modules/marketplace/data/get-marketplace";
+import { marketplaceMetadata } from "@/modules/marketplace/lib/marketplace-seo";
 import { loadMarketplaceSearchParams, toFilters } from "@/modules/marketplace/lib/search-params";
 
-export const metadata: Metadata = {
-  title: "Marketplace",
-  description: "Discover, compare and trade verified Steam cosmetics with instant bot escrow.",
-};
+export async function generateMetadata({ searchParams }: PageProps<"/marketplace">): Promise<Metadata> {
+  return marketplaceMetadata(await searchParams);
+}
 
 /**
  * Filters live in the URL, and Postgres applies them: this reads the same nuqs

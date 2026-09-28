@@ -1,4 +1,5 @@
 import type { ItemBadge, ItemDetail, RarityVariant, RelatedItem } from "@/modules/items/types";
+import { gameMarketPath } from "@/modules/seo/lib/games";
 import type { SellerBook } from "./items.book";
 import { toIntelligence } from "./items.intelligence";
 import type { ItemRow, ItemStyleRow, ListingRow, PricePointRow, RelatedRow } from "./items.types";
@@ -60,7 +61,7 @@ export function toItemDetail(
     classId: item.steamClassId ?? "—",
     syncedAgo: "just now",
     breadcrumb: [
-      { label: gameLabel, href: `/marketplace?ecosystem=${item.gameId}` },
+      { label: gameLabel, href: gameMarketPath(item.gameId) },
       ...(item.heroName ? [{ label: item.heroName }] : []),
       { label: item.name, chip: true },
     ],

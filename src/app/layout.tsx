@@ -3,17 +3,28 @@ import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/toaster";
 import { fontVariables } from "@/lib/fonts";
+import { INDEXABLE, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
 import { THEME_SCRIPT } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
+/**
+ * Site-wide defaults. Pages set their own title, description and canonical
+ * through `pageMetadata`; there's deliberately no canonical here, or every
+ * page would inherit the home page's.
+ */
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
-    default: "Relicto — Steam Intel Exchange",
-    template: "%s | Relicto",
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description: "Discover, trade and track Dota 2 and CS2 items with instant bot escrow.",
+  description: SITE_DESCRIPTION,
+  openGraph: { siteName: SITE_NAME, type: "website", locale: "en_US" },
+  twitter: { card: "summary" },
+  robots: INDEXABLE ? { index: true, follow: true } : { index: false, follow: false },
 };
 
 export const viewport: Viewport = {

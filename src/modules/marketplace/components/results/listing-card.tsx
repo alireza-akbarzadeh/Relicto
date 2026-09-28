@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -94,7 +95,8 @@ export function ListingCard({
               "transition-colors duration-200 group-hover:text-primary",
             )}
           >
-            {listing.name}
+            {/* A real link, so crawlers (and middle-click) reach the item page, not just the Offers button. */}
+            <Link href={`/items/${listing.id}`}>{listing.name}</Link>
           </h4>
 
           <div className="mt-1 flex min-w-0 items-center gap-1.5 font-body-sm text-body-sm text-text-muted">

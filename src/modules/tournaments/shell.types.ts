@@ -17,11 +17,6 @@ export type DesktopShell = {
   activeNav: string;
   searchPlaceholder: string;
   user: ArenaUser;
-  footer: {
-    description: string;
-    links: NavLink[];
-    copyright: string;
-  };
 };
 
 export type MobileTab = { id: string; label: string; icon: IconName; href: string; badge?: boolean };

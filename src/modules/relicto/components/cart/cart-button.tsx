@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetT
 import { formatMoney } from "@/lib/format";
 import { quote } from "@/modules/checkout/lib/pricing";
 import { useCart } from "../../state/cart-provider";
+import { useViewer } from "../../state/session-provider";
 import { CartAssurances } from "./cart-assurances";
 import { CartEmpty } from "./cart-empty";
 import { CartLine } from "./cart-line";
@@ -19,6 +20,10 @@ import { CartSummary } from "./cart-summary";
  * `/checkout`, which is where the rails and the vault balance live.
  */
 export function CartButton() {
+  return useViewer() ? <SignedInCartButton /> : null;
+}
+
+function SignedInCartButton() {
   const router = useRouter();
   const { items, count, removeItem, clearCart } = useCart();
   const [open, setOpen] = useState(false);

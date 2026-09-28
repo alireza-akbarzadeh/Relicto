@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { CheckoutItem } from "@/modules/checkout/types";
+import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import { formatMoney } from "@/lib/format";
 import type { MobileListing } from "../mobile.types";
@@ -30,6 +31,7 @@ function toCheckoutItem(listing: MobileListing): CheckoutItem {
 export function useMobileListingAction(listing: MobileListing) {
   const router = useRouter();
   const { has, addItem } = useCart();
+  const requireAccount = useAccountGate();
 
   const reserve = () => {
     if (has(listing.slug)) return false;
@@ -42,6 +44,7 @@ export function useMobileListingAction(listing: MobileListing) {
       router.push(`/items/${listing.slug}`);
       return;
     }
+    if (!requireAccount("buy items")) return;
     const added = reserve();
     if (listing.action === "trade") {
       router.push("/checkout");

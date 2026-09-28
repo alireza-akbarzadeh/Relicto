@@ -28,7 +28,7 @@ function toSeller({ listing, name, verified, profile }: SellerRow): MobileSeller
  * active listing except the viewer's own, and the basket id is the slug, so
  * the buy buttons reserve a real listing.
  */
-export function toItemMobile(authored: ItemMobile, sellers: SellerRow[], viewerId: string): ItemMobile {
+export function toItemMobile(authored: ItemMobile, sellers: SellerRow[], viewerId: string | null): ItemMobile {
   const others = sellers.filter((row) => row.listing.sellerId !== viewerId);
   const floor = others[0]?.listing;
   if (!floor) return { ...authored, cartId: authored.slug, sellers: [] };

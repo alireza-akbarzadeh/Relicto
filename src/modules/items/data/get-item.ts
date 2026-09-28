@@ -1,6 +1,6 @@
 import "server-only";
 import { cache } from "react";
-import { requireUserId } from "@/modules/relicto/data/get-session";
+import { getUserId } from "@/modules/relicto/data/get-session";
 import { itemService } from "@/server/modules/items/items.service";
 import type { ItemMobile } from "../mobile.types";
 import type { ItemDetail } from "../types";
@@ -20,7 +20,7 @@ const MOBILE: Record<string, ItemMobile> = { [manifoldParadoxMobile.slug]: manif
  * only when the catalog doesn't carry the item at all.
  */
 export const getItem = cache(async (slug: string): Promise<ItemDetail | null> => {
-  const viewerId = await requireUserId();
+  const viewerId = await getUserId();
   const authored = AUTHORED[slug];
   if (!authored) return itemService.detail(slug, viewerId);
 
@@ -34,5 +34,5 @@ export const getItem = cache(async (slug: string): Promise<ItemDetail | null> =>
  */
 export async function getItemMobile(slug: string): Promise<ItemMobile | null> {
   const authored = MOBILE[slug];
-  return authored ? itemService.mobile(authored, await requireUserId()) : null;
+  return authored ? itemService.mobile(authored, await getUserId()) : null;
 }

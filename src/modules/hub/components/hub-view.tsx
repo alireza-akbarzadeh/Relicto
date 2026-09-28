@@ -1,4 +1,4 @@
-import { HubFooter } from "@/modules/relicto/components/shell/hub-footer";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import type { HubData } from "../types";
 import { CommunityBoard } from "./community/community-board";
@@ -20,7 +20,7 @@ export function HubView({ hub }: { hub: HubData }) {
           <CommunityBoard threads={hub.threads} newThreads={hub.newThreads} incentive={hub.incentive} />
         </GameStage>
       </main>
-      <HubFooter />
+      <SiteFooter />
     </div>
   );
 }

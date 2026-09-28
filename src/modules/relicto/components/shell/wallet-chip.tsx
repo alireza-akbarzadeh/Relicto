@@ -8,9 +8,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatMoney } from "@/lib/format";
-import { useSession } from "../../state/session-provider";
+import { useSession, useViewer } from "../../state/session-provider";
 
+/** The vault balance chip; guests have no vault. */
 export function WalletChip() {
+  return useViewer() ? <SignedInWalletChip /> : null;
+}
+
+function SignedInWalletChip() {
   const { user } = useSession();
   const balance = formatMoney(user.walletUsd);
 

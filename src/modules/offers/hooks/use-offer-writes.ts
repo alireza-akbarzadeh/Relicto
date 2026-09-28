@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
+import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
 import { acceptOffer, declineOffer, makeOffer, withdrawOffer } from "../actions/offers";
 
 type Refusal = readonly [title: string, description: string];
@@ -30,6 +31,7 @@ const failed = () => toast.error("Couldn't reach the market", { description: "Ch
 export function useOfferWrites() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const requireAccount = useAccountGate();
 
   const run = (work: () => Promise<void>) =>
     startTransition(async () => {
@@ -40,7 +42,8 @@ export function useOfferWrites() {
       }
     });
 
-  const make = (input: { listingId: string; amountUsd: number; note: string }, name: string, onDone?: () => void) =>
+  const make = (input: { listingId: string; amountUsd: number; note: string }, name: string, onDone?: () => void) => {
+    if (!requireAccount("make offers")) return;
     run(async () => {
       const { status } = await makeOffer(input);
       if (status === "placed" || status === "revised") {
@@ -53,6 +56,7 @@ export function useOfferWrites() {
         toast.error(title, { description });
       }
     });
+  };
 
   const withdraw = (offerId: string, name: string, onDone?: () => void) =>
     run(async () => {

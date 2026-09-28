@@ -1,6 +1,6 @@
 "use client";
 
-import { LedgerFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { LedgerHeader } from "@/modules/relicto/components/shell/ledger-header";
 import { useOrderFilters } from "../hooks/use-order-filters";
 import type { LedgerData } from "../types";
@@ -40,7 +40,7 @@ export function HistoryView({ data }: { data: LedgerData }) {
           </div>
         </div>
       </main>
-      <LedgerFooter />
+      <SiteFooter />
     </div>
   );
 }

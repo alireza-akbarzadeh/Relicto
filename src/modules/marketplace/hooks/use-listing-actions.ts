@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import { formatMoney } from "@/lib/format";
 import type { CheckoutItem } from "@/modules/checkout/types";
@@ -32,6 +33,7 @@ function checkoutItemFromListing(listing: Listing): CheckoutItem {
 export function useListingActions(listing: Listing) {
   const router = useRouter();
   const { has, addItem } = useCart();
+  const requireAccount = useAccountGate();
   // The exact copy on the card when the catalog is live; otherwise its cheapest copy.
   const ref = listing.listingId ?? listing.id;
   const inBasket = has(ref);
@@ -39,6 +41,7 @@ export function useListingActions(listing: Listing) {
   const viewOffers = () => router.push(`/items/${listing.id}`);
 
   const quickBuy = () => {
+    if (!requireAccount("buy items")) return;
     if (inBasket) {
       toast(`${listing.name} is already in your basket`, { description: "Open the basket to continue to checkout." });
       return;

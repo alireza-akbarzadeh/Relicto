@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { CheckoutItem } from "@/modules/checkout/types";
+import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import { formatMoney } from "@/lib/format";
 import type { ItemMobile, MobileSeller, SynergyItem } from "../mobile.types";
@@ -53,6 +54,7 @@ function synergyLine(item: ItemMobile, entry: SynergyItem, discountPct = 0): Che
 export function useItemMobileCart(item: ItemMobile) {
   const router = useRouter();
   const { has, addItem } = useCart();
+  const requireAccount = useAccountGate();
   const checkoutAction = { label: "Checkout", onClick: () => router.push("/checkout") };
   const floor: MobileSeller | undefined = item.sellers.reduce<MobileSeller | undefined>(
     (best, seller) => (!best || seller.priceUsd < best.priceUsd ? seller : best),
@@ -60,6 +62,7 @@ export function useItemMobileCart(item: ItemMobile) {
   );
 
   const buyFrom = (seller: MobileSeller) => {
+    if (!requireAccount("buy items")) return;
     if (has(item.slug)) {
       toast(`${item.name} is already in your basket`, { description: "Swap sellers at checkout.", action: checkoutAction });
       return;
@@ -73,15 +76,18 @@ export function useItemMobileCart(item: ItemMobile) {
     floor,
     buyFrom,
     instantBuy: () => {
+      if (!requireAccount("buy items")) return;
       if (floor && !has(item.slug)) addItem(sellerLine(item, floor), floor.id);
       router.push("/checkout");
     },
     addToBag: () => (floor ? buyFrom(floor) : toast(`No one is selling ${item.name} right now`)),
     addPair: (entry: SynergyItem) => {
+      if (!requireAccount("buy items")) return;
       if (!has(entry.id)) addItem(synergyLine(item, entry));
       toast.success(`${entry.name} added to your basket`, { action: checkoutAction });
     },
     equipCombo: () => {
+      if (!requireAccount("buy items")) return;
       const priced = item.synergy.items.filter((entry) => entry.priceUsd !== undefined && !has(entry.id));
       priced.forEach((entry) => addItem(synergyLine(item, entry, item.synergy.discountPct)));
       toast.success(`${item.synergy.title} equipped`, {

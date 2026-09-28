@@ -11,7 +11,7 @@ const POLL_MS = 30_000;
  * arrives (the service worker pings open tabs), and on a slow poll while the tab
  * is visible, which also covers devices that declined push.
  */
-export function useNotificationFeed(initial: AppNotification[]) {
+export function useNotificationFeed(initial: AppNotification[], enabled = true) {
   const [notifications, setNotifications] = useState(initial);
 
   const refresh = useCallback(async () => {
@@ -24,6 +24,8 @@ export function useNotificationFeed(initial: AppNotification[]) {
   }, []);
 
   useEffect(() => {
+    // Guests have no feed; polling would only collect 401s.
+    if (!enabled) return;
     const tick = () => document.visibilityState === "visible" && void refresh();
     const timer = window.setInterval(tick, POLL_MS);
     const onMessage = (event: MessageEvent) => event.data?.type === "notifications:refresh" && void refresh();
@@ -35,7 +37,7 @@ export function useNotificationFeed(initial: AppNotification[]) {
       document.removeEventListener("visibilitychange", tick);
       navigator.serviceWorker?.removeEventListener("message", onMessage);
     };
-  }, [refresh]);
+  }, [enabled, refresh]);
 
   const markRead = useCallback((id: string) => {
     setNotifications((list) => list.map((n) => (n.id === id ? { ...n, unread: false } : n)));

@@ -9,15 +9,16 @@ import { toItemDetail } from "./items.presenter";
 import * as repository from "./items.repository";
 import type { SellerRow } from "./items.repository";
 
-/** The copies the viewer can buy or bid on, with their open bids attached. */
-async function book(sellers: SellerRow[], viewerId: string): Promise<SellerBook> {
+/** The copies the viewer can buy or bid on, with their open bids attached. A guest sees every copy and has no bids. */
+async function book(sellers: SellerRow[], viewerId: string | null): Promise<SellerBook> {
+  if (!viewerId) return toSellerBook(sellers, null, {});
   const others = sellers.filter((row) => row.listing.sellerId !== viewerId).map((row) => row.listing.id);
   return toSellerBook(sellers, viewerId, await offerService.bids(viewerId, others));
 }
 
 export const itemService = {
   /** Full detail page for a catalog item, or null when the slug is unknown. */
-  async detail(slug: string, viewerId: string): Promise<ItemDetail | null> {
+  async detail(slug: string, viewerId: string | null): Promise<ItemDetail | null> {
     const item = await repository.findItemBySlug(slug);
     if (!item) return null;
 
@@ -37,14 +38,14 @@ export const itemService = {
    * The live seller book alone, for hand-authored pages whose sample sellers
    * can't be bought from. Null when the item isn't in the catalog.
    */
-  async book(slug: string, viewerId: string): Promise<SellerBook | null> {
+  async book(slug: string, viewerId: string | null): Promise<SellerBook | null> {
     const item = await repository.findItemBySlug(slug);
     if (!item) return null;
     return book(await repository.findItemSellers(item.id), viewerId);
   },
 
   /** An authored mobile inspector with live floor, move and seller book for the viewer. */
-  async mobile(authored: ItemMobile, viewerId: string): Promise<ItemMobile> {
+  async mobile(authored: ItemMobile, viewerId: string | null): Promise<ItemMobile> {
     const item = await repository.findItemBySlug(authored.slug);
     if (!item) return authored;
     return toItemMobile(authored, await repository.findItemSellers(item.id), viewerId);

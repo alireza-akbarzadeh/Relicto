@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 
 const FAILED: Record<string, string> = {
   steam_unverified: "Steam couldn't confirm the sign-in. Try again from the Steam button.",
@@ -20,7 +21,7 @@ export function useSteamSignIn() {
   }, []);
 
   return () => {
-    const next = new URLSearchParams(window.location.search).get("next") ?? "/marketplace";
+    const next = safeNext(new URLSearchParams(window.location.search).get("next"));
     // An API route that redirects off-site to Steam, so this must be a full page load, not a router push.
     const url = new URL(`/api/auth/steam/sign-in?callbackURL=${encodeURIComponent(next)}`, window.location.origin);
     window.location.assign(url.href);

@@ -1,4 +1,4 @@
-import { LedgerFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import type { ProfileData } from "../types";
 import { ProfileHero } from "./hero/profile-hero";
 import { ProfileBoard } from "./profile-board";
@@ -17,7 +17,7 @@ export function ProfileView({ data }: { data: ProfileData }) {
           <ProfileBoard data={data} />
         </div>
       </div>
-      <LedgerFooter />
+      <SiteFooter />
     </div>
   );
 }

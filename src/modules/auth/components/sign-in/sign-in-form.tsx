@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { AuthField } from "../ui/auth-field";
 
 const LABEL = "font-mono text-xs font-semibold tracking-wider text-slate-300 uppercase";
@@ -37,7 +38,7 @@ export function SignInForm() {
     }
 
     toast.success("Session authenticated");
-    router.push(searchParams.get("next") || "/marketplace");
+    router.push(safeNext(searchParams.get("next")));
     router.refresh();
   };
 

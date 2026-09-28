@@ -1,6 +1,6 @@
 import "server-only";
 
-import { requireUserId } from "@/modules/relicto/data/get-session";
+import { getUserId } from "@/modules/relicto/data/get-session";
 import { listingService } from "@/server/modules/listings/listings.service";
 import { searchListings } from "../lib/filters";
 import type { Filters } from "../types";
@@ -40,7 +40,7 @@ const usd = (value: number) =>
  * pills and the meta-spike banner stay authored.
  */
 export async function getMarketplaceMobile() {
-  const feed = await listingService.mobileFeed(await requireUserId());
+  const feed = await listingService.mobileFeed(await getUserId());
   if (feed.listings.length === 0) return marketMobile;
   return { ...marketMobile, listings: feed.listings, ticker: { ...marketMobile.ticker, pool: usd(feed.liquidityUsd) } };
 }

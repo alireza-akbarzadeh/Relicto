@@ -1,7 +1,7 @@
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
-import { StudioFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import { OUTAGE } from "../data/status.mock";
 import { GatewayRetryControls } from "./gateway-retry-controls";
@@ -225,7 +225,7 @@ export function GatewayErrorView({ onRetry }: { onRetry?: () => void }) {
           </div>
         </div>
       </main>
-      <StudioFooter />
+      <SiteFooter />
     </div>
   );
 }

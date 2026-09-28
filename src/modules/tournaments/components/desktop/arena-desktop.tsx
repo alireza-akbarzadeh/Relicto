@@ -6,7 +6,7 @@ import { PlatformStats } from "./hero/platform-stats";
 import { InfrastructurePanel } from "./infrastructure/infrastructure-panel";
 import { LiveBroadcast } from "./live/live-broadcast";
 import { LiveFeeds } from "./live/live-feeds";
-import { DesktopFooter } from "./shell/desktop-footer";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { DesktopHeader } from "./shell/desktop-header";
 
 /** Desktop Arena hub (Stitch: "Dota 2 & CS2 Esports Tournament Platform"). */
@@ -38,7 +38,7 @@ export function ArenaDesktop({ data }: { data: ArenaDesktopData }) {
           </div>
         </div>
       </main>
-      <DesktopFooter shell={shell} />
+      <SiteFooter className="mt-space-xl" />
     </FeaturedGameProvider>
   );
 }

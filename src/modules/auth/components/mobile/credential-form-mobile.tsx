@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { cn } from "@/lib/cn";
 
 const LABEL = "font-label-badge text-label-badge tracking-wider text-text-secondary uppercase";
@@ -41,7 +42,7 @@ export function CredentialFormMobile({ uid }: { uid: string }) {
     }
 
     toast.success("Session authenticated", { description: remember ? "Remembered on this device for 30 days." : "Session ends when you close the app." });
-    router.push(searchParams.get("next") || "/marketplace");
+    router.push(safeNext(searchParams.get("next")));
     router.refresh();
   };
 

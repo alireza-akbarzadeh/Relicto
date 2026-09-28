@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { setWatched } from "../actions/watchlist";
+import { useAccountGate } from "./use-account-gate";
 
 /**
  * The trader's watched item slugs, shared by every heart and watch button.
@@ -10,11 +11,13 @@ import { setWatched } from "../actions/watchlist";
  */
 export function useWatchlistState(initial: string[]) {
   const [slugs, setSlugs] = useState(() => new Set(initial));
+  const requireAccount = useAccountGate();
 
   const isWatched = useCallback((slug: string) => slugs.has(slug), [slugs]);
 
   const toggle = useCallback(
     (slug: string, name: string) => {
+      if (!requireAccount("watch items")) return;
       const watched = !slugs.has(slug);
       const before = slugs;
       setSlugs((current) => {
@@ -37,7 +40,7 @@ export function useWatchlistState(initial: string[]) {
           toast.error("Couldn't update your watchlist", { description: "Check your connection and try again." });
         });
     },
-    [slugs],
+    [slugs, requireAccount],
   );
 
   return useMemo(() => ({ isWatched, toggle }), [isWatched, toggle]);

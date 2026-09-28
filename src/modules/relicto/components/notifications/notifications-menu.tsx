@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/cn";
-import { useSession } from "../../state/session-provider";
+import { useSession, useViewer } from "../../state/session-provider";
 import { NotificationItem } from "./notification-item";
 import { PushToggle } from "./push-toggle";
 
@@ -136,7 +136,12 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
   );
 }
 
+/** The bell and its feed; guests have neither. */
 export function NotificationsMenu({ trigger }: { trigger: NotificationsTrigger }) {
+  return useViewer() ? <SignedInNotificationsMenu trigger={trigger} /> : null;
+}
+
+function SignedInNotificationsMenu({ trigger }: { trigger: NotificationsTrigger }) {
   const { unreadCount } = useSession();
   const [open, setOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");

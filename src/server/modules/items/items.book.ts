@@ -39,7 +39,7 @@ function toBookRow({ listing, name, verified, profile }: SellerRow, index: numbe
  * Every copy the viewer can buy, cheapest first. Their own listings are left
  * out — you can't buy from or bid on yourself — as on the mobile inspector.
  */
-export function toSellerBook(sellers: SellerRow[], viewerId: string, bids: Record<string, MyBid>): SellerBook {
+export function toSellerBook(sellers: SellerRow[], viewerId: string | null, bids: Record<string, MyBid>): SellerBook {
   const book = sellers.filter((row) => row.listing.sellerId !== viewerId);
   const offers = book.map((row, index) => toBookRow(row, index, bids[row.listing.id]));
   return {

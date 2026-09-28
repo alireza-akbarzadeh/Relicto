@@ -5,6 +5,7 @@ import { useState, type KeyboardEvent } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
 import { optimisticLine } from "@/modules/checkout/lib/optimistic-line";
+import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import type { SearchItem, SearchResults } from "../types";
 import { useRecentSearches } from "./use-recent-searches";
@@ -24,6 +25,7 @@ const GAME_LABEL = { cs2: "CS2", dota2: "Dota 2", tf2: "TF2" } as const;
 export function useSearchPalette(initialQuery: string, onClose: () => void) {
   const router = useRouter();
   const { has, addItem } = useCart();
+  const requireAccount = useAccountGate();
   const recents = useRecentSearches();
   const [criteria, setCriteria] = useState<SearchCriteria>({
     ...EMPTY_CRITERIA,
@@ -50,6 +52,7 @@ export function useSearchPalette(initialQuery: string, onClose: () => void) {
   };
 
   const basket = (item: SearchItem) => {
+    if (!requireAccount("buy items")) return onClose();
     if (has(item.listingId) || has(item.slug))
       return toast(`${item.name} is already in your basket`);
     recents.remember(criteria.q || item.name);

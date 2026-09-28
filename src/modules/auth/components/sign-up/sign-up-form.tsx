@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { authClient } from "@/lib/auth-client";
+import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { SIGN_UP_DEFAULTS } from "../../data/sign-up.mock";
 import { passwordStrength } from "../../lib/password-strength";
 import { AuthField } from "../ui/auth-field";
@@ -54,7 +55,7 @@ export function SignUpForm() {
     }
 
     toast.success("Trader profile created", { description: "Welcome to Relicto." });
-    router.push("/marketplace");
+    router.push(safeNext(new URLSearchParams(window.location.search).get("next")));
     router.refresh();
   };
 

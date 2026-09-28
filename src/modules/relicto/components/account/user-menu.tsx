@@ -18,8 +18,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ACCOUNT_LINKS } from "../../data/navigation";
-import { useSession } from "../../state/session-provider";
+import { useSession, useViewer } from "../../state/session-provider";
 import { AvatarImage } from "./avatar-image";
+import { GuestActions } from "./guest-actions";
 import { USER_TRIGGERS } from "./user-triggers";
 
 type UserMenuProps = { trigger: keyof typeof USER_TRIGGERS };
@@ -154,12 +155,16 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
   );
 }
 
+/** The avatar menu for a signed-in trader; sign-in and create-account for a guest. */
 export function UserMenu({ trigger }: UserMenuProps) {
+  return useViewer() ? <SignedInUserMenu trigger={trigger} /> : <GuestActions />;
+}
+
+function SignedInUserMenu({ trigger }: UserMenuProps) {
   const { user } = useSession();
   const Trigger = USER_TRIGGERS[trigger];
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Shared trigger element
   const renderTrigger = (props: React.ComponentPropsWithoutRef<"button">) => (
     <button
       {...props}

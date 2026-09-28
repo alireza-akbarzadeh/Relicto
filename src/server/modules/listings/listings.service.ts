@@ -58,10 +58,10 @@ export const listingService = {
   },
 
   /** The mobile trading feed (one card per item, biggest movers first) and the liquidity its ticker quotes. */
-  async mobileFeed(userId: string) {
+  async mobileFeed(userId: string | null) {
     const [catalog, watched, liquidityCents] = await Promise.all([
       listingService.catalog({ sort: "recent" }),
-      repository.findWatchedSlugs(userId),
+      userId ? repository.findWatchedSlugs(userId) : Promise.resolve([]),
       repository.sumActiveLiquidityCents(),
     ]);
     return { listings: toMobileFeed(catalog, watched), liquidityUsd: liquidityCents / 100 };

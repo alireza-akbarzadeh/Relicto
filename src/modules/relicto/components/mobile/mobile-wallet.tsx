@@ -3,12 +3,16 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { formatCount, formatMoney } from "@/lib/format";
-import { useSession } from "../../state/session-provider";
+import { useSession, useViewer } from "../../state/session-provider";
 
 type MobileWalletProps = { variant: "market" | "linked" | "intel" };
 
 /** Session wallet balance, drawn the way each mobile header family shows it. Opens the wallet. */
 export function MobileWallet({ variant }: MobileWalletProps) {
+  return useViewer() ? <SignedInMobileWallet variant={variant} /> : null;
+}
+
+function SignedInMobileWallet({ variant }: MobileWalletProps) {
   const { user } = useSession();
 
   if (variant === "linked") {

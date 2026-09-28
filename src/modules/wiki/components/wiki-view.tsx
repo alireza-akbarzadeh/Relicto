@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
-import { StudioFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import { wikiSearchParams } from "../lib/search-params";
 import type { WikiData, WikiGuide, WikiTone } from "../types";
@@ -78,7 +78,7 @@ export function WikiView({ data }: { data: WikiData }) {
           <ApiBand />
         </div>
       </main>
-      <StudioFooter />
+      <SiteFooter />
     </div>
   );
 }

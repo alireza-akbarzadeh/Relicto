@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
 import { optimisticLine } from "@/modules/checkout/lib/optimistic-line";
+import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import type { ItemDetail, Offer } from "../types";
 
@@ -17,6 +18,7 @@ import type { ItemDetail, Offer } from "../types";
 export function useItemBuy(item: ItemDetail) {
   const router = useRouter();
   const { has, addItem } = useCart();
+  const requireAccount = useAccountGate();
   const [pending, setPending] = useState(false);
   const floor: Offer | undefined = item.offers[0];
 
@@ -39,6 +41,7 @@ export function useItemBuy(item: ItemDetail) {
   /** Reserve the copy and go straight to settlement. */
   const buyNow = async (offer: Offer | undefined = floor) => {
     if (!offer) return toast(`No one is selling ${item.name} right now`, { description: "Watch it to hear when a copy is listed." });
+    if (!requireAccount(`buy ${item.name}`)) return;
     if (!inBasket(offer)) {
       setPending(true);
       const added = await addItem(lineFor(offer), refFor(offer));
@@ -51,6 +54,7 @@ export function useItemBuy(item: ItemDetail) {
   /** Reserve the copy and stay on the page. */
   const addToBasket = (offer: Offer | undefined = floor) => {
     if (!offer) return toast(`No one is selling ${item.name} right now`);
+    if (!requireAccount(`buy ${item.name}`)) return;
     if (inBasket(offer)) {
       return toast(`${item.name} is already in your basket`, { action: { label: "Checkout", onClick: () => router.push("/checkout") } });
     }

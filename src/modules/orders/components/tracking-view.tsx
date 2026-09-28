@@ -1,4 +1,4 @@
-import { LedgerFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { LedgerHeader } from "@/modules/relicto/components/shell/ledger-header";
 import type { OrderTracking } from "../types";
 import { EscrowSteps } from "./tracking/escrow-steps";
@@ -34,7 +34,7 @@ export function TrackingView({ order }: { order: OrderTracking }) {
           <TelemetryStream telemetry={order.telemetry} />
         </div>
       </main>
-      <LedgerFooter />
+      <SiteFooter />
     </div>
   );
 }

@@ -21,16 +21,4 @@ export const desktopShell: DesktopShell = {
     status: "STEAM SYNCED",
     avatar: "/images/arena/avatar.png",
   },
-  footer: {
-    description:
-      "Premier competitive gaming architecture and tournament operations engine for Valve Dota 2 and Counter-Strike 2 circuits.",
-    links: [
-      { id: "championships", label: "Championships", href: "#" },
-      { id: "pro-circuit", label: "Pro Circuit", href: "#" },
-      { id: "rulebooks", label: "Rulebooks", href: "#" },
-      { id: "steam", label: "Steam Integration", href: "#" },
-    ],
-    copyright:
-      "© 2025 APEX AEGIS ENTERTAINMENT LLC. VALVE, DOTA 2, AND CS2 ARE TRADEMARKS OF VALVE CORPORATION.",
-  },
 };

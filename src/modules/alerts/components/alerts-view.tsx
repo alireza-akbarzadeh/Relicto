@@ -7,7 +7,7 @@ import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import { StudioFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import type { AlertStatus, PriceAlert } from "../types";
 import { CommunityTone } from "@/modules/community/types";
@@ -70,7 +70,7 @@ export function AlertsView({ alerts: initial }: { alerts: PriceAlert[] }) {
           </div>
         </div>
       </main>
-      <StudioFooter />
+      <SiteFooter />
     </div>
   );
 }

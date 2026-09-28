@@ -1,4 +1,4 @@
-import { VaultFooter } from "@/modules/relicto/components/shell/vault-footer";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { VaultHeader } from "@/modules/relicto/components/shell/vault-header";
 import type { ItemDetail } from "../types";
 import { BreadcrumbBar } from "./detail/breadcrumb-bar";
@@ -48,7 +48,7 @@ export function ItemView({ item }: { item: ItemDetail }) {
           <RelatedItems related={item.related} />
         </div>
       </main>
-      <VaultFooter />
+      <SiteFooter />
     </div>
   );
 }

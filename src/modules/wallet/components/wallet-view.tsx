@@ -2,7 +2,7 @@
 
 import { useState, useRef, type RefObject } from "react";
 
-import { StudioFooter } from "@/modules/relicto/components/shell/footers";
+import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 
 import type { WalletData } from "../types";
@@ -120,7 +120,7 @@ export function WalletView({ data }: { data: WalletData }) {
         </div>
       </main>
 
-      <StudioFooter />
+      <SiteFooter />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { addToCart, clearCart, removeFromCart } from "@/modules/checkout/actions/cart";
 import type { CheckoutItem } from "@/modules/checkout/types";
+import { useAccountGate } from "./use-account-gate";
 
 const failed = (title: string) => toast.error(title, { description: "Check your connection and try again." });
 
@@ -17,6 +18,7 @@ export function useCartState(initialItems: CheckoutItem[]) {
   const [saved, setSaved] = useState(initialItems);
   const [local, setLocal] = useState<CheckoutItem[]>([]);
   const items = useMemo(() => [...saved, ...local], [saved, local]);
+  const requireAccount = useAccountGate();
 
   /** Matches a cart row id, a listing id or an item slug. */
   const has = useCallback(
@@ -32,6 +34,8 @@ export function useCartState(initialItems: CheckoutItem[]) {
    * to checkout can wait for it instead of racing the reservation.
    */
   const addItem = (item: CheckoutItem, ref = item.id): Promise<boolean> => {
+    // Callers gate first so they don't toast a reservation; this is the backstop.
+    if (!requireAccount("buy items")) return Promise.resolve(false);
     if (has(ref) || has(item.id)) return Promise.resolve(false);
     setLocal((current) => [...current, item]);
 

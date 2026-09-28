@@ -2,7 +2,7 @@
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { formatMoney } from "@/lib/format";
-import { useSession } from "../../state/session-provider";
+import { useViewer } from "../../state/session-provider";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
@@ -12,7 +12,7 @@ import { MainNav } from "./main-nav";
 
 /** Header of the item vault (detail) screens: Steam identity chip, cart and avatar. */
 export function VaultHeader({ steamId }: { steamId: string }) {
-  const { user } = useSession();
+  const user = useViewer();
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 w-full border-b border-border-subtle bg-overlay-base/95 shadow-[0_4px_24px_rgba(0,0,0,0.7)] backdrop-blur-xl">
@@ -25,21 +25,23 @@ export function VaultHeader({ steamId }: { steamId: string }) {
         </div>
         <VaultHeaderSearch />
         <div className="flex shrink-0 items-center gap-3">
-          <div className="hidden items-center gap-2 rounded-lg border border-border-subtle bg-surface-container-lowest px-3 py-1.5 sm:flex">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5 leading-tight">
-                <span className="font-data-mono-md text-xs font-medium text-text-primary">{steamId}</span>
-                <span className="rounded border border-emerald-500/30 bg-emerald-950/70 px-1 font-label-badge text-[9px] font-bold text-emerald-400">
-                  VAC CLEAN
-                </span>
-              </div>
-              <div className="mt-0.5 flex items-center gap-1">
-                <span className="font-label-badge text-[10px] text-text-muted uppercase">Steam Wallet:</span>
-                <span className="font-data-mono-md text-xs font-bold text-tertiary">{formatMoney(user.walletUsd)}</span>
+          {user && (
+            <div className="hidden items-center gap-2 rounded-lg border border-border-subtle bg-surface-container-lowest px-3 py-1.5 sm:flex">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5 leading-tight">
+                  <span className="font-data-mono-md text-xs font-medium text-text-primary">{steamId}</span>
+                  <span className="rounded border border-emerald-500/30 bg-emerald-950/70 px-1 font-label-badge text-[9px] font-bold text-emerald-400">
+                    VAC CLEAN
+                  </span>
+                </div>
+                <div className="mt-0.5 flex items-center gap-1">
+                  <span className="font-label-badge text-[10px] text-text-muted uppercase">Steam Wallet:</span>
+                  <span className="font-data-mono-md text-xs font-bold text-tertiary">{formatMoney(user.walletUsd)}</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           <ThemeToggle className="rounded-lg border border-border-subtle bg-surface-container-lowest p-2 text-text-secondary hover:bg-surface-container hover:text-text-primary" />
           <NotificationsMenu trigger="vault" />
           <CartButton />

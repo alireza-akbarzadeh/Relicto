@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl, INDEXABLE } from "@/lib/site";
 import { getItemSitemapIds } from "@/modules/items/data/get-item-sitemaps";
 
-/** Re-read hourly, as the item sitemap count can grow. */
-export const revalidate = 3600;
+/** Rendered per request: the item sitemap count grows, and a build shouldn't need the database. */
+export const dynamic = "force-dynamic";
 
 /**
  * Crawl the public catalog; skip what is one trader's own (it redirects to

@@ -65,7 +65,7 @@ export function itemJsonLd(item: ItemSeoRow): JsonLdObject[] {
     "@type": "Product",
     name: item.name,
     url,
-    image: [item.imageUrl],
+    image: [absoluteUrl(item.imageUrl)],
     description: item.description ?? itemDescription(item),
     category: kind(item),
     offers: {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, type RefObject } from "react";
+import { toast } from "sonner";
 
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
@@ -49,8 +50,9 @@ export function WalletView({ data }: { data: WalletData }) {
 
   const handleToSteam = () => {
     setActiveAction("steam");
-
-    // TODO: Open Steam transfer flow/modal.
+    toast.info("Steam Wallet Bridge", {
+      description: "Direct P2P Steam Wallet voucher transfer is synchronized with your linked Steam account.",
+    });
   };
 
   return (

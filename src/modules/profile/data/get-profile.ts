@@ -1,5 +1,6 @@
 import "server-only";
 import { requireUserId } from "@/modules/relicto/data/get-session";
+import { offerService } from "@/server/modules/offers/offers.service";
 import { profileService } from "@/server/modules/profile/profile.service";
 import { watchlistService } from "@/server/modules/watchlist/watchlist.service";
 import type { ProfileData } from "../types";
@@ -16,6 +17,7 @@ const SAMPLE: ProfileData = {
   listingsShown: 3,
   /** The sample profile has no watched items; the tab shows its empty state. */
   watchlist: [],
+  bids: [],
   security,
   lastHandshake,
   endorsements,
@@ -30,13 +32,15 @@ const SAMPLE: ProfileData = {
  * Trader profile for the signed-in account, from Postgres. Falls back to the
  * sample profile so the screen never renders empty.
  *
- * The watchlist is always the caller's own. It lives in its own table keyed on
- * the user, so an account with no `profiles` row yet — every fresh sign-up —
- * still sees what it actually watches rather than the sample's empty list.
+ * The watchlist and bids are always the caller's own.
  */
 export async function getProfile(): Promise<ProfileData> {
   const userId = await requireUserId();
-  const [profile, watchlist] = await Promise.all([profileService.detail(userId), watchlistService.watched(userId)]);
+  const [profile, watchlist, bids] = await Promise.all([
+    profileService.detail(userId),
+    watchlistService.watched(userId),
+    offerService.outgoing(userId),
+  ]);
 
-  return { ...(profile ?? SAMPLE), watchlist };
+  return { ...(profile ?? SAMPLE), watchlist, bids };
 }

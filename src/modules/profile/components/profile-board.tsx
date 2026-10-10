@@ -3,6 +3,7 @@
 import { useQueryState } from "nuqs";
 import { profileSearchParams } from "../lib/search-params";
 import type { ProfileData, ProfileTab } from "../types";
+import { BidsSection } from "./bids/bids-section";
 import { ListingsSection } from "./listings/listings-section";
 import { ShowcaseSection } from "./showcase/showcase-section";
 import { EndorsementsPanel } from "./sidebar/endorsements-panel";
@@ -15,6 +16,7 @@ import { WatchlistSection } from "./watchlist/watchlist-section";
 function Panel({ tab, data }: { tab: ProfileTab; data: ProfileData }) {
   if (tab === "listings") return <ListingsSection listings={data.listings} total={data.listings.length} />;
   if (tab === "watchlist") return <WatchlistSection items={data.watchlist} />;
+  if (tab === "bids") return <BidsSection bids={data.bids ?? []} />;
   if (tab === "reviews") return <ReviewsPanel data={data} />;
   if (tab === "linked") return <LinkedPanel data={data} />;
   if (tab === "safeguards") return <SafeguardsPanel data={data} />;
@@ -38,6 +40,7 @@ export function ProfileBoard({ data }: { data: ProfileData }) {
         inventoryCount={data.inventoryCount}
         listingCount={data.listings.length}
         watchlistCount={data.watchlist.length}
+        bidsCount={data.bids?.length ?? 0}
         reviewCount={data.reviewCount}
       />
       <main className="w-full px-gutter-desktop py-space-lg">

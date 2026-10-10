@@ -1,6 +1,7 @@
 import "server-only";
 
-import type { CheckoutData, CheckoutItem } from "@/modules/checkout/types";
+import type { CheckoutData, CheckoutItem, CheckoutRecipient } from "@/modules/checkout/types";
+import { findProfile } from "../profile/profile.repository";
 import { toCheckoutData, toCheckoutItem } from "./checkout.presenter";
 import * as repo from "./checkout.repository";
 import { settle, type SettleInput, type SettleResult } from "./checkout.settle";
@@ -14,9 +15,28 @@ export const checkoutService = {
    * basket is real state; null means nothing has been seeded at all.
    */
   async basket(userId: string): Promise<CheckoutData | null> {
-    const [rows, balanceCents] = await Promise.all([repo.findCartLines(userId), repo.findWalletBalance(userId)]);
+    const [rows, balanceCents, profile] = await Promise.all([
+      repo.findCartLines(userId),
+      repo.findWalletBalance(userId),
+      findProfile(userId),
+    ]);
     if (rows.length === 0 && !(await repo.hasCatalog())) return null;
-    return toCheckoutData(rows, balanceCents);
+
+    const recipient: CheckoutRecipient | undefined = profile
+      ? {
+          handle: profile.handle,
+          avatarUrl: profile.avatar,
+          steamId: profile.steamId ?? "76561198082348819",
+          level: profile.level,
+          tier: profile.tier ?? "Prime Tier",
+          tradeUrl: profile.tradeUrl,
+          boundSince: profile.createdAt
+            ? new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric" }).format(profile.createdAt)
+            : undefined,
+        }
+      : undefined;
+
+    return toCheckoutData(rows, balanceCents, recipient);
   },
 
   /** Spendable vault balance, in cents — what every checkout quotes as "available". */

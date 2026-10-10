@@ -1,8 +1,10 @@
 import { bidDiscount } from "@/modules/offers/lib/bid-rules";
-import type { IncomingOffer, MyBid } from "@/modules/offers/types";
+import type { BuyerBid, IncomingOffer, MyBid } from "@/modules/offers/types";
 import { ago } from "../shared/ago";
 import { initials } from "../shared/initials";
-import type { IncomingRow } from "./offers.repository";
+import type { findOutgoing, IncomingRow } from "./offers.repository";
+
+type OutgoingRow = Awaited<ReturnType<typeof findOutgoing>>[number];
 
 const HOUR = 60 * 60 * 1000;
 
@@ -52,4 +54,29 @@ export function toIncomingOffers(rows: IncomingRow[], now = new Date()): Incomin
       top: row.offer.priceCents === top.get(row.listingId),
     };
   });
+}
+
+/** The buyer's active bids across the market. */
+export function toBuyerBids(rows: OutgoingRow[], now = new Date()): BuyerBid[] {
+  return rows.map((row) => ({
+    id: row.offer.id,
+    listingId: row.listingId,
+    item: {
+      name: row.itemName,
+      slug: row.itemSlug,
+      image: row.listingImage ?? row.itemImage ?? "",
+      imageAlt: row.listingImageAlt ?? row.itemImageAlt ?? row.itemName,
+      wear: row.listingWear ? row.listingWear.toUpperCase() : undefined,
+    },
+    seller: {
+      name: row.sellerName,
+      handle: row.sellerHandle ?? row.sellerName,
+      trust: row.trustScore !== null ? `${row.trustScore / 10}% trust` : "Verified Seller",
+    },
+    bidUsd: row.offer.priceCents / 100,
+    askUsd: row.askCents / 100,
+    discount: bidDiscount(row.offer.priceCents, row.askCents),
+    placed: ago(row.offer.createdAt, now),
+    expires: timeLeft(row.offer.expiresAt, now),
+  }));
 }

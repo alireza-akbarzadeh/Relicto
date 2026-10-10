@@ -1,6 +1,5 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -81,16 +80,13 @@ function TraderCard({ trader }: { trader: SearchTrader }) {
         <span className="font-data-mono-md text-[11px] text-text-muted">
           {trader.listings} live listing{trader.listings === 1 ? "" : "s"}
         </span>
-        <NoticeButton
-          notice={{
-            title: `@${trader.handle}'s storefront`,
-            description: "Public trader storefronts are on the roadmap.",
-          }}
+        <LinkButton
+          href={`/traders/${trader.handle}`}
           className="h-auto gap-1 rounded border-0 bg-surface-container-highest px-3 py-1 font-label-caps text-[11px] tracking-wider text-text-primary uppercase transition-colors hover:bg-surface-bright"
         >
           <Icon name="inventory_2" className="text-[13px]" />
           <span>View Backpack</span>
-        </NoticeButton>
+        </LinkButton>
       </div>
     </div>
   );

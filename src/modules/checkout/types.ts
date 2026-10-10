@@ -38,6 +38,16 @@ export type PaymentRail = {
   tone: "primary" | "amber" | "cyan" | "muted";
 };
 
+export type CheckoutRecipient = {
+  handle: string;
+  avatarUrl?: string | null;
+  steamId: string;
+  level: number;
+  tier?: string | null;
+  tradeUrl?: string | null;
+  boundSince?: string | null;
+};
+
 export type CheckoutData = {
   session: string;
   items: CheckoutItem[];
@@ -46,4 +56,5 @@ export type CheckoutData = {
   comboDiscount: number;
   promoDiscount: number;
   walletAfter: string;
+  recipient?: CheckoutRecipient;
 };

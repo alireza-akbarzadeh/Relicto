@@ -50,6 +50,42 @@ export const profileService = {
     };
   },
 
+  /** Public storefront for any trader by their handle. */
+  async publicStorefront(handle: string): Promise<ProfileData | null> {
+    const profile = await repository.findProfileByHandle(handle);
+    if (!profile) return null;
+
+    const now = new Date();
+    const [showcase, sellerListings, statusRows, endorsements, reviews, sales] = await Promise.all([
+      repository.findShowcase(profile.id),
+      repository.findSellerListings(profile.userId),
+      repository.findStatusRows(profile.id),
+      repository.findEndorsements(profile.id),
+      repository.findReviews(profile.id),
+      repository.sumRecentSales(profile.userId, now),
+    ]);
+
+    const byGroup = (group: (typeof statusRows)[number]["group"]) =>
+      statusRows.filter((row) => row.group === group).map(toStatusRow);
+
+    return {
+      identity: toIdentity(profile),
+      stats: toStats(profile, sales),
+      showcase: showcase.map(toShowcase),
+      listings: sellerListings.map(toSellerListing),
+      listingsShown: sellerListings.length,
+      watchlist: [],
+      security: byGroup("security"),
+      lastHandshake: profile.lastHandshake ?? "",
+      endorsements: endorsements.map(toEndorsement),
+      reviews: reviews.map((row) => toReview(row, now)),
+      linked: byGroup("linked"),
+      safeguards: byGroup("safeguards"),
+      inventoryCount: profile.inventoryCount,
+      reviewCount: profile.reviewCount,
+    };
+  },
+
   /** The same trader in the mobile profile's shape; `chrome` is the screen's authored furniture. */
   async mobile(userId: string, chrome: ProfileChrome): Promise<ProfileMobile | null> {
     const profile = await repository.findOrOpenProfile(userId);

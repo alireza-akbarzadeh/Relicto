@@ -48,6 +48,33 @@ export async function findBids(buyerId: string, listingIds: string[], now = new 
     .where(and(eq(offers.buyerId, buyerId), inArray(offers.listingId, listingIds), liveOffer(now)));
 }
 
+/** All open bids placed by a buyer across the marketplace, newest first. */
+export async function findOutgoing(buyerId: string, now = new Date()) {
+  return db
+    .select({
+      offer: offers,
+      listingId: listings.id,
+      askCents: listings.priceCents,
+      listingWear: listings.wear,
+      listingImage: listings.imageUrl,
+      listingImageAlt: listings.imageAlt,
+      itemName: items.name,
+      itemSlug: items.slug,
+      itemImage: items.imageUrl,
+      itemImageAlt: items.imageAlt,
+      sellerName: user.name,
+      sellerHandle: profiles.handle,
+      trustScore: profiles.trustScore,
+    })
+    .from(offers)
+    .innerJoin(listings, eq(offers.listingId, listings.id))
+    .innerJoin(items, eq(listings.itemId, items.id))
+    .innerJoin(user, eq(listings.sellerId, user.id))
+    .leftJoin(profiles, eq(profiles.userId, user.id))
+    .where(and(eq(offers.buyerId, buyerId), eq(listings.status, "active"), liveOffer(now)))
+    .orderBy(desc(offers.createdAt));
+}
+
 /**
  * `listings.offer_count` is what the item page and the marketplace quote as
  * "Open Offers". Every bid write recounts it, so it can't drift from the rows.

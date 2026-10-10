@@ -82,9 +82,11 @@ export type StatusRow = {
 
 export type Endorsement = { label: string; value: string; pct: number; tone: Tone };
 
+import type { BuyerBid } from "@/modules/offers/types";
+
 export type Review = { id: string; author: string; age: string; quote: string };
 
-export type ProfileTab = "showcase" | "listings" | "watchlist" | "reviews" | "linked" | "safeguards";
+export type ProfileTab = "showcase" | "listings" | "watchlist" | "bids" | "reviews" | "linked" | "safeguards";
 
 /**
  * One item on the trader's watchlist. Private to them — this is buying intent,
@@ -116,6 +118,7 @@ export type ProfileData = {
   /** Listings visible on the default tab. */
   listingsShown: number;
   watchlist: WatchedItem[];
+  bids?: BuyerBid[];
   security: StatusRow[];
   lastHandshake: string;
   endorsements: Endorsement[];

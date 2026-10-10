@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -19,7 +20,9 @@ export function OfferRow({ offer, itemName, onBuy, onAdd }: OfferRowProps) {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
-              <span className="font-headline-sm text-sm font-bold text-text-primary">{offer.seller.name}</span>
+              <Link href={`/traders/${offer.seller.name}`} className="font-headline-sm text-sm font-bold text-text-primary hover:text-primary transition-colors">
+                {offer.seller.name}
+              </Link>
               {offer.seller.verified && <Icon name="verified" label="Verified merchant" className="text-[16px] text-tertiary" />}
             </div>
             <span className="font-data-mono-md text-[10px] text-emerald-400">{offer.seller.rating}</span>

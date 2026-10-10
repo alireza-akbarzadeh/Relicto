@@ -5,6 +5,7 @@ import { cache } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
+import { findProfile } from "@/server/modules/profile/profile.repository";
 import { walletService } from "@/server/modules/wallet/wallet.service";
 import type { AppNotification, SessionUser } from "../session-types";
 
@@ -15,24 +16,6 @@ import type { AppNotification, SessionUser } from "../session-types";
  */
 const EXPIRED = "/sign-in?expired=1";
 
-/**
- * Trader level and role belong to the profile, which isn't read here yet —
- * every signed-in trader gets these defaults until it is. The wallet balance
- * is filled in by `getSession`.
- */
-function toSessionUser(user: { name: string; image?: string | null; emailVerified: boolean }): SessionUser {
-  return {
-    handle: user.name,
-    avatar: user.image ?? "/images/lootora/avatar.jpg",
-    avatarAlt: `${user.name} profile portrait`,
-    level: 1,
-    role: "Trader",
-    verified: user.emailVerified,
-    steamSynced: false,
-    walletUsd: 0,
-  };
-}
-
 /** One Better Auth lookup per request, however many loaders ask who is signed in. */
 const readSession = cache(async () => auth.api.getSession({ headers: await headers() }));
 
@@ -40,11 +23,24 @@ const readSession = cache(async () => auth.api.getSession({ headers: await heade
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
   const result = await readSession();
   if (!result) return null;
-  const [notifications, walletCents] = await Promise.all([
+  const [notifications, walletCents, profile] = await Promise.all([
     notificationService.feed(result.user.id),
     walletService.liquidCents(result.user.id),
+    findProfile(result.user.id),
   ]);
-  return { user: { ...toSessionUser(result.user), walletUsd: walletCents / 100 }, notifications };
+
+  const user: SessionUser = {
+    handle: profile?.handle ?? result.user.name,
+    avatar: profile?.avatar || result.user.image || "/images/lootora/avatar.jpg",
+    avatarAlt: profile?.avatarAlt ?? `${result.user.name} profile portrait`,
+    level: profile?.level ?? 1,
+    role: profile?.role ?? "Trader",
+    verified: result.user.emailVerified,
+    steamSynced: !!profile?.steamId,
+    walletUsd: walletCents / 100,
+  };
+
+  return { user, notifications };
 }
 
 /**

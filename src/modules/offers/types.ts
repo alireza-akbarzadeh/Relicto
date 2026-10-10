@@ -22,3 +22,16 @@ export type IncomingOffer = {
   /** Highest open bid on its listing — accepting any other leaves money behind. */
   top: boolean;
 };
+
+/** An open bid placed by the buyer across the marketplace. */
+export type BuyerBid = {
+  id: string;
+  listingId: string;
+  item: { name: string; slug: string; image: string; imageAlt: string; wear?: string };
+  seller: { name: string; handle: string; trust: string };
+  bidUsd: number;
+  askUsd: number;
+  discount: string;
+  expires: string;
+  placed: string;
+};

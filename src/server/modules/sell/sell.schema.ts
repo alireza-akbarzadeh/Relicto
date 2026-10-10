@@ -7,3 +7,8 @@ export const listItemInput = z.object({
 });
 
 export const delistInput = z.object({ listingId: z.string().min(1).max(64) });
+
+export const bulkListInput = z.object({
+  inventoryIds: z.array(z.string().min(1).max(64)).min(1).max(50),
+  discountPercent: z.number().min(-50).max(50).default(0),
+});

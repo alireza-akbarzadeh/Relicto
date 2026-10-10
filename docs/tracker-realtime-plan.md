@@ -112,3 +112,24 @@ stream at `maxDuration` (300 s) and the browser reconnects.
 - Candles: the history is one observation a day, so there is no intraday OHLC.
 - Cross-venue depth (Steam, Buff): no data source yet.
 - Spreads table and board stay as they are.
+
+## Market stream — every panel live (2026-09-28)
+
+`GET /api/tracker/market?market=ALL&focus=<slug>` (SSE) drives everything that
+isn't the focused item's book: the telemetry strip, ticker, arbitrage table,
+the trader's price alerts and a stream-vitals panel.
+
+| Source | Panels | Live how |
+| --- | --- | --- |
+| Active listings, live offers (`tracker.market.ts`) | ticker floors, totals, spread "Relicto floor" | Postgres NOTIFY on any item (`watchMarket`), 400 ms debounce, 15 s safety poll |
+| Alert rules (`alertService.list`) | Live Price Alerts | re-read with every market change |
+| Skinport daily feed, Steam scrape | secondary / Steam columns | **test mode:** deterministic drift every 2 s around the last observation (`tracker.venues.ts`, labelled SIM); **production:** last observation, static |
+| Focus item without feed history | chart | **test mode:** simulated daily walk ending at the ticker's quote (`tracker.sim-history.ts`); the chart's end point moves with every frame |
+
+- `TRACKER_SIMULATE_VENUES=false` turns simulation off outside production; `=true` forces it on.
+- A venue price more than 3× off the floor is treated as a wrong-copy feed match
+  (wear/StatTrak), left out of the spreads and counted as "Feed mismatches":
+  26 of 81 Skinport matches on 2026-09-28. Fix the feed's item matching or the seeded floors.
+- Verified: curl on the stream (open → 2 s ticks → `change` 0.4 s after a no-op
+  `UPDATE listings`), Chromium on `/tracker?market=ALL|CS2|DOTA 2`, `next build`.
+- Mobile tracker still reads its server-rendered snapshot; it doesn't subscribe yet.

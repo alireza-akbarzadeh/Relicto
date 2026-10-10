@@ -6,31 +6,189 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/cn";
+import { formatMoney } from "@/lib/format";
 import type { DispatchChoice } from "../hooks/use-checkout-dispatch";
 import { quote } from "../lib/pricing";
 import type { CheckoutData, PaymentRail } from "../types";
 
-const TONE = { primary: "text-primary", amber: "text-tertiary", cyan: "text-status-upcoming", muted: "text-text-muted" };
-
-export function SettlementPanel({ data, onDispatch, pending = false }: { data: CheckoutData; onDispatch: (choice: DispatchChoice) => void; pending?: boolean }) {
+export function SettlementPanel({
+  data,
+  onDispatch,
+  pending = false,
+}: {
+  data: CheckoutData;
+  onDispatch: (choice: DispatchChoice) => void;
+  pending?: boolean;
+}) {
   const [payment, setPayment] = useState("relicto");
   const [promo, setPromo] = useState(true);
-  /**
-   * Through `quote()`, the same arithmetic the charge uses. Subtracting the
-   * discounts by hand went negative whenever they exceeded a small basket,
-   * while `placeOrder` clamps at zero — the screen promised money back.
-   */
-  const q = quote(
-    data.items.map((item) => Math.round(item.price * 100)),
-    promo,
-  );
+  const [agreed, setAgreed] = useState(true);
+
+  const q = quote(data.items.map((item) => Math.round(item.price * 100)), promo);
   const total = q.dueCents / 100;
-  /* Capped so the lines always reconcile with the total — a discount never pays the buyer. */
   const combo = Math.min(q.comboCents, q.subtotalCents) / 100;
   const promoOff = Math.min(q.promoCents, Math.max(0, q.subtotalCents - q.comboCents)) / 100;
-  return <aside className="sticky top-24 flex flex-col gap-space-md rounded-xl bg-surface-card p-space-md shadow-xl md:p-space-lg"><div className="flex items-center justify-between"><h2 className="font-headline-sm text-headline-sm font-bold text-text-primary uppercase">Settlement Rail</h2><span className="font-label-badge text-label-badge font-bold text-status-upcoming uppercase">Encrypted SSL</span></div><RadioGroup value={payment} onValueChange={setPayment} className="gap-2">{data.paymentRails.map((rail) => <PaymentOption key={rail.id} rail={rail} selected={payment === rail.id} />)}</RadioGroup><div className="flex items-center justify-between rounded-lg bg-surface-container-lowest p-3"><div className="flex flex-col"><span className="font-label-badge text-label-badge text-text-muted uppercase">Wallet Balance After Settlement</span><span className="font-data-mono-md text-body-sm font-bold text-status-upcoming">{data.walletAfter}</span></div><Icon name="account_balance_wallet" className="text-[20px] text-status-upcoming" /></div><div className="flex flex-col gap-1.5"><span className="font-label-badge text-label-badge tracking-wider text-text-secondary uppercase">Tournament Promo Code</span><div className="flex items-center justify-between rounded bg-surface-container-lowest px-2.5 py-1.5"><div className="flex items-center gap-2"><Icon name="stars" className="text-[18px] text-tertiary" /><span className="font-data-mono-md text-body-sm font-bold text-text-primary">TI14-MAJOR-VIP</span>{promo && <span className="rounded bg-status-upcoming/20 px-1.5 py-0.5 font-label-badge text-[10px] font-bold text-status-upcoming uppercase">Applied</span>}</div><Button variant={null} size={null} onClick={() => setPromo((active) => !active)} className="h-auto rounded-none border-0 p-0 font-label-badge text-label-badge text-text-muted uppercase hover:text-error">{promo ? "Remove" : "Apply"}</Button></div></div><div className="flex flex-col gap-2 pt-2"><Line label={`Subtotal (${data.items.length} Items Reserved)`} value={`$${(q.subtotalCents / 100).toFixed(2)}`} /><Line label="Combo Synergy Discount" value={`-$${combo.toFixed(2)}`} tone="amber" icon="stars" /><Line label="VIP Promo Code Discount" value={promo ? `-$${promoOff.toFixed(2)}` : "$0.00"} tone="cyan" icon="confirmation_number" /><Line label="Escrow Execution Fee" value="FREE ($0.00)" tone="cyan" /><Line label="Steam Web API Route Token" value="$0.00" /><div className="mt-2 flex items-center justify-between rounded-lg bg-surface-container-high p-3"><div className="flex flex-col"><span className="font-label-badge text-label-badge text-text-muted uppercase">Total Payable</span><span className="font-label-caps text-label-caps text-text-secondary uppercase">Via {payment === "relicto" ? "Relicto Balance" : "Selected Rail"}</span></div><span className="font-data-mono-lg text-headline-lg font-bold tracking-tight text-text-primary">${total.toFixed(2)}</span></div></div><div className="flex flex-col gap-2.5 pt-1"><Consent text="I verify that my registered Steam Trade URL is operational and my Steam Guard 2FA Mobile Authenticator has been active without recent mobile transfers." /><Consent text="I authorize the vault debit. It stays in escrow until I confirm receipt; if the seller doesn't send the Steam trade offer within 12 hours, it is refunded automatically." /></div><div className="flex flex-col gap-2 pt-2"><Button onClick={() => onDispatch({ rail: payment, promo })} disabled={pending} className="h-auto w-full gap-3 rounded-lg border-0 bg-primary-container px-6 py-4 font-headline-sm text-headline-sm font-bold tracking-wider text-on-primary-container uppercase shadow-lg hover:bg-primary"><Icon name="lock" className="text-[22px]" /><span>Authorize &amp; Dispatch Bots</span><Icon name="bolt" className="text-[20px]" /></Button><div className="flex items-center justify-center gap-2 text-center font-data-mono-md text-label-badge text-text-muted"><span className="h-1.5 w-1.5 rounded-full bg-status-upcoming" />Instant P2P bot dispatch in &lt;30s • 256-bit cold escrow</div></div><div className="flex items-center justify-between rounded-lg bg-surface-container-lowest p-3"><div className="flex items-center gap-2.5"><Icon name="support_agent" className="text-[20px] text-secondary" /><div className="flex flex-col"><span className="font-body-sm text-body-sm font-semibold text-text-primary">Need Steam Guard Help?</span><span className="font-label-badge text-label-badge text-text-muted">24/7 Live Trade Concierge</span></div></div><Button variant={null} size={null} onClick={() => undefined} className="h-auto rounded bg-surface-container-high px-2.5 py-1 font-label-caps text-label-caps text-text-primary uppercase">Chat Now</Button></div></aside>;
+
+  return (
+    <aside className="sticky top-24 flex flex-col gap-4 rounded-2xl border border-white/8 bg-surface-card p-5 shadow-xl sm:p-6">
+      <div className="flex items-center justify-between border-b border-white/6 pb-3">
+        <h2 className="font-headline-sm text-sm font-bold text-text-primary">
+          Payment Method
+        </h2>
+        <span className="flex items-center gap-1 font-data-mono-md text-[11px] text-text-muted">
+          <Icon name="lock" className="text-[13px] text-status-upcoming" />
+          256-bit SSL
+        </span>
+      </div>
+
+      <RadioGroup value={payment} onValueChange={setPayment} className="flex flex-col gap-2.5">
+        {data.paymentRails.map((rail) => (
+          <PaymentOption key={rail.id} rail={rail} selected={payment === rail.id} />
+        ))}
+      </RadioGroup>
+
+      {/* Wallet Balance Status */}
+      <div className="flex items-center justify-between rounded-xl border border-white/6 bg-surface-container-lowest px-3.5 py-2.5">
+        <div className="flex items-center gap-2.5">
+          <Icon name="account_balance_wallet" className="text-[17px] text-text-muted shrink-0" />
+          <div className="flex flex-col">
+            <span className="text-[11px] text-text-muted">Vault Balance</span>
+            <span className="font-data-mono-md text-xs font-semibold text-text-primary">
+              {data.walletAfter}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Promo Code Row */}
+      <div className="flex items-center justify-between rounded-xl border border-white/6 bg-surface-container-lowest px-3.5 py-2.5">
+        <div className="flex items-center gap-2">
+          <Icon name="confirmation_number" className="text-[16px] text-tertiary" />
+          <span className="font-data-mono-md text-xs font-bold text-text-primary">TI14-MAJOR-VIP</span>
+          {promo && (
+            <span className="rounded bg-status-upcoming/15 px-1.5 py-0.5 font-data-mono-md text-[10px] font-medium text-status-upcoming">
+              -$15.00
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => setPromo((active) => !active)}
+          className="text-xs font-medium text-text-muted transition-colors hover:text-text-primary"
+        >
+          {promo ? "Remove" : "Apply"}
+        </button>
+      </div>
+
+      {/* Order Summary Lines */}
+      <div className="flex flex-col gap-2 rounded-xl border border-white/6 bg-surface-container-lowest/60 p-4">
+        <div className="flex justify-between text-xs text-text-secondary">
+          <span>Subtotal ({data.items.length} {data.items.length === 1 ? "item" : "items"})</span>
+          <span className="font-data-mono-md font-semibold text-text-primary">
+            {formatMoney(q.subtotalCents / 100)}
+          </span>
+        </div>
+        {combo > 0 && (
+          <div className="flex justify-between text-xs text-tertiary">
+            <span className="flex items-center gap-1">
+              <Icon name="stars" className="text-[13px]" />
+              Bundle Rebate
+            </span>
+            <span className="font-data-mono-md font-semibold">-{formatMoney(combo)}</span>
+          </div>
+        )}
+        {promo && promoOff > 0 && (
+          <div className="flex justify-between text-xs text-status-upcoming">
+            <span className="flex items-center gap-1">
+              <Icon name="confirmation_number" className="text-[13px]" />
+              Tournament Code
+            </span>
+            <span className="font-data-mono-md font-semibold">-{formatMoney(promoOff)}</span>
+          </div>
+        )}
+        <div className="flex justify-between text-xs text-text-muted">
+          <span>Escrow Underwriting</span>
+          <span className="font-data-mono-md text-status-upcoming">Free</span>
+        </div>
+
+        <div className="my-1 border-t border-white/6" />
+
+        <div className="flex items-baseline justify-between pt-1">
+          <div className="flex flex-col">
+            <span className="font-headline-sm text-xs font-bold text-text-primary">Total Payable</span>
+            <span className="text-[11px] text-text-muted">Instant escrow dispatch</span>
+          </div>
+          <span className="font-data-mono-lg text-2xl font-bold tracking-tight text-text-primary">
+            {formatMoney(total)}
+          </span>
+        </div>
+      </div>
+
+      {/* Terms and Consent */}
+      <label className="flex items-start gap-2.5 cursor-pointer pt-1">
+        <Checkbox checked={agreed} onCheckedChange={(val) => setAgreed(!!val)} className="mt-0.5" />
+        <span className="text-xs leading-relaxed text-text-muted">
+          I verify my Steam Trade URL is operational and authorize the escrow debit. Offers not sent within 12h are 100% refunded.
+        </span>
+      </label>
+
+      {/* CTA Button */}
+      <Button
+        onClick={() => onDispatch({ rail: payment, promo })}
+        disabled={pending || !agreed || data.items.length === 0}
+        className="h-12 w-full gap-2 rounded-xl bg-primary-container px-6 font-headline-sm text-sm font-bold tracking-wide text-on-primary-container shadow-lg transition-all hover:bg-primary-container/90 disabled:opacity-50"
+      >
+        <Icon name="lock" className="text-[17px]" />
+        <span>{pending ? "Dispatching..." : `Authorize & Dispatch (${formatMoney(total)})`}</span>
+      </Button>
+
+      <div className="flex items-center justify-center gap-1.5 text-center font-data-mono-md text-[11px] text-text-muted">
+        <span className="h-1.5 w-1.5 rounded-full bg-status-upcoming" />
+        <span>Automated bot dispatch in &lt;30s · Zero loss guarantee</span>
+      </div>
+
+      {/* Support Strip */}
+      <div className="flex items-center justify-between rounded-xl border border-white/6 bg-surface-container-lowest px-3.5 py-2 text-xs text-text-secondary">
+        <div className="flex items-center gap-2">
+          <Icon name="support_agent" className="text-[16px] text-secondary" />
+          <span>Need Trade Help?</span>
+        </div>
+        <span className="font-medium text-text-primary hover:underline cursor-pointer">
+          24/7 Live Concierge
+        </span>
+      </div>
+    </aside>
+  );
 }
 
-function PaymentOption({ rail, selected }: { rail: PaymentRail; selected: boolean }) { return <label className={cn("flex cursor-pointer items-center justify-between gap-2 rounded-lg p-3 transition-all", selected ? "bg-surface-container-high" : "bg-surface-container-lowest hover:bg-surface-container-low")}><span className="flex items-center gap-3"><RadioGroupItem value={rail.id} aria-label={rail.title} /><Icon name={rail.icon} className={cn("text-[19px]", TONE[rail.tone])} /><span className="flex flex-col"><span className="flex items-center gap-1.5 font-body-sm text-body-sm font-bold text-text-primary">{rail.title}{rail.badge && <span className={cn("rounded px-1.5 py-0.5 font-label-badge text-[9px] uppercase", rail.tone === "primary" ? "bg-primary-container text-on-primary-container" : "bg-tertiary-container/30 text-tertiary")}>{rail.badge}</span>}</span><span className="font-data-mono-md text-label-badge text-text-muted">{rail.detail}</span></span></span><span className={cn("shrink-0 font-label-badge text-label-badge font-semibold uppercase", selected ? "text-status-upcoming" : "text-text-muted")}>{rail.note}</span></label>; }
-function Line({ label, value, tone = "muted", icon }: { label: string; value: string; tone?: keyof typeof TONE; icon?: "stars" | "confirmation_number" }) { return <div className="flex items-center justify-between text-body-sm"><span className={cn("flex items-center gap-1", TONE[tone])}>{icon && <Icon name={icon} className="text-[15px]" />}{label}</span><span className={cn("font-data-mono-md font-bold", TONE[tone] === "text-text-muted" ? "text-text-primary" : TONE[tone])}>{value}</span></div>; }
-function Consent({ text }: { text: string }) { return <label className="flex items-start gap-2.5"><Checkbox defaultChecked className="mt-0.5" /><span className="font-body-sm text-body-sm leading-snug text-text-secondary">{text}</span></label>; }
+function PaymentOption({ rail, selected }: { rail: PaymentRail; selected: boolean }) {
+  return (
+    <label
+      className={cn(
+        "flex cursor-pointer flex-col gap-1.5 rounded-xl border p-3.5 transition-all",
+        selected
+          ? "border-primary/50 bg-surface-container-high/90 shadow-xs ring-1 ring-primary/20"
+          : "border-white/6 bg-surface-container-lowest/80 hover:bg-surface-container-low hover:border-white/12",
+      )}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <RadioGroupItem value={rail.id} aria-label={rail.title} className="shrink-0" />
+          <Icon name={rail.icon} className="text-[17px] text-text-secondary shrink-0" />
+          <span className="truncate font-headline-sm text-xs font-bold text-text-primary">{rail.title}</span>
+          {rail.badge && (
+            <span className="shrink-0 whitespace-nowrap rounded bg-primary-container/20 px-1.5 py-0.5 font-data-mono-md text-[10px] font-semibold text-primary">
+              {rail.badge}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="flex items-center justify-between gap-2 pl-7 font-data-mono-md text-[11px]">
+        <span className="truncate text-text-muted">{rail.detail}</span>
+        <span className={cn("shrink-0 font-medium", selected ? "text-status-upcoming" : "text-text-muted")}>
+          {rail.note}
+        </span>
+      </div>
+    </label>
+  );
+}

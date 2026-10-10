@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { inventoryItems, items, listings, offers, profiles } from "@/lib/db/schema";
 import type { SellMobile } from "@/modules/sell/mobile.types";
 import { toSellMobile } from "./sell-mobile.presenter";
-import { delist, listItem } from "./sell.commands";
+import { bulkList, delist, listItem } from "./sell.commands";
 import type { ActiveListing, InventoryItem, SellData, SellGame, SellTone } from "@/modules/sell/types";
 import { ago } from "@/server/modules/shared/ago";
 import { notCommitted } from "@/server/modules/trade-ups/trade-ups.repository";
@@ -106,6 +106,7 @@ function toActiveListing(row: ActiveRow, now: Date): ActiveListing {
 
 export const sellService = {
   list: listItem,
+  bulkList,
   delist,
 
   /** Seller studio: unlisted inventory plus the trader's newest live listings. */

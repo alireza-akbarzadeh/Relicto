@@ -1,10 +1,10 @@
 import "server-only";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { inventoryItems, items, listings } from "@/lib/db/schema";
 import type { z } from "zod";
-import type { listItemInput } from "./sell.schema";
+import type { bulkListInput, listItemInput } from "./sell.schema";
 
 type Wear = (typeof listings.$inferInsert)["wear"];
 const WEAR: Record<string, NonNullable<Wear>> = {
@@ -47,6 +47,58 @@ export async function listItem(userId: string, input: z.infer<typeof listItemInp
 
     await tx.update(inventoryItems).set({ listingId: listing.id }).where(eq(inventoryItems.id, row.id));
     return { status: "listed", listingId: listing.id };
+  });
+}
+
+/**
+ * Bulk lists multiple inventory items at their market floor/price or adjusted by a discount percentage.
+ */
+export async function bulkList(
+  userId: string,
+  input: z.infer<typeof bulkListInput>,
+): Promise<{ status: "listed"; count: number } | { status: "empty" }> {
+  return db.transaction(async (tx) => {
+    const rows = await tx
+      .select()
+      .from(inventoryItems)
+      .where(
+        and(
+          inArray(inventoryItems.id, input.inventoryIds),
+          eq(inventoryItems.userId, userId),
+        ),
+      )
+      .for("update");
+
+    const validRows = rows.filter((r) => !r.listingId && r.itemId);
+    if (validRows.length === 0) return { status: "empty" };
+
+    let count = 0;
+    for (const row of validRows) {
+      const float = Number(row.floatLabel);
+      const baseCents = row.floorCents > 0 ? row.floorCents : row.priceCents;
+      const adjustedCents = Math.round(baseCents * (1 + input.discountPercent / 100));
+      const priceCents = Math.max(10, adjustedCents);
+
+      const [listing] = await tx
+        .insert(listings)
+        .values({
+          itemId: row.itemId!,
+          sellerId: userId,
+          priceCents,
+          status: "active",
+          wear: WEAR[row.wearLabel?.toLowerCase() ?? ""] ?? null,
+          float: Number.isFinite(float) && row.floatLabel ? float : null,
+          sellerNote: row.rankLabel ? `Tier Rank: ${row.rankLabel}` : null,
+          imageUrl: row.imageUrl,
+          imageAlt: row.imageAlt,
+        })
+        .returning({ id: listings.id });
+
+      await tx.update(inventoryItems).set({ listingId: listing.id }).where(eq(inventoryItems.id, row.id));
+      count++;
+    }
+
+    return { status: "listed", count };
   });
 }
 

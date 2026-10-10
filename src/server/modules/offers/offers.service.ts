@@ -1,16 +1,21 @@
 import "server-only";
 
 import { db } from "@/lib/db";
-import type { IncomingOffer, MyBid } from "@/modules/offers/types";
+import type { BuyerBid, IncomingOffer, MyBid } from "@/modules/offers/types";
 import { acceptOffer } from "./offers.accept";
 import { declineOffer, makeOffer, withdrawOffer } from "./offers.commands";
-import { toIncomingOffers, toMyBid } from "./offers.presenter";
+import { toBuyerBids, toIncomingOffers, toMyBid } from "./offers.presenter";
 import * as repo from "./offers.repository";
 
 export const offerService = {
   /** Bids waiting on the seller's answer, newest first. */
   async incoming(sellerId: string): Promise<IncomingOffer[]> {
     return toIncomingOffers(await repo.findIncoming(sellerId));
+  },
+
+  /** Open bids placed by the buyer across the market. */
+  async outgoing(buyerId: string): Promise<BuyerBid[]> {
+    return toBuyerBids(await repo.findOutgoing(buyerId));
   },
 
   /** The buyer's open bids on these copies, keyed by listing id. */

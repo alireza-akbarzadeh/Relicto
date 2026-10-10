@@ -1,5 +1,5 @@
 import type { IconName } from "@/components/ui/icon";
-import type { CheckoutData, CheckoutItem } from "@/modules/checkout/types";
+import type { CheckoutData, CheckoutItem, CheckoutRecipient } from "@/modules/checkout/types";
 import { quote } from "@/modules/checkout/lib/pricing";
 import { PAYMENT_RAILS, sessionCode } from "./checkout.rails";
 import type { CartLine } from "./checkout.repository";
@@ -51,7 +51,7 @@ export function toCheckoutItem(row: CartLine): CheckoutItem {
 }
 
 /** The screen's quote assumes the promo code is applied, as the panel does by default. */
-export function toCheckoutData(rows: CartLine[], balanceCents: number): CheckoutData {
+export function toCheckoutData(rows: CartLine[], balanceCents: number, recipient?: CheckoutRecipient): CheckoutData {
   const q = quote(
     rows.map((row) => row.listing.priceCents),
     true,
@@ -66,5 +66,6 @@ export function toCheckoutData(rows: CartLine[], balanceCents: number): Checkout
     comboDiscount: q.comboCents / 100,
     promoDiscount: q.promoCents / 100,
     walletAfter: `${usd(Math.abs(remainingCents))} USD ${remainingCents >= 0 ? "Remaining" : "Short"}`,
+    ...(recipient ? { recipient } : {}),
   };
 }

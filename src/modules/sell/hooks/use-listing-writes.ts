@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
-import { delistListing, listInventoryItem } from "../actions/listings";
+import { bulkListInventory, delistListing, listInventoryItem } from "../actions/listings";
 
 const LIST_REFUSED = {
   "not-found": ["That item isn't in your inventory", "Refresh the studio and pick it again."],
@@ -13,7 +13,7 @@ const LIST_REFUSED = {
 
 const failed = () => toast.error("Couldn't reach the market", { description: "Check your connection and try again." });
 
-/** The studio's two writes: put an inventory item on the market, or pull a listing back. */
+/** The studio's writes: put an inventory item on the market, bulk list, or pull a listing back. */
 export function useListingWrites() {
   const [pending, startTransition] = useTransition();
 
@@ -33,6 +33,25 @@ export function useListingWrites() {
     });
   };
 
+  const bulkList = (inventoryIds: string[], discountPercent = 0, onDone?: () => void) => {
+    if (inventoryIds.length === 0) return toast.error("Select items to list");
+    startTransition(async () => {
+      try {
+        const result = await bulkListInventory({ inventoryIds, discountPercent });
+        if (result.status === "listed") {
+          toast.success(`Listed ${result.count} items`, {
+            description: "All selected items are now live on the marketplace.",
+          });
+          onDone?.();
+        } else {
+          toast.error("No eligible items could be listed");
+        }
+      } catch {
+        failed();
+      }
+    });
+  };
+
   const delist = (listingId: string, name: string) =>
     startTransition(async () => {
       try {
@@ -44,5 +63,5 @@ export function useListingWrites() {
       }
     });
 
-  return { pending, list, delist };
+  return { pending, list, bulkList, delist };
 }

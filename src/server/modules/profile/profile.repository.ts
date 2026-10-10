@@ -19,6 +19,11 @@ export async function findProfile(userId: string) {
   return row ?? null;
 }
 
+export async function findProfileByHandle(handle: string) {
+  const [row] = await db.select().from(profiles).where(eq(profiles.handle, handle)).limit(1);
+  return row ?? null;
+}
+
 /** As `findProfile`, but opens one for an account that predates the sign-up hook. */
 export async function findOrOpenProfile(userId: string) {
   const found = await findProfile(userId);

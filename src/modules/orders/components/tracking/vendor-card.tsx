@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
+import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import type { Vendor } from "../../types";
 
@@ -38,13 +38,13 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
           </div>
         ))}
       </div>
-      <NoticeButton
-        notice={{ title: `Opening ${vendor.handle}'s inventory`, description: "Vendor storefronts arrive with the marketplace API." }}
+      <LinkButton
+        href={`/traders/${vendor.handle}`}
         className="h-auto w-full gap-space-xs rounded-lg border-0 bg-surface-container py-space-sm font-label-caps text-label-caps text-text-secondary uppercase transition-colors hover:bg-surface-container-high hover:text-text-primary"
       >
         <Icon name="storefront" className="text-[16px]" />
-        <span>View Vendor Inventory</span>
-      </NoticeButton>
+        <span>View Vendor Storefront</span>
+      </LinkButton>
     </div>
   );
 }

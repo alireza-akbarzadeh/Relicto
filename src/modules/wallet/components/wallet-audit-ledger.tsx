@@ -2,13 +2,13 @@
 
 import { useMemo } from "react";
 import { useQueryStates } from "nuqs";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
-import { cn } from "@/lib/cn";
 import type { WalletTransaction } from "../types";
 import { walletSearchParams } from "../lib/search-params";
+import { WalletAuditTable } from "./wallet-audit-table";
 
 const TYPE_OPTIONS: readonly SelectOption<string>[] = [
   "All Transactions",
@@ -22,12 +22,6 @@ const RANGE_OPTIONS: readonly SelectOption<string>[] = ["Last 30 Days", "This Qu
   value: label,
   label,
 }));
-
-const STATUS_STYLE: Record<WalletTransaction["statusTone"], { text: string; dot: string; pulse?: boolean }> = {
-  live: { text: "text-tertiary", dot: "bg-status-live", pulse: true },
-  cyan: { text: "text-status-upcoming", dot: "bg-status-upcoming" },
-  amber: { text: "text-error", dot: "bg-error" },
-};
 
 function matchesType(transaction: WalletTransaction, type: string) {
   if (type === "All Transactions") return true;
@@ -43,17 +37,36 @@ function parseAmount(amount: string) {
   return Number.isFinite(numeric) ? numeric : 0;
 }
 
-function LedgerStatus({ transaction }: { transaction: WalletTransaction }) {
-  const style = STATUS_STYLE[transaction.statusTone];
-  return (
-    <div className="flex max-w-45 flex-col gap-0.5">
-      <span className={cn("inline-flex w-fit items-center gap-1 rounded bg-surface-container-lowest px-2 py-0.5 font-label-badge text-[10px] uppercase", style.text)}>
-        <span className={cn("h-1.5 w-1.5 rounded-full", style.dot, style.pulse && "animate-pulse")} />
-        {transaction.status}
-      </span>
-      <span className="font-body-sm text-[11px] leading-snug text-text-muted">{transaction.statusHint}</span>
-    </div>
-  );
+function exportCsv(transactions: WalletTransaction[], range: string) {
+  if (transactions.length === 0) {
+    toast.error("No transactions to export in current filter");
+    return;
+  }
+  const headers = ["ID", "Title", "Hash", "Asset", "Detail", "Node", "Amount", "Status", "Kind", "Status Hint"];
+  const rows = transactions.map((t) => [
+    t.id,
+    `"${(t.title ?? "").replace(/"/g, '""')}"`,
+    `"${(t.hash ?? "").replace(/"/g, '""')}"`,
+    `"${(t.asset ?? "").replace(/"/g, '""')}"`,
+    `"${(t.detail ?? "").replace(/"/g, '""')}"`,
+    `"${(t.node ?? "").replace(/"/g, '""')}"`,
+    `"${(t.amount ?? "").replace(/"/g, '""')}"`,
+    `"${(t.status ?? "").replace(/"/g, '""')}"`,
+    `"${(t.kind ?? "").replace(/"/g, '""')}"`,
+    `"${(t.statusHint ?? "").replace(/"/g, '""')}"`,
+  ]);
+  const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const dateStr = new Date().toISOString().slice(0, 10);
+  link.setAttribute("href", url);
+  link.setAttribute("download", `relicto-wallet-audit-${range.toLowerCase().replace(/\s+/g, "-")}-${dateStr}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  toast.success("Audit ledger exported", { description: `Downloaded ${transactions.length} records as CSV.` });
 }
 
 export function WalletAuditLedger({ transactions }: { transactions: WalletTransaction[] }) {
@@ -145,89 +158,18 @@ export function WalletAuditLedger({ transactions }: { transactions: WalletTransa
             triggerClassName="cursor-pointer rounded-lg bg-surface-card px-space-sm py-2 pr-7 font-label-caps text-[11px] text-text-secondary uppercase"
             iconClassName="absolute top-2.5 right-2 text-[16px] text-text-muted"
           />
-          <NoticeButton
-            notice={{ title: "Audit export queued", description: "CSV and tax reports download once the wallet API is wired." }}
-            className="h-auto gap-1 rounded-lg border-0 bg-surface-container-high px-space-md py-2 font-label-caps text-[11px] text-text-primary uppercase hover:bg-surface-container-highest"
+          <button
+            type="button"
+            onClick={() => exportCsv(visible, range)}
+            className="inline-flex cursor-pointer items-center gap-1 rounded-lg border-0 bg-surface-container-high px-space-md py-2 font-label-caps text-[11px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
           >
             <Icon name="file_download" className="text-[16px]" />
             <span>CSV / Tax Audit</span>
-          </NoticeButton>
+          </button>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-225 border-collapse text-left font-body-sm">
-          <thead>
-            <tr className="bg-surface-container-lowest font-label-caps text-[11px] text-text-muted uppercase">
-              <th className="rounded-l-lg px-space-md py-3">Transaction &amp; Hash</th>
-              <th className="px-space-md py-3">Asset Details / Counterparty</th>
-              <th className="px-space-md py-3">Execution Node</th>
-              <th className="px-space-md py-3">Amount (USD)</th>
-              <th className="px-space-md py-3">Audited Status</th>
-              <th className="rounded-r-lg px-space-md py-3 text-right">Proof / Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-space-md py-space-xl text-center">
-                  <div className="mx-auto flex max-w-md flex-col items-center gap-space-sm">
-                    <Icon name="inventory_2" className="text-[32px] text-text-muted" />
-                    <p className="font-headline-sm text-headline-sm text-text-primary">No ledger entries yet</p>
-                    <p className="font-body-sm text-body-sm text-text-secondary">
-                      Deposits and cashouts appear here with live status. Make a test deposit to open your vault history.
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              visible.map((transaction) => (
-                <tr key={transaction.id} className="border-t border-border-subtle/40 transition-colors hover:bg-surface-container-high/30">
-                  <td className="px-space-md py-3.5">
-                    <div className="flex items-center gap-space-xs">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-container-high text-tertiary">
-                        <Icon name={transaction.icon} className="text-[16px]" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-headline-sm text-[13px] font-semibold text-text-primary">{transaction.title}</span>
-                        <span className="font-data-mono-md text-[11px] text-text-muted">{transaction.hash}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-space-md py-3.5">
-                    <div className="flex flex-col">
-                      <span className="text-text-primary">{transaction.asset}</span>
-                      <span className="font-data-mono-md text-[11px] text-text-muted">{transaction.detail}</span>
-                    </div>
-                  </td>
-                  <td className="px-space-md py-3.5 font-data-mono-md text-[11px] text-status-upcoming">{transaction.node}</td>
-                  <td className={cn("px-space-md py-3.5 font-data-mono-md text-data-mono-md font-bold", transaction.amountTone === "primary" ? "text-primary" : "text-tertiary")}>
-                    {transaction.amount}
-                  </td>
-                  <td className="px-space-md py-3.5">
-                    <LedgerStatus transaction={transaction} />
-                  </td>
-                  <td className="px-space-md py-3.5 text-right">
-                    <NoticeButton
-                      notice={{ title: transaction.action, description: transaction.statusHint }}
-                      className="inline-flex h-auto gap-0.5 rounded-none border-0 p-0 font-label-caps text-[11px] text-text-secondary uppercase hover:text-text-primary"
-                    >
-                      <span>{transaction.action}</span>
-                      <Icon name={transaction.actionIcon} className="text-[14px]" />
-                    </NoticeButton>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="flex flex-col items-center justify-between gap-space-sm pt-space-xs sm:flex-row">
-        <span className="font-data-mono-md text-body-sm text-text-muted">
-          Showing {visible.length} of {transactions.length} verified {range.toLowerCase()} entries
-        </span>
-      </div>
+      <WalletAuditTable visible={visible} totalCount={transactions.length} range={range} />
     </section>
   );
 }

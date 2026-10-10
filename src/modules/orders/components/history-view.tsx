@@ -26,6 +26,7 @@ export function HistoryView({ data }: { data: LedgerData }) {
             <LedgerStats stats={data.stats} active={data.active} />
             <FilterBar
               counts={data.counts}
+              rows={filters.visible}
               tab={filters.tab}
               onTab={filters.setTab}
               game={filters.game}

@@ -1,6 +1,6 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { LedgerRow } from "../../types";
@@ -69,19 +69,22 @@ export function OrdersTable({ rows, total, pages, page, onPage }: OrdersTablePro
           <span>transactions</span>
         </div>
         <div className="flex items-center gap-space-xs">
-          <NoticeButton
-            notice={{ title: "First page", description: "You are already on the first page." }}
+          <Button
+            variant={null}
+            size={null}
             disabled={page === 1}
+            onClick={() => onPage(page - 1)}
             aria-label="Previous page"
             className={cn(STEP_BUTTON, "text-text-muted hover:text-text-primary disabled:opacity-40")}
           >
             <Icon name="chevron_left" className="text-[18px]" />
-          </NoticeButton>
+          </Button>
           {Array.from({ length: pages }, (_, index) => index + 1).map((number) => (
-            <NoticeButton
+            <Button
               key={number}
-              notice={{ title: `Page ${number}`, description: "Paging loads more rows once the orders API is wired." }}
-              onClickCapture={() => onPage(number)}
+              variant={null}
+              size={null}
+              onClick={() => onPage(number)}
               aria-current={page === number ? "page" : undefined}
               className={cn(
                 PAGE_BUTTON,
@@ -91,16 +94,18 @@ export function OrdersTable({ rows, total, pages, page, onPage }: OrdersTablePro
               )}
             >
               {number}
-            </NoticeButton>
+            </Button>
           ))}
-          <NoticeButton
-            notice={{ title: `Page ${Math.min(page + 1, pages)}`, description: "Paging loads more rows once the orders API is wired." }}
-            onClickCapture={() => onPage(Math.min(page + 1, pages))}
+          <Button
+            variant={null}
+            size={null}
+            disabled={page >= pages}
+            onClick={() => onPage(page + 1)}
             aria-label="Next page"
-            className={cn(STEP_BUTTON, "text-text-secondary hover:text-text-primary")}
+            className={cn(STEP_BUTTON, "text-text-secondary hover:text-text-primary disabled:opacity-40")}
           >
             <Icon name="chevron_right" className="text-[18px]" />
-          </NoticeButton>
+          </Button>
         </div>
       </div>
     </div>

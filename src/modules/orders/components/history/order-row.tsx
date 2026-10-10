@@ -38,14 +38,14 @@ function RowActions({ row }: { row: LedgerRow }) {
       </LinkButton>
     ),
     receipt: (
-      <NoticeButton
+      <LinkButton
         key="receipt"
-        notice={notice(`Receipt ${row.code}`, "Transaction receipts render once the orders API is wired.")}
+        href={`/orders/${row.code.replace("#", "")}`}
         aria-label={`View receipt for ${row.code}`}
         className={ICON_ACTION}
       >
         <Icon name="receipt_long" className="text-[18px]" />
-      </NoticeButton>
+      </LinkButton>
     ),
     inspect: (
       <NoticeButton

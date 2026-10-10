@@ -29,6 +29,10 @@ const SAMPLE: LedgerData = {
  * sample ledger while the account has no orders, so the screen is never blank.
  */
 export async function getOrderLedger(): Promise<LedgerData> {
-  const ledger = await orderService.ledger(await requireSettledViewer());
-  return ledger.counts.all > 0 ? ledger : SAMPLE;
+  const viewer = await requireSettledViewer();
+  const [ledger, hasOrders] = await Promise.all([
+    orderService.ledger(viewer),
+    orderService.hasOrders(),
+  ]);
+  return hasOrders ? ledger : SAMPLE;
 }

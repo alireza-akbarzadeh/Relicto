@@ -1,13 +1,13 @@
 "use client";
 
 import type { KeyboardEvent } from "react";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import { GAME_OPTIONS, RANGE_OPTIONS, type GameFilter, type LedgerTab, type RangeFilter } from "../../lib/history-filters";
-import type { LedgerData } from "../../types";
+import type { LedgerData, LedgerRow } from "../../types";
 
 const TAB =
   "flex-none rounded border-0 bg-surface-container px-space-md py-1.5 font-label-caps text-label-caps font-semibold text-text-secondary uppercase transition-all hover:bg-surface-container-high hover:text-text-primary data-active:bg-primary-container data-active:font-bold data-active:text-on-primary-container group-data-[variant=default]/tabs-list:data-active:shadow-none";
@@ -16,6 +16,7 @@ const SELECT =
 
 type FilterBarProps = {
   counts: LedgerData["counts"];
+  rows: LedgerRow[];
   tab: LedgerTab;
   onTab: (tab: LedgerTab) => void;
   game: GameFilter;
@@ -26,8 +27,39 @@ type FilterBarProps = {
   onQuery: (query: string) => void;
 };
 
+function exportOrdersCsv(rows: LedgerRow[], game: string, range: string) {
+  if (rows.length === 0) {
+    toast.error("No orders to export in current filter");
+    return;
+  }
+  const headers = ["Order Code", "Date", "Game", "Item Name", "Item Detail", "Flow", "Counterparty", "Settlement", "Status"];
+  const csvRows = rows.map((r) => [
+    `"${r.code.replace(/"/g, '""')}"`,
+    `"${r.when.replace(/"/g, '""')}"`,
+    `"${r.game.replace(/"/g, '""')}"`,
+    `"${r.itemName.replace(/"/g, '""')}"`,
+    `"${r.itemDetail.replace(/"/g, '""')}"`,
+    `"${r.flow.replace(/"/g, '""')}"`,
+    `"${r.party.name.replace(/"/g, '""')}"`,
+    `"${r.settlement.amount.replace(/"/g, '""')}"`,
+    `"${r.stateLabel.replace(/"/g, '""')}"`,
+  ]);
+  const csvContent = [headers.join(","), ...csvRows.map((r) => r.join(","))].join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const dateStr = new Date().toISOString().slice(0, 10);
+  link.setAttribute("href", url);
+  link.setAttribute("download", `relicto-orders-${game.toLowerCase().replace(/\s+/g, "-")}-${dateStr}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  toast.success("Order ledger exported", { description: `Downloaded ${rows.length} records as CSV.` });
+}
+
 /** Search, game and range pickers, export, and the status tab row. */
-export function FilterBar({ counts, tab, onTab, game, onGame, range, onRange, query, onQuery }: FilterBarProps) {
+export function FilterBar({ counts, rows, tab, onTab, game, onGame, range, onRange, query, onQuery }: FilterBarProps) {
   const tabs = [
     { value: "all" as const, content: `All Orders (${counts.all})` },
     { value: "purchases" as const, content: `Purchases (${counts.purchases})` },
@@ -83,13 +115,14 @@ export function FilterBar({ counts, tab, onTab, game, onGame, range, onRange, qu
             triggerClassName={SELECT}
             iconClassName="absolute right-2 top-2.5 text-[16px] text-text-muted"
           />
-          <NoticeButton
-            notice={{ title: "Export queued", description: "CSV and tax reports download once the orders API is wired." }}
-            className="h-auto gap-space-xs rounded-lg border-0 bg-surface-container px-space-md py-space-sm font-label-caps text-label-caps font-bold text-text-primary uppercase shadow-xs transition-colors hover:bg-surface-container-high"
+          <button
+            type="button"
+            onClick={() => exportOrdersCsv(rows, game, range)}
+            className="inline-flex cursor-pointer items-center gap-space-xs rounded-lg border-0 bg-surface-container px-space-md py-space-sm font-label-caps text-label-caps font-bold text-text-primary uppercase shadow-xs transition-colors hover:bg-surface-container-high focus-visible:outline-hidden"
           >
             <Icon name="download" className="text-[18px]" />
             <span>Export CSV</span>
-          </NoticeButton>
+          </button>
         </div>
       </div>
       <div className="flex items-center justify-between overflow-x-auto pt-space-xs pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

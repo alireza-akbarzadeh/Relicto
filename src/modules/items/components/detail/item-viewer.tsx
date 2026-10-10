@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -14,6 +14,20 @@ import type { ItemDetail } from "../../types";
 export function ItemViewer({ item }: { item: ItemDetail }) {
   const [mode, setMode] = useQueryState("view", itemSearchParams.view.withOptions({ history: "replace", clearOnDefault: true }));
 
+  const handleInspectInGame = () => {
+    const inspectUrl = `steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20${encodeURIComponent(item.slug)}`;
+    window.location.href = inspectUrl;
+    toast.success("Dispatched Steam in-game inspect", { description: "Launching client preview protocol..." });
+  };
+
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => toast.info("Fullscreen unavailable"));
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
   return (
     <div className="group relative flex aspect-4/3 w-full flex-col justify-between overflow-hidden rounded-lg border border-border-subtle bg-surface-card p-4 shadow-2xl">
       <div className="z-20 flex w-full items-center justify-between">
@@ -25,20 +39,22 @@ export function ItemViewer({ item }: { item: ItemDetail }) {
           ))}
         </div>
         <div className="flex items-center gap-1.5">
-          <NoticeButton
-            notice={{ title: "Steam deep link", description: "Opens the in-game inspector once Steam auth is wired." }}
+          <button
+            type="button"
+            onClick={handleInspectInGame}
             aria-label="Inspect in game"
-            className="h-auto rounded border-border-subtle bg-surface-container-lowest/90 p-2 text-text-secondary transition-all hover:bg-surface-container hover:text-tertiary"
+            className="flex h-auto cursor-pointer items-center justify-center rounded border border-border-subtle bg-surface-container-lowest/90 p-2 text-text-secondary transition-all hover:bg-surface-container hover:text-tertiary focus-visible:outline-hidden"
           >
             <Icon name="open_in_new" className="text-[18px]" />
-          </NoticeButton>
-          <NoticeButton
-            notice={{ title: "High-res inspector", description: "The fullscreen 3D viewer ships with the asset pipeline." }}
+          </button>
+          <button
+            type="button"
+            onClick={handleToggleFullscreen}
             aria-label="Fullscreen 3D view"
-            className="h-auto rounded border-border-subtle bg-surface-container-lowest/90 p-2 text-text-secondary transition-all hover:bg-surface-container hover:text-text-primary"
+            className="flex h-auto cursor-pointer items-center justify-center rounded border border-border-subtle bg-surface-container-lowest/90 p-2 text-text-secondary transition-all hover:bg-surface-container hover:text-text-primary focus-visible:outline-hidden"
           >
             <Icon name="fullscreen" className="text-[18px]" />
-          </NoticeButton>
+          </button>
         </div>
       </div>
       <div className="relative my-auto flex h-full w-full items-center justify-center">
@@ -58,29 +74,28 @@ export function ItemViewer({ item }: { item: ItemDetail }) {
         </div>
         <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded border border-border-subtle bg-surface-container-lowest/90 px-2.5 py-1 shadow-sm backdrop-blur-md">
           <Icon name="diamond" className="text-[14px] text-pink-400" />
-          <span className="font-data-mono-md text-[11px] font-medium text-text-primary">{item.hero.kills}</span>
+          <span className="font-label-badge text-[10px] font-bold text-pink-400 uppercase">{item.hero.statTrak}</span>
         </div>
       </div>
-      <div className="z-20 flex w-full items-center justify-center pt-2">
-        <div className="flex items-center gap-1 rounded-lg border border-border-subtle bg-surface-container-lowest/95 p-1 backdrop-blur-xl">
-          {item.inspectModes.map((option) => (
+      <div className="z-20 flex w-full items-center justify-between">
+        <div className="flex items-center gap-2">
+          {(["3d", "render", "inspect"] as const).map((view) => (
             <Button
-              key={option.id}
+              key={view}
               variant={null}
               size={null}
-              onClick={() => void setMode(option.id)}
-              aria-pressed={mode === option.id}
+              onClick={() => void setMode(view)}
+              aria-pressed={mode === view}
               className={cn(
-                "h-auto rounded border-0 px-3 py-1 font-label-caps text-xs transition-all",
-                mode === option.id
-                  ? "bg-surface-container-high font-bold text-tertiary shadow-xs"
-                  : "font-normal text-text-muted hover:bg-surface-container hover:text-text-primary",
+                "h-auto rounded border border-border-subtle bg-surface-container-lowest/90 px-3 py-1 font-headline-sm text-xs uppercase transition-all",
+                mode === view ? "border-border-tactical text-tertiary shadow-sm" : "text-text-muted hover:text-text-primary",
               )}
             >
-              {option.label}
+              {view}
             </Button>
           ))}
         </div>
+        <span className="font-data-mono-md text-[11px] text-text-muted">{item.hero.version}</span>
       </div>
     </div>
   );

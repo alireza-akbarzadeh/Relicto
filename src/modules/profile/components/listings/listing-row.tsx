@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
 import { DelistButton } from "@/modules/sell/components/delist-button";
 import { Icon } from "@/components/ui/icon";
+import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { LISTING_BADGE, TONE_TEXT } from "../../lib/tones";
@@ -34,13 +34,13 @@ export function ListingRow({ listing }: { listing: Listing }) {
           <span className={cn("font-label-badge text-label-badge", TONE_TEXT[listing.noteTone])}>{listing.note}</span>
         </div>
         <div className="flex items-center gap-space-xs">
-          <NoticeButton
-            notice={{ title: `Adjusting listing price for ${listing.name}`, description: "Price editing lands with the listings API." }}
-            aria-label={`Edit price for ${listing.name}`}
+          <LinkButton
+            href="/sell"
+            aria-label={`Manage listing for ${listing.name}`}
             className={cn(ACTION, "text-text-primary hover:bg-surface-bright")}
           >
             <Icon name="edit" className="text-[18px]" />
-          </NoticeButton>
+          </LinkButton>
           <DelistButton
             listingId={listing.id}
             name={listing.name}

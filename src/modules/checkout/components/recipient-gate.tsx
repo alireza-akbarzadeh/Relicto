@@ -1,6 +1,6 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Icon } from "@/components/ui/icon";
 import type { CheckoutRecipient } from "../types";
 
@@ -36,15 +36,12 @@ export function RecipientGate({
             <span className="h-1.5 w-1.5 rounded-full bg-status-upcoming" />
             Ready for Instant Bot Push
           </span>
-          <NoticeButton
-            notice={{
-              title: "Destination settings",
-              description: "Steam trade destination settings are synchronized.",
-            }}
+          <LinkButton
+            href="/profile"
             className="h-auto rounded-lg px-2.5 py-1 text-xs text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
           >
             Change
-          </NoticeButton>
+          </LinkButton>
         </div>
       </div>
 

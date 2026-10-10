@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { STAT_TONE } from "../../lib/tones";
@@ -63,12 +63,12 @@ export function RevenueConvertor({ item, sell }: { item: string; sell: SellConve
             </div>
             <div className="flex items-center justify-between gap-2 pt-1">
               <span className="font-body-sm text-[10px] text-text-muted">{sell.note}</span>
-              <NoticeButton
-                notice={{ title: "Listing drafted", description: "The sell studio opens once the listings API is wired." }}
+              <LinkButton
+                href="/sell"
                 className="h-auto rounded border-0 bg-emerald-500 px-5 py-2 font-headline-sm text-xs font-bold tracking-wider text-surface-container-lowest uppercase shadow-sm transition-all hover:bg-emerald-400"
               >
                 List for Sale Now
-              </NoticeButton>
+              </LinkButton>
             </div>
           </div>
         </div>

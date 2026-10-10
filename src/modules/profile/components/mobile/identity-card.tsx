@@ -1,6 +1,6 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Icon } from "@/components/ui/icon";
 import { AvatarImage } from "@/modules/relicto/components/account/avatar-image";
 import { useSession } from "@/modules/relicto/state/session-provider";
@@ -39,13 +39,13 @@ export function IdentityCard({ profile }: { profile: ProfileMobile }) {
             </div>
           </div>
         </div>
-        <NoticeButton
+        <LinkButton
+          href="/profile"
           aria-label="Profile display settings"
-          notice={{ title: "Profile display", description: "Showcase order and privacy controls arrive with account settings." }}
-          className="h-9 w-9 rounded-lg border-0 bg-surface-container-low text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border-0 bg-surface-container-low text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
         >
           <Icon name="tune" className="text-[20px]" />
-        </NoticeButton>
+        </LinkButton>
       </div>
 
       <div className="mt-1 flex items-center justify-between rounded-lg bg-surface-container-lowest/60 px-3 pt-space-xs pb-2">

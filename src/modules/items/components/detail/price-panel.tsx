@@ -1,6 +1,6 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -99,13 +99,21 @@ export function PricePanel({ item }: { item: ItemDetail }) {
             >
               <Icon name="favorite" filled={watched} className="text-[20px]" />
             </Button>
-            <NoticeButton
-              notice={{ title: "Price ping", description: "Configure the alert threshold in the panel below." }}
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById("price-alert") ?? document.getElementById("sell-flow");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  toast.info("Price alert monitoring active for this item");
+                }
+              }}
               aria-label="Configure price drop ping"
               className={cn(ACTION, "px-3.5 text-text-secondary hover:text-tertiary")}
             >
               <Icon name="notifications_active" className="text-[20px]" />
-            </NoticeButton>
+            </button>
             <ShareButton
               title={item.name}
               text={item.description}

@@ -1,5 +1,5 @@
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
+import { LinkButton } from "@/components/ui/link-button";
 import type { Listing } from "../../types";
 import { SectionTitle } from "../shared/section-title";
 import { ListingRow } from "./listing-row";
@@ -26,12 +26,13 @@ export function ListingsSection({ listings, total }: ListingsSectionProps) {
           }
         />
         {!complete && (
-          <NoticeButton
-            notice={{ title: `Showing all ${total} listings`, description: "Open the Active Listings tab to manage every listing." }}
+          <LinkButton
+            href="/marketplace"
             className="h-auto gap-1 rounded-none border-0 p-0 font-label-caps text-label-caps tracking-wider text-primary uppercase transition-colors hover:text-text-primary"
           >
-            View All {total} Listings <Icon name="arrow_forward" className="text-[16px]" />
-          </NoticeButton>
+            <span>View All {total} Listings</span>
+            <Icon name="arrow_forward" className="text-[16px]" />
+          </LinkButton>
         )}
       </div>
       <div className="flex flex-col gap-space-xs">

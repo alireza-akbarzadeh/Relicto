@@ -1,5 +1,5 @@
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
+import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { TONE_TEXT } from "../../lib/mobile";
 import type { LiquidityRail } from "../../mobile.types";
@@ -36,13 +36,13 @@ export function LiquidityRails({ rails }: { rails: LiquidityRail[] }) {
                 <span className="truncate font-body-sm text-body-sm text-text-secondary">{rail.note}</span>
               </div>
             </div>
-            <NoticeButton
-              aria-label={`Open ${rail.title}`}
-              notice={{ title: rail.title, description: `${rail.note}. Fees: ${rail.chip}.` }}
-              className="h-8 w-8 shrink-0 rounded-lg border-0 bg-surface-container text-text-primary"
+            <LinkButton
+              href="/wallet"
+              aria-label={`Open ${rail.title} in treasury`}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-0 bg-surface-container text-text-primary transition-colors hover:bg-surface-container-high"
             >
               <Icon name="chevron_right" className="text-[18px]" />
-            </NoticeButton>
+            </LinkButton>
           </div>
         ))}
       </div>

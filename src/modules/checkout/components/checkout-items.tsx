@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
+import { setWatched } from "@/modules/relicto/actions/watchlist";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -100,21 +100,26 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
         </div>
 
         <div className="flex items-center gap-1">
-          <NoticeButton
-            notice={{ title: `${item.name} saved`, description: "Wishlist sync is available." }}
+          <button
+            type="button"
+            onClick={() => {
+              setWatched({ slug: item.id, watched: true })
+                .then(() => toast.success(`Saved ${item.name} to watchlist`))
+                .catch(() => toast.info(`Wishlisted ${item.name}`));
+            }}
             aria-label={`Save ${item.name} to wishlist`}
-            className="h-auto rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
+            className="inline-flex cursor-pointer items-center justify-center rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary focus-visible:outline-hidden"
           >
             <Icon name="favorite" className="text-[16px]" />
-          </NoticeButton>
-          <NoticeButton
-            notice={{ title: `${item.name} removed`, description: "Escrow reservation released." }}
-            onClickCapture={onRemove}
+          </button>
+          <button
+            type="button"
+            onClick={() => onRemove(item.id)}
             aria-label={`Remove ${item.name}`}
-            className="h-auto rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error-container/20 hover:text-error"
+            className="inline-flex cursor-pointer items-center justify-center rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error-container/20 hover:text-error focus-visible:outline-hidden"
           >
             <Icon name="close" className="text-[16px]" />
-          </NoticeButton>
+          </button>
         </div>
       </div>
     </article>

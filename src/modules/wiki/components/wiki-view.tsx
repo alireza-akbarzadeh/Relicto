@@ -1,8 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useQueryStates } from "nuqs";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
@@ -341,16 +340,18 @@ function GuideCard({ guide, wide }: { guide: WikiGuide; wide: boolean }) {
         <span className="font-label-badge text-label-badge text-text-muted">
           {guide.meta}
         </span>
-        <NoticeButton
-          notice={{
-            title: `${guide.title} opened`,
-            description:
-              "The full research article is available in the codex API.",
+        <button
+          type="button"
+          onClick={() => {
+            const el = document.getElementById("articles");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+            toast.info(`Opened research codex: ${guide.title}`);
           }}
-          className="h-auto rounded bg-surface-container-high px-space-md py-space-xs font-headline-sm text-[12px] text-text-primary uppercase"
+          className="inline-flex cursor-pointer items-center gap-1 rounded bg-surface-container-high px-space-md py-space-xs font-headline-sm text-[12px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
         >
-          Read Research <Icon name="chevron_right" className="text-[14px]" />
-        </NoticeButton>
+          <span>Read Research</span>
+          <Icon name="chevron_right" className="text-[14px]" />
+        </button>
       </div>
     </article>
   );

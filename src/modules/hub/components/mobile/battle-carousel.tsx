@@ -1,4 +1,3 @@
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -32,10 +31,10 @@ function Card({ card }: { card: BattleCard }) {
         </div>
       ))}
       {card.action.kind === "vote" ? (
-        <NoticeButton notice={{ title: "Vote cast", description: `150 pts staked on ${card.teams[0].name} vs ${card.teams[1].name}.` }} className={ACTION}>
+        <LinkButton href="/community" className={ACTION}>
           <span>{card.action.label}</span>
           <Icon name="chevron_right" className="text-[16px]" />
-        </NoticeButton>
+        </LinkButton>
       ) : (
         <LinkButton href="/alerts" className={ACTION}>
           <span>{card.action.label}</span>

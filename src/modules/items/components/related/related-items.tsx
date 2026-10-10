@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -16,13 +15,13 @@ export function RelatedItems({ related }: { related: ItemDetail["related"] }) {
           <span className="font-label-caps text-xs font-bold tracking-wider text-tertiary">{related.eyebrow}</span>
           <h3 className="mt-0.5 font-headline-lg text-2xl font-bold text-text-primary">{related.title}</h3>
         </div>
-        <NoticeButton
-          notice={{ title: "All Phantom Assassin gear", description: "Hero collections open with the catalog API." }}
+        <LinkButton
+          href="/marketplace?q=Phantom%20Assassin"
           className="inline-flex h-auto gap-1 rounded-none border-0 p-0 font-label-caps text-xs font-bold text-text-muted transition-colors hover:text-tertiary"
         >
           <span>ALL PHANTOM ASSASSIN GEAR</span>
           <Icon name="arrow_forward" className="text-[16px]" />
-        </NoticeButton>
+        </LinkButton>
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {related.items.map((entry) => (

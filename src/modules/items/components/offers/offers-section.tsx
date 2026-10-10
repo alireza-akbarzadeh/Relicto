@@ -2,7 +2,6 @@
 
 import { useQueryStates } from "nuqs";
 import { itemSearchParams } from "../../lib/search-params";
-import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
@@ -48,13 +47,13 @@ export function OffersSection({ item }: OffersSectionProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded border border-border-subtle bg-surface-container px-2.5 py-1 font-label-badge text-xs text-text-secondary">{note}</span>
-          <NoticeButton
-            notice={{ title: "Refine filters", description: "Advanced offer filters arrive with the marketplace API." }}
-            className="h-auto gap-1 rounded border-border-subtle bg-surface-container px-3 py-1.5 text-xs font-medium text-text-secondary transition-all hover:bg-surface-container-high hover:text-text-primary"
+          <LinkButton
+            href="/marketplace"
+            className="h-auto gap-1 rounded border border-border-subtle bg-surface-container px-3 py-1.5 text-xs font-medium text-text-secondary transition-all hover:bg-surface-container-high hover:text-text-primary"
           >
             <Icon name="tune" className="text-[16px]" />
-            <span>Refine Filters</span>
-          </NoticeButton>
+            <span>Browse All Offers</span>
+          </LinkButton>
         </div>
       </div>
 

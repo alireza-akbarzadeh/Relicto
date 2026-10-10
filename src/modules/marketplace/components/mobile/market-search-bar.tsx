@@ -1,6 +1,6 @@
 "use client";
 
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { useMobileMarket } from "../../state/mobile-market-provider";
@@ -9,6 +9,49 @@ import { MarketFilterSheet } from "./market-filter-sheet";
 /** Live search (writes `q` as you type) plus the filter-matrix sheet. */
 export function MarketSearchBar({ placeholder }: { placeholder: string }) {
   const { criteria, set } = useMobileMarket();
+
+  const handleVoiceScan = () => {
+    if (typeof window === "undefined") return;
+    const windowWithSpeech = window as unknown as {
+      SpeechRecognition?: new () => {
+        lang: string;
+        onresult: (event: { results: { 0: { 0: { transcript: string } } } }) => void;
+        onerror: () => void;
+        start: () => void;
+      };
+      webkitSpeechRecognition?: new () => {
+        lang: string;
+        onresult: (event: { results: { 0: { 0: { transcript: string } } } }) => void;
+        onerror: () => void;
+        start: () => void;
+      };
+    };
+
+    const SpeechClass = windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
+    if (!SpeechClass) {
+      toast.info("Voice recognition not supported in this browser", { description: "Type skin name directly into the search bar." });
+      return;
+    }
+
+    try {
+      const recognition = new SpeechClass();
+      recognition.lang = "en-US";
+      recognition.onresult = (event) => {
+        const transcript = event.results[0]?.[0]?.transcript;
+        if (transcript) {
+          set({ q: transcript });
+          toast.success(`Voice search: "${transcript}"`);
+        }
+      };
+      recognition.onerror = () => {
+        toast.error("Could not capture audio from microphone");
+      };
+      recognition.start();
+      toast.info("Listening... speak weapon or skin name");
+    } catch {
+      toast.error("Microphone access unavailable");
+    }
+  };
 
   return (
     <section className="flex w-full items-center gap-space-sm">
@@ -23,13 +66,14 @@ export function MarketSearchBar({ placeholder }: { placeholder: string }) {
           placeholder={placeholder}
           className="h-11 rounded-xl border-0 bg-surface-container-low pr-9 pl-10 font-body-sm text-body-sm text-on-surface shadow-inner transition-all duration-200 placeholder:text-text-muted focus-visible:ring-2 focus-visible:ring-border-focus md:text-body-sm dark:bg-surface-container-low"
         />
-        <NoticeButton
-          aria-label="Voice scan"
-          notice={{ title: "Voice scan", description: "Say an item name to search. Microphone search ships with the mobile app." }}
-          className="absolute right-2.5 h-6 w-6 rounded border-0 text-text-muted transition-colors hover:text-primary"
+        <button
+          type="button"
+          onClick={handleVoiceScan}
+          aria-label="Voice scan search"
+          className="absolute right-2.5 flex h-6 w-6 cursor-pointer items-center justify-center rounded border-0 bg-transparent text-text-muted transition-colors hover:text-primary focus-visible:outline-hidden"
         >
           <Icon name="mic" className="text-[18px]" />
-        </NoticeButton>
+        </button>
       </div>
       <MarketFilterSheet />
     </section>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { NoticeButton } from "@/components/notice-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import { legSpread } from "../../lib/mobile-market";
@@ -88,13 +88,13 @@ function Card({ card }: { card: ArbCard }) {
           </div>
         ))}
       </div>
-      <NoticeButton
-        notice={{ title: "Arb bot armed", description: `Buying on ${card.buy.venue} and listing on ${card.sell.venue} (${spread} spread).` }}
-        className="h-auto min-h-[44px] w-full gap-1.5 rounded-lg border-0 bg-surface-container-high px-3 py-2.5 font-label-caps text-label-caps font-bold text-primary uppercase transition-all hover:bg-primary hover:text-on-primary active:scale-[0.98]"
+      <LinkButton
+        href={`/marketplace?q=${encodeURIComponent(card.name)}`}
+        className="h-auto min-h-[44px] w-full justify-center gap-1.5 rounded-lg border-0 bg-surface-container-high px-3 py-2.5 font-label-caps text-label-caps font-bold text-primary uppercase transition-all hover:bg-primary hover:text-on-primary active:scale-[0.98]"
       >
         <Icon name="smart_toy" className="text-[18px]" />
-        <span>Execute Instant Arb Bot</span>
-      </NoticeButton>
+        <span>View Arb Opportunity</span>
+      </LinkButton>
     </div>
   );
 }

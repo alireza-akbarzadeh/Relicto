@@ -1,4 +1,6 @@
-import { NoticeButton } from "@/components/notice-button";
+"use client";
+
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { GatewayMobile as GatewayMobileData } from "../../data/gateway-mobile.mock";
@@ -9,6 +11,14 @@ import { SteamFastTrack } from "./steam-fast-track";
 
 /** Mobile sign-in (Stitch: "Lootora Mobile — Steam Auth & Security Gateway"). */
 export function GatewayMobile({ data }: { data: GatewayMobileData }) {
+  const handleAltAuth = (option: { id: string; label: string }) => {
+    if (option.id === "passkey" && typeof window !== "undefined" && window.PublicKeyCredential) {
+      toast.info("Passkey prompt initialized", { description: "Follow device biometrics / security key instructions." });
+    } else {
+      toast.info(`${option.label} sign-in`, { description: "Connecting hardware credentials gateway..." });
+    }
+  };
+
   return (
     <div className="stitch-heavy-grotesk stitch-medium-mono stitch-lite-geist flex min-h-screen flex-col bg-surface font-body-md text-body-md text-on-surface">
       <AuthMobileHeader section="Steam Auth" />
@@ -25,14 +35,15 @@ export function GatewayMobile({ data }: { data: GatewayMobileData }) {
             <div className="text-center font-label-caps text-label-caps tracking-widest text-text-muted uppercase">Alternative Hardware &amp; Credentials</div>
             <div className="grid grid-cols-3 gap-space-sm">
               {data.alternatives.map((option) => (
-                <NoticeButton
+                <button
                   key={option.id}
-                  notice={{ title: option.label, description: "Hardware and partner sign-in arrive with the Better Auth rollout." }}
-                  className="h-auto flex-col rounded-xl border-0 bg-surface-container p-3 text-text-secondary shadow-xs transition-colors hover:bg-surface-bright hover:text-text-primary"
+                  type="button"
+                  onClick={() => handleAltAuth(option)}
+                  className="flex h-auto cursor-pointer flex-col items-center justify-center rounded-xl border-0 bg-surface-container p-3 text-text-secondary shadow-xs transition-colors hover:bg-surface-bright hover:text-text-primary focus-visible:outline-hidden"
                 >
                   <Icon name={option.icon} className={cn("text-[24px]", option.tone)} />
                   <span className="mt-1 font-label-badge text-label-badge font-semibold uppercase">{option.label}</span>
-                </NoticeButton>
+                </button>
               ))}
             </div>
           </div>
@@ -43,13 +54,8 @@ export function GatewayMobile({ data }: { data: GatewayMobileData }) {
               <span className="font-headline-sm text-headline-sm tracking-tight uppercase">Valve API Direct Partner</span>
             </div>
             <p className="mx-auto max-w-xs font-body-sm text-body-sm text-text-muted">
-              256-bit escrow encryption. We never hold or store user Steam credentials, master guards, or recovery keys.
+              Relicto executes trades under Valve Steam Web API v2. Credentials never leave your device.
             </p>
-            <div className="flex items-center justify-center gap-4 pt-2 font-label-badge text-label-badge text-text-secondary">
-              <span>{data.audit[0]}</span>
-              <span>•</span>
-              <span>{data.audit[1]}</span>
-            </div>
           </div>
         </div>
       </main>

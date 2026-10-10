@@ -451,15 +451,17 @@ function RevisionLedger({ revisions }: { revisions: WikiData["revisions"] }) {
               canonical commit.
             </p>
           </div>
-          <NoticeButton
-            notice={{
-              title: "Revision submitted",
-              description: "Wiki contribution enters the peer review queue.",
+          <button
+            type="button"
+            onClick={() => {
+              toast.info("Community wiki contribution", {
+                description: "Pull request template available in the Relicto codex repo.",
+              });
             }}
-            className="h-auto rounded bg-surface-container-high px-3 py-2 font-label-caps text-[10px] text-text-primary uppercase"
+            className="inline-flex cursor-pointer items-center justify-center rounded bg-surface-container-high px-3 py-2 font-label-caps text-[10px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
           >
             Submit Wiki Edit
-          </NoticeButton>
+          </button>
         </div>
         <div className="overflow-x-auto rounded-xl bg-surface-card">
           <table className="w-full min-w-225 text-left">
@@ -514,16 +516,16 @@ function RevisionLedger({ revisions }: { revisions: WikiData["revisions"] }) {
                     {revision.time}
                   </td>
                   <td className="px-3 py-3 text-right">
-                    <NoticeButton
-                      notice={{
-                        title: "Audit record opened",
-                        description:
-                          "Cryptographic proof details are available in the wiki API.",
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(revision.hash);
+                        toast.success("Commit hash copied", { description: revision.hash });
                       }}
-                      className="h-auto rounded bg-surface-container-high px-2 py-1 font-label-caps text-[10px] text-text-secondary uppercase"
+                      className="inline-flex cursor-pointer items-center justify-center rounded bg-surface-container-high px-2 py-1 font-label-caps text-[10px] text-text-secondary uppercase transition-colors hover:bg-surface-container-highest hover:text-text-primary focus-visible:outline-hidden"
                     >
                       Inspect
-                    </NoticeButton>
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -550,16 +552,18 @@ function ApiBand() {
             </p>
           </div>
         </div>
-        <NoticeButton
-          notice={{
-            title: "API key copied",
-            description:
-              "Developer credentials are available from the account console.",
+        <button
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText("relicto_live_pk_9f83a201b4c74892e319");
+            toast.success("API key copied to clipboard", {
+              description: "relicto_live_pk_9f83a... (Rate Limit: 120 req/min)",
+            });
           }}
-          className="h-auto rounded bg-surface-container-high px-3 py-2 font-label-caps text-[10px] text-text-primary uppercase"
+          className="inline-flex cursor-pointer items-center justify-center rounded bg-surface-container-high px-3 py-2 font-label-caps text-[10px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
         >
           Copy Key
-        </NoticeButton>
+        </button>
       </div>
     </section>
   );

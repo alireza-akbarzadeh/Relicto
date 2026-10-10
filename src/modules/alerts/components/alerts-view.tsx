@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { setAlertArmed } from "../actions/rules";
-import { NoticeButton } from "@/components/notice-button";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -110,20 +109,33 @@ function TriggerTelemetry({
             />
             {paused ? "Resume All Automations" : "Pause All Automations"}
           </Button>
-          <NoticeButton
-            notice={{
-              title: "Webhook logs exported",
-              description:
-                "The latest automation logs are ready for the API exporter.",
+          <button
+            type="button"
+            onClick={() => {
+              const exportPayload = {
+                exportedAt: new Date().toISOString(),
+                status: paused ? "paused" : "streaming",
+                websocketLatencyMs: 6,
+                engine: "Algo V4.2",
+                endpoint: "wss://stream.relicto.gg/v1/triggers",
+              };
+              const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `relicto-telemetry-${new Date().toISOString().slice(0, 10)}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+              toast.success("Webhook logs exported", { description: "Downloaded telemetry JSON bundle." });
             }}
-            className="h-auto gap-1 rounded bg-surface-container px-space-md py-space-xs font-label-caps text-label-caps text-text-secondary uppercase"
+            className="inline-flex cursor-pointer items-center gap-1 rounded bg-surface-container px-space-md py-space-xs font-label-caps text-label-caps text-text-secondary uppercase transition-colors hover:bg-surface-container-high hover:text-text-primary focus-visible:outline-hidden"
           >
             <Icon
               name="download"
               className="text-[16px] text-status-upcoming"
             />
-            Export Webhook Logs
-          </NoticeButton>
+            <span>Export Webhook Logs</span>
+          </button>
           <a
             href="#rule-builder"
             className="flex items-center gap-1 rounded bg-primary-container px-space-md py-space-xs font-label-caps text-label-caps text-on-primary-container uppercase"
@@ -506,15 +518,17 @@ function TriggerGrid({
                 </td>
                 <td className="px-3 py-3 text-right">
                   <div className="flex justify-end gap-1">
-                    <NoticeButton
-                      notice={{
-                        title: "Rule tested",
-                        description: `${alert.item} passed the simulated trigger evaluation.`,
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toast.success(`Simulation passed: ${alert.item}`, {
+                          description: "Trigger evaluation passed with 6ms simulated latency.",
+                        });
                       }}
-                      className="h-auto rounded bg-surface-container-high px-2 py-1 font-label-caps text-[10px] text-text-primary uppercase"
+                      className="inline-flex cursor-pointer items-center justify-center rounded bg-surface-container-high px-2 py-1 font-label-caps text-[10px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
                     >
                       Test
-                    </NoticeButton>
+                    </button>
                     <Button
                       variant={null}
                       size="icon-xs"

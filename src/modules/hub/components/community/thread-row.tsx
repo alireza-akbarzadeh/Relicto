@@ -1,17 +1,16 @@
 import { ChevronRight, ThumbsUp } from "lucide-react";
-import { NoticeButton } from "@/components/notice-button";
+import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { TONE_TEXT } from "../../lib/tones";
 import type { Thread } from "../../types";
 
 /**
- * A community discussion teaser; the whole row opens the thread (the board is
- * not built yet). Children are spans so the button stays valid phrasing content.
+ * A community discussion teaser; the whole row opens the thread in community discussions.
  */
 export function ThreadRow({ thread }: { thread: Thread }) {
   return (
-    <NoticeButton
-      notice={{ title: thread.title, description: "Community threads open here once the board ships." }}
+    <LinkButton
+      href={`/community?channel=${encodeURIComponent(thread.channel.label)}`}
       className="w-full cursor-pointer justify-between gap-4 rounded-lg border-border-dark bg-surface p-4 text-left leading-normal font-normal whitespace-normal transition-colors hover:border-surface-bright"
     >
       <span className="flex items-start gap-3.5">
@@ -32,6 +31,6 @@ export function ThreadRow({ thread }: { thread: Thread }) {
         </span>
       </span>
       <ChevronRight className="size-5 shrink-0 text-text-muted" />
-    </NoticeButton>
+    </LinkButton>
   );
 }

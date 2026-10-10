@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useQueryStates } from "nuqs";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -519,8 +520,8 @@ function RevisionLedger({ revisions }: { revisions: WikiData["revisions"] }) {
                     <button
                       type="button"
                       onClick={() => {
-                        navigator.clipboard.writeText(revision.hash);
-                        toast.success("Commit hash copied", { description: revision.hash });
+                        navigator.clipboard.writeText(revision.commit);
+                        toast.success("Commit hash copied", { description: revision.commit });
                       }}
                       className="inline-flex cursor-pointer items-center justify-center rounded bg-surface-container-high px-2 py-1 font-label-caps text-[10px] text-text-secondary uppercase transition-colors hover:bg-surface-container-highest hover:text-text-primary focus-visible:outline-hidden"
                     >

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { toast } from "sonner";
 import { setWatched } from "@/modules/relicto/actions/watchlist";
 import { Icon } from "@/components/ui/icon";
@@ -114,7 +115,7 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
           </button>
           <button
             type="button"
-            onClick={() => onRemove(item.id)}
+            onClick={onRemove}
             aria-label={`Remove ${item.name}`}
             className="inline-flex cursor-pointer items-center justify-center rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error-container/20 hover:text-error focus-visible:outline-hidden"
           >

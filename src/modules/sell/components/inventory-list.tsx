@@ -11,7 +11,7 @@ import { SteamSyncStatus } from "./steam-sync-status";
 const TONE = { primary: "bg-primary", amber: "bg-tertiary", cyan: "bg-status-upcoming", indigo: "bg-secondary", muted: "bg-text-muted" };
 const TEXT = { primary: "text-primary", amber: "text-tertiary", cyan: "text-status-upcoming", indigo: "text-secondary", muted: "text-text-muted" };
 
-export function InventoryList({ items, selected, onToggle, game, totalInventory, readyToList, steam }: { items: InventoryItem[]; selected: string[]; onToggle: (id: string, checked: boolean) => void; game: SellGame; totalInventory: number; readyToList: number; steam: SteamSync }) {
+export function InventoryList({ items, selected, onToggle, totalInventory, readyToList, steam }: { items: InventoryItem[]; selected: string[]; onToggle: (id: string, checked: boolean) => void; game: SellGame; totalInventory: number; readyToList: number; steam: SteamSync }) {
   // The sample studio quotes the design's figure; a Steam trader's is the sum of what they hold.
   const backpackUsd = steam.linked ? items.reduce((total, item) => total + item.price, 0) : 10474.5;
   return (

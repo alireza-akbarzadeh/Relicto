@@ -10,7 +10,7 @@ const CTA = {
     icon: ShoppingBag,
     className: "border-0 bg-primary shadow-xs hover:bg-rose-600",
     iconClassName: "",
-    href: (_l: Loadout) => "/checkout",
+    href: () => "/checkout",
   },
   inspect: {
     icon: Eye,
@@ -34,14 +34,13 @@ export function LoadoutCard({ loadout }: { loadout: Loadout }) {
             </div>
             <div>
               <h3 className="font-headline text-lg font-bold text-white">{loadout.player}</h3>
-              <p className="text-xs text-text-muted">{loadout.team}</p>
+              <p className="text-xs text-text-muted">{loadout.role}</p>
             </div>
           </div>
-          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", OUTLINE_PILL[loadout.badge.tone])}>
-            {loadout.badge.label}
+          <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", OUTLINE_PILL[loadout.tag.tone])}>
+            {loadout.tag.label}
           </span>
         </div>
-        <p className="text-xs text-text-secondary">{loadout.meta}</p>
         <div className="flex flex-col gap-2 rounded-lg bg-surface-container-lowest p-3">
           <div className="flex items-center justify-between text-xs text-text-muted">
             <span>Bundle Valuation</span>

@@ -50,7 +50,7 @@ function exportOrdersCsv(rows: LedgerRow[], game: string, range: string) {
   const link = document.createElement("a");
   const dateStr = new Date().toISOString().slice(0, 10);
   link.setAttribute("href", url);
-  link.setAttribute("download", `relicto-orders-${game.toLowerCase().replace(/\s+/g, "-")}-${dateStr}.csv`);
+  link.setAttribute("download", `relicto-orders-${game.toLowerCase().replace(/\s+/g, "-")}-${range.toLowerCase()}-${dateStr}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

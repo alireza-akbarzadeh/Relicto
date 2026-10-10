@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import type { VerifyMobile } from "../../data/verify-mobile.mock";
 
@@ -34,12 +36,13 @@ export function ApprovalPanels({ data }: { data: VerifyMobile }) {
                   <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-secondary border-t-transparent" />
                   <span className="font-data-mono-md text-data-mono-md text-text-secondary">Awaiting signature handshake...</span>
                 </div>
-                <NoticeButton
-                  notice={{ title: "Polling Steam", description: "Checking the approval status again." }}
-                  className="h-auto border-0 font-label-badge text-label-badge font-semibold tracking-wider text-secondary uppercase hover:text-text-primary"
+                <button
+                  type="button"
+                  onClick={() => toast.info("Polling Steam Mobile handshake...", { description: "Checking approval session..." })}
+                  className="cursor-pointer border-0 bg-transparent font-label-badge text-label-badge font-semibold tracking-wider text-secondary uppercase hover:text-text-primary focus-visible:outline-hidden"
                 >
                   Refresh
-                </NoticeButton>
+                </button>
               </div>
             </div>
           </div>
@@ -84,27 +87,19 @@ export function RecoveryPanels({ domain }: { domain: string }) {
             <Link href="/reset-password" className={`${SMALL} text-text-primary`}>
               Use Valve R-Token
             </Link>
-            <NoticeButton notice={{ title: "Arbiter paged", description: "A 24/7 escrow arbiter will reply in this session." }} className={`${SMALL} h-auto border-0 text-primary`}>
+            <Link href="/community" className={`${SMALL} h-auto border-0 text-primary`}>
               Contact 24/7 Arbiter
-            </NoticeButton>
+            </Link>
           </div>
         </div>
       </div>
 
       <div className="mt-space-md px-space-md">
         <div className="flex items-start gap-space-sm rounded-lg border border-border-subtle bg-surface-container-lowest p-space-sm">
-          <Icon name="verified_user" className="mt-0.5 shrink-0 text-[18px] text-tertiary" />
-          <div className="flex-1">
-            <p className="font-body-sm text-body-sm leading-relaxed text-text-muted">
-              <strong className="font-semibold text-text-secondary">Official Security Rule:</strong> Relicto personnel will{" "}
-              <span className="text-primary underline">never</span> ask for your Steam password, mobile auth tokens, or private recovery codes.
-            </p>
-            <div className="mt-1.5 flex items-center gap-2">
-              <span className="flex items-center gap-1 font-data-mono-md text-data-mono-md text-status-upcoming">
-                <Icon name="lock" className="text-[11px]" /> {domain}
-              </span>
-              <span className="font-data-mono-md text-data-mono-md text-text-muted">Cert SHA-256 Validated</span>
-            </div>
+          <Icon name="verified_user" className="mt-0.5 text-[16px] text-status-upcoming" />
+          <div className="font-body-sm text-body-sm text-text-muted">
+            <span className="font-semibold text-text-primary">Anti-Phishing Token Lock: </span>
+            Never enter this code on any site other than <span className="font-data-mono-md text-text-primary">{domain}</span>. Relicto admins will never ask for your Steam Guard credentials.
           </div>
         </div>
       </div>

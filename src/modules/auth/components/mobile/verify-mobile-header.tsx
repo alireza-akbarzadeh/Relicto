@@ -1,8 +1,10 @@
-import { NoticeButton } from "@/components/notice-button";
+"use client";
+
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { MobileBackButton } from "@/modules/relicto/components/mobile/mobile-back-button";
 
-const ACTION = "h-11 w-11 rounded border-0 text-on-surface-variant transition-colors hover:text-on-surface";
+const ACTION = "flex h-11 w-11 cursor-pointer items-center justify-center rounded border-0 bg-transparent text-on-surface-variant transition-colors hover:text-on-surface focus-visible:outline-hidden";
 
 /** Compact titled top bar of the verification screen. */
 export function VerifyMobileHeader() {
@@ -14,12 +16,22 @@ export function VerifyMobileHeader() {
           <h1 className="truncate font-headline-sm text-headline-sm font-semibold tracking-tight text-text-primary">Steam Guard 2FA Verification</h1>
         </div>
         <div className="flex items-center gap-1">
-          <NoticeButton aria-label="Trust this device" notice={{ title: "Trusted device", description: "Relicto skips the push challenge on this phone for 30 days." }} className={ACTION}>
+          <button
+            type="button"
+            onClick={() => toast.success("Device trusted for 30 days", { description: "Steam Guard push challenge remembered on this client." })}
+            aria-label="Trust this device"
+            className={ACTION}
+          >
             <Icon name="favorite" className="text-[20px]" />
-          </NoticeButton>
-          <NoticeButton aria-label="Security help" notice={{ title: "Steam Guard help", description: "Codes rotate every 30 seconds in the Steam Mobile app." }} className={ACTION}>
+          </button>
+          <button
+            type="button"
+            onClick={() => toast.info("Steam Guard security assistance", { description: "Open Steam Mobile app on your phone and tap Steam Guard to view code." })}
+            aria-label="Security help"
+            className={ACTION}
+          >
             <Icon name="share" className="text-[20px]" />
-          </NoticeButton>
+          </button>
           <span className="ml-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary" aria-hidden>
             <Icon name="person" className="text-[18px] text-on-primary" />
           </span>

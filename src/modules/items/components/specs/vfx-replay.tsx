@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Play, Pause } from "lucide-react";
 import { toast } from "sonner";
-import { Icon } from "@/components/ui/icon";
 import type { ItemDetail } from "../../types";
 import { PriceAlertCard } from "./price-alert-card";
 
@@ -57,7 +57,7 @@ export function VfxReplay({
                   aria-label={playing ? "Pause animation clip" : "Play animation clip"}
                   className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 bg-status-live/90 text-text-primary shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-transform group-hover:scale-110 hover:bg-status-live focus-visible:outline-hidden"
                 >
-                  <Icon name={playing ? "pause" : "play_arrow"} className="ml-0.5 text-[24px]" />
+                  {playing ? <Pause className="size-6 text-white" /> : <Play className="ml-0.5 size-6 text-white" />}
                 </button>
               </div>
               <div className="absolute right-2 bottom-2 left-2 flex items-center justify-between rounded border border-border-subtle bg-surface-container-lowest/90 px-2 py-1 font-label-badge text-[10px] text-text-primary backdrop-blur-md">
@@ -69,7 +69,7 @@ export function VfxReplay({
             </div>
           </>
         )}
-        <PriceAlertCard itemName={itemName} />
+        <PriceAlertCard itemName={itemName} defaultPrice={replay.alertPrice || "$100.00"} />
       </div>
     </div>
   );

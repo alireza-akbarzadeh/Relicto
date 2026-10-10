@@ -74,28 +74,28 @@ export function ItemViewer({ item }: { item: ItemDetail }) {
         </div>
         <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 rounded border border-border-subtle bg-surface-container-lowest/90 px-2.5 py-1 shadow-sm backdrop-blur-md">
           <Icon name="diamond" className="text-[14px] text-pink-400" />
-          <span className="font-label-badge text-[10px] font-bold text-pink-400 uppercase">{item.hero.statTrak}</span>
+          <span className="font-label-badge text-[10px] font-bold text-pink-400 uppercase">{item.hero.kills}</span>
         </div>
       </div>
       <div className="z-20 flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
-          {(["3d", "render", "inspect"] as const).map((view) => (
+          {item.inspectModes.map(({ id, label }) => (
             <Button
-              key={view}
+              key={id}
               variant={null}
               size={null}
-              onClick={() => void setMode(view)}
-              aria-pressed={mode === view}
+              onClick={() => void setMode(id)}
+              aria-pressed={mode === id}
               className={cn(
                 "h-auto rounded border border-border-subtle bg-surface-container-lowest/90 px-3 py-1 font-headline-sm text-xs uppercase transition-all",
-                mode === view ? "border-border-tactical text-tertiary shadow-sm" : "text-text-muted hover:text-text-primary",
+                mode === id ? "border-border-tactical text-tertiary shadow-sm" : "text-text-muted hover:text-text-primary",
               )}
             >
-              {view}
+              {label}
             </Button>
           ))}
         </div>
-        <span className="font-data-mono-md text-[11px] text-text-muted">{item.hero.version}</span>
+        <span className="font-data-mono-md text-[11px] text-text-muted">{item.classId ? `ID #${item.classId}` : ""}</span>
       </div>
     </div>
   );

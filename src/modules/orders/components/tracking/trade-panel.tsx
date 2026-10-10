@@ -1,4 +1,7 @@
-import { NoticeButton } from "@/components/notice-button";
+"use client";
+
+import Link from "next/link";
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import type { SentinelBot, TradeToken } from "../../types";
@@ -30,43 +33,42 @@ function BotHeader({ bot }: { bot: SentinelBot }) {
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-1.5 font-data-mono-md text-[12px] text-text-secondary">
-        <Icon name="bolt" className="text-[16px] text-status-upcoming" />
-        <span>
-          Offer ID: <span className="font-bold text-text-primary">{bot.offerId}</span>
-        </span>
+      <div className="flex items-center gap-space-xs font-label-badge text-label-badge text-text-muted uppercase">
+        <Icon name="fingerprint" className="text-[16px] text-tertiary-fixed-dim" />
+        <span>Offer ID: #{bot.offerId}</span>
       </div>
     </div>
   );
 }
 
-function TokenBanner({ token }: { token: TradeToken }) {
+function TokenWarning({ token }: { token: TradeToken }) {
   return (
-    <div className="relative flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-deep p-space-lg shadow-xl">
-      <div className="flex flex-col items-start justify-between gap-space-md sm:flex-row sm:items-center">
-        <div className="flex items-center gap-space-sm">
-          <Icon name="key" className="text-[26px] text-tertiary-fixed-dim" />
-          <div className="flex flex-col">
-            <span className="font-label-caps text-label-caps font-bold tracking-wider text-tertiary-fixed-dim uppercase">Anti-Phishing Trade Token</span>
-            <span className="font-body-sm text-body-sm text-text-secondary">{token.hint}</span>
-          </div>
-        </div>
-        <div className="rounded-lg bg-surface-container px-space-lg py-space-sm font-data-mono-lg text-headline-sm font-bold tracking-widest text-tertiary-fixed-dim shadow-inner">
-          {token.code}
-        </div>
+    <div className="flex flex-col gap-space-xs rounded-lg border border-primary/20 bg-primary/5 p-space-md">
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-1 font-label-caps text-label-caps font-bold tracking-wider text-primary uppercase">
+          <Icon name="security" className="text-[16px]" />
+          Steam Security Check
+        </span>
+        <span className="font-label-badge text-[10px] text-text-muted">{token.latency}</span>
       </div>
-      <div className="font-body-sm text-[12px] leading-relaxed text-text-muted">{token.caution}</div>
+      <div className="flex flex-col gap-space-xs sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <span className="font-headline-sm text-headline-sm font-semibold text-text-primary">Verify Escrow Token: </span>
+          <span className="font-data-mono-md text-data-mono-md font-bold tracking-wider text-primary">{token.code}</span>
+        </div>
+        <span className="font-body-sm text-[12px] text-text-secondary">{token.hint}</span>
+      </div>
+      <p className="font-body-sm text-[12px] text-text-muted">{token.caution}</p>
     </div>
   );
 }
 
-/** Sentinel bot identity, anti-phishing token, trade actions and instructions. */
+/** The primary action card: open the Steam offer, re-send, instructions and cancel. */
 export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBot; token: TradeToken }) {
   return (
-    <div className="relative flex flex-col gap-space-lg overflow-hidden rounded-xl bg-surface-card p-space-lg shadow-2xl">
-      <div className="pointer-events-none absolute -right-24 -bottom-24 h-96 w-96 rounded-full bg-primary-container/10 blur-3xl" />
+    <div className="flex flex-col gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
       <BotHeader bot={bot} />
-      <TokenBanner token={token} />
+      <TokenWarning token={token} />
       <div className="flex flex-col items-center gap-space-md pt-space-xs sm:flex-row">
         <LinkButton
           href={token.offerUrl}
@@ -78,13 +80,18 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
           <span>Open Steam Trade Offer</span>
           <Icon name="open_in_new" className="text-[18px]" />
         </LinkButton>
-        <NoticeButton
-          notice={{ title: "Trade offer re-sent", description: "Sentinel Bot #42 will dispatch a fresh offer within 30 seconds." }}
-          className="h-auto w-full gap-space-xs rounded-lg border-0 bg-surface-container px-space-lg py-space-md font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-container-high sm:w-auto"
+        <button
+          type="button"
+          onClick={() => {
+            toast.success("Trade offer re-dispatched", {
+              description: `Sentinel Bot #${bot.offerId} queued a fresh offer to your Trade URL within 30 seconds.`,
+            });
+          }}
+          className="inline-flex h-auto w-full cursor-pointer items-center justify-center gap-space-xs rounded-lg border-0 bg-surface-container px-space-lg py-space-md font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-container-high focus-visible:outline-hidden sm:w-auto"
         >
           <Icon name="refresh" className="text-[18px]" />
           <span>Re-Send Offer</span>
-        </NoticeButton>
+        </button>
       </div>
       <div className="flex flex-col gap-space-sm rounded-lg bg-surface-container-low/60 p-space-md">
         <span className="font-label-caps text-label-caps font-semibold tracking-wider text-text-muted uppercase">How to confirm in 30 seconds:</span>
@@ -109,13 +116,13 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
           </span>
         </div>
         <div className="flex items-center gap-space-md">
-          <NoticeButton
-            notice={{ title: "Support relay", description: "Live escrow support opens with the helpdesk integration." }}
-            className="inline-flex h-auto gap-1 rounded-none border-0 p-0 font-label-caps text-label-caps text-text-muted uppercase transition-colors hover:text-text-primary"
+          <Link
+            href="/wiki"
+            className="inline-flex cursor-pointer items-center gap-1 font-label-caps text-label-caps text-text-muted uppercase transition-colors hover:text-text-primary"
           >
             <Icon name="help_center" className="text-[16px]" />
             <span>Need Assistance?</span>
-          </NoticeButton>
+          </Link>
           <CancelOrderButton code={code} />
         </div>
       </div>

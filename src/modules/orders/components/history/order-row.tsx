@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import { NoticeButton } from "@/components/notice-button";
+import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -18,14 +20,13 @@ const FLOW: Record<OrderFlow, { label: string; tone: string }> = {
 };
 
 const PARTY_TONE = { cyan: "text-status-upcoming", muted: "text-text-muted", amber: "text-tertiary-fixed-dim" };
-const ICON_ACTION = "h-auto rounded border-0 bg-surface-container p-1.5 text-text-secondary transition-colors hover:bg-surface-container-high hover:text-text-primary";
+const ICON_ACTION = "h-auto cursor-pointer rounded border-0 bg-surface-container p-1.5 text-text-secondary transition-colors hover:bg-surface-container-high hover:text-text-primary";
 const TEXT_ACTION =
-  "h-auto rounded border-0 bg-surface-container px-space-sm py-1 font-label-caps text-label-caps uppercase transition-colors hover:bg-surface-container-high";
+  "h-auto cursor-pointer rounded border-0 bg-surface-container px-space-sm py-1 font-label-caps text-label-caps uppercase transition-colors hover:bg-surface-container-high";
 
 const CELL = "px-space-md py-space-md align-middle";
 
 function RowActions({ row }: { row: LedgerRow }) {
-  const notice = (title: string, description: string) => ({ title, description });
   const render: Record<RowAction, React.ReactNode> = {
     track: (
       <LinkButton
@@ -48,42 +49,46 @@ function RowActions({ row }: { row: LedgerRow }) {
       </LinkButton>
     ),
     inspect: (
-      <NoticeButton
+      <LinkButton
         key="inspect"
-        notice={notice(`Inspecting ${row.itemName}`, "Steam Community inspection opens with the Steam API integration.")}
-        aria-label={`Inspect ${row.itemName} on Steam`}
+        href={`/marketplace?q=${encodeURIComponent(row.itemName)}`}
+        aria-label={`Inspect ${row.itemName} on marketplace`}
         className={ICON_ACTION}
       >
         <Icon name="open_in_new" className="text-[18px]" />
-      </NoticeButton>
+      </LinkButton>
     ),
     "inspect-label": (
-      <NoticeButton
+      <LinkButton
         key="inspect-label"
-        notice={notice(`Inspecting ${row.itemName}`, "Float and pattern inspection opens with the Steam API integration.")}
+        href={`/marketplace?q=${encodeURIComponent(row.itemName)}`}
         className={cn(TEXT_ACTION, "text-text-secondary hover:text-text-primary")}
       >
         Inspect
-      </NoticeButton>
+      </LinkButton>
     ),
     "sell-back": (
-      <NoticeButton
+      <LinkButton
         key="sell-back"
-        notice={notice(`Sell back ${row.itemName}`, "Instant buy-back quotes arrive with the pricing API.")}
-        className={cn(TEXT_ACTION, "text-tertiary-fixed-dim")}
+        href="/sell"
+        className={cn(TEXT_ACTION, "text-tertiary-fixed-dim hover:text-tertiary")}
       >
         Sell Back
-      </NoticeButton>
+      </LinkButton>
     ),
     fingerprint: (
-      <NoticeButton
+      <button
         key="fingerprint"
-        notice={notice("Liquidation proof", "Pool settlement proofs open once the liquidity API is wired.")}
-        aria-label="View liquidation proof"
+        type="button"
+        onClick={() => {
+          navigator.clipboard.writeText(row.code);
+          toast.success("Settlement reference copied", { description: row.code });
+        }}
+        aria-label="Copy liquidation settlement proof"
         className={ICON_ACTION}
       >
         <Icon name="fingerprint" className="text-[18px]" />
-      </NoticeButton>
+      </button>
     ),
   };
 
@@ -93,50 +98,48 @@ function RowActions({ row }: { row: LedgerRow }) {
 /** One ledger row: order, item, flow, counterparty, settlement, state and actions. */
 export function OrderRow({ row, alt }: { row: LedgerRow; alt: boolean }) {
   const flow = FLOW[row.flow];
+
   return (
-    <tr className={cn("transition-colors hover:bg-surface-container", alt ? "bg-surface-container-lowest" : "bg-surface-container-low")}>
+    <tr className={cn("border-b border-surface-container-low transition-colors hover:bg-surface-container/50", alt && "bg-surface-container-lowest/30")}>
       <td className="px-space-lg py-space-md align-middle">
         <div className="flex flex-col">
-          <span className={cn("font-data-mono-md text-data-mono-md font-bold", row.state === "escrow" ? "text-primary" : "text-text-primary")}>
-            {row.code}
-          </span>
-          <span className="mt-0.5 font-label-badge text-label-badge text-text-muted">{row.when}</span>
+          <span className="font-data-mono-md text-data-mono-md font-bold tracking-tight text-text-primary">{row.code}</span>
+          <span className="font-label-badge text-label-badge text-text-muted">{row.when}</span>
         </div>
       </td>
       <td className={CELL}>
         <div className="flex items-center gap-space-md">
-          <div className={cn("relative h-12 w-12 shrink-0 overflow-hidden rounded-lg shadow-sm", alt ? "bg-surface-container-low" : "bg-surface-container-lowest")}>
-            <Image src={row.image} alt={row.imageAlt} fill sizes="48px" className="object-cover" />
-            <span className={cn("absolute top-0 right-0 rounded-bl px-1 font-label-badge text-[9px] font-bold", TAG[row.tag.variant])}>{row.tag.label}</span>
+          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-outline-variant/30 bg-surface-container-low p-1">
+            <Image src={row.image} alt={row.imageAlt} fill sizes="48px" className="object-contain" />
+            <span
+              className={cn(
+                "absolute top-0 right-0 rounded-bl px-1 py-0.25 font-label-badge text-[9px] font-bold uppercase",
+                TAG[row.tag.variant],
+              )}
+            >
+              {row.tag.label}
+            </span>
           </div>
           <div className="flex flex-col">
-            <div className="flex items-center gap-space-xs">
-              <span
-                className={cn(
-                  "rounded bg-surface-container-highest px-1 font-label-badge text-[10px] font-bold uppercase",
-                  row.game === "CS2" ? "text-tertiary-fixed-dim" : "text-text-muted",
-                )}
-              >
-                {row.game}
-              </span>
-              <span className="font-headline-sm text-[14px] font-semibold text-text-primary">{row.itemName}</span>
-            </div>
-            <span className="max-w-xs truncate font-body-sm text-body-sm text-text-secondary">{row.itemDetail}</span>
+            <span className="font-headline-sm text-headline-sm font-semibold text-text-primary">{row.itemName}</span>
+            <span className="font-data-mono-md text-[11px] text-text-muted">{row.itemDetail}</span>
           </div>
         </div>
       </td>
       <td className={CELL}>
         <div className="flex flex-col">
-          <span className={cn("font-label-caps text-label-caps font-bold uppercase", flow.tone)}>{flow.label}</span>
+          <span className={cn("font-headline-sm text-label-caps font-bold uppercase", flow.tone)}>{flow.label}</span>
           <span className="font-label-badge text-label-badge text-text-muted">{row.flowNote}</span>
         </div>
       </td>
       <td className={CELL}>
         <div className="flex items-center gap-space-xs">
-          <Icon name={row.party.icon} className={cn("text-[16px]", PARTY_TONE[row.party.iconTone])} />
-          <span className="font-data-mono-md text-data-mono-md text-text-primary">{row.party.name}</span>
+          <Icon name={row.party.icon} className={cn("text-[18px]", PARTY_TONE[row.party.iconTone])} />
+          <div className="flex flex-col">
+            <span className="font-body-sm text-body-sm font-semibold text-text-primary">{row.party.name}</span>
+            <span className="font-label-badge text-label-badge text-text-muted">{row.party.note}</span>
+          </div>
         </div>
-        <span className="font-label-badge text-label-badge text-text-muted">{row.party.note}</span>
       </td>
       <td className={cn(CELL, "text-right")}>
         <div className={cn("font-data-mono-md text-data-mono-md font-bold", row.settlement.tone === "amber" ? "text-tertiary-fixed-dim" : "text-text-primary")}>

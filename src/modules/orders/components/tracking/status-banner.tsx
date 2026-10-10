@@ -1,5 +1,7 @@
+"use client";
+
+import { toast } from "sonner";
 import { CountdownText } from "@/components/countdown-text";
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
 import type { OrderTracking } from "../../types";
 
@@ -28,13 +30,7 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
         </div>
       </div>
       <div className="z-10 flex flex-wrap items-center gap-space-md">
-        <div className="flex items-center gap-space-md rounded-lg bg-surface-container-low px-space-md py-space-sm shadow-xs">
-          <div className="flex flex-col">
-            <span className="font-label-badge text-label-badge text-text-muted uppercase">Placed</span>
-            <span className="font-data-mono-md text-data-mono-md text-text-primary">{order.placedAgo}</span>
-          </div>
-          <div className="h-8 w-px bg-surface-variant" />
-          {/* The clock only runs while escrow is waiting on the seller; once the offer is out (or the order settled) nothing auto-cancels. */}
+        <div className="flex items-center gap-space-md rounded-lg border border-outline-variant/30 bg-surface-container-low px-space-md py-space-sm">
           {order.autoCancelSeconds > 0 ? (
             <div className="flex flex-col">
               <span className="flex items-center gap-1 font-label-badge text-label-badge font-bold tracking-wider text-status-live uppercase">
@@ -57,13 +53,17 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
             </div>
           )}
         </div>
-        <NoticeButton
-          notice={{ title: "Escrow proof hash", description: "The settlement receipt opens once the escrow API is wired." }}
-          className="h-auto gap-space-xs rounded-lg border-0 bg-surface-variant px-space-md py-space-sm font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright"
+        <button
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(order.code);
+            toast.success("Escrow proof hash copied", { description: order.code });
+          }}
+          className="inline-flex cursor-pointer items-center gap-space-xs rounded-lg border-0 bg-surface-variant px-space-md py-space-sm font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright focus-visible:outline-hidden"
         >
           <Icon name="receipt_long" className="text-[18px]" />
           <span>Proof Hash</span>
-        </NoticeButton>
+        </button>
       </div>
     </div>
   );

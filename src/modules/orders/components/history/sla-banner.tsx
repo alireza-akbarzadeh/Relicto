@@ -1,5 +1,5 @@
-import { NoticeButton } from "@/components/notice-button";
 import { Icon } from "@/components/ui/icon";
+import { LinkButton } from "@/components/ui/link-button";
 
 const ACTION = "h-auto flex-1 rounded-lg border-0 px-space-md py-space-sm text-center font-label-caps text-label-caps font-bold uppercase transition-colors md:flex-initial";
 
@@ -23,19 +23,19 @@ export function SlaBanner() {
         </div>
       </div>
       <div className="flex w-full items-center gap-space-sm md:w-auto">
-        <NoticeButton
-          notice={{ title: "Dispute filed", description: "Dispute intake opens with the support integration." }}
+        <LinkButton
+          href="/wiki"
           className={`${ACTION} bg-surface-container text-text-primary hover:bg-surface-container-high`}
         >
-          Open a Dispute
-        </NoticeButton>
-        <NoticeButton
-          notice={{ title: "Concierge", description: "24/7 concierge chat arrives with the support integration." }}
+          Dispute SLA Protocol
+        </LinkButton>
+        <LinkButton
+          href="/community"
           className={`${ACTION} flex items-center justify-center gap-space-xs bg-surface-container-high text-status-upcoming hover:bg-surface-bright`}
         >
           <Icon name="support_agent" className="text-[18px]" />
           <span>24/7 Concierge</span>
-        </NoticeButton>
+        </LinkButton>
       </div>
     </div>
   );

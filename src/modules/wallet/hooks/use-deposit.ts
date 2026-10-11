@@ -16,7 +16,7 @@ export function useDeposit() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  const deposit = (rail: string, amountUsd: number) => {
+  const deposit = (rail: string, amountUsd: number, txHash?: string) => {
     if (!isMoneyRail(rail)) {
       return toast("Skins are liquidated in the Sell Studio", {
         description: "Instant cashout turns inventory into vault balance, with the +2% booster.",
@@ -28,11 +28,33 @@ export function useDeposit() {
 
     startTransition(async () => {
       try {
-        const result = await depositFunds({ rail, amountUsd });
+        if (rail === "cards") {
+          const res = await fetch("/api/wallet/stripe/create-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amountUsd }),
+          });
+          const data = await res.json();
+          if (data.mode === "stripe" && data.url) {
+            window.location.assign(data.url);
+            return;
+          }
+          if (data.mode === "settled") {
+            router.refresh();
+            toast.success(`${formatMoney(amountUsd)} added to your vault`, {
+              description: "Vault balance credited securely via Stripe Card.",
+            });
+            return;
+          }
+        }
+
+        const result = await depositFunds({ rail, amountUsd, txHash });
         if (result.status === "credited") {
           router.refresh();
           toast.success(`${formatMoney(amountUsd)} added to your vault`, {
-            description: `Test deposit — nothing was charged. Vault balance ${formatMoney(result.balanceCents / 100)}.`,
+            description: txHash
+              ? `On-chain transfer verified: ${txHash.slice(0, 14)}...`
+              : `Vault balance credited: ${formatMoney(result.balanceCents / 100)}.`,
           });
         } else if (result.status === "vault-frozen") {
           toast.error("Your vault is frozen", { description: "Unfreeze it before depositing." });

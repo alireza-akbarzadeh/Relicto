@@ -16,4 +16,5 @@ export const DEPOSIT_RAILS = ["crypto", "cards", "bank"] as const;
 export const depositInput = z.object({
   rail: z.enum(DEPOSIT_RAILS),
   amountUsd: z.number().min(10).max(10_000),
+  txHash: z.string().trim().max(128).optional(),
 });

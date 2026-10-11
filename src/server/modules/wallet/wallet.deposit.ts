@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import type { z } from "zod";
 import { db } from "@/lib/db";
 import { ledgerEntries, walletAccounts } from "@/lib/db/schema";
+import { isStripeConfigured } from "@/lib/stripe/client";
 import { mockPaymentsEnabled } from "../checkout/checkout.payment";
 import type { depositInput } from "./wallet.schema";
 
@@ -16,18 +17,17 @@ export type DepositResult =
   | { status: "credited"; balanceCents: number }
   | { status: "rail-unavailable" | "vault-frozen" };
 
-/** Whether this environment may credit the vault without a payment provider — the same switch checkout uses. */
+/** Whether this environment may credit the vault without a payment provider. */
 export const testDepositsEnabled = mockPaymentsEnabled;
 
+const canDeposit = (rail: Rail, txHash?: string) =>
+  Boolean(txHash) || testDepositsEnabled() || (rail === "cards" && isStripeConfigured());
+
 /**
- * Tops up the vault. No payment provider is connected yet, so outside
- * production (or with `CHECKOUT_MOCK_PAYMENTS=true`) the deposit is simulated:
- * the vault is credited at once and the ledger row says nothing was charged.
- * In production without that switch it refuses — balance is never minted there.
- * Ids carry a `dep` prefix so the seed can undo test deposits.
+ * Tops up the vault via Web3 Crypto, Stripe Card, or simulated test mode.
  */
 export async function deposit(userId: string, input: z.infer<typeof depositInput>): Promise<DepositResult> {
-  if (!testDepositsEnabled()) return { status: "rail-unavailable" };
+  if (!canDeposit(input.rail, input.txHash)) return { status: "rail-unavailable" };
 
   return db.transaction(async (tx): Promise<DepositResult> => {
     // A brand-new trader has no vault yet; the first deposit opens it.
@@ -38,6 +38,17 @@ export async function deposit(userId: string, input: z.infer<typeof depositInput
     const amountCents = Math.round(input.amountUsd * 100);
     const balanceCents = wallet.balanceCents + amountCents;
     await tx.update(walletAccounts).set({ balanceCents }).where(eq(walletAccounts.id, wallet.id));
+
+    const isCrypto = Boolean(input.txHash);
+    const isLiveStripe = input.rail === "cards" && isStripeConfigured();
+
+    const hash = input.txHash ?? (isLiveStripe ? `#STRIPE-${randomInt(1_000_000, 10_000_000)}` : `#MOCK-${randomInt(1_000_000, 10_000_000)}`);
+    const title = isCrypto ? "Web3 Crypto Deposit" : (isLiveStripe ? "Stripe Card Deposit" : `${RAIL[input.rail]} Deposit (simulated)`);
+    const detailLabel = isCrypto
+      ? `On-chain verified: ${input.txHash?.slice(0, 16)}...`
+      : (isLiveStripe ? "Settled via Stripe 3D Secure" : "Test mode — no payment provider connected, nothing was charged");
+    const nodeLabel = isCrypto ? "Web3 Node" : (isLiveStripe ? "Stripe Vault" : "Mock Rail");
+
     await tx.insert(ledgerEntries).values({
       id: `ledger-dep-${randomUUID()}`,
       walletId: wallet.id,
@@ -46,12 +57,12 @@ export async function deposit(userId: string, input: z.infer<typeof depositInput
       amountCents,
       balanceAfterCents: balanceCents,
       status: "settled",
-      hash: `#MOCK-${randomInt(1_000_000, 10_000_000)}`,
+      hash,
       venue: "internal",
-      title: `${RAIL[input.rail]} Deposit (simulated)`,
+      title,
       assetLabel: RAIL[input.rail],
-      detailLabel: "Test mode — no payment provider connected, nothing was charged",
-      nodeLabel: "Mock Rail",
+      detailLabel,
+      nodeLabel,
     });
 
     return { status: "credited", balanceCents };

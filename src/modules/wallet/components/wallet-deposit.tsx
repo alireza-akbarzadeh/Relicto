@@ -7,6 +7,8 @@ import { Ref, useState } from "react";
 import { toast } from "sonner";
 import { isMoneyRail, useDeposit } from "../hooks/use-deposit";
 import type { WalletRail as WalletRailType } from "../types";
+import { CryptoModal } from "@/modules/checkout/components/crypto-modal";
+import { StationTitle, TestModeStrip } from "./wallet-station-title";
 import { WalletAction } from "./wallet-action-button";
 import { WalletRail } from "./wallet-rail";
 import { WalletSummary } from "./wallet-summary";
@@ -24,6 +26,7 @@ export function WalletDeposit({
 }) {
   const [rail, setRail] = useState("crypto");
   const [amount, setAmount] = useState("250.00");
+  const [cryptoOpen, setCryptoOpen] = useState(false);
   const { pending, deposit } = useDeposit();
   const numericAmount = Number(amount) || 0;
   const skins = !isMoneyRail(rail);
@@ -131,7 +134,13 @@ export function WalletDeposit({
           variant={null}
           size={null}
           disabled={pending}
-          onClick={() => deposit(rail, numericAmount)}
+          onClick={() => {
+            if (rail === "crypto") {
+              setCryptoOpen(true);
+              return;
+            }
+            deposit(rail, numericAmount);
+          }}
           className="h-auto w-full gap-space-xs rounded-lg border-0 bg-primary py-space-md font-headline-sm text-[14px] text-on-primary uppercase shadow-[0_0_20px_rgba(244,63,94,0.35)] hover:bg-primary/90"
         >
           <Icon name="verified" className="text-[18px]" />
@@ -140,56 +149,25 @@ export function WalletDeposit({
               ? "Crediting vault…"
               : skins
                 ? "Liquidate in Sell Studio"
-                : "Confirm & Execute Ingress"}
+                : rail === "cards"
+                  ? `Pay with Card / Stripe ($${numericAmount.toFixed(2)})`
+                  : rail === "crypto"
+                    ? `Open Web3 Deposit ($${numericAmount.toFixed(2)})`
+                    : `Confirm & Execute Ingress ($${numericAmount.toFixed(2)})`}
           </span>
         </Button>
       </div>
+
+      <CryptoModal
+        open={cryptoOpen}
+        onOpenChange={setCryptoOpen}
+        totalUsd={numericAmount}
+        isPending={pending}
+        onConfirm={({ network, txHash }) => {
+          setCryptoOpen(false);
+          deposit("crypto", numericAmount, `${network.symbol}:${txHash}`);
+        }}
+      />
     </section>
-  );
-}
-
-function StationTitle({
-  icon,
-  title,
-  subtitle,
-  badge,
-}: {
-  icon: "account_balance" | "bolt";
-  title: string;
-  subtitle: string;
-  badge: string;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-space-md">
-      <div className="flex items-center gap-space-xs">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-container-high text-primary">
-          <Icon name={icon} className="text-[20px]" />
-        </div>
-        <div className="flex flex-col">
-          <h3 className="font-headline-sm text-headline-sm text-text-primary">
-            {title}
-          </h3>
-          <span className="font-label-badge text-label-badge text-text-muted">
-            {subtitle}
-          </span>
-        </div>
-      </div>
-      <span className="rounded bg-primary-container/20 px-2 py-1 font-label-badge text-[11px] text-primary-container">
-        {badge}
-      </span>
-    </div>
-  );
-}
-
-/** Says out loud that nothing is charged here — deposits are simulated until a payment provider is connected. */
-function TestModeStrip() {
-  return (
-    <div className="flex items-center gap-space-xs rounded-lg bg-status-upcoming/10 px-space-sm py-2 font-body-sm text-[11px] text-status-upcoming">
-      <Icon name="info" className="text-[14px]" />
-      <span>
-        Test mode: deposits are credited instantly and nothing is charged. No
-        payment provider is connected yet.
-      </span>
-    </div>
   );
 }

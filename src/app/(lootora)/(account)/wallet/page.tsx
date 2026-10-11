@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { WalletMobile } from "@/modules/wallet/components/mobile/wallet-mobile";
 import { WalletView } from "@/modules/wallet/components/wallet-view";
@@ -12,13 +13,13 @@ export const metadata: Metadata = {
 export default async function WalletPage() {
   const [data, mobile] = await Promise.all([getWallet(), getWalletMobile()]);
   return (
-    <>
+    <Suspense>
       <div className="md:hidden">
         <WalletMobile wallet={mobile} />
       </div>
       <div className="hidden md:block">
         <WalletView data={data} />
       </div>
-    </>
+    </Suspense>
   );
 }

@@ -86,6 +86,16 @@ export async function processStripeWebhook(
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const userId = session.metadata?.userId;
+
+      if (session.metadata?.kind === "wallet_deposit" && userId) {
+        const amountCents = Number(session.metadata.amountCents) || 0;
+        if (amountCents > 0) {
+          const { deposit } = await import("@/server/modules/wallet/wallet.deposit");
+          await deposit(userId, { rail: "cards", amountUsd: amountCents / 100 });
+          return { status: "settled" };
+        }
+      }
+
       const cartIds = session.metadata?.cartIds?.split(",") ?? [];
       const promo = session.metadata?.promo === "true";
 

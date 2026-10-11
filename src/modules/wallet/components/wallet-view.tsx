@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, type RefObject } from "react";
+import { useState, useRef, useEffect, type RefObject } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
@@ -17,8 +18,24 @@ import { WalletOverview } from "./wallet-overview";
 type WalletAction = "deposit" | "cashout" | "steam";
 
 export function WalletView({ data }: { data: WalletData }) {
+  const searchParams = useSearchParams();
   const [activeAction, setActiveAction] =
     useState<WalletAction>("deposit");
+
+  useEffect(() => {
+    if (searchParams.get("stripe_deposit_success") === "true") {
+      const amount = searchParams.get("amount");
+      toast.success("Deposit Confirmed via Stripe", {
+        description: amount
+          ? `$${amount} USD has been credited to your Lootora Vault.`
+          : "Your deposit has been credited to your Lootora Vault.",
+      });
+    } else if (searchParams.get("stripe_deposit_cancel") === "true") {
+      toast.info("Deposit Cancelled", {
+        description: "No funds were charged to your card.",
+      });
+    }
+  }, [searchParams]);
 
   const depositRef = useRef<HTMLDivElement>(null);
   const cashoutRef = useRef<HTMLDivElement>(null);

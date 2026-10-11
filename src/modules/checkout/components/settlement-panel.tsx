@@ -10,6 +10,7 @@ import type { DispatchChoice } from "../hooks/use-checkout-dispatch";
 import { quote } from "../lib/pricing";
 import type { CheckoutData } from "../types";
 
+import { useCart } from "@/modules/relicto/state/cart-provider";
 import { CryptoModal } from "./crypto-modal";
 import { PaymentOption } from "./payment-option";
 
@@ -22,8 +23,8 @@ export function SettlementPanel({
   onDispatch: (choice: DispatchChoice) => void;
   pending?: boolean;
 }) {
+  const { promo, setPromo } = useCart();
   const [payment, setPayment] = useState("relicto");
-  const [promo, setPromo] = useState(true);
   const [agreed, setAgreed] = useState(true);
   const [cryptoOpen, setCryptoOpen] = useState(false);
 

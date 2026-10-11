@@ -10,10 +10,18 @@ import { quote } from "@/modules/checkout/lib/pricing";
  * line, which silently omitted the combo discount the server applies at three
  * items. Like the checkout panel, this assumes the promo code is applied.
  */
-export function CartSummary({ pricesUsd }: { pricesUsd: number[] }) {
+export function CartSummary({
+  pricesUsd,
+  promo = true,
+  onTogglePromo,
+}: {
+  pricesUsd: number[];
+  promo?: boolean;
+  onTogglePromo?: (active: boolean) => void;
+}) {
   const q = quote(
     pricesUsd.map((price) => Math.round(price * 100)),
-    true,
+    promo,
   );
   const usd = (cents: number) => formatMoney(cents / 100);
 
@@ -36,12 +44,34 @@ export function CartSummary({ pricesUsd }: { pricesUsd: number[] }) {
         </div>
       )}
 
-      {q.promoCents > 0 && (
+      {q.promoCents > 0 ? (
         <div className="flex items-center justify-between font-body-sm text-xs">
-          <span className="text-text-secondary">Promo · TI14-MAJOR-VIP</span>
+          <span className="flex items-center gap-1.5 text-text-secondary">
+            <span>Promo · TI14-MAJOR-VIP</span>
+            {onTogglePromo && (
+              <button
+                type="button"
+                onClick={() => onTogglePromo(false)}
+                className="text-[11px] text-text-muted hover:text-text-primary underline cursor-pointer"
+              >
+                (Remove)
+              </button>
+            )}
+          </span>
           <span className="font-data-mono-md font-semibold text-status-success">−{usd(q.promoCents)}</span>
         </div>
-      )}
+      ) : onTogglePromo ? (
+        <div className="flex items-center justify-between font-body-sm text-xs">
+          <span className="text-text-secondary">Promo code</span>
+          <button
+            type="button"
+            onClick={() => onTogglePromo(true)}
+            className="font-data-mono-md text-[11px] font-semibold text-primary hover:underline cursor-pointer"
+          >
+            Apply TI14-MAJOR-VIP (−$15.00)
+          </button>
+        </div>
+      ) : null}
 
       <div className="flex items-center justify-between font-body-sm text-xs">
         <span className="flex items-center gap-1 text-text-secondary">

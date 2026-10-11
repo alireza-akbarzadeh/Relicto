@@ -14,16 +14,17 @@ export function vendorOf(item: CheckoutItem) {
 }
 
 /**
- * Subtotal, rail fee and payable total for the cart, priced by the same rules
- * the server charges by. Mobile has no promo field, so no promo is applied.
+ * Subtotal, discounts, rail fee and payable total for the cart, priced by the same rules
+ * the server charges by.
  */
-export function cartTotals(items: CheckoutItem[], rail: MobileRail) {
-  const due = quote(items.map((item) => Math.round(item.price * 100)), false);
+export function cartTotals(items: CheckoutItem[], rail: MobileRail, promo = false) {
+  const due = quote(items.map((item) => Math.round(item.price * 100)), promo);
   const payable = due.dueCents / 100;
   const fee = Math.round(payable * rail.feePct) / 100;
   return {
     subtotal: due.subtotalCents / 100,
     comboDiscount: due.comboCents / 100,
+    promoDiscount: due.promoCents / 100,
     fee,
     total: payable + fee,
   };

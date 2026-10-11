@@ -25,13 +25,13 @@ export function CartButton() {
 
 function SignedInCartButton() {
   const router = useRouter();
-  const { items, count, removeItem, clearCart } = useCart();
+  const { items, count, promo, setPromo, removeItem, clearCart } = useCart();
   const [open, setOpen] = useState(false);
 
   const pricesUsd = items.map((item) => item.price);
   const due = quote(
     pricesUsd.map((price) => Math.round(price * 100)),
-    true,
+    promo,
   ).dueCents;
 
   const close = () => setOpen(false);
@@ -103,7 +103,7 @@ function SignedInCartButton() {
               {items.map((item) => (
                 <CartLine key={item.id} item={item} onRemove={removeItem} onNavigate={close} />
               ))}
-              <CartSummary pricesUsd={pricesUsd} />
+              <CartSummary pricesUsd={pricesUsd} promo={promo} onTogglePromo={setPromo} />
             </>
           )}
         </div>

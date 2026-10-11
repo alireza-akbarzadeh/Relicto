@@ -7,15 +7,17 @@ import type { CheckoutMobile } from "../mobile.types";
 
 /** Cart lines, the selected rail (`?rail=`) and every derived amount the mobile checkout shows. */
 export function useMobileCheckout(data: CheckoutMobile) {
-  const { items, removeItem } = useCart();
+  const { items, removeItem, promo, setPromo } = useCart();
   const [railId, setRail] = useQueryState("rail", railSearchParam.withOptions({ history: "replace", clearOnDefault: true }));
   const rail = data.rails.find((entry) => entry.id === railId) ?? data.rails[0];
-  const totals = cartTotals(items, rail);
+  const totals = cartTotals(items, rail, promo);
 
   return {
     items,
     removeItem,
     rail,
+    promo,
+    setPromo,
     setRail: (id: typeof railId) => void setRail(id),
     ...totals,
     remainingUsd: data.vaultUsd - totals.total,

@@ -17,6 +17,7 @@ const failed = (title: string) => toast.error(title, { description: "Check your 
 export function useCartState(initialItems: CheckoutItem[]) {
   const [saved, setSaved] = useState(initialItems);
   const [local, setLocal] = useState<CheckoutItem[]>([]);
+  const [promo, setPromo] = useState(true);
   const items = useMemo(() => [...saved, ...local], [saved, local]);
   const requireAccount = useAccountGate();
 
@@ -83,5 +84,5 @@ export function useCartState(initialItems: CheckoutItem[]) {
       });
   };
 
-  return { items, count: items.length, has, addItem, removeItem, clearCart: clear, sync: setSaved };
+  return { items, count: items.length, promo, setPromo, has, addItem, removeItem, clearCart: clear, sync: setSaved };
 }

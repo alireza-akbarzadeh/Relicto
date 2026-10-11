@@ -15,12 +15,23 @@ const NOTICE: Record<Exclude<QuickAction["id"], "freeze">, { title: string; desc
 };
 
 /** Deposit / Cashout / P2P Send / Freeze. Freeze locks the vault and raises the banner. */
-export function QuickActions({ actions }: { actions: QuickAction[] }) {
+export function QuickActions({
+  actions,
+  onAction,
+}: {
+  actions: QuickAction[];
+  onAction?: (actionId: QuickAction["id"]) => void;
+}) {
   const { freeze } = useVaultFreeze();
 
   const run = (action: QuickAction) => {
-    if (action.id === "freeze") freeze();
-    else toast(NOTICE[action.id].title, { description: NOTICE[action.id].description });
+    if (action.id === "freeze") {
+      freeze();
+    } else if (onAction) {
+      onAction(action.id);
+    } else {
+      toast(NOTICE[action.id].title, { description: NOTICE[action.id].description });
+    }
   };
 
   return (

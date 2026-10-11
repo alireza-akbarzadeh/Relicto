@@ -112,6 +112,7 @@ export type ItemDetail = {
   name: string;
   description: string;
   price: { lowestUsd: number; moveLabel: string; moveNote: string; trendLabel: string; trendNote: string; stats: PriceStat[] };
+  watchers?: number;
   escrow: EscrowBadge[];
   sections: SectionLink[];
   offers: Offer[];

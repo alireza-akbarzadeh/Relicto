@@ -29,8 +29,18 @@ export function InspectorActionRow({ item }: { item: ItemMobile }) {
         <span className="truncate font-semibold text-text-primary">{item.breadcrumb.hero}</span>
       </nav>
       <div className="flex shrink-0 items-center gap-space-xs">
-        <Button variant={null} size={null} aria-label="Add to watchlist" aria-pressed={saved} onClick={toggleSaved} className={ACTION}>
+        <Button
+          variant={null}
+          size={null}
+          aria-label="Add to watchlist"
+          aria-pressed={saved}
+          onClick={toggleSaved}
+          className={cn(ACTION, "flex items-center justify-center gap-1", item.watchers ? "w-auto px-2" : "w-9")}
+        >
           <Icon name="favorite" filled={saved} className={cn("text-[18px]", saved && "text-primary")} />
+          {typeof item.watchers === "number" && item.watchers > 0 && (
+            <span className="font-data-mono-md text-[11px] font-bold text-text-primary">{item.watchers}</span>
+          )}
         </Button>
         <ShareButton
           title={`${item.breadcrumb.hero} — ${item.name}`}

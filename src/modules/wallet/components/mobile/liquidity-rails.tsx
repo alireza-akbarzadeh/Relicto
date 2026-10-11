@@ -1,3 +1,5 @@
+import type { MouseEvent } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -11,7 +13,13 @@ const CHIP = {
 };
 
 /** Deposit and cashout rails with their fees and settlement speed. */
-export function LiquidityRails({ rails }: { rails: LiquidityRail[] }) {
+export function LiquidityRails({
+  rails,
+  onSelectRail,
+}: {
+  rails: LiquidityRail[];
+  onSelectRail?: (railId: string) => void;
+}) {
   return (
     <>
       <div className="flex items-center justify-between pt-space-xs">
@@ -23,7 +31,11 @@ export function LiquidityRails({ rails }: { rails: LiquidityRail[] }) {
       </div>
       <div className="grid grid-cols-1 gap-2">
         {rails.map((rail) => (
-          <div key={rail.id} className="flex items-center justify-between rounded-xl bg-surface-card p-space-sm shadow-xs transition-colors hover:bg-surface-container">
+          <div
+            key={rail.id}
+            onClick={() => onSelectRail?.(rail.id)}
+            className="flex cursor-pointer items-center justify-between rounded-xl bg-surface-card p-space-sm shadow-xs transition-colors hover:bg-surface-container active:scale-[0.99]"
+          >
             <div className="flex min-w-0 items-center gap-space-sm">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-container-high">
                 <Icon name={rail.icon} className={cn("text-[22px]", TONE_TEXT[rail.tone])} />
@@ -36,13 +48,28 @@ export function LiquidityRails({ rails }: { rails: LiquidityRail[] }) {
                 <span className="truncate font-body-sm text-body-sm text-text-secondary">{rail.note}</span>
               </div>
             </div>
-            <LinkButton
-              href="/wallet"
-              aria-label={`Open ${rail.title} in treasury`}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-0 bg-surface-container text-text-primary transition-colors hover:bg-surface-container-high"
-            >
-              <Icon name="chevron_right" className="text-[18px]" />
-            </LinkButton>
+            {onSelectRail ? (
+              <Button
+                variant={null}
+                size={null}
+                aria-label={`Open ${rail.title} in treasury`}
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                  onSelectRail(rail.id);
+                }}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-0 bg-surface-container text-text-primary transition-colors hover:bg-surface-container-high"
+              >
+                <Icon name="chevron_right" className="text-[18px]" />
+              </Button>
+            ) : (
+              <LinkButton
+                href="/wallet"
+                aria-label={`Open ${rail.title} in treasury`}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-0 bg-surface-container text-text-primary transition-colors hover:bg-surface-container-high"
+              >
+                <Icon name="chevron_right" className="text-[18px]" />
+              </LinkButton>
+            )}
           </div>
         ))}
       </div>

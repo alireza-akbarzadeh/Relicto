@@ -869,8 +869,8 @@ Still open:
   ticked. Proper faceted counts need one query per facet.
 - **Generated catalog art repeats** — eight images across 144 items.
 - ~~Mobile has no watchlist tab or share button.~~ Fixed: Mobile profile now features `SegmentedTabs` switching between Showcase and live Watchlist (with `WatchedCard` and quick-link shortcut), and `MobileListingCard` / `InspectorActionRow` provide `ShareButton` with OS share sheet and clipboard fallback.
-- **`watchlistService.watchers()` has no UI.** The count is queryable; nothing
-  renders "N watching" yet.
+- ~~`watchlistService.watchers()` has no UI.~~ Fixed: live watcher counts are resolved in `itemService.detail()` / `mobile()` / `getItem()` and displayed in `PricePanel` stats + watchlist button on desktop and `InspectorActionRow` on mobile.
+- ~~Mobile wallet has no interactive deposit, cashout, or transfer flow.~~ Fixed: `WalletMobile` now features interactive modal sheets (`MobileDepositSheet`, `MobileCashoutSheet`, `MobileSendSheet`) with Web3 Crypto, Stripe Card, and Steam Guard 2FA support, plus Stripe return callback handling.
 - **The drawer assumes the promo is applied**, as the checkout panel does. If a
   buyer removes it at checkout the total rises by $15 from what the drawer showed.
 - **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
@@ -885,7 +885,7 @@ Still open:
 
 Unchanged by this work, listed so it is not lost:
 
-- `src/lib/env.ts` zod validation
+- ~~`src/lib/env.ts` zod validation~~ Fixed: added `src/lib/env.ts` with Zod schema validating required database and auth secrets on initialization.
 - Steam sign-in: plugin written (`src/lib/steam/`), round trip not yet verified
 - `additionalFields` / `username` plugin, 2FA, email verification and reset
 - `/verify` and `/reset-password` are still static mockups

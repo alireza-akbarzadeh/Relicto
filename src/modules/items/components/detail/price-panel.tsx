@@ -95,12 +95,16 @@ export function PricePanel({ item }: { item: ItemDetail }) {
               onClick={() => toggle(item.slug, item.name)}
               aria-label={watched ? "Remove from watchlist" : "Add to watchlist"}
               aria-pressed={watched}
-              className={cn(ACTION, "px-3.5 hover:text-primary", watched ? "text-primary" : "text-text-secondary")}
+              className={cn(ACTION, "gap-1.5 px-3.5 hover:text-primary", watched ? "text-primary" : "text-text-secondary")}
             >
               <Icon name="favorite" filled={watched} className="text-[20px]" />
+              {typeof item.watchers === "number" && item.watchers > 0 && (
+                <span className="font-data-mono-md text-[11px] font-bold">{item.watchers}</span>
+              )}
             </Button>
-            <button
-              type="button"
+            <Button
+              variant={null}
+              size={null}
               onClick={() => {
                 const el = document.getElementById("price-alert") ?? document.getElementById("sell-flow");
                 if (el) {
@@ -113,7 +117,7 @@ export function PricePanel({ item }: { item: ItemDetail }) {
               className={cn(ACTION, "px-3.5 text-text-secondary hover:text-tertiary")}
             >
               <Icon name="notifications_active" className="text-[20px]" />
-            </button>
+            </Button>
             <ShareButton
               title={item.name}
               text={item.description}

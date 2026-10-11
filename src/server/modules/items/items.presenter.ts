@@ -39,6 +39,7 @@ export function toItemDetail(
   styles: ItemStyleRow[],
   history: PricePointRow[],
   related: RelatedRow[],
+  watchers = 0,
 ): ItemDetail {
   const cheapest = itemListings[0];
   const lowestCents = cheapest?.priceCents ?? 0;
@@ -104,8 +105,10 @@ export function toItemDetail(
         { label: "30d Low", value: money(low), tone: "cyan" },
         { label: "30d High", value: money(high), tone: "amber" },
         { label: "Open Offers", value: String(openOffers), tone: "primary" },
+        { label: "Watchers", value: `${watchers} watching`, tone: "cyan" },
       ],
     },
+    watchers,
     escrow: [
       { icon: "verified", tone: "emerald", title: "0-day hold", note: "Instant peer escrow" },
       { icon: "bolt", tone: "cyan", title: "~12s dispatch", note: "Automated bot offer" },

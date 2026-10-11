@@ -9,6 +9,8 @@ import { toItemDetail } from "./items.presenter";
 import * as repository from "./items.repository";
 import type { SellerRow } from "./items.repository";
 
+import { watchlistService } from "../watchlist/watchlist.service";
+
 /** The copies the viewer can buy or bid on, with their open bids attached. A guest sees every copy and has no bids. */
 async function book(sellers: SellerRow[], viewerId: string | null): Promise<SellerBook> {
   if (!viewerId) return toSellerBook(sellers, null, {});
@@ -22,16 +24,18 @@ export const itemService = {
     const item = await repository.findItemBySlug(slug);
     if (!item) return null;
 
-    const [sellers, styles, history, related] = await Promise.all([
+    const [sellers, styles, history, related, watcherMap] = await Promise.all([
       repository.findItemSellers(item.id),
       repository.findItemStyles(item.id),
       repository.findPriceHistory(item.id),
       repository.findRelatedItems(item.slug, item.gameId),
+      watchlistService.watchers([item.slug]),
     ]);
 
     // Price facts cover every copy on the market; the book only what the viewer can buy.
     const listings = sellers.map((row) => row.listing);
-    return toItemDetail(item, listings, await book(sellers, viewerId), styles, history, related);
+    const watchers = watcherMap.get(item.slug) ?? 0;
+    return toItemDetail(item, listings, await book(sellers, viewerId), styles, history, related, watchers);
   },
 
   /**
@@ -48,7 +52,12 @@ export const itemService = {
   async mobile(authored: ItemMobile, viewerId: string | null): Promise<ItemMobile> {
     const item = await repository.findItemBySlug(authored.slug);
     if (!item) return authored;
-    return toItemMobile(authored, await repository.findItemSellers(item.id), viewerId);
+    const [sellers, watcherMap] = await Promise.all([
+      repository.findItemSellers(item.id),
+      watchlistService.watchers([authored.slug]),
+    ]);
+    const watchers = watcherMap.get(authored.slug) ?? 0;
+    return toItemMobile(authored, sellers, viewerId, watchers);
   },
 
   async exists(slug: string) {

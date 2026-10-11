@@ -1,4 +1,5 @@
 import "server-only";
+import "@/lib/env";
 import { attachDatabasePool } from "@vercel/functions";
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";

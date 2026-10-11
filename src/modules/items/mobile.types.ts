@@ -59,6 +59,7 @@ export type ItemMobile = {
   defaultStyle: string;
   price: { floorUsd: number; steamUsd: number; deltaPct: number; sparkline: [number, number][] };
   protection: { label: string; dispatch: string };
+  watchers?: number;
   meta: { title: string; patch: string; stats: MetaStat[]; endorsement: { initials: string; label: string; value: string } };
   sellers: MobileSeller[];
   synergy: { eyebrow: string; title: string; cta: string; discountPct: number; items: SynergyItem[] };

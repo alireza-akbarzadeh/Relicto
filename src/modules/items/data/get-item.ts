@@ -7,6 +7,8 @@ import type { ItemDetail } from "../types";
 import { manifoldParadox } from "./manifold-paradox.mock";
 import { manifoldParadoxMobile } from "./manifold-paradox.mobile.mock";
 
+import { watchlistService } from "@/server/modules/watchlist/watchlist.service";
+
 /** Hand-authored pages (full lore, replay, engine mods) take precedence. */
 const AUTHORED: Record<string, ItemDetail> = { [manifoldParadox.slug]: manifoldParadox };
 const MOBILE: Record<string, ItemMobile> = { [manifoldParadoxMobile.slug]: manifoldParadoxMobile };
@@ -24,8 +26,23 @@ export const getItem = cache(async (slug: string): Promise<ItemDetail | null> =>
   const authored = AUTHORED[slug];
   if (!authored) return itemService.detail(slug, viewerId);
 
-  const book = await itemService.book(slug, viewerId);
-  return book ? { ...authored, ...book } : authored;
+  const [book, watcherMap] = await Promise.all([
+    itemService.book(slug, viewerId),
+    watchlistService.watchers([slug]),
+  ]);
+  const watchers = watcherMap.get(slug) ?? 0;
+  const merged = book ? { ...authored, ...book } : authored;
+  return {
+    ...merged,
+    watchers,
+    price: {
+      ...merged.price,
+      stats: [
+        ...merged.price.stats.filter((s) => s.label !== "Watchers"),
+        { label: "Watchers", value: `${watchers} watching`, tone: "cyan" },
+      ],
+    },
+  };
 });
 
 /**

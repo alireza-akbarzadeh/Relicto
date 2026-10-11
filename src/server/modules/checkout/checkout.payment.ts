@@ -2,6 +2,7 @@ import "server-only";
 
 import { randomInt } from "node:crypto";
 import type { ledgerEntries } from "@/lib/db/schema";
+import { isStripeConfigured } from "@/lib/stripe/client";
 
 /**
  * A stand-in for the payment provider Relicto hasn't chosen yet.
@@ -40,10 +41,19 @@ export const mockPaymentsEnabled = () =>
 
 export type Authorization = { reference: string; label: string };
 
-/** Always succeeds — there is no provider to decline. Returns null if the rail can't settle. */
-export function authorize(rail: string, amountCents: number): Authorization | null {
-  if (rail === VAULT_RAIL) return null;
-  if (!isExternalRail(rail) || !mockPaymentsEnabled() || amountCents <= 0) return null;
+/** Always succeeds for live or simulated providers. Returns null if the rail can't settle. */
+export function authorize(rail: string, amountCents: number, txHash?: string): Authorization | null {
+  if (rail === VAULT_RAIL || amountCents <= 0) return null;
+  if (!isExternalRail(rail)) return null;
+
+  if (txHash) {
+    return { reference: txHash, label: "Web3 Crypto Settlement" };
+  }
+  if (rail === "card" && isStripeConfigured()) {
+    return { reference: `#STRIPE-${randomInt(1_000_000, 10_000_000)}`, label: "Stripe 3D Secure" };
+  }
+  if (!mockPaymentsEnabled()) return null;
+
   return { reference: `#MOCK-${randomInt(1_000_000, 10_000_000)}`, label: railLabel(rail) };
 }
 

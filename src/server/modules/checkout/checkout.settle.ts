@@ -10,6 +10,7 @@ import { buildOrderRows, orderCode } from "./checkout.order-rows";
 import { authorize, depositRow, isExternalRail, mockPaymentsEnabled, railLabel, VAULT_RAIL } from "./checkout.payment";
 import { allocate, quote } from "@/modules/checkout/lib/pricing";
 import { cartLinesWhere, LINE } from "./checkout.repository";
+import { isStripeConfigured } from "@/lib/stripe/client";
 
 export type SettleInput = { rail: string; promo: boolean; cartIds: string[]; txHash?: string };
 
@@ -21,11 +22,13 @@ export type SettleResult =
 const key = (ids: string[]) => [...ids].sort().join("|");
 
 /**
- * The vault always settles. Card, crypto and Steam settle through the mock
- * provider until a real one is chosen — and nowhere at all if mock payments
- * are off, which is the default in production.
+ * Vault always settles. Card, crypto and Steam settle through their live
+ * providers (Stripe / on-chain proof) or the simulated mock provider.
  */
-const canSettle = (rail: string) => rail === VAULT_RAIL || (isExternalRail(rail) && mockPaymentsEnabled());
+const canSettle = (rail: string, txHash?: string) =>
+  rail === VAULT_RAIL ||
+  Boolean(txHash) ||
+  (isExternalRail(rail) && (mockPaymentsEnabled() || (rail === "card" && isStripeConfigured())));
 
 /**
  * Turns the basket into one escrow order per line, paid from the vault. The
@@ -33,7 +36,7 @@ const canSettle = (rail: string) => rail === VAULT_RAIL || (isExternalRail(rail)
  * or two buyers — can't spend the same balance or reserve the same copy.
  */
 export async function settle(userId: string, input: SettleInput): Promise<SettleResult> {
-  if (!canSettle(input.rail)) return { status: "rail-unavailable" };
+  if (!canSettle(input.rail, input.txHash)) return { status: "rail-unavailable" };
 
   return db.transaction(async (tx): Promise<SettleResult> => {
     const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, userId)).for("update");
@@ -67,7 +70,7 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
      * for exactly what's due, so the purchase debits below are the same rows a
      * vault payment writes. Nothing is charged — see checkout.payment.ts.
      */
-    const auth = authorize(input.rail, due.dueCents);
+    const auth = authorize(input.rail, due.dueCents, input.txHash);
     if (auth) {
       balance += due.dueCents;
       await tx.insert(ledgerEntries).values(

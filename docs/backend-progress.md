@@ -665,8 +665,7 @@ cleared first; accepted-offer orders are `order-chk-` with the trader as
 
 - **Mobile can't bid or answer bids yet.** The mobile seller cards buy; there's
   no offer button, and the mobile studio has no inbox.
-- **No buyer-side list of open bids.** A bid is visible only on its item page
-  and in notifications. A profile tab (like the watchlist) would fix it.
+- ~~No buyer-side list of open bids.~~ Fixed: Profile **My Bids** tab (`BidsSection`) lists all outgoing purchase offers with cancellation/withdraw actions and item navigation.
 - **Bids aren't held.** Funds are checked at bid time and debited at accept; a
   buyer who spends the vault in between gets `buyer-short`. Holding funds would
   need a ledger hold per bid.
@@ -778,7 +777,7 @@ console errors. `tsc`, `eslint`, `next build` clean.
 - ~~New Steam traders get no `profiles` row or wallet until they act.~~ Fixed
   by the profile bootstrap below.
 - Mobile has no palette trigger beyond the hotkeys; mobile deposit is untouched.
-- Public trader storefronts, a Stitch design each: see the design list.
+- ~~Public trader storefronts.~~ Done: `/traders/[handle]` renders the verified public profile storefront via `profileService.publicStorefront(handle)`.
 
 ## Profile bootstrap (2026-09-27)
 

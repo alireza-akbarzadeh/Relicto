@@ -12,7 +12,7 @@ const TONE = { rose: "text-primary", indigo: "text-secondary", muted: "text-text
 
 /** Steam handshake, rail picker with remaining vault balance, and the fee breakdown. */
 export function SettlementCard({ data }: { data: CheckoutMobile }) {
-  const { rail, setRail, items, subtotal, fee, total, remainingUsd } = useMobileCheckout(data);
+  const { rail, setRail, items, subtotal, comboDiscount, fee, total, remainingUsd } = useMobileCheckout(data);
 
   return (
     <>
@@ -81,6 +81,16 @@ export function SettlementCard({ data }: { data: CheckoutMobile }) {
           <span className={ROW}>Subtotal ({items.length} Assets)</span>
           <span className="font-data-mono-md text-[13px] font-bold text-text-primary">{formatMoney(subtotal)}</span>
         </div>
+        {comboDiscount > 0 && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <span className={ROW}>Multi-Item Combo Relief</span>
+              <span className="rounded bg-tertiary/20 px-1 font-label-badge text-[9px] font-bold text-tertiary">3+ ASSETS</span>
+            </div>
+            <span className="font-data-mono-md text-[13px] font-bold text-tertiary">−{formatMoney(comboDiscount)}</span>
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <span className={ROW}>Steam Escrow Bot Protection</span>

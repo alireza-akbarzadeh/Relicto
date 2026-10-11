@@ -15,8 +15,9 @@ export default async function ProfilePage() {
   return (
     <>
       <div className="md:hidden">
-        <ProfileMobile profile={mobile} />
+        <ProfileMobile profile={mobile} watchlist={data.watchlist} bids={data.bids} />
       </div>
+
       <div className="hidden md:block">
         <ProfileView data={data} />
       </div>

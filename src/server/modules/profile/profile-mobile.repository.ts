@@ -2,7 +2,8 @@ import "server-only";
 
 import { and, asc, count, eq, exists, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { alertRules, items, listings, orders, showcaseItems } from "@/lib/db/schema";
+import { alertRules, items, listings, orders, showcaseItems, watchlist } from "@/lib/db/schema";
+
 
 /** Showcase cards with the item they link to, and whether the trader has it listed right now. */
 export async function findShowcaseCards(profileId: string, userId: string) {
@@ -35,9 +36,10 @@ export async function countActivity(userId: string) {
     .from(orders)
     .where(party);
 
-  const [[listed], [armed]] = await Promise.all([
+  const [[listed], [armed], [watched]] = await Promise.all([
     db.select({ value: count() }).from(listings).where(and(eq(listings.sellerId, userId), eq(listings.status, "active"))),
     db.select({ value: count() }).from(alertRules).where(and(eq(alertRules.userId, userId), eq(alertRules.status, "armed"))),
+    db.select({ value: count() }).from(watchlist).where(eq(watchlist.userId, userId)),
   ]);
 
   return {
@@ -46,5 +48,7 @@ export async function countActivity(userId: string) {
     openEscrows: trades?.open ?? 0,
     listed: listed?.value ?? 0,
     armedAlerts: armed?.value ?? 0,
+    watched: watched?.value ?? 0,
   };
 }
+

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
+import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import type { ItemMobile } from "../../mobile.types";
 
@@ -15,16 +16,6 @@ export function InspectorActionRow({ item }: { item: ItemMobile }) {
   const { isWatched, toggle } = useWatchlist();
   const saved = isWatched(item.slug);
   const toggleSaved = () => toggle(item.slug, item.name);
-
-  const share = async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({ title: `${item.breadcrumb.hero} — ${item.name}`, url }).catch(() => undefined);
-      return;
-    }
-    await navigator.clipboard.writeText(url);
-    toast.success("Link copied", { description: "The current style and filters are in the link." });
-  };
 
   return (
     <div className="flex items-center justify-between bg-surface-container-lowest px-space-md py-space-sm">
@@ -41,10 +32,13 @@ export function InspectorActionRow({ item }: { item: ItemMobile }) {
         <Button variant={null} size={null} aria-label="Add to watchlist" aria-pressed={saved} onClick={toggleSaved} className={ACTION}>
           <Icon name="favorite" filled={saved} className={cn("text-[18px]", saved && "text-primary")} />
         </Button>
-        <Button variant={null} size={null} aria-label="Share item" onClick={share} className={ACTION}>
-          <Icon name="share" className="text-[18px]" />
-        </Button>
+        <ShareButton
+          title={`${item.breadcrumb.hero} — ${item.name}`}
+          path={`/items/${item.slug}`}
+          className={cn(ACTION, "flex items-center justify-center p-0")}
+        />
       </div>
     </div>
   );
 }
+

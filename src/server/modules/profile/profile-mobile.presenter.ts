@@ -68,15 +68,17 @@ function toShowcaseCard({ card, slug, listed }: Card): ShowcaseCard {
   };
 }
 
-/** Quick-link badges are counts of the trader's real escrows, listings and armed alerts. */
+/** Quick-link badges are counts of the trader's real escrows, listings, armed alerts and watched items. */
 function badges(links: QuickLink[], activity: Activity): QuickLink[] {
   const counts: Record<string, QuickLink["badge"]> = {
     dispatches: { text: `${activity.openEscrows} ONGOING`, style: "cyan-pill" },
     listed: { text: `${activity.listed} SKINS`, style: "plain" },
     webhooks: { text: `${activity.armedAlerts} ARMED`, style: "crimson-pill" },
+    watchlist: { text: `${activity.watched} SAVED`, style: "crimson-pill" },
   };
   return links.map((link) => (counts[link.id] ? { ...link, badge: counts[link.id] } : link));
 }
+
 
 export function toProfileMobile(
   chrome: ProfileChrome,

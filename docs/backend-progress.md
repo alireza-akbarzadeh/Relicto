@@ -868,8 +868,7 @@ Still open:
   selected ecosystem only, so a rarity tally doesn't narrow when a wear tier is
   ticked. Proper faceted counts need one query per facet.
 - **Generated catalog art repeats** — eight images across 144 items.
-- **Mobile has no watchlist tab or share button.** Phase 6 is desktop-only; the
-  mobile profile composition still shows its own quick-links.
+- ~~Mobile has no watchlist tab or share button.~~ Fixed: Mobile profile now features `SegmentedTabs` switching between Showcase and live Watchlist (with `WatchedCard` and quick-link shortcut), and `MobileListingCard` / `InspectorActionRow` provide `ShareButton` with OS share sheet and clipboard fallback.
 - **`watchlistService.watchers()` has no UI.** The count is queryable; nothing
   renders "N watching" yet.
 - **The drawer assumes the promo is applied**, as the checkout panel does. If a
@@ -877,9 +876,8 @@ Still open:
 - **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
   rules use fixed ids, so seeding a second trader collides with the demo one.
   The handle collision is fixed; re-keying those rows per trader is not.
-- **Mobile checkout has no discount rows.** Its total applies the three-item
-  combo (as the server charges) but the design shows only subtotal, fee and
-  total, so the discount is invisible there.
+- ~~Mobile checkout has no discount rows.~~ Fixed: `cartTotals` and `SettlementCard` now expose and render Multi-Item Combo Relief when 3+ assets are present, reconciling subtotal and payable total transparently.
+
 - **Radar rows use full team names** ("Gaimin Gladiators"), which wrap where the
   design had short ones. A short display name per team would fix it.
 

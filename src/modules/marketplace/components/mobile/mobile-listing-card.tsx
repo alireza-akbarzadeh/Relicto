@@ -7,7 +7,9 @@ import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import { formatDelta, formatMoney } from "@/lib/format";
+import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useMobileListingAction } from "../../hooks/use-mobile-listing-action";
+
 import { changeTone } from "../../lib/mobile-filters";
 import type { ListingAction, ListingTagTone, MobileListing } from "../../mobile.types";
 
@@ -38,17 +40,21 @@ export function MobileListingCard({ listing }: { listing: MobileListing }) {
     <article className="group relative flex flex-col overflow-hidden rounded-xl bg-surface-container p-2.5 shadow-xs">
       <div className="mb-1 flex w-full items-center justify-between">
         <span className={cn("rounded px-1.5 py-0.5 font-label-badge text-[10px] uppercase", TAG[listing.tagTone])}>{listing.tag}</span>
-        <Button
-          variant={null}
-          size={null}
-          aria-label={saved ? `Remove ${listing.name} from watchlist` : `Bookmark ${listing.name}`}
-          aria-pressed={saved}
-          onClick={() => toggle(listing.slug, listing.name)}
-          className={cn("h-6 w-6 rounded border-0 transition-colors", saved ? "text-primary" : "text-text-muted hover:text-primary")}
-        >
-          <Icon name="favorite" filled={saved} className="text-[16px]" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <ShareButton title={listing.name} path={href} className="h-6 w-6 p-0" />
+          <Button
+            variant={null}
+            size={null}
+            aria-label={saved ? `Remove ${listing.name} from watchlist` : `Bookmark ${listing.name}`}
+            aria-pressed={saved}
+            onClick={() => toggle(listing.slug, listing.name)}
+            className={cn("h-6 w-6 rounded border-0 transition-colors", saved ? "text-primary" : "text-text-muted hover:text-primary")}
+          >
+            <Icon name="favorite" filled={saved} className="text-[16px]" />
+          </Button>
+        </div>
       </div>
+
 
       <Link href={href} className="relative my-1 flex h-28 w-full items-center justify-center overflow-hidden rounded-lg bg-surface-container-lowest">
         <Image src={listing.image} alt={listing.imageAlt} width={320} height={224} sizes="50vw" className="h-full w-full object-contain p-2" />

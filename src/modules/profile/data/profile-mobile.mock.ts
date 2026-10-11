@@ -43,7 +43,9 @@ export const profileMobile: ProfileMobile = {
     { id: "dispatches", href: "/orders?tab=escrow", icon: "sync_alt", tone: "cyan", title: "Active Escrow Dispatches", note: "Awaiting Steam confirmation token", badge: { text: "2 ONGOING", style: "cyan-pill" } },
     { id: "ledger", href: "/orders", icon: "receipt_long", tone: "amber", title: "Trade History & Tax Ledger", note: "Downloadable CSV / Audit trail" },
     { id: "listed", href: "/sell", icon: "inventory_2", tone: "indigo", title: "My Listed Inventory", note: "Active marketplace public listings", badge: { text: "14 SKINS", style: "plain" } },
+    { id: "watchlist", href: "/profile?tab=watchlist", icon: "favorite", tone: "crimson", title: "Watched Items & Floors", note: "Cheapest live prices for tracked items", badge: { text: "4 SAVED", style: "crimson-pill" } },
     { id: "webhooks", href: "/alerts", icon: "notifications_active", tone: "crimson", title: "Price Drop Webhooks", note: "Instant push trigger thresholds", badge: { text: "8 ARMED", style: "crimson-pill" } },
+
     { id: "bots", href: "/verify", icon: "smart_toy", tone: "plain", title: "API Security & Authorized Bots", note: "OAuth token whitelist management" },
   ],
   savedAccounts: 2,

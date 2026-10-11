@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { VaultHeader } from "@/modules/relicto/components/shell/vault-header";
 import { useCart } from "@/modules/relicto/state/cart-provider";
@@ -14,8 +17,22 @@ import { RecipientGate } from "./recipient-gate";
 import { SettlementPanel } from "./settlement-panel";
 
 export function CheckoutView({ data }: { data: CheckoutData }) {
-  const { items, removeItem } = useCart();
+  const searchParams = useSearchParams();
+  const { items, removeItem, sync } = useCart();
   const { dispatch, pending, codes, close, monitor } = useCheckoutDispatch();
+
+  useEffect(() => {
+    if (searchParams.get("stripe_success") === "true") {
+      toast.success("Stripe Payment Verified", {
+        description: "Your card was processed securely. Escrow delivery is now active.",
+      });
+      sync([]);
+    } else if (searchParams.get("stripe_cancel") === "true") {
+      toast.info("Stripe Payment Cancelled", {
+        description: "No funds were debited. Your items remain in your cart.",
+      });
+    }
+  }, [searchParams, sync]);
 
   return (
     <div className="min-h-screen bg-canvas-base font-body-md text-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">

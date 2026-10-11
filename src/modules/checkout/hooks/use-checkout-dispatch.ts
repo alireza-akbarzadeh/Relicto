@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useCart } from "@/modules/relicto/state/cart-provider";
 import { placeOrder } from "../actions/cart";
 
-export type DispatchChoice = { rail: string; promo: boolean };
+export type DispatchChoice = { rail: string; promo: boolean; txHash?: string };
 
 /** What the buyer is told when the server declines to settle. */
 const DECLINED = {
@@ -21,8 +21,7 @@ const decline = (status: keyof typeof DECLINED) =>
   toast.error(DECLINED[status][0], { description: DECLINED[status][1] });
 
 /**
- * Authorize & Dispatch: settles the basket, then hands the new escrow codes to
- * the dispatch dialog — or to `onPlaced`, for screens that go straight on.
+ * Authorize & Dispatch: settles the basket via Stripe, Web3 Crypto, or Relicto Vault.
  */
 export function useCheckoutDispatch({ onPlaced }: { onPlaced?: (codes: string[]) => void } = {}) {
   const router = useRouter();
@@ -30,7 +29,7 @@ export function useCheckoutDispatch({ onPlaced }: { onPlaced?: (codes: string[])
   const [codes, setCodes] = useState<string[] | null>(null);
   const [pending, startTransition] = useTransition();
 
-  const dispatch = ({ rail, promo }: DispatchChoice) => {
+  const dispatch = ({ rail, promo, txHash }: DispatchChoice) => {
     if (items.length === 0) {
       decline("empty");
       return;
@@ -38,7 +37,36 @@ export function useCheckoutDispatch({ onPlaced }: { onPlaced?: (codes: string[])
 
     startTransition(async () => {
       try {
-        const result = await placeOrder({ rail, promo, cartIds: items.map((item) => item.id) });
+        if (rail === "card") {
+          const res = await fetch("/api/checkout/stripe/create-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ promo, cartIds: items.map((i) => i.id) }),
+          });
+          const data = await res.json();
+
+          if (data.mode === "stripe" && data.url) {
+            window.location.assign(data.url);
+            return;
+          }
+          if (data.mode === "settled" && data.codes) {
+            sync([]);
+            (onPlaced ?? setCodes)(data.codes);
+            return;
+          }
+          if (data.mode === "error") {
+            decline(data.reason as keyof typeof DECLINED);
+            return;
+          }
+        }
+
+        const result = await placeOrder({
+          rail,
+          promo,
+          cartIds: items.map((item) => item.id),
+          txHash,
+        });
+
         if (result.items) sync(result.items);
         if (result.status === "placed") (onPlaced ?? setCodes)(result.codes);
         else decline(result.status);

@@ -9,4 +9,5 @@ export const placeOrderInput = z.object({
   rail: z.string().min(1).max(32),
   promo: z.boolean(),
   cartIds: z.array(z.string().min(1).max(64)).min(1).max(50),
+  txHash: z.string().trim().max(128).optional(),
 });

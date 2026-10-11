@@ -1,7 +1,12 @@
 "use client";
 
-import { LinkButton } from "@/components/ui/link-button";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
+import { isValidTradeUrl } from "@/lib/steam/trade-url";
+import { saveSteamTradeUrl } from "@/modules/profile/actions/steam";
 import type { CheckoutRecipient } from "../types";
 
 export function RecipientGate({
@@ -14,9 +19,35 @@ export function RecipientGate({
   const level = recipient?.level ?? 94;
   const tier = recipient?.tier ?? "Prime Tier";
   const steamId = recipient?.steamId ?? "76561198082348819";
-  const tradeUrl =
+  const initialUrl =
     recipient?.tradeUrl ??
     "https://steamcommunity.com/tradeoffer/new/?partner=122068591&token=K98xA40f";
+
+  const [tradeUrl, setTradeUrl] = useState(initialUrl);
+  const [editing, setEditing] = useState(false);
+  const [isSaving, startSaving] = useTransition();
+
+  const valid = isValidTradeUrl(tradeUrl);
+
+  const handleSave = () => {
+    if (!valid) {
+      toast.error("Invalid Steam Trade URL", {
+        description: "Check for partner ID and token in the URL.",
+      });
+      return;
+    }
+    startSaving(async () => {
+      const res = await saveSteamTradeUrl(tradeUrl);
+      if (res.success) {
+        toast.success("Steam Destination Updated", {
+          description: "Trade offers will be dispatched to your new Steam trade URL.",
+        });
+        setEditing(false);
+      } else {
+        toast.error("Failed to update", { description: res.error });
+      }
+    });
+  };
 
   return (
     <section className="flex flex-col gap-4 rounded-2xl border border-white/8 bg-surface-card p-5 shadow-sm">
@@ -36,12 +67,15 @@ export function RecipientGate({
             <span className="h-1.5 w-1.5 rounded-full bg-status-upcoming" />
             Ready for Instant Bot Push
           </span>
-          <LinkButton
-            href="/profile"
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setEditing((prev) => !prev)}
             className="h-auto rounded-lg px-2.5 py-1 text-xs text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
           >
-            Change
-          </LinkButton>
+            {editing ? "Cancel" : "Change"}
+          </Button>
         </div>
       </div>
 
@@ -74,17 +108,37 @@ export function RecipientGate({
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-1 max-w-md items-center justify-between rounded-xl border border-white/6 bg-surface-container-lowest px-3 py-2">
-          <div className="flex min-w-0 items-center gap-2">
-            <Icon name="key" className="text-[15px] text-text-muted shrink-0" />
-            <span className="truncate font-data-mono-md text-xs text-text-secondary">
-              {tradeUrl}
+        {editing ? (
+          <div className="flex min-w-0 flex-1 max-w-lg items-center gap-2">
+            <Input
+              value={tradeUrl}
+              onChange={(e) => setTradeUrl(e.target.value)}
+              placeholder="https://steamcommunity.com/tradeoffer/new/?partner=...&token=..."
+              className="h-9 rounded-lg border-white/10 bg-surface-container-lowest font-data-mono-md text-xs text-text-primary"
+            />
+            <Button
+              type="button"
+              size="sm"
+              disabled={isSaving || !valid}
+              onClick={handleSave}
+              className="h-9 shrink-0 rounded-lg bg-status-upcoming/20 px-3 text-xs font-bold text-status-upcoming hover:bg-status-upcoming/30"
+            >
+              {isSaving ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        ) : (
+          <div className="flex min-w-0 flex-1 max-w-md items-center justify-between rounded-xl border border-white/6 bg-surface-container-lowest px-3 py-2">
+            <div className="flex min-w-0 items-center gap-2">
+              <Icon name="key" className="text-[15px] text-text-muted shrink-0" />
+              <span className="truncate font-data-mono-md text-xs text-text-secondary">
+                {tradeUrl}
+              </span>
+            </div>
+            <span className="ml-2 shrink-0 rounded bg-status-upcoming/15 px-2 py-0.5 font-data-mono-md text-[10px] font-medium text-status-upcoming">
+              12ms Verified
             </span>
           </div>
-          <span className="ml-2 shrink-0 rounded bg-status-upcoming/15 px-2 py-0.5 font-data-mono-md text-[10px] font-medium text-status-upcoming">
-            12ms Verified
-          </span>
-        </div>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-3 pt-1 text-xs text-text-secondary">

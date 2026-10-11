@@ -11,7 +11,7 @@ import { authorize, depositRow, isExternalRail, mockPaymentsEnabled, railLabel, 
 import { allocate, quote } from "@/modules/checkout/lib/pricing";
 import { cartLinesWhere, LINE } from "./checkout.repository";
 
-export type SettleInput = { rail: string; promo: boolean; cartIds: string[] };
+export type SettleInput = { rail: string; promo: boolean; cartIds: string[]; txHash?: string };
 
 export type SettleResult =
   /** `notices` are both sides' notifications, for push once the transaction has committed. */
@@ -88,7 +88,9 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
 
       const rows = buildOrderRows(line, {
         buyerId: userId, code, totalCents, walletId: wallet.id, balanceAfterCents: balance, now,
-        fundingLabel: railLabel(input.rail),
+        fundingLabel: input.txHash
+          ? `${railLabel(input.rail)} • ${input.txHash.slice(0, 10)}...`
+          : railLabel(input.rail),
       });
 
       await tx.insert(orders).values(rows.order);

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { CheckoutView } from "@/modules/checkout/components/checkout-view";
 import { CheckoutMobile } from "@/modules/checkout/components/mobile/checkout-mobile";
@@ -12,13 +13,13 @@ export const metadata: Metadata = {
 export default async function CheckoutPage() {
   const [data, mobile] = await Promise.all([getCheckout(), getCheckoutMobile()]);
   return (
-    <>
+    <Suspense>
       <div className="md:hidden">
         <CheckoutMobile data={mobile} />
       </div>
       <div className="hidden md:block">
         <CheckoutView data={data} />
       </div>
-    </>
+    </Suspense>
   );
 }

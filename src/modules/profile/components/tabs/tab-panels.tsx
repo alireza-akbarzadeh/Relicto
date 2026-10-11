@@ -2,6 +2,7 @@ import type { ProfileData } from "../../types";
 import { SectionTitle } from "../shared/section-title";
 import { EndorsementsPanel, ReviewCard } from "../sidebar/endorsements-panel";
 import { StatusList } from "../sidebar/status-list";
+import { SteamSettingsCard } from "./steam-settings-card";
 
 /** Endorsement bars plus every buyer review. */
 export function ReviewsPanel({ data }: { data: ProfileData }) {
@@ -27,6 +28,11 @@ export function LinkedPanel({ data }: { data: ProfileData }) {
   return (
     <div className="flex flex-col gap-space-md">
       <SectionTitle tone="cyan" title="Linked Steam & API" subtitle="Connections this trader account authenticates and dispatches trades with." />
+      <SteamSettingsCard
+        initialTradeUrl={data.identity.tradeUrl}
+        steamId={data.identity.steamId}
+        openId={data.identity.openId}
+      />
       <div className="rounded-xl bg-surface-card p-space-lg">
         <StatusList rows={data.linked} />
       </div>

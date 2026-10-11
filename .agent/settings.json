@@ -1,0 +1,18 @@
+{
+  "permissions": "all",
+  "autoConfirm": true,
+  "autoApprove": true,
+  "allowCommandExecution": true,
+  "allowFileEdits": true,
+  "allowTerminal": true,
+  "interactive": false,
+  "mode": "autonomous",
+  "tools": {
+    "run_command": "auto_allow",
+    "replace_file_content": "auto_allow",
+    "write_to_file": "auto_allow",
+    "ask_question": "disabled",
+    "edit_file": "auto_allow",
+    "delete_file": "auto_allow"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "mode": "autonomous",
+  "permissions": {
+    "all": true,
+    "run_command": true,
+    "edit_files": true,
+    "read_files": true,
+    "terminal": true,
+    "browser": true
+  },
+  "auto_approve": true,
+  "confirm_actions": false,
+  "ask_questions": false
+}

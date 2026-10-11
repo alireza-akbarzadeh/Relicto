@@ -21,8 +21,14 @@ export function cartTotals(items: CheckoutItem[], rail: MobileRail) {
   const due = quote(items.map((item) => Math.round(item.price * 100)), false);
   const payable = due.dueCents / 100;
   const fee = Math.round(payable * rail.feePct) / 100;
-  return { subtotal: due.subtotalCents / 100, fee, total: payable + fee };
+  return {
+    subtotal: due.subtotalCents / 100,
+    comboDiscount: due.comboCents / 100,
+    fee,
+    total: payable + fee,
+  };
 }
+
 
 /** Mobile rail ids → the settlement rails the server knows. */
 export const SETTLEMENT_RAIL: Record<string, string> = { vault: "relicto", crypto: "crypto", card: "card" };

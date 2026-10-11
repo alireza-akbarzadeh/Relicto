@@ -3,7 +3,7 @@
  * "current" column comes from the live floor. Strategy kinds follow the mobile
  * sniper terminal, the only screen that shows them.
  */
-import { and, eq, notLike } from "drizzle-orm";
+import { eq, like, or } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import * as schema from "../../lib/db/schema";
 import { alerts } from "../../modules/alerts/data/alerts.mock";
@@ -26,15 +26,14 @@ const cents = (label: string) => Math.round(Number(label.replace(/[^0-9.]/g, "")
 
 export async function seedAlerts(db: Db, traderId: string) {
   const now = Date.now();
-  // Rules deployed in the app have generated ids; a re-seed starts from the designed three.
-  await db.delete(schema.alertRules).where(and(eq(schema.alertRules.userId, traderId), notLike(schema.alertRules.id, "alert-%")));
+  await db.delete(schema.alertRules).where(eq(schema.alertRules.userId, traderId));
 
   for (const alert of alerts) {
     const meta = RULES[alert.id];
     const stamp = new Date(now - (meta?.agoMinutes ?? 30) * MINUTE);
 
     const row = {
-      id: `alert-${alert.id}`,
+      id: `alert-${traderId}-${alert.id}`,
       userId: traderId,
       kind: meta?.kind ?? "snipe",
       // The design's Butterfly snipe is the one wired to buy on its own.
@@ -61,6 +60,11 @@ export async function seedAlerts(db: Db, traderId: string) {
 export async function linkAlertItems(db: Db) {
   for (const [id, meta] of Object.entries(RULES)) {
     const [item] = await db.select({ id: schema.items.id }).from(schema.items).where(eq(schema.items.slug, meta.itemSlug));
-    await db.update(schema.alertRules).set({ itemId: item?.id ?? null }).where(eq(schema.alertRules.id, `alert-${id}`));
+    if (item?.id) {
+      await db
+        .update(schema.alertRules)
+        .set({ itemId: item.id })
+        .where(or(eq(schema.alertRules.id, `alert-${id}`), like(schema.alertRules.id, `alert-%-${id}`)));
+    }
   }
 }

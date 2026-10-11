@@ -3,7 +3,7 @@
  * same identity, showcase, listings, endorsements and status tabs on Postgres.
  */
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { eq } from "drizzle-orm";
+import { eq, like, or } from "drizzle-orm";
 import * as schema from "../../lib/db/schema";
 import { identity, stats } from "../../modules/profile/data/identity.mock";
 import { listings as sellerListings, showcase } from "../../modules/profile/data/inventory.mock";
@@ -75,7 +75,7 @@ export async function seedProfile(db: Db, traderId: string, ownHandle?: string) 
 async function seedShowcase(db: Db, profileId: string) {
   for (const [order, card] of showcase.entries()) {
     const row = {
-      id: `showcase-${card.id}`,
+      id: `showcase-${profileId}-${card.id}`,
       profileId,
       name: card.name,
       kicker: card.kicker,
@@ -100,10 +100,12 @@ async function seedShowcase(db: Db, profileId: string) {
 export async function linkShowcaseItems(db: Db) {
   for (const card of showcase) {
     const [item] = await db.select({ id: schema.items.id }).from(schema.items).where(eq(schema.items.slug, card.id));
-    await db
-      .update(schema.showcaseItems)
-      .set({ itemId: item?.id ?? null })
-      .where(eq(schema.showcaseItems.id, `showcase-${card.id}`));
+    if (item?.id) {
+      await db
+        .update(schema.showcaseItems)
+        .set({ itemId: item.id })
+        .where(or(eq(schema.showcaseItems.id, `showcase-${card.id}`), like(schema.showcaseItems.id, `showcase-%-${card.id}`)));
+    }
   }
 }
 
@@ -117,7 +119,7 @@ async function seedStatusRows(db: Db, profileId: string) {
   for (const [group, rows] of groups) {
     for (const [order, item] of rows.entries()) {
       const row = {
-        id: `status-${group}-${item.id}`,
+        id: `status-${profileId}-${group}-${item.id}`,
         profileId,
         group,
         icon: item.icon,
@@ -161,7 +163,7 @@ async function seedReviews(db: Db, profileId: string) {
 
   await db.insert(schema.reviews).values(
     reviews.map((review, index) => ({
-      id: `review-${review.id}`,
+      id: `review-${profileId}-${review.id}`,
       profileId,
       authorHandle: review.author,
       quote: review.quote,

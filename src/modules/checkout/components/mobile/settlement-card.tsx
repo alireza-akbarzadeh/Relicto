@@ -12,7 +12,7 @@ const TONE = { rose: "text-primary", indigo: "text-secondary", muted: "text-text
 
 /** Steam handshake, rail picker with remaining vault balance, and the fee breakdown. */
 export function SettlementCard({ data }: { data: CheckoutMobile }) {
-  const { rail, setRail, items, subtotal, comboDiscount, fee, total, remainingUsd } = useMobileCheckout(data);
+  const { rail, setRail, items, subtotal, comboDiscount, promoDiscount, promo, setPromo, fee, total, remainingUsd } = useMobileCheckout(data);
 
   return (
     <>
@@ -88,6 +88,22 @@ export function SettlementCard({ data }: { data: CheckoutMobile }) {
               <span className="rounded bg-tertiary/20 px-1 font-label-badge text-[9px] font-bold text-tertiary">3+ ASSETS</span>
             </div>
             <span className="font-data-mono-md text-[13px] font-bold text-tertiary">−{formatMoney(comboDiscount)}</span>
+          </div>
+        )}
+
+        {promo && promoDiscount > 0 && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <span className={ROW}>Tournament Code (TI14-MAJOR-VIP)</span>
+              <button
+                type="button"
+                onClick={() => setPromo(false)}
+                className="ml-1 text-[10px] text-text-muted underline hover:text-text-primary"
+              >
+                Remove
+              </button>
+            </div>
+            <span className="font-data-mono-md text-[13px] font-bold text-status-upcoming">−{formatMoney(promoDiscount)}</span>
           </div>
         )}
 

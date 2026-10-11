@@ -13,7 +13,7 @@ import type { CheckoutMobile } from "../../mobile.types";
 /** Fixed settlement dock: partner ping, total (USD and ETH quote) and the authorize action. */
 export function CheckoutDock({ data }: { data: CheckoutMobile }) {
   const router = useRouter();
-  const { total, eth, rail, remainingUsd } = useMobileCheckout(data);
+  const { total, eth, rail, remainingUsd, promo } = useMobileCheckout(data);
   const { dispatch, pending } = useCheckoutDispatch({
     onPlaced: (codes) => {
       toast.success("Multi-sig escrow authorized", { description: `${codes.length} items dispatched to Sentinel bots.` });
@@ -26,7 +26,7 @@ export function CheckoutDock({ data }: { data: CheckoutMobile }) {
       toast.error("Not enough vault balance", { description: `Top up ${formatMoney(-remainingUsd)} or pick another rail.` });
       return;
     }
-    dispatch({ rail: SETTLEMENT_RAIL[rail.id] ?? rail.id, promo: false });
+    dispatch({ rail: SETTLEMENT_RAIL[rail.id] ?? rail.id, promo });
   };
 
   return (

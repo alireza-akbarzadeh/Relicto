@@ -865,11 +865,8 @@ Still open:
 - ~~`watchlistService.watchers()` has no UI.~~ Fixed: live watcher counts are resolved in `itemService.detail()` / `mobile()` / `getItem()` and displayed in `PricePanel` stats + watchlist button on desktop and `InspectorActionRow` on mobile.
 - ~~Mobile wallet has no interactive deposit, cashout, or transfer flow.~~ Fixed: `WalletMobile` now features interactive modal sheets (`MobileDepositSheet`, `MobileCashoutSheet`, `MobileSendSheet`) with Web3 Crypto, Stripe Card, and Steam Guard 2FA support, plus Stripe return callback handling.
 - ~~Empty profile sections show only their heading.~~ Fixed: Added clean, design-token styled empty states (`EmptyShowcase`, `EmptyListings`, and mobile showcase fallback) with navigation actions for fresh user profiles.
-- **The drawer assumes the promo is applied**, as the checkout panel does. If a
-  buyer removes it at checkout the total rises by $15 from what the drawer showed.
-- **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
-  rules use fixed ids, so seeding a second trader collides with the demo one.
-  The handle collision is fixed; re-keying those rows per trader is not.
+- ~~The drawer assumes the promo is applied.~~ Fixed: `promo` and `setPromo` are lifted into shared `useCart()` state, synchronizing live discount deductions, removal, and re-application seamlessly across the cart drawer, desktop settlement panel, mobile settlement card, and checkout dispatch.
+- ~~`db:seed -- --user <email>` is broken.~~ Fixed: Showcase cards, status rows, endorsements, reviews, and alert rules now scope their primary key IDs by `profileId` / `traderId`, preventing collisions when seeding secondary or user accounts.
 - ~~Mobile checkout has no discount rows.~~ Fixed: `cartTotals` and `SettlementCard` now expose and render Multi-Item Combo Relief when 3+ assets are present, reconciling subtotal and payable total transparently.
 - ~~Radar rows use full team names ("Gaimin Gladiators").~~ Fixed: `tournaments-mobile.presenter.ts` introduces `SHORT_TEAM_NAMES` mapping to ensure clean, non-wrapping radar match cards.
 

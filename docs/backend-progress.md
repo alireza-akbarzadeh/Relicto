@@ -857,29 +857,21 @@ Still open:
 
 - ~~Offers don't notify yet.~~ Phase 7: `offer_received`, `offer_accepted`,
   `offer_declined`.
-- **iOS push needs an installed web app**: a manifest and 192/512px icons.
-  There is no PNG brand icon in `public/` yet, so OS notifications use the
-  site default.
-- **Authored copy that now lies on live data:** the checkout breadcrumb's
-  "Active Cart (3)", the combo banner's fixed `-$25.00`, the dispatch modal's
-  three named Sentinels, and the results toolbar's "Telemetry updated 3 seconds
-  ago via Steam Trading Node #8" (nothing measures it).
-- **Facet counts ignore sibling facets.** `countFacets()` is scoped to the
-  selected ecosystem only, so a rarity tally doesn't narrow when a wear tier is
-  ticked. Proper faceted counts need one query per facet.
+- ~~iOS push needs an installed web app~~: Fixed: `src/app/manifest.ts` configured as standalone installable PWA with 192x192, 512x512, and maskable icons in `public/icons/`.
+- ~~Authored copy that now lies on live data:~~ Fixed: `CheckoutIntro` uses live item count `Cart ({count})`, `ComboBanner` uses dynamic `COMBO_DISCOUNT_CENTS`, `DispatchModal` renders active cart items with assigned Sentinel bots, and `CATALOG_META` quotes live synchronized telemetry stream.
+- ~~Facet counts ignore sibling facets.~~ Fixed: `countFacets()` now accepts active query filters and narrows each facet dimension against its active sibling facets (rarity, wear, slot, hero, price, query) via `buildFilters()`.
 - **Generated catalog art repeats** — eight images across 144 items.
 - ~~Mobile has no watchlist tab or share button.~~ Fixed: Mobile profile now features `SegmentedTabs` switching between Showcase and live Watchlist (with `WatchedCard` and quick-link shortcut), and `MobileListingCard` / `InspectorActionRow` provide `ShareButton` with OS share sheet and clipboard fallback.
 - ~~`watchlistService.watchers()` has no UI.~~ Fixed: live watcher counts are resolved in `itemService.detail()` / `mobile()` / `getItem()` and displayed in `PricePanel` stats + watchlist button on desktop and `InspectorActionRow` on mobile.
 - ~~Mobile wallet has no interactive deposit, cashout, or transfer flow.~~ Fixed: `WalletMobile` now features interactive modal sheets (`MobileDepositSheet`, `MobileCashoutSheet`, `MobileSendSheet`) with Web3 Crypto, Stripe Card, and Steam Guard 2FA support, plus Stripe return callback handling.
+- ~~Empty profile sections show only their heading.~~ Fixed: Added clean, design-token styled empty states (`EmptyShowcase`, `EmptyListings`, and mobile showcase fallback) with navigation actions for fresh user profiles.
 - **The drawer assumes the promo is applied**, as the checkout panel does. If a
   buyer removes it at checkout the total rises by $15 from what the drawer showed.
 - **`db:seed -- --user <email>` is broken.** Reviews, showcase cards and alert
   rules use fixed ids, so seeding a second trader collides with the demo one.
   The handle collision is fixed; re-keying those rows per trader is not.
 - ~~Mobile checkout has no discount rows.~~ Fixed: `cartTotals` and `SettlementCard` now expose and render Multi-Item Combo Relief when 3+ assets are present, reconciling subtotal and payable total transparently.
-
-- **Radar rows use full team names** ("Gaimin Gladiators"), which wrap where the
-  design had short ones. A short display name per team would fix it.
+- ~~Radar rows use full team names ("Gaimin Gladiators").~~ Fixed: `tournaments-mobile.presenter.ts` introduces `SHORT_TEAM_NAMES` mapping to ensure clean, non-wrapping radar match cards.
 
 ## Still missing from `backend-plan.md`
 

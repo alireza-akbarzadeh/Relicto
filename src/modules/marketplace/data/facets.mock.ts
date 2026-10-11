@@ -86,4 +86,4 @@ export const PER_PAGE_OPTIONS = [
 ] as const;
 
 /** Server-side totals shown on the designed screen. */
-export const CATALOG_META = { total: 1_248, pages: 64, telemetry: "Telemetry updated 3 seconds ago via Steam Trading Node #8" };
+export const CATALOG_META = { total: 1_248, pages: 64, telemetry: "Live escrow telemetry synchronized via Steam Trading Cluster" };

@@ -6,7 +6,7 @@ import { heroes, items, listings, watchlist } from "@/lib/db/schema";
 import type { CreateListingInput, ListListingsInput } from "./listings.schema";
 
 /** Only rows a buyer can actually act on, narrowed by the marketplace facets. */
-function buildFilters(input: ListListingsInput): SQL[] {
+export function buildFilters(input: ListListingsInput): SQL[] {
   const filters: SQL[] = [eq(listings.status, "active")];
 
   if (input.query) {

@@ -75,11 +75,19 @@ export function ShowcaseRail({ showcase }: { showcase: ProfileMobile["showcase"]
           {showcase.items.length} OF {showcase.total} DISPLAYED
         </span>
       </div>
-      <div className="no-scrollbar -mx-space-md flex gap-space-sm overflow-x-auto px-space-md pb-1">
-        {showcase.items.map((card) => (
-          <Card key={card.id} card={card} available={available[card.id]} onToggle={() => toggle(card)} />
-        ))}
-      </div>
+      {showcase.items.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-white/6 bg-surface-card p-6 text-center">
+          <Icon name="diamond" className="text-[24px] text-text-muted" />
+          <span className="font-headline-sm text-sm font-bold text-text-primary">No showcase items</span>
+          <p className="font-body-sm text-xs text-text-muted">Feature weapon skins and relics to exhibit them on your mobile showcase.</p>
+        </div>
+      ) : (
+        <div className="no-scrollbar -mx-space-md flex gap-space-sm overflow-x-auto px-space-md pb-1">
+          {showcase.items.map((card) => (
+            <Card key={card.id} card={card} available={available[card.id]} onToggle={() => toggle(card)} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

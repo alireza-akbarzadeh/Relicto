@@ -1,4 +1,6 @@
 import { Icon } from "@/components/ui/icon";
+import { formatMoney } from "@/lib/format";
+import { COMBO_DISCOUNT_CENTS, COMBO_THRESHOLD } from "../lib/pricing";
 
 export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: number; itemCount: number }) {
   if (comboDiscount > 0) {
@@ -19,14 +21,14 @@ export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: numbe
                 </span>
               </div>
               <span className="font-body-sm text-xs text-text-secondary">
-                -$ {comboDiscount.toFixed(2)} USD instant escrow rebate applied to this order.
+                -${formatMoney(comboDiscount)} instant escrow rebate applied to this order.
               </span>
             </div>
           </div>
           <div className="rounded-xl border border-white/6 bg-surface-container-lowest px-3 py-1.5 text-right sm:self-center">
             <span className="block font-data-mono-md text-[10px] text-text-muted">Rebate Applied</span>
             <span className="font-data-mono-md text-sm font-bold text-tertiary">
-              -${comboDiscount.toFixed(2)} USD
+              -${formatMoney(comboDiscount)}
             </span>
           </div>
         </div>
@@ -34,8 +36,9 @@ export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: numbe
     );
   }
 
-  if (itemCount > 0 && itemCount < 3) {
-    const needed = 3 - itemCount;
+  if (itemCount > 0 && itemCount < COMBO_THRESHOLD) {
+    const needed = COMBO_THRESHOLD - itemCount;
+    const rebateAmount = formatMoney(COMBO_DISCOUNT_CENTS / 100);
     return (
       <section className="flex items-center gap-3 rounded-2xl border border-dashed border-white/10 bg-surface-card/60 p-3.5">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-container-high text-primary">
@@ -43,7 +46,7 @@ export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: numbe
         </div>
         <div className="flex flex-col">
           <span className="font-headline-sm text-xs font-bold text-text-primary">
-            Unlock $25.00 Escrow Rebate
+            Unlock {rebateAmount} Escrow Rebate
           </span>
           <span className="font-body-sm text-xs text-text-muted">
             Add {needed} more {needed === 1 ? "item" : "items"} to activate bundle savings on this order.

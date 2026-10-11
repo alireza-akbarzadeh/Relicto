@@ -54,7 +54,7 @@ export function CheckoutView({ data }: { data: CheckoutData }) {
         </div>
       </main>
       <SiteFooter />
-      {codes && <DispatchModal onClose={close} onMonitor={monitor} />}
+      {codes && <DispatchModal items={items} onClose={close} onMonitor={monitor} />}
     </div>
   );
 }

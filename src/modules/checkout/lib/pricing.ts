@@ -4,10 +4,10 @@
  */
 
 /** Bundle relief once the basket holds this many items. */
-const COMBO_THRESHOLD = 3;
-const COMBO_DISCOUNT_CENTS = 2500;
+export const COMBO_THRESHOLD = 3;
+export const COMBO_DISCOUNT_CENTS = 2500;
 /** The tournament code the settlement panel offers (`TI14-MAJOR-VIP`). */
-const PROMO_DISCOUNT_CENTS = 1500;
+export const PROMO_DISCOUNT_CENTS = 1500;
 
 export type Quote = {
   subtotalCents: number;

@@ -41,7 +41,7 @@ export const listingService = {
     const input = listListingsInput.parse(toListingQuery(filters));
     const [{ rows, total }, facets] = await Promise.all([
       repository.findListings(input),
-      countFacets(input.gameId),
+      countFacets(input),
     ]);
 
     const pages = Math.max(1, Math.ceil(total / input.perPage));

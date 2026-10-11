@@ -61,6 +61,23 @@ export function toBracketCard(row: TournamentRow, now: Date): BracketCardData | 
   };
 }
 
+const SHORT_TEAM_NAMES: Record<string, string> = {
+  "Gaimin Gladiators": "Gladiators",
+  "Team Spirit": "Spirit",
+  "Natus Vincere": "NaVi",
+  "FaZe Clan": "FaZe",
+  "Team Liquid": "Liquid",
+  "BetBoom Team": "BetBoom",
+  "Tundra Esports": "Tundra",
+  "Team Falcons": "Falcons",
+  "Virtus.pro": "VP",
+};
+
+function shortTeamName(name?: string | null): string {
+  if (!name) return "TBD";
+  return SHORT_TEAM_NAMES[name] ?? name;
+}
+
 /** A live match on the radar: the same teams, score and state the desktop feed shows. */
 export function toRadarMatch({ match, gameId, teamA, teamB }: MatchRow): RadarMatch {
   const p = match.presentation;
@@ -74,8 +91,8 @@ export function toRadarMatch({ match, gameId, teamA, teamB }: MatchRow): RadarMa
     labelIcon: cs2 ? "military_tech" : "sports_kabaddi",
     labelTone: (p?.labelTone ?? "muted") as Tone,
     clock: { label: p?.state.label ?? "LIVE", tone: (p?.state.tone ?? "live") as Tone },
-    home: { tag: teamA?.tag ?? "TBD", name: teamA?.name ?? "TBD", meta: p?.meta[0] ?? "", metaTone: tones[0] },
-    away: { tag: teamB?.tag ?? "TBD", name: teamB?.name ?? "TBD", meta: p?.meta[1] ?? "", metaTone: tones[1] },
+    home: { tag: teamA?.tag ?? "TBD", name: shortTeamName(teamA?.name), meta: p?.meta[0] ?? "", metaTone: tones[0] },
+    away: { tag: teamB?.tag ?? "TBD", name: shortTeamName(teamB?.name), meta: p?.meta[1] ?? "", metaTone: tones[1] },
     score: [score(match.scoreA), score(match.scoreB)],
     scoreTones: tones,
     separator: cs2 ? ":" : "-",

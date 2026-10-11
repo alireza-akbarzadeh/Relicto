@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, isNotNull } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { heroes, items, listings } from "@/lib/db/schema";
 
@@ -17,7 +17,7 @@ export async function countFacets(gameId?: string) {
   const active = eq(listings.status, "active");
   const scope = gameId ? and(active, eq(items.gameId, gameId)) : active;
 
-  const [byGame, byRarity, bySlot, byHero] = await Promise.all([
+  const [byGame, byRarity, bySlot, byHero, byWear] = await Promise.all([
     db
       .select({ key: items.gameId, n: count() })
       .from(listings)
@@ -43,6 +43,11 @@ export async function countFacets(gameId?: string) {
       .innerJoin(heroes, eq(items.heroId, heroes.id))
       .where(scope)
       .groupBy(heroes.name),
+    db
+      .select({ key: listings.wear, n: count() })
+      .from(listings)
+      .where(and(active, isNotNull(listings.wear)))
+      .groupBy(listings.wear),
   ]);
 
   const games = toMap(byGame);
@@ -52,6 +57,8 @@ export async function countFacets(gameId?: string) {
     rarities: toMap(byRarity),
     slots: toMap(bySlot),
     heroes: toMap(byHero),
+    wears: toMap(byWear),
     total: Object.values(games).reduce((sum, n) => sum + n, 0),
   };
 }
+

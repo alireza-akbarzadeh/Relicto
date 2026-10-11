@@ -23,13 +23,30 @@ export const HEROES = [
   "Spectre", "Sniper", "Windranger", "Tinker", "Rubick", "Storm Spirit", "Earthshaker", "Axe",
 ];
 
-export const RARITIES: { value: RarityKey; label: string; count: number; check: string }[] = [
+export const DOTA_RARITIES: { value: RarityKey; label: string; count: number; check: string }[] = [
   { value: "arcana", label: "Arcana", count: 218, check: "bg-primary-container text-on-primary-container" },
   { value: "immortal", label: "Immortal", count: 1_842, check: "bg-tertiary text-on-tertiary" },
   { value: "ancient", label: "Ancient", count: 94, check: "bg-secondary text-on-secondary" },
   { value: "mythical", label: "Mythical", count: 6_430, check: "bg-secondary-container text-on-secondary-container" },
   { value: "rare", label: "Rare & Exalted", count: 14_102, check: "bg-status-upcoming text-canvas-base" },
 ];
+
+export const CS2_RARITIES: { value: RarityKey; label: string; count: number; check: string }[] = [
+  { value: "melee", label: "★ Knives & Blades", count: 24, check: "bg-tertiary text-on-tertiary" },
+  { value: "gloves", label: "★ Specialist Gloves", count: 16, check: "bg-secondary text-on-secondary" },
+  { value: "covert", label: "Covert Grade", count: 42, check: "bg-primary-container text-on-primary-container" },
+  { value: "rare", label: "Classified / Restricted", count: 68, check: "bg-status-upcoming text-canvas-base" },
+];
+
+export const ALL_RARITIES: { value: RarityKey; label: string; count: number; check: string }[] = [
+  ...DOTA_RARITIES,
+  { value: "covert", label: "Covert Grade", count: 42, check: "bg-primary-container text-on-primary-container" },
+  { value: "melee", label: "★ Knives & Blades", count: 24, check: "bg-tertiary text-on-tertiary" },
+  { value: "gloves", label: "★ Gloves", count: 16, check: "bg-secondary text-on-secondary" },
+];
+
+export const RARITIES = DOTA_RARITIES;
+
 
 export const SLOTS = [
   { value: "Weapon", count: 482 },

@@ -18,21 +18,22 @@ const FLOAT_BOUNDS: Record<Filters["float"], { maxFloat?: number; minFloat?: num
  * so the grid, the totals and the facet tallies can't drift apart.
  */
 export function toListingQuery(filters: Filters): Partial<ListListingsInput> {
-  const dota = filters.ecosystem !== "cs2";
-  const cs2 = filters.ecosystem === "cs2" || filters.ecosystem === "all";
+  const isCs2 = filters.ecosystem === "cs2";
+  const isDota = filters.ecosystem === "dota2";
 
   return {
     query: filters.query.trim() || undefined,
     gameId: filters.ecosystem === "all" ? undefined : filters.ecosystem,
     /* Facets only apply to their own economy — the sidebar hides the others. */
-    heroSlugs: dota && filters.heroes.length ? filters.heroes.map(slugify) : undefined,
+    heroSlugs: isDota && filters.heroes.length ? filters.heroes.map(slugify) : undefined,
     rarities: filters.rarities.length ? filters.rarities : undefined,
-    slots: dota && filters.slots.length ? filters.slots : undefined,
+    slots: (isDota || filters.ecosystem === "tf2") && filters.slots.length ? filters.slots : undefined,
     minCents: filters.price.min > 0 ? Math.round(filters.price.min * 100) : undefined,
     maxCents: Math.round(filters.price.max * 100),
-    wear: cs2 && filters.wear.length ? filters.wear : undefined,
-    ...(cs2 ? FLOAT_BOUNDS[filters.float] : {}),
-    stattrak: cs2 && filters.stattrak ? true : undefined,
+    wear: isCs2 && filters.wear.length ? filters.wear : undefined,
+    ...(isCs2 ? FLOAT_BOUNDS[filters.float] : {}),
+    stattrak: isCs2 && filters.stattrak ? true : undefined,
+
     safeguards: filters.safeguards.length ? filters.safeguards : undefined,
     sort: filters.sort,
     page: filters.page,

@@ -9,7 +9,8 @@ export type Accent = "crimson" | "pink" | "amber" | "gold" | "cyan" | "indigo" |
 export type BlobTone = "primary" | "secondary" | "amber" | "indigo";
 export type ShadowTone = "crimson-30" | "crimson-20" | "amber-20" | "amber-25" | "cyan-20" | "indigo-30" | "indigo-25";
 
-export type RarityKey = "arcana" | "immortal" | "ancient" | "mythical" | "rare";
+export type RarityKey = "arcana" | "immortal" | "ancient" | "mythical" | "rare" | "covert" | "melee" | "gloves";
+
 export type SafeguardKey = "instantEscrow" | "verifiedSellers" | "gems" | "allStyles";
 export type PricePreset = "under25" | "25to100" | "100to500" | "over500";
 export type SortKey = "price-asc" | "price-desc" | "change" | "volume" | "recent";
@@ -78,8 +79,10 @@ export type FacetCounts = {
   rarities: Record<string, number>;
   slots: Record<string, number>;
   heroes: Record<string, number>;
+  wears?: Record<string, number>;
   total: number;
 };
+
 
 /** One page of the grid plus every tally rendered around it. */
 export type MarketplaceResults = {

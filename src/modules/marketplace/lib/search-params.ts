@@ -12,7 +12,8 @@ import type { EcosystemFilter, Filters } from "../types";
 
 /* Allowed values. Anything else in the URL falls back to the default. */
 export const ECOSYSTEM_VALUES = ["all", "dota2", "cs2", "tf2"] as const;
-export const RARITY_VALUES = ["arcana", "immortal", "ancient", "mythical", "rare"] as const;
+export const RARITY_VALUES = ["arcana", "immortal", "ancient", "mythical", "rare", "covert", "melee", "gloves"] as const;
+
 export const SAFEGUARD_VALUES = ["instantEscrow", "verifiedSellers", "gems", "allStyles"] as const;
 export const SORT_VALUES = ["price-asc", "price-desc", "change", "volume", "recent"] as const;
 export const VIEW_VALUES = ["grid", "list"] as const;

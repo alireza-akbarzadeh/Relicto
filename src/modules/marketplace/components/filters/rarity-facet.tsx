@@ -2,19 +2,23 @@
 
 import { cn } from "@/lib/cn";
 import { formatCount } from "@/lib/format";
-import { RARITIES } from "../../data/facets.mock";
+import { ALL_RARITIES, CS2_RARITIES, DOTA_RARITIES } from "../../data/facets.mock";
 import { toggle } from "../../lib/filters";
 import { useMarketplace } from "../../state/marketplace-provider";
 import { CheckMark, CheckRow } from "./check-row";
 
 export function RarityFacet() {
   const { filters, patch, results } = useMarketplace();
+  const list = filters.ecosystem === "cs2" ? CS2_RARITIES : filters.ecosystem === "dota2" ? DOTA_RARITIES : ALL_RARITIES;
 
   return (
     <div className="mb-space-md">
-      <span className="mb-2 block font-label-badge text-label-badge text-text-muted uppercase">Item Rarity / Tier</span>
+      <span className="mb-2 block font-label-badge text-label-badge text-text-muted uppercase">
+        {filters.ecosystem === "cs2" ? "CS2 Grade & Quality" : "Item Rarity / Tier"}
+      </span>
       <div className="space-y-1.5">
-        {RARITIES.map((rarity) => {
+        {list.map((rarity) => {
+
           const checked = filters.rarities.includes(rarity.value);
           return (
             <CheckRow

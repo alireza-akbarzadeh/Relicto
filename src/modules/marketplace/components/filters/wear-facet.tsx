@@ -23,7 +23,7 @@ const BANDS: { value: FloatBand; label: string }[] = [
 
 /** CS2 economy facets: wear tier, float band and StatTrak — the hero facet's counterpart. */
 export function WearFacet() {
-  const { filters, patch } = useMarketplace();
+  const { filters, patch, results } = useMarketplace();
 
   return (
     <div className="mb-space-md">
@@ -34,6 +34,7 @@ export function WearFacet() {
       <div className="mb-space-sm space-y-1.5">
         {WEARS.map((wear) => {
           const checked = filters.wear.includes(wear.value);
+          const count = results.facets.wears?.[wear.value];
           return (
             <CheckRow
               key={wear.value}
@@ -52,11 +53,17 @@ export function WearFacet() {
                   {wear.label}
                 </span>
               </div>
-              <span className="font-data-mono-md text-data-mono-md text-text-muted">{wear.range}</span>
+              <div className="flex items-center gap-1.5 font-data-mono-md text-data-mono-md text-text-muted">
+                {count !== undefined && count > 0 && (
+                  <span className="font-bold text-tertiary">({count})</span>
+                )}
+                <span>{wear.range}</span>
+              </div>
             </CheckRow>
           );
         })}
       </div>
+
 
       <span className="mb-1.5 block font-label-badge text-label-badge text-text-muted uppercase">Float Band</span>
       <div className="mb-space-sm grid grid-cols-2 gap-1">

@@ -874,6 +874,9 @@ Still open:
 - ~~Profile editor was a placeholder toast and inventory sync was a mock timeout.~~ Fixed: Implemented `updateProfileDetails` server action and `ProfileEditModal` dialog, allowing full persona customization (handle, alias, real name, role, avatar preset/URL, and Steam trade URL) on desktop and mobile. Connected "Sync Inventory" to `triggerManualSteamSync()`.
 - ~~Price alert bell button on item detail view was static.~~ Fixed: Implemented `PriceAlertModal` on `/items/[slug]` allowing traders to deploy continuous snipe rules directly from the item price panel with discount preset chips (`-5%` to `-25%`), float conditions, and auto-buy execution toggles.
 - ~~Mobile sign-out did not revoke Better Auth session.~~ Fixed: Connected mobile `AccountControls` to `authClient.signOut()` with transition loading states.
+- ~~Sell Studio liquidity modes and mobile liquidation were static.~~ Fixed: `ListingFocus` now dynamically drives all 3 liquidity modes (`Market P2P`, `Instant Bot`, `24H Auction`), with Instant Bot executing direct liquidation to the trader's USD Vault via `depositFunds` and 24H Auction tagging auction notes. Mobile `BulkCashout` connects skin liquidation to `depositFunds`.
+- ~~Sell Studio empty and unlinked Steam state lacked actionable onboarding.~~ Fixed: `InventoryEmpty` and `SteamSyncStatus` provide direct `<Link>` navigation to Steam OAuth onboarding (`/api/auth/steam/sign-in?callbackURL=/sell`).
+- ~~Algorithmic Trigger Logic Studio had a static deploy button.~~ Fixed: Connected "Arm & Deploy Rule Engine" in `RuleBuilder` on `/alerts` to `createAlertRule` with optimistic loading state and live toast notifications.
 
 ## Still missing from `backend-plan.md`
 

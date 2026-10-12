@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -24,9 +25,15 @@ export function SteamSyncStatus({ steam }: { steam: SteamSync }) {
 
   if (!steam.linked) {
     return (
-      <span className="font-data-mono-md text-xs text-text-secondary">
-        Steam Sync: <span className="text-tertiary">{steam.synced}</span>
-      </span>
+      <Link
+        href="/api/auth/steam/sign-in?callbackURL=/sell"
+        className="flex items-center gap-1.5 font-data-mono-md text-xs text-text-secondary transition-colors hover:text-text-primary"
+      >
+        <span>Steam Sync:</span>
+        <span className="rounded border border-tertiary/40 bg-tertiary/15 px-1.5 py-0.5 font-headline-sm text-[10px] font-bold tracking-wider text-tertiary uppercase hover:brightness-110">
+          Link Steam
+        </span>
+      </Link>
     );
   }
 

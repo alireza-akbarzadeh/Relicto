@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
+import { depositFunds } from "@/modules/wallet/actions/treasury";
 import { useListingWrites } from "../hooks/use-listing-writes";
 import type { InventoryItem } from "../types";
 
@@ -28,15 +30,51 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
   const [price, setPrice] = useState(item.price.toFixed(2));
   const [note, setNote] = useState(item.rank ? `Float ${item.float} · ${item.rank}` : `Float ${item.float}`);
   const { pending, list } = useListingWrites();
+  const [liquidating, startLiquidating] = useTransition();
 
   const numPrice = Number(price || 0);
   const fee = numPrice * 0.02;
-  const proceeds = numPrice - fee;
+  const proceeds = Math.max(0, numPrice - fee);
   const wearBadge = getWearBadge(item);
   const token = `#L00T-${item.id.replace(/[^a-zA-Z0-9]/g, "").slice(-5).toUpperCase()}`;
   const counterMin = (item.floor * 0.8).toFixed(0);
   const deltaVsFloor = item.floor > 0 ? (((numPrice - item.floor) / item.floor) * 100).toFixed(1) : "0.0";
   const deltaSign = Number(deltaVsFloor) >= 0 ? "+" : "";
+
+  const handleAction = () => {
+    if (mode === "Instant Bot") {
+      if (proceeds <= 0) {
+        toast.error("Valuation must be greater than $0");
+        return;
+      }
+      startLiquidating(async () => {
+        try {
+          const result = await depositFunds({
+            rail: "crypto",
+            amountUsd: proceeds,
+            txHash: `BOT-LIQUIDATE-${item.id}`,
+          });
+          if (result.status === "credited") {
+            toast.success(`Liquidated ${item.name} for $${proceeds.toFixed(2)}`, {
+              description: "Instant bot liquidity credited to your Relicto USD Vault.",
+            });
+          } else {
+            toast.error("Liquidation paused", { description: "Vault is locked or rail is unavailable." });
+          }
+        } catch {
+          toast.error("Liquidation dispatch failed", { description: "Check your connection and try again." });
+        }
+      });
+      return;
+    }
+
+    if (mode === "24H Auction") {
+      list(item, numPrice, `[24H Auction] ${note}`);
+      return;
+    }
+
+    list(item, numPrice, note);
+  };
 
   return (
     <aside className="flex flex-col gap-space-md rounded-xl border border-white/[0.08] bg-surface-card p-space-md shadow-xl lg:p-space-lg">
@@ -91,14 +129,27 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
       <div className="flex flex-col gap-2 rounded-lg border border-white/[0.08] bg-surface-container-lowest p-3">
         <div className="flex items-center justify-between border-b border-white/[0.06] pb-1">
           <span className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">Escrow Settlement Ledger</span>
-          <span className="font-data-mono-md text-[10px] font-semibold text-primary">Tier 1 Pro Liquidity</span>
+          <span className="font-data-mono-md text-[10px] font-semibold text-primary">
+            {mode === "Instant Bot" ? "Instant Automated Payout" : mode === "24H Auction" ? "Time-Decay Escrow" : "Tier 1 Pro Liquidity"}
+          </span>
         </div>
         <div className="flex flex-col gap-1 font-data-mono-md text-xs">
-          <div className="flex justify-between text-text-secondary"><span>Gross Listed Value:</span><span className="font-semibold text-text-primary">${numPrice.toFixed(2)}</span></div>
-          <div className="flex justify-between text-text-secondary"><span>Relicto Platform Fee (2.0%):</span><span className="font-semibold text-primary">-${fee.toFixed(2)}</span></div>
+          <div className="flex justify-between text-text-secondary">
+            <span>{mode === "Instant Bot" ? "Instant Asset Valuation:" : "Gross Listed Value:"}</span>
+            <span className="font-semibold text-text-primary">${numPrice.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between text-text-secondary">
+            <span>{mode === "Instant Bot" ? "Liquidity Bot Spread (2.0%):" : "Relicto Platform Fee (2.0%):"}</span>
+            <span className="font-semibold text-primary">-${fee.toFixed(2)}</span>
+          </div>
           <div className="flex justify-between text-text-secondary"><span>Steam Bot Relay:</span><span className="font-semibold text-status-upcoming">$0.00 (Free)</span></div>
           <div className="my-1 h-px bg-white/[0.06]" />
-          <div className="flex items-center justify-between text-sm"><span className="font-semibold text-text-primary">Net Trader Proceeds:</span><span className="font-data-mono-lg text-base font-bold text-tertiary">${proceeds.toFixed(2)} USD</span></div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="font-semibold text-text-primary">
+              {mode === "Instant Bot" ? "Immediate Vault Credit:" : "Net Trader Proceeds:"}
+            </span>
+            <span className="font-data-mono-lg text-base font-bold text-tertiary">${proceeds.toFixed(2)} USD</span>
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
@@ -117,11 +168,38 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
         <Input id="buyer-note" value={note} onChange={(event) => setNote(event.target.value)} className="h-auto rounded bg-surface-container-lowest px-3 py-1.5 font-data-mono-md text-xs text-text-secondary" />
       </label>
       <div className="flex flex-col gap-2 pt-1">
-        <Button variant={null} size={null} disabled={pending} onClick={() => list(item, numPrice, note)} className="h-auto w-full gap-2 rounded bg-primary py-2.5 font-headline-md text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_16px_rgba(244,63,94,0.35)] hover:bg-primary/90">
-          <Icon name="lock" className="text-[18px]" />List Item on Relicto (${numPrice.toFixed(2)})
+        <Button
+          variant={null}
+          size={null}
+          disabled={pending || liquidating}
+          onClick={handleAction}
+          className={cn(
+            "h-auto w-full gap-2 rounded py-2.5 font-headline-md text-sm font-bold tracking-wider uppercase transition-all",
+            mode === "Instant Bot"
+              ? "bg-tertiary text-on-tertiary-container shadow-[0_0_16px_rgba(245,158,11,0.35)] hover:bg-tertiary-fixed"
+              : "bg-primary text-white shadow-[0_0_16px_rgba(244,63,94,0.35)] hover:bg-primary/90",
+          )}
+        >
+          {mode === "Instant Bot" ? (
+            <>
+              <Icon name="bolt" className="text-[18px]" />
+              {liquidating ? "Liquidating to Vault..." : `Instant Liquidate to Vault ($${proceeds.toFixed(2)})`}
+            </>
+          ) : mode === "24H Auction" ? (
+            <>
+              <Icon name="timer" className="text-[18px]" />
+              {pending ? "Launching Auction..." : `Launch 24H Auction ($${numPrice.toFixed(2)})`}
+            </>
+          ) : (
+            <>
+              <Icon name="lock" className="text-[18px]" />
+              {pending ? "Listing on Relicto..." : `List Item on Relicto ($${numPrice.toFixed(2)})`}
+            </>
+          )}
         </Button>
         <div className="flex items-center justify-center gap-1 text-center font-data-mono-md text-[11px] text-text-muted">
-          <Icon name="verified_user" className="text-[13px] text-status-upcoming" />Encrypted Steam P2P Escrow Bot Verification System
+          <Icon name="verified_user" className="text-[13px] text-status-upcoming" />
+          {mode === "Instant Bot" ? "Instant Automated Steam Bot Settlement" : "Encrypted Steam P2P Escrow Bot Verification System"}
         </div>
       </div>
     </aside>

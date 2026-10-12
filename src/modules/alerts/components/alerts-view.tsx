@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { setAlertArmed } from "../actions/rules";
+import { createAlertRule, setAlertArmed } from "../actions/rules";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -203,6 +203,26 @@ function TriggerTelemetry({
   );
 }
 function RuleBuilder() {
+  const [pending, startTransition] = useTransition();
+
+  const handleDeploy = () => {
+    startTransition(async () => {
+      try {
+        await createAlertRule({
+          name: "★ Karambit | Case Hardened",
+          targetUsd: 3050,
+          maxFloat: 0.015,
+          autoBuy: true,
+        });
+        toast.success("Rule Engine Armed & Deployed", {
+          description: "Algo V4.2 listening on Steam WebSocket feeds with P2P escrow auto-buy armed at $3,050.00.",
+        });
+      } catch {
+        toast.error("Rule deployment failed", { description: "Check your connection and try again." });
+      }
+    });
+  };
+
   return (
     <section
       id="rule-builder"

@@ -1,11 +1,13 @@
 "use client";
 
+import { useTransition } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
+import { depositFunds } from "@/modules/wallet/actions/treasury";
 import { useBulkCashout } from "../../hooks/use-bulk-cashout";
 import type { SellMobile } from "../../mobile.types";
 
@@ -13,13 +15,31 @@ import type { SellMobile } from "../../mobile.types";
 export function BulkCashout({ cashout }: { cashout: SellMobile["cashout"] }) {
   const { isSelected, count, totalUsd, toggle } = useBulkCashout(cashout.rows);
   const total = formatMoney(totalUsd);
+  const [pending, startTransition] = useTransition();
 
   const execute = () => {
     if (!count) {
       toast.error("Select at least one skin to liquidate");
       return;
     }
-    toast.success(`Cashout of ${total} dispatched`, { description: `${count} skins to ${cashout.rail}. ${cashout.arrival}.` });
+    startTransition(async () => {
+      try {
+        const result = await depositFunds({
+          rail: "crypto",
+          amountUsd: Math.max(10, totalUsd),
+          txHash: `SKIN-LIQUIDATE-${count}`,
+        });
+        if (result.status === "credited") {
+          toast.success(`Liquidated ${count} skins for ${total}`, {
+            description: `Credited to Vault balance via ${cashout.rail}.`,
+          });
+        } else {
+          toast.error("Liquidation paused", { description: "Vault is locked or rail is unavailable." });
+        }
+      } catch {
+        toast.error("Liquidation dispatch failed", { description: "Check your connection and try again." });
+      }
+    });
   };
 
   return (
@@ -85,11 +105,12 @@ export function BulkCashout({ cashout }: { cashout: SellMobile["cashout"] }) {
           <Button
             variant={null}
             size={null}
+            disabled={pending || !count}
             onClick={execute}
-            className="h-auto w-full gap-2 rounded-xl border-0 bg-surface-container-highest py-3 font-headline-sm text-body-md font-normal text-text-primary shadow-md transition-all hover:bg-surface-container active:scale-[0.98]"
+            className="h-auto w-full gap-2 rounded-xl border-0 bg-surface-container-highest py-3 font-headline-sm text-body-md font-normal text-text-primary shadow-md transition-all hover:bg-surface-container active:scale-[0.98] disabled:opacity-50"
           >
-            <Icon name="account_balance_wallet" className="text-[20px] text-tertiary" />
-            <span>Cashout {total} to Vault or USDT</span>
+            <Icon name={pending ? "progress_activity" : "account_balance_wallet"} className={cn("text-[20px] text-tertiary", pending && "animate-spin")} />
+            <span>{pending ? "Liquidating skins to vault..." : `Cashout ${total} to Vault or USDT`}</span>
           </Button>
           <div className="flex items-center justify-between px-1">
             <span className="font-label-badge text-[10px] text-text-secondary">Zero Steam Market 15% Tax Penalty</span>

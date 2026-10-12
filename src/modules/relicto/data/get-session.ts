@@ -5,7 +5,7 @@ import { cache } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
-import { findProfile } from "@/server/modules/profile/profile.repository";
+import { findOrOpenProfile } from "@/server/modules/profile/profile.repository";
 import { walletService } from "@/server/modules/wallet/wallet.service";
 import type { AppNotification, SessionUser } from "../session-types";
 
@@ -26,7 +26,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
   const [notifications, walletCents, profile] = await Promise.all([
     notificationService.feed(result.user.id),
     walletService.liquidCents(result.user.id),
-    findProfile(result.user.id),
+    findOrOpenProfile(result.user.id),
   ]);
 
   const user: SessionUser = {

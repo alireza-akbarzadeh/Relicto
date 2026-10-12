@@ -812,10 +812,7 @@ empty collections, mobile). The backfill on dev opened 2 profiles, and a second
 run changed nothing. In Chromium, a fresh account's `/profile` returned 200 at
 1440 and 390 with its own handle, no sample data and no console errors.
 
-**Still open.** Empty sections show only their heading, since there is no
-empty-state design. The session header prints `user.name` ("Fresh Trader"),
-not the profile handle, and `SessionUser.level/role` are still fixed defaults:
-`getSession` doesn't read the profile yet.
+**Resolved:** The session header now resolves the trader's profile handle, level, role, and avatar dynamically via `findOrOpenProfile` in `getSession()`. If a user profile was missing, it is bootstrapped seamlessly on session load.
 
 ## Known data artifacts
 

@@ -30,8 +30,10 @@ const pending = new Map();
 const events = [];
 ws.addEventListener("message", (e) => {
   const msg = JSON.parse(e.data);
-  if (msg.id && pending.has(msg.id)) pending.get(msg.id)(msg), pending.delete(msg.id);
-  else if (msg.method) events.push(msg.method);
+  if (msg.id && pending.has(msg.id)) {
+    pending.get(msg.id)(msg);
+    pending.delete(msg.id);
+  } else if (msg.method) events.push(msg.method);
 });
 const send = (method, params = {}) =>
   new Promise((resolve) => {

@@ -362,8 +362,15 @@ function RuleBuilder() {
               Protected by Steam Protobuf Guard
             </span>
           </div>
-          <Button className="h-auto rounded bg-primary-container px-5 py-2 font-label-caps text-label-caps text-on-primary-container uppercase">
-            Arm & Deploy Rule Engine
+          <Button
+            variant={null}
+            size={null}
+            disabled={pending}
+            onClick={handleDeploy}
+            className="flex h-auto items-center gap-1.5 rounded bg-primary-container px-5 py-2 font-label-caps text-label-caps font-bold text-on-primary-container uppercase shadow-[0_0_16px_rgba(244,63,94,0.35)] transition-all hover:bg-primary disabled:opacity-50"
+          >
+            <Icon name={pending ? "sync" : "bolt"} className={cn("text-[16px]", pending && "animate-spin")} />
+            <span>{pending ? "Deploying Engine..." : "Arm & Deploy Rule Engine"}</span>
           </Button>
         </div>
       </div>

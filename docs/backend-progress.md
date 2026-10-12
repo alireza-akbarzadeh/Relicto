@@ -871,6 +871,9 @@ Still open:
 - ~~`/reset-password` was a static mockup.~~ Fixed: Implemented full password recovery and reset lifecycle. Server dispatches reset tokens; client card supports email recovery (`requestPasswordReset`), token resending, and interactive password reset (`NewPasswordCard`) with dynamic entropy meter, strength criteria, and Better Auth client integration.
 - ~~`/verify` (2FA) was a static mockup.~~ Fixed: Integrated Better Auth `twoFactor` server plugin and `twoFactorClient` on the client. Vault verification card and mobile verify screen support both TOTP authenticator codes and recovery backup codes, dynamic input syncing, and fallback challenge guidance.
 - ~~Sign-in only accepted email addresses.~~ Fixed: Added `resolveAccountEmail` server action allowing traders to sign in with their trader handle (`@kuro_trades`), gamertag, or email address across desktop and mobile sign-in forms.
+- ~~Profile editor was a placeholder toast and inventory sync was a mock timeout.~~ Fixed: Implemented `updateProfileDetails` server action and `ProfileEditModal` dialog, allowing full persona customization (handle, alias, real name, role, avatar preset/URL, and Steam trade URL) on desktop and mobile. Connected "Sync Inventory" to `triggerManualSteamSync()`.
+- ~~Price alert bell button on item detail view was static.~~ Fixed: Implemented `PriceAlertModal` on `/items/[slug]` allowing traders to deploy continuous snipe rules directly from the item price panel with discount preset chips (`-5%` to `-25%`), float conditions, and auto-buy execution toggles.
+- ~~Mobile sign-out did not revoke Better Auth session.~~ Fixed: Connected mobile `AccountControls` to `authClient.signOut()` with transition loading states.
 
 ## Still missing from `backend-plan.md`
 

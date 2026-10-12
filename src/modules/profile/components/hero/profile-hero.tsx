@@ -63,7 +63,7 @@ export function ProfileHero({ identity }: { identity: TraderIdentity }) {
             <Avatar identity={identity} />
             <IdentityBlock identity={identity} />
           </div>
-          <HeroActions />
+          <HeroActions identity={identity} />
         </div>
         <TradeRail tradeUrl={identity.tradeUrl} handshake={identity.handshake} />
       </div>

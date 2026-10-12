@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { useTheme } from "@/hooks/use-theme";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/cn";
 
 const ROW = "flex items-center justify-between rounded-lg p-space-sm text-text-primary transition-colors hover:bg-surface-container-high";
@@ -15,10 +17,19 @@ export function AccountControls({ savedAccounts }: { savedAccounts: number }) {
   const router = useRouter();
   const { theme, toggle } = useTheme();
   const oled = theme === "dark";
+  const [signingOut, setSigningOut] = useState(false);
 
-  const signOut = () => {
-    toast.success("Steam token revoked", { description: "This device was signed out of Relicto." });
-    router.push("/sign-in");
+  const signOut = async () => {
+    setSigningOut(true);
+    try {
+      await authClient.signOut();
+      toast.success("Signed out successfully", { description: "This device has been disconnected." });
+      router.push("/sign-in");
+    } catch {
+      router.push("/sign-in");
+    } finally {
+      setSigningOut(false);
+    }
   };
 
   return (
@@ -71,12 +82,13 @@ export function AccountControls({ savedAccounts }: { savedAccounts: number }) {
       <Button
         variant={null}
         size={null}
+        disabled={signingOut}
         onClick={signOut}
-        className="mt-1 h-auto w-full justify-between rounded-lg border-0 p-space-sm text-body-md font-normal text-error transition-colors hover:bg-error-container/20"
+        className="mt-1 h-auto w-full justify-between rounded-lg border-0 p-space-sm text-body-md font-normal text-error transition-colors hover:bg-error-container/20 disabled:opacity-50"
       >
         <span className="flex items-center gap-2.5">
-          <Icon name="logout" className="text-[19px] text-error" />
-          <span className="font-headline-sm text-[14px] font-bold">Disconnect &amp; Revoke Token</span>
+          <Icon name={signingOut ? "progress_activity" : "logout"} className={cn("text-[19px] text-error", signingOut && "animate-spin")} />
+          <span className="font-headline-sm text-[14px] font-bold">{signingOut ? "Revoking Token..." : "Disconnect & Revoke Token"}</span>
         </span>
         <span className="font-label-badge text-label-badge tracking-wider text-error uppercase opacity-70">TERMINATE</span>
       </Button>

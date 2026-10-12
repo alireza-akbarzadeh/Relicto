@@ -1,23 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { triggerManualSteamSync } from "../../actions/steam";
+import type { TraderIdentity } from "../../types";
+import { ProfileEditModal } from "./profile-edit-modal";
 
 const BASE = "h-auto gap-space-xs rounded-lg border-0 px-space-md py-space-sm font-headline-sm text-[13px] font-semibold tracking-wider uppercase";
 
 /** Sync, share and edit actions on the trader banner. */
-export function HeroActions() {
-  const [syncing, setSyncing] = useState(false);
+export function HeroActions({ identity }: { identity?: TraderIdentity }) {
+  const [syncing, startSync] = useTransition();
+  const [editOpen, setEditOpen] = useState(false);
 
-  const sync = () => {
-    setSyncing(true);
-    toast.loading("Initiating real-time Steam Inventory sync...", { id: "sync" });
-    window.setTimeout(() => {
-      setSyncing(false);
-      toast.success("Inventory synced", { id: "sync", description: "142 items re-appraised from the Steam Web API." });
-    }, 1600);
+  const handleSync = () => {
+    startSync(async () => {
+      toast.loading("Initiating real-time Steam Inventory sync...", { id: "steam-sync" });
+      try {
+        const result = await triggerManualSteamSync();
+        if (result.success) {
+          toast.success("Inventory synced", {
+            id: "steam-sync",
+            description: result.message,
+          });
+        } else {
+          toast.error("Sync incomplete", {
+            id: "steam-sync",
+            description: result.error,
+          });
+        }
+      } catch {
+        toast.error("Sync failed", {
+          id: "steam-sync",
+          description: "Could not establish connection with Steam community servers.",
+        });
+      }
+    });
   };
 
   const share = async () => {
@@ -30,29 +50,44 @@ export function HeroActions() {
   };
 
   return (
-    <div className="flex w-full flex-wrap items-center gap-space-sm sm:flex-nowrap lg:w-auto">
-      <Button
-        onClick={sync}
-        disabled={syncing}
-        className={`${BASE} flex-1 bg-surface-container-high text-text-primary transition-all duration-200 hover:bg-surface-bright sm:flex-none`}
-      >
-        <Icon name="bolt" className="text-[18px] text-primary" />
-        <span>Sync Inventory</span>
-      </Button>
-      <Button
-        onClick={share}
-        className={`${BASE} flex-1 bg-surface-container text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-text-primary sm:flex-none`}
-      >
-        <Icon name="share" className="text-[18px]" />
-        <span>Share</span>
-      </Button>
-      <Button
-        onClick={() => toast("Profile editor is on the roadmap", { description: "Showcase ordering and bio editing land with the accounts API." })}
-        className={`${BASE} w-full shrink whitespace-normal bg-primary-container px-space-lg font-bold text-on-primary-container shadow-[0_0_20px_rgba(244,63,94,0.35)] transition-all hover:bg-primary-container/90 sm:w-auto`}
-      >
-        <Icon name="tune" className="text-[18px]" />
-        <span>Edit Profile &amp; Showcase</span>
-      </Button>
-    </div>
+    <>
+      <div className="flex w-full flex-wrap items-center gap-space-sm sm:flex-nowrap lg:w-auto">
+        <Button
+          onClick={handleSync}
+          disabled={syncing}
+          className={`${BASE} flex-1 bg-surface-container-high text-text-primary transition-all duration-200 hover:bg-surface-bright sm:flex-none`}
+        >
+          <Icon name={syncing ? "sync" : "bolt"} className={`text-[18px] text-primary ${syncing ? "animate-spin" : ""}`} />
+          <span>{syncing ? "Syncing..." : "Sync Inventory"}</span>
+        </Button>
+        <Button
+          onClick={share}
+          className={`${BASE} flex-1 bg-surface-container text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-text-primary sm:flex-none`}
+        >
+          <Icon name="share" className="text-[18px]" />
+          <span>Share</span>
+        </Button>
+        <Button
+          onClick={() => setEditOpen(true)}
+          className={`${BASE} w-full shrink whitespace-normal bg-primary-container px-space-lg font-bold text-on-primary-container shadow-[0_0_20px_rgba(244,63,94,0.35)] transition-all hover:bg-primary-container/90 sm:w-auto`}
+        >
+          <Icon name="tune" className="text-[18px]" />
+          <span>Edit Profile</span>
+        </Button>
+      </div>
+
+      <ProfileEditModal
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        initialData={{
+          handle: identity?.handle ?? "",
+          realName: identity?.realName ?? "",
+          alias: identity?.alias ?? "",
+          role: identity?.role ?? "Trader",
+          avatar: identity?.avatar ?? "",
+          tradeUrl: identity?.tradeUrl ?? "",
+        }}
+      />
+    </>
   );
 }

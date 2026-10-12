@@ -1,14 +1,16 @@
 "use client";
 
-import { LinkButton } from "@/components/ui/link-button";
+import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { AvatarImage } from "@/modules/relicto/components/account/avatar-image";
 import { useSession } from "@/modules/relicto/state/session-provider";
 import type { ProfileMobile } from "../../mobile.types";
+import { ProfileEditModal } from "../hero/profile-edit-modal";
 
 /** Trader header: session portrait, level, verified handle, tier chips and the Steam sync strip. */
 export function IdentityCard({ profile }: { profile: ProfileMobile }) {
   const { user } = useSession();
+  const [editOpen, setEditOpen] = useState(false);
 
   return (
     <div className="relative flex flex-col gap-space-sm overflow-hidden rounded-xl bg-surface-card p-space-md shadow-xl">
@@ -39,14 +41,26 @@ export function IdentityCard({ profile }: { profile: ProfileMobile }) {
             </div>
           </div>
         </div>
-        <LinkButton
-          href="/profile"
-          aria-label="Profile display settings"
+        <button
+          type="button"
+          onClick={() => setEditOpen(true)}
+          aria-label="Edit trader profile"
           className="flex h-9 w-9 items-center justify-center rounded-lg border-0 bg-surface-container-low text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
         >
           <Icon name="tune" className="text-[20px]" />
-        </LinkButton>
+        </button>
       </div>
+
+      <ProfileEditModal
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        initialData={{
+          handle: user.handle,
+          role: profile.role,
+          avatar: user.avatar,
+          tradeUrl: profile.security.tradeUrl,
+        }}
+      />
 
       <div className="mt-1 flex items-center justify-between rounded-lg bg-surface-container-lowest/60 px-3 pt-space-xs pb-2">
         <div className="flex items-center gap-2">

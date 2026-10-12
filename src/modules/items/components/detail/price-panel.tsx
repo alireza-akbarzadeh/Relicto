@@ -1,6 +1,6 @@
 "use client";
 
-import { toast } from "sonner";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -10,6 +10,7 @@ import type { ItemDetail } from "../../types";
 import { useItemBuy } from "../../hooks/use-item-buy";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
+import { PriceAlertModal } from "./price-alert-modal";
 
 const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3 font-headline-sm text-sm transition-all hover:bg-surface-container-high";
 
@@ -19,6 +20,7 @@ export function PricePanel({ item }: { item: ItemDetail }) {
   const { isWatched, toggle } = useWatchlist();
   const watched = isWatched(item.slug);
   const { floor, pending, buyNow, addToBasket } = useItemBuy(item);
+  const [alertOpen, setAlertOpen] = useState(false);
   return (
     <div className="flex flex-col justify-between gap-4 lg:col-span-6">
       <div>
@@ -105,14 +107,7 @@ export function PricePanel({ item }: { item: ItemDetail }) {
             <Button
               variant={null}
               size={null}
-              onClick={() => {
-                const el = document.getElementById("price-alert") ?? document.getElementById("sell-flow");
-                if (el) {
-                  el.scrollIntoView({ behavior: "smooth" });
-                } else {
-                  toast.info("Price alert monitoring active for this item");
-                }
-              }}
+              onClick={() => setAlertOpen(true)}
               aria-label="Configure price drop ping"
               className={cn(ACTION, "px-3.5 text-text-secondary hover:text-tertiary")}
             >
@@ -139,6 +134,12 @@ export function PricePanel({ item }: { item: ItemDetail }) {
           </div>
         ))}
       </div>
+
+      <PriceAlertModal
+        open={alertOpen}
+        onOpenChange={setAlertOpen}
+        item={item}
+      />
     </div>
   );
 }

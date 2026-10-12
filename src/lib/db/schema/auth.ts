@@ -1,4 +1,4 @@
-import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -6,6 +6,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
+  twoFactorEnabled: boolean("two_factor_enabled").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -48,4 +49,16 @@ export const verification = pgTable("verification", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const twoFactor = pgTable("two_factor", {
+  id: text("id").primaryKey(),
+  secret: text("secret").notNull(),
+  backupCodes: text("backup_codes").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  verified: boolean("verified").default(true),
+  failedVerificationCount: integer("failed_verification_count").default(0),
+  lockedUntil: timestamp("locked_until"),
 });

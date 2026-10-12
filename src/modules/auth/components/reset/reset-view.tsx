@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { AuthShell } from "../shell/auth-shell";
+import { NewPasswordCard } from "./new-password-card";
 import { RecoveryCard } from "./recovery-card";
 
 function LockEmblem() {
@@ -23,8 +24,11 @@ function LockEmblem() {
   );
 }
 
+
 /** Stitch: "Relicto — Reset Password & Recovery". */
-export function ResetView() {
+export function ResetView({ token, error }: { token?: string; error?: string }) {
+  const isResetting = Boolean(token);
+
   return (
     <AuthShell
       page="reset"
@@ -41,13 +45,33 @@ export function ResetView() {
       <div className="relative z-10 mx-auto flex w-full max-w-md flex-col items-center">
         <div className="mb-6 flex flex-col items-center text-center">
           <LockEmblem />
-          <span className="mb-1.5 font-display text-[11px] font-bold tracking-[0.2em] text-brand-rose uppercase">Security Subsystem</span>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white uppercase sm:text-3xl">Reset Your Relicto Password</h1>
+          <span className="mb-1.5 font-display text-[11px] font-bold tracking-[0.2em] text-brand-rose uppercase">
+            {isResetting ? "Authorized Credential Update" : "Security Subsystem"}
+          </span>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-white uppercase sm:text-3xl">
+            {isResetting ? "Set New Relicto Password" : "Reset Your Relicto Password"}
+          </h1>
           <p className="mt-2 max-w-sm text-xs leading-relaxed text-text-secondary sm:text-sm">
-            Enter your registered email address or Steam Trade URL to receive instant security recovery instructions.
+            {isResetting
+              ? "Choose a new master password to secure your Relicto trading account and escrow vault."
+              : "Enter your registered email address or Steam OpenID to receive instant security recovery instructions."}
           </p>
         </div>
-        <RecoveryCard />
+
+        {error && (
+          <div className="mb-5 flex w-full items-start gap-3 rounded-xl border border-error-container/30 bg-error-container/15 p-3.5 text-error">
+            <Icon name="error" className="mt-0.5 text-[18px]" />
+            <div className="flex flex-col text-left">
+              <span className="font-mono text-[11px] font-bold uppercase">Token Expired or Invalid</span>
+              <span className="text-xs text-text-secondary">
+                The password recovery link was invalid or has expired. Request a new reset link below.
+              </span>
+            </div>
+          </div>
+        )}
+
+        {token ? <NewPasswordCard token={token} /> : <RecoveryCard />}
+
         <div className="mt-6 flex items-center justify-center">
           <Link href="/sign-in" className="group inline-flex items-center gap-2 font-display text-xs tracking-widest text-text-secondary uppercase transition-colors hover:text-white">
             <Icon name="arrow_back" className="text-[16px] transition-transform group-hover:-translate-x-1" />
@@ -58,3 +82,4 @@ export function ResetView() {
     </AuthShell>
   );
 }
+

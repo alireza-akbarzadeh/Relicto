@@ -11,9 +11,26 @@ const CELL =
   "h-14 rounded-xl border-white/15 bg-surface-container-lowest text-center font-mono text-xl font-bold text-white uppercase shadow-inner transition-all focus-visible:border-rose-500 focus-visible:bg-auth-field-focus focus-visible:ring-2 focus-visible:ring-rose-500/20 sm:h-16 sm:text-2xl";
 
 /** Steam Guard 5-character code with its rotating 30s window. */
-export function CodePanel() {
+export function CodePanel({
+  onCodeChange,
+}: {
+  onCodeChange?: (code: string) => void;
+}) {
   const { cells, register, onChange, onKeyDown, onPaste } = useCodeCells(["R", "9", "K", "4", "2"]);
   const { left, progress } = useCodeCycle(30, 18);
+
+  const handleCharChange = (i: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(i)(e);
+    const updated = [...cells];
+    updated[i] = e.target.value.slice(-1).toUpperCase();
+    onCodeChange?.(updated.join(""));
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    onPaste(e);
+    const chars = e.clipboardData.getData("text").replace(/\s/g, "").toUpperCase().slice(0, cells.length);
+    if (chars) onCodeChange?.(chars);
+  };
 
   return (
     <div className="flex flex-col gap-3.5">
@@ -30,9 +47,9 @@ export function CodePanel() {
             key={i}
             ref={register(i)}
             value={value}
-            onChange={onChange(i)}
+            onChange={handleCharChange(i)}
             onKeyDown={onKeyDown(i)}
-            onPaste={onPaste}
+            onPaste={handlePaste}
             aria-label={`Code character ${i + 1}`}
             inputMode="text"
             autoComplete="one-time-code"
@@ -80,7 +97,13 @@ export function PushPanel() {
   );
 }
 
-export function BackupPanel() {
+export function BackupPanel({
+  backupCode = "",
+  onBackupCodeChange,
+}: {
+  backupCode?: string;
+  onBackupCodeChange?: (code: string) => void;
+}) {
   return (
     <div className="flex flex-col gap-3">
       <label htmlFor="r-code" className="font-display text-[11px] font-bold tracking-wider text-text-secondary uppercase">SMS OR RECOVERY R-CODE</label>
@@ -88,6 +111,8 @@ export function BackupPanel() {
         <span className="rounded-lg border border-white/10 bg-surface-container-lowest px-3.5 py-3 font-mono text-sm text-text-muted">R-</span>
         <Input
           id="r-code"
+          value={backupCode}
+          onChange={(e) => onBackupCodeChange?.(e.target.value)}
           placeholder="XXXXX-XXXXX"
           className="h-auto rounded-lg border-white/10 bg-surface-container-lowest px-4 py-3 font-mono text-sm text-white uppercase placeholder:text-text-muted focus-visible:border-rose-500 focus-visible:bg-auth-field-focus focus-visible:ring-0"
         />
@@ -96,3 +121,4 @@ export function BackupPanel() {
     </div>
   );
 }
+

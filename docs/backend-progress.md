@@ -870,11 +870,17 @@ Still open:
 - ~~Mobile checkout has no discount rows.~~ Fixed: `cartTotals` and `SettlementCard` now expose and render Multi-Item Combo Relief when 3+ assets are present, reconciling subtotal and payable total transparently.
 - ~~Radar rows use full team names ("Gaimin Gladiators").~~ Fixed: `tournaments-mobile.presenter.ts` introduces `SHORT_TEAM_NAMES` mapping to ensure clean, non-wrapping radar match cards.
 
+- ~~Mobile tracker read mocks without real-time sync.~~ Fixed: `TrackerMobile` now subscribes to `useMarketStream` and `useLiveBook`, dynamically streaming live ticker tapes, depth books, telemetry metrics, and relay heartbeat indicators.
+- ~~`/reset-password` was a static mockup.~~ Fixed: Implemented full password recovery and reset lifecycle. Server dispatches reset tokens; client card supports email recovery (`requestPasswordReset`), token resending, and interactive password reset (`NewPasswordCard`) with dynamic entropy meter, strength criteria, and Better Auth client integration.
+- ~~`/verify` (2FA) was a static mockup.~~ Fixed: Integrated Better Auth `twoFactor` server plugin and `twoFactorClient` on the client. Vault verification card and mobile verify screen support both TOTP authenticator codes and recovery backup codes, dynamic input syncing, and fallback challenge guidance.
+- ~~Sign-in only accepted email addresses.~~ Fixed: Added `resolveAccountEmail` server action allowing traders to sign in with their trader handle (`@kuro_trades`), gamertag, or email address across desktop and mobile sign-in forms.
+
 ## Still missing from `backend-plan.md`
 
 Unchanged by this work, listed so it is not lost:
 
 - ~~`src/lib/env.ts` zod validation~~ Fixed: added `src/lib/env.ts` with Zod schema validating required database and auth secrets on initialization.
 - Steam sign-in: plugin written (`src/lib/steam/`), round trip not yet verified
-- `additionalFields` / `username` plugin, 2FA, email verification and reset
-- `/verify` and `/reset-password` are still static mockups
+- ~~`additionalFields` / `username` plugin, 2FA, email verification and reset~~ Fixed: 2FA plugin, TOTP + backup codes, reset password, handle lookup resolution, and email verification hooks wired to Better Auth.
+- ~~`/verify` and `/reset-password` are still static mockups~~ Fixed: Fully functional and wired to Better Auth client and server actions.
+

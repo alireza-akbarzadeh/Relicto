@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { dash } from "@better-auth/infra";
+import { twoFactor } from "better-auth/plugins";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { steamAuth } from "@/lib/steam/steam-auth-plugin";
@@ -31,6 +32,14 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url, token }) => {
+      console.log(`[auth] Reset password for ${user.email}: url=${url} token=${token}`);
+    },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }) => {
+      console.log(`[auth] Verification email for ${user.email}: url=${url} token=${token}`);
+    },
   },
   databaseHooks: {
     user: {
@@ -50,6 +59,9 @@ export const auth = betterAuth({
   plugins: [
     dash({
       apiKey: process.env.BETTER_AUTH_API_KEY,
+    }),
+    twoFactor({
+      issuer: "Relicto",
     }),
     steamAuth(),
     nextCookies(),

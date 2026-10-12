@@ -12,6 +12,8 @@ import { authClient } from "@/lib/auth-client";
 import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { AuthField } from "../ui/auth-field";
 
+import { resolveAccountEmail } from "@/server/modules/auth/auth.identity";
+
 const LABEL = "font-mono text-xs font-semibold tracking-wider text-slate-300 uppercase";
 const INPUT =
   "rounded-xl border-white/10 bg-surface-container-lowest pl-10 py-3 text-sm text-white shadow-inner placeholder:text-slate-600 focus-visible:border-primary-container focus-visible:ring-1 focus-visible:ring-primary-container";
@@ -20,16 +22,25 @@ const INPUT =
 export function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
+  const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [pending, setPending] = useState(false);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!identity.trim()) {
+      toast.error("Please enter your email or trader handle");
+      return;
+    }
 
     setPending(true);
-    const { error } = await authClient.signIn.email({ email, password, rememberMe: remember });
+    const resolvedEmail = await resolveAccountEmail(identity);
+    const { error } = await authClient.signIn.email({
+      email: resolvedEmail,
+      password,
+      rememberMe: remember,
+    });
     setPending(false);
 
     if (error) {
@@ -47,14 +58,14 @@ export function SignInForm() {
       <AuthField
         id="identity"
         name="identity"
-        type="email"
+        type="text"
         label="Account Identity"
-        aside={<span className="font-mono text-[11px] text-text-muted">Email</span>}
+        aside={<span className="font-mono text-[11px] text-text-muted">Email or Handle</span>}
         icon="badge"
-        placeholder="user@domain.com"
+        placeholder="user@domain.com or @handle"
         autoComplete="username"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={identity}
+        onChange={(e) => setIdentity(e.target.value)}
         labelClassName={LABEL}
         inputClassName={`${INPUT} pr-4`}
       />

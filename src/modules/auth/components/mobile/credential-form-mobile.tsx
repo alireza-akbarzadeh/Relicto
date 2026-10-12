@@ -11,6 +11,8 @@ import { authClient } from "@/lib/auth-client";
 import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { cn } from "@/lib/cn";
 
+import { resolveAccountEmail } from "@/server/modules/auth/auth.identity";
+
 const LABEL = "font-label-badge text-label-badge tracking-wider text-text-secondary uppercase";
 const FIELD =
   "h-auto rounded-lg border-0 bg-surface-deep py-3 pl-10 font-body-md text-body-md text-text-primary shadow-inner transition-colors placeholder:text-text-muted focus-visible:bg-surface-container-high focus-visible:ring-0 md:text-body-md dark:bg-surface-deep";
@@ -28,16 +30,21 @@ export function CredentialFormMobile({ uid }: { uid: string }) {
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (!identity.trim() || !secret) {
-      toast.error("Enter your email and passkey");
+      toast.error("Enter your email or trader handle and passkey");
       return;
     }
 
     setPending(true);
-    const { error } = await authClient.signIn.email({ email: identity, password: secret, rememberMe: remember });
+    const resolvedEmail = await resolveAccountEmail(identity);
+    const { error } = await authClient.signIn.email({
+      email: resolvedEmail,
+      password: secret,
+      rememberMe: remember,
+    });
     setPending(false);
 
     if (error) {
-      toast.error("Sign-in failed", { description: error.message ?? "Check your email and password." });
+      toast.error("Sign-in failed", { description: error.message ?? "Check your email/handle and password." });
       return;
     }
 
@@ -57,13 +64,13 @@ export function CredentialFormMobile({ uid }: { uid: string }) {
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <label htmlFor="trader-identity" className={LABEL}>
-              Email
+              Email or Handle
             </label>
             <span className="font-label-badge text-label-badge text-text-muted">{uid}</span>
           </div>
           <div className="relative flex items-center">
             <Icon name="badge" className="absolute left-3.5 text-[18px] text-text-muted" />
-            <Input id="trader-identity" type="email" value={identity} onChange={(e) => setIdentity(e.target.value)} autoComplete="username" placeholder="user@domain.com" className={cn(FIELD, "pr-4")} />
+            <Input id="trader-identity" type="text" value={identity} onChange={(e) => setIdentity(e.target.value)} autoComplete="username" placeholder="user@domain.com or @handle" className={cn(FIELD, "pr-4")} />
           </div>
         </div>
 

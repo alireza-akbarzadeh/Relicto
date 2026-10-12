@@ -18,7 +18,7 @@ export default async function TrackerPage({ searchParams }: PageProps<"/tracker"
   return (
     <>
       <div className="md:hidden">
-        <TrackerMobile data={mobile} />
+        <TrackerMobile data={mobile} market={marketFrame} liveBook={data.live?.book} />
       </div>
       <div className="hidden md:block">
         <TrackerView data={data} market={marketFrame} />

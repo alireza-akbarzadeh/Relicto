@@ -1,20 +1,42 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { authClient } from "@/lib/auth-client";
 import { AuthField } from "../ui/auth-field";
 
 const CTA =
-  "group h-auto w-full gap-2 rounded-xl border border-brand-rose/30 bg-linear-to-r/srgb from-brand-crimson to-brand-crimson-deep px-4 py-3.5 font-display text-xs font-bold tracking-widest text-white uppercase shadow-[0_0_24px_rgba(255,59,92,0.4)] hover:shadow-[0_0_32px_rgba(255,59,92,0.6)] hover:brightness-110 active:scale-[0.99]";
+  "group h-auto w-full gap-2 rounded-xl border border-brand-rose/30 bg-linear-to-r/srgb from-brand-crimson to-brand-crimson-deep px-4 py-3.5 font-display text-xs font-bold tracking-widest text-white uppercase shadow-[0_0_24px_rgba(255,59,92,0.4)] hover:shadow-[0_0_32px_rgba(255,59,92,0.6)] hover:brightness-110 active:scale-[0.99] disabled:opacity-60";
 
 /** Email channel: identifier + Turnstile badge + send. */
 export function EmailRecovery({ onDispatch }: { onDispatch: (target: string) => void }) {
   const [value, setValue] = useState("");
+  const [pending, setPending] = useState(false);
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
-    onDispatch(value);
+    if (!value.trim()) return;
+
+    setPending(true);
+    const { error } = await authClient.requestPasswordReset({
+      email: value.trim(),
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setPending(false);
+
+    if (error) {
+      toast.error("Recovery request failed", {
+        description: error.message ?? "Check your email address and try again.",
+      });
+      return;
+    }
+
+    toast.success("Recovery token dispatched", {
+      description: "Check your inbox for password reset instructions.",
+    });
+    onDispatch(value.trim());
   };
 
   return (
@@ -22,10 +44,11 @@ export function EmailRecovery({ onDispatch }: { onDispatch: (target: string) => 
       <AuthField
         id="recovery-credential"
         label="Account Recovery Identifier"
-        aside={<span className="font-mono text-[10px] tracking-wider text-text-muted normal-case">Steam / Intel ID</span>}
+        aside={<span className="font-mono text-[10px] tracking-wider text-text-muted normal-case">Email Address</span>}
         labelClassName="font-mono text-[11px] font-normal tracking-wider text-text-secondary uppercase"
         icon="alternate_email"
         placeholder="trader@example.com"
+        type="email"
         required
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -43,9 +66,12 @@ export function EmailRecovery({ onDispatch }: { onDispatch: (target: string) => 
         </div>
         <span className="rounded border border-status-cyan/25 bg-status-cyan/10 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider text-status-cyan uppercase">PASSED</span>
       </div>
-      <Button type="submit" className={CTA}>
-        <span>Send Password Reset Link</span>
-        <Icon name="send" className="text-[18px] transition-transform group-hover:translate-x-1" />
+      <Button type="submit" disabled={pending} className={CTA}>
+        <span>{pending ? "Dispatching Recovery Link..." : "Send Password Reset Link"}</span>
+        <Icon
+          name={pending ? "progress_activity" : "send"}
+          className={pending ? "animate-spin text-[18px]" : "text-[18px] transition-transform group-hover:translate-x-1"}
+        />
       </Button>
     </form>
   );
@@ -53,6 +79,12 @@ export function EmailRecovery({ onDispatch }: { onDispatch: (target: string) => 
 
 /** Steam channel: sign the reset through Valve OpenID. */
 export function SteamRecovery({ onDispatch }: { onDispatch: () => void }) {
+  const startSteamAuth = () => {
+    onDispatch();
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.href = `${window.location.origin}/api/auth/steam/sign-in`;
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5 rounded-xl border border-white/10 bg-surface-container-lowest p-4">
@@ -66,7 +98,7 @@ export function SteamRecovery({ onDispatch }: { onDispatch: () => void }) {
       </div>
       <Button
         type="button"
-        onClick={onDispatch}
+        onClick={startSteamAuth}
         className="h-auto w-full gap-2.5 rounded-xl border border-status-cyan/40 bg-surface-container px-4 py-3.5 font-display text-xs font-bold tracking-wider text-white uppercase shadow-[0_0_18px_rgba(6,182,212,0.2)] hover:bg-auth-steam-hover"
       >
         <Icon name="vpn_key" className="text-[18px] text-status-cyan" />
@@ -100,3 +132,4 @@ export function DispatchedNotice({ target, onResend }: { target: string; onResen
     </div>
   );
 }
+

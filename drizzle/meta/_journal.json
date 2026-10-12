@@ -155,6 +155,13 @@
       "when": 1790430250121,
       "tag": "0021_market_notify",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1791788890727,
+      "tag": "0022_ordinary_living_lightning",
+      "breakpoints": true
     }
   ]
 }

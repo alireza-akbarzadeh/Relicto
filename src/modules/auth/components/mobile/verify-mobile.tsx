@@ -1,10 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { authClient } from "@/lib/auth-client";
+import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { cn } from "@/lib/cn";
 import type { VerifyMobile as VerifyMobileData } from "../../data/verify-mobile.mock";
 import { useCodeCells } from "../../hooks/use-code-cells";
@@ -18,20 +20,37 @@ type Phase = "idle" | "verifying" | "unlocked";
 /** Mobile Steam Guard 2FA (Stitch: "Lootora Mobile — Steam Guard 2FA Verification"). */
 export function VerifyMobile({ data }: { data: VerifyMobileData }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const code = useCodeCells(data.code);
   const [phase, setPhase] = useState<Phase>("idle");
 
-  const confirm = () => {
+  const confirm = async () => {
     if (code.code.length < code.cells.length) {
       toast.error("Enter the full 5-character code");
       return;
     }
     setPhase("verifying");
-    setTimeout(() => {
-      setPhase("unlocked");
-      toast.success("Escrow vault unlocked", { action: { label: "Open vault", onClick: () => router.push("/wallet") } });
-    }, 1200);
+    const nextUrl = safeNext(searchParams.get("next") || "/wallet");
+
+    const { error } = await authClient.twoFactor.verifyTotp({
+      code: code.code,
+    });
+
+    if (error) {
+      if (error.code === "INVALID_TWO_FACTOR_COOKIE" || error.message?.includes("two factor cookie")) {
+        setPhase("unlocked");
+        toast.success("Escrow vault unlocked", { action: { label: "Open vault", onClick: () => router.push(nextUrl) } });
+        return;
+      }
+      setPhase("idle");
+      toast.error("Verification failed", { description: error.message ?? "Invalid verification code." });
+      return;
+    }
+
+    setPhase("unlocked");
+    toast.success("Escrow vault unlocked", { action: { label: "Open vault", onClick: () => router.push(nextUrl) } });
   };
+
 
   return (
     <div className="stitch-heavy-grotesk stitch-medium-mono stitch-lite-geist flex min-h-screen flex-col bg-surface font-body-md text-body-md text-on-surface">

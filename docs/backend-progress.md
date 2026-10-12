@@ -879,6 +879,9 @@ Still open:
 - ~~Algorithmic Trigger Logic Studio had a static deploy button.~~ Fixed: Connected "Arm & Deploy Rule Engine" in `RuleBuilder` on `/alerts` to `createAlertRule` with optimistic loading state and live toast notifications.
 - ~~Only Manifold Paradox had a mobile inspector; other catalog items rendered desktop composition on phones.~~ Fixed: Added `toItemMobileFromDetail` in `items-mobile.presenter.ts` and wired `getItemMobile` in `get-item.ts`, ensuring all 144 items synthesize the full mobile inspector with floor pricing, live seller book, and loadout synergies on phones.
 - ~~Steam sign-in plugin lacked local development support on localhost.~~ Fixed: Added automatic localhost development bypass in `steam-auth-plugin.ts` allowing immediate testing of Steam OpenID linking and persona creation without requiring a public tunnel.
+- ~~Desktop Sell Studio lacked Trade-Up Chamber integration.~~ Fixed: Embedded responsive `TradeUpChamber` into desktop `SellView` with a 12-column tactical workstation layout (`lg:grid lg:grid-cols-12`), real-time float averaging, 10-slot committed arsenal forge deck, simulated probability matrix, and quick anchor in `SellerToolbar`.
+- ~~Bulk skin cashout forced a $10 minimum deposit floor.~~ Fixed: Updated `BulkCashout` to allow micro-liquidations down to single-cent values (`Math.max(0.01, ...)`).
+- ~~`SlotDeck` filled vs empty slot buttons had variable heights.~~ Fixed: Unified slot button heights to `h-20` for consistent grid alignment across screen sizes.
 
 ## Still missing from `backend-plan.md`
 

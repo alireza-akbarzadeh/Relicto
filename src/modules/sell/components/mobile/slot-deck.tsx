@@ -39,7 +39,7 @@ export function SlotDeck({ slots, fillable, onToggle, onSmartFill }: SlotDeckPro
               size={null}
               aria-label={`Remove ${item.imageAlt} from the contract`}
               onClick={() => onToggle(index)}
-              className="relative h-auto min-w-0 flex-col justify-start rounded-lg border-0 bg-surface-container-low p-1.5 text-body-md font-normal whitespace-normal shadow-xs"
+              className="relative h-20 min-w-0 flex-col justify-start rounded-lg border-0 bg-surface-container-low p-1.5 text-body-md font-normal whitespace-normal shadow-xs"
             >
               <Image src={item.image} alt={item.imageAlt} width={96} height={80} sizes="48px" className="h-10 w-12 rounded object-contain" />
               <span className="mt-1 w-full truncate text-center font-label-badge text-[9px] text-text-primary">{item.name}</span>

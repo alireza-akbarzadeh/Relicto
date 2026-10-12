@@ -9,15 +9,25 @@ import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import { useListingWrites } from "../hooks/use-listing-writes";
 import { sellSearchParams } from "../lib/search-params";
+import type { SellMobile } from "../mobile.types";
 import type { SellData, SellGame } from "../types";
 import { ActiveListings } from "./active-listings";
 import { InventoryList } from "./inventory-list";
 import { ListingFocus } from "./listing-focus";
+import { TradeUpChamber } from "./mobile/trade-up-chamber";
 import { SellGuarantee } from "./sell-guarantee";
 import { SellTelemetry } from "./sell-telemetry";
 import { SellerHero } from "./seller-hero";
 
-export function SellView({ data, offers }: { data: SellData; offers: IncomingOffer[] }) {
+export function SellView({
+  data,
+  offers,
+  contract,
+}: {
+  data: SellData;
+  offers: IncomingOffer[];
+  contract: SellMobile["contract"];
+}) {
   /* Inventory game, search, trade filter, sort and picks are all URL state. */
   const [{ game, q: query, filter, sort, picks: selected }, setParams] = useQueryStates(
     sellSearchParams,
@@ -107,6 +117,30 @@ export function SellView({ data, offers }: { data: SellData; offers: IncomingOff
       </section>
 
       <ActiveListings data={data} onRefresh={() => router.refresh()} />
+
+      <section id="trade-up" className="w-full scroll-mt-20 border-t border-white/6 bg-surface-deep/30 px-margin-desktop py-space-xl">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-space-lg">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-space-sm">
+              <span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-label-badge text-[10px] font-bold tracking-widest text-primary uppercase">
+                Trade-Up Forge
+              </span>
+              <span className="rounded bg-surface-container-highest px-2 py-0.5 font-data-mono-md text-[10px] text-secondary">
+                10-SLOT PRO CONVERTER
+              </span>
+            </div>
+            <h2 className="font-headline-xl text-xl font-bold tracking-tight text-text-primary uppercase lg:text-2xl">
+              Contract Chamber & Float Forge
+            </h2>
+            <p className="max-w-3xl font-body-md text-xs leading-relaxed text-text-secondary sm:text-sm">
+              Commit ten weapons of identical grade to forge higher-tier classified or covert outcomes. Calculated mathematically with real-time float simulation and instant escrow liquidation.
+            </p>
+          </div>
+
+          <TradeUpChamber contract={contract} className="mt-0 px-0" />
+        </div>
+      </section>
+
       <OffersInbox offers={offers} />
       <SellGuarantee />
       <SiteFooter />

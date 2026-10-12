@@ -117,6 +117,13 @@ export function SellerToolbar({
           >
             Non-Tradable (0)
           </Button>
+          <a
+            href="#trade-up"
+            className="flex h-auto items-center gap-1 rounded border border-primary/30 bg-primary/10 px-2.5 py-1 font-headline-sm text-xs font-semibold text-primary uppercase transition-colors hover:bg-primary/20"
+          >
+            <Icon name="whatshot" className="text-[14px]" />
+            Trade-Up Forge
+          </a>
         </div>
       </div>
 

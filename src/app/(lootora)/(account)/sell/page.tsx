@@ -18,7 +18,7 @@ export default async function SellPage() {
         <SellMobile data={mobile} />
       </div>
       <div className="hidden md:block">
-        <SellView data={data} offers={offers} />
+        <SellView data={data} offers={offers} contract={mobile.contract} />
       </div>
     </>
   );

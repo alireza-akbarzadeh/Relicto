@@ -26,7 +26,7 @@ export function BulkCashout({ cashout }: { cashout: SellMobile["cashout"] }) {
       try {
         const result = await depositFunds({
           rail: "crypto",
-          amountUsd: Math.max(10, totalUsd),
+          amountUsd: Math.max(0.01, Number(totalUsd.toFixed(2))),
           txHash: `SKIN-LIQUIDATE-${count}`,
         });
         if (result.status === "credited") {

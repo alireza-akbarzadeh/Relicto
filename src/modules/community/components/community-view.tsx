@@ -10,6 +10,7 @@ import type { CommunityData } from "../types";
 import { communitySearchParams } from "../lib/search-params";
 import { ChannelRail } from "./community-rail";
 import { CommunityAside } from "./community-aside";
+import { authClient } from "@/lib/auth-client";
 import { Composer, PostCard } from "./community-post-card";
 
 const CHANNELS = [
@@ -52,6 +53,10 @@ export function CommunityView({ data }: { data: CommunityData }) {
   const setChannel = (value: string) => void setChannelParam(value);
   const [draft, setDraft] = useState("");
   const [posts, setPosts] = useState(data.posts);
+  const { data: session } = authClient.useSession();
+
+  const userHandle = session?.user?.name ? `@${session.user.name}` : "@Trader";
+  const userInitials = (session?.user?.name?.slice(0, 2) ?? "TR").toUpperCase();
 
   const visible = useMemo(
     () =>
@@ -74,9 +79,9 @@ export function CommunityView({ data }: { data: CommunityData }) {
     setPosts((current) => [
       {
         id: `post-${Date.now()}`,
-        initials: "S1",
-        handle: "@S1mple_CS",
-        role: "PRO SELLER",
+        initials: userInitials,
+        handle: userHandle,
+        role: "VERIFIED TRADER",
         roleTone: "primary",
         age: "now",
         tag: "BROADCAST",
@@ -100,7 +105,12 @@ export function CommunityView({ data }: { data: CommunityData }) {
         <section className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-space-lg px-gutter-desktop py-space-lg xl:grid-cols-12">
           <ChannelRail channels={CHANNELS} active={channel} setActive={setChannel} guilds={data.guilds} />
           <div className="flex flex-col gap-space-md xl:col-span-6">
-            <Composer draft={draft} setDraft={setDraft} onBroadcast={broadcast} />
+            <Composer
+              draft={draft}
+              setDraft={setDraft}
+              onBroadcast={broadcast}
+              initials={userInitials}
+            />
             <div className="flex flex-col gap-space-md">
               {visible.map((post) => (
                 <PostCard key={post.id} post={post} />

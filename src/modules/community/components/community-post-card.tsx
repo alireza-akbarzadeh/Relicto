@@ -22,16 +22,18 @@ export function Composer({
   draft,
   setDraft,
   onBroadcast,
+  initials = "TR",
 }: {
   draft: string;
   setDraft: (value: string) => void;
   onBroadcast: () => void;
+  initials?: string;
 }) {
   return (
     <section className="rounded-xl bg-surface-container-low p-space-md shadow-lg">
       <div className="flex gap-space-sm">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container font-headline-sm text-headline-sm text-on-primary-container">
-          S1
+          {initials}
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-space-sm">
           <Textarea

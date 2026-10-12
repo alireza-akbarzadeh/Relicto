@@ -882,6 +882,8 @@ Still open:
 - ~~Desktop Sell Studio lacked Trade-Up Chamber integration.~~ Fixed: Embedded responsive `TradeUpChamber` into desktop `SellView` with a 12-column tactical workstation layout (`lg:grid lg:grid-cols-12`), real-time float averaging, 10-slot committed arsenal forge deck, simulated probability matrix, and quick anchor in `SellerToolbar`.
 - ~~Bulk skin cashout forced a $10 minimum deposit floor.~~ Fixed: Updated `BulkCashout` to allow micro-liquidations down to single-cent values (`Math.max(0.01, ...)`).
 - ~~`SlotDeck` filled vs empty slot buttons had variable heights.~~ Fixed: Unified slot button heights to `h-20` for consistent grid alignment across screen sizes.
+- ~~Tournament headers lacked command palette search, alerts, and profile link.~~ Fixed: Wired desktop tournament search to `useCommandSearch()` (`⌘K`), notification triggers to `/alerts`, and user avatars to `/profile` across desktop and mobile headers.
+- ~~Public trader storefronts (`/traders/[handle]`) only rendered desktop layout on mobile.~~ Fixed: Implemented `publicStorefrontMobile` in `profileService` and wired responsive mobile composition (`ProfileMobile` on phones, `ProfileView` on desktop).
 
 ## Still missing from `backend-plan.md`
 

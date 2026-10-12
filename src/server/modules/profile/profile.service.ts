@@ -99,4 +99,18 @@ export const profileService = {
 
     return toProfileMobile(chrome, profile, cards, activity, escrow);
   },
+
+  /** Public storefront in mobile shape for any trader by their handle. */
+  async publicStorefrontMobile(handle: string, chrome: ProfileChrome): Promise<ProfileMobile | null> {
+    const profile = await repository.findProfileByHandle(handle);
+    if (!profile) return null;
+
+    const [cards, activity, escrow] = await Promise.all([
+      mobileRepository.findShowcaseCards(profile.id, profile.userId),
+      mobileRepository.countActivity(profile.userId),
+      sumEscrowHolds(profile.userId),
+    ]);
+
+    return toProfileMobile(chrome, profile, cards, activity, escrow);
+  },
 };

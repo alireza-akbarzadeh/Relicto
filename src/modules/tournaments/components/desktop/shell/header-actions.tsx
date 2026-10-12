@@ -1,38 +1,51 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
+import { useCommandSearch } from "@/modules/relicto/hooks/use-command-search";
 import type { ArenaUser } from "../../../shell.types";
 
 export function HeaderSearch({ placeholder }: { placeholder: string }) {
+  const { trigger, input } = useCommandSearch();
   return (
-    <label className="hidden w-48 items-center rounded bg-surface-container-lowest px-space-md py-space-xs md:flex xl:w-64">
+    <div
+      {...trigger}
+      className="hidden w-48 cursor-pointer items-center rounded bg-surface-container-lowest px-space-md py-space-xs md:flex xl:w-64 transition-colors hover:bg-surface-container"
+    >
       <Icon name="search" className="mr-space-sm text-body-md text-text-muted" />
       <input
-        type="text"
-        enterKeyHint="search"
-        aria-label="Search"
+        {...input}
         placeholder={placeholder}
         className="w-full border-none bg-transparent font-body-sm text-body-sm text-text-primary outline-hidden placeholder:text-text-muted focus:ring-0"
       />
-    </label>
+      <kbd className="ml-1 flex h-4 items-center justify-center rounded border border-white/5 bg-white/10 px-1 font-data-mono-md text-[9px] text-text-muted">
+        ⌘K
+      </kbd>
+    </div>
   );
 }
 
 export function NotificationButton({ unread }: { unread: boolean }) {
   return (
-    <button
-      type="button"
-      aria-label="Notifications"
+    <Link
+      href="/alerts"
+      aria-label="Price alerts and notifications"
       className="relative rounded bg-surface-container-low p-space-sm text-text-secondary transition-colors hover:bg-surface-container hover:text-on-surface"
     >
       <Icon name="notifications" className="text-body-lg" />
       {unread && <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-status-live" />}
-    </button>
+    </Link>
   );
 }
 
 export function UserChip({ user }: { user: ArenaUser }) {
   return (
-    <div className="flex items-center gap-space-sm rounded-xl bg-surface-container-low/80 py-1.5 pr-space-md pl-space-sm">
+    <Link
+      href="/profile"
+      aria-label={`Profile: ${user.handle}`}
+      className="flex items-center gap-space-sm rounded-xl bg-surface-container-low/80 py-1.5 pr-space-md pl-space-sm transition-colors hover:bg-surface-container"
+    >
       <div className="relative shrink-0">
         <Image
           src={user.avatar}
@@ -56,6 +69,6 @@ export function UserChip({ user }: { user: ArenaUser }) {
         </div>
         <span className="font-data-mono-md text-[10px] leading-tight text-text-muted">{user.status}</span>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -9,7 +9,7 @@ export function LiveFeeds({ matches }: { matches: FeedMatch[] }) {
         <h2 className="font-headline-sm text-headline-sm tracking-wide text-text-primary uppercase">
           Live Tournament Feeds
         </h2>
-        <Link href="#" className="font-label-caps text-label-caps text-primary uppercase hover:underline">
+        <Link href="#active-arenas" className="font-label-caps text-label-caps text-primary uppercase hover:underline">
           View All Matches
         </Link>
       </div>

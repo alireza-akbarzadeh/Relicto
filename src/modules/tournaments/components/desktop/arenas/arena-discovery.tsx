@@ -18,7 +18,7 @@ export function ArenaDiscovery({ section, filters, chips, cards }: ArenaDiscover
   const { filter, setFilter, visible } = useGameFilter(cards);
 
   return (
-    <section className="flex flex-col gap-space-lg" aria-labelledby="active-arenas">
+    <section id="active-arenas" className="flex scroll-mt-24 flex-col gap-space-lg" aria-labelledby="active-arenas">
       <div className="flex flex-col gap-space-md">
         <ArenaSectionHeader section={section} />
         <ArenaToolbar filters={filters} active={filter} onChange={setFilter} chips={chips} />

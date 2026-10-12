@@ -7,7 +7,7 @@ type RadarFeedProps = { section: { title: string; meta: string }; matches: Radar
 
 export function RadarFeed({ section, matches }: RadarFeedProps) {
   return (
-    <section>
+    <section id="radar-feed" className="scroll-mt-20">
       <SectionHeading
         className="px-margin pt-6 pb-2"
         leading={<PingDot sizeClassName="h-2 w-2" colorClassName="bg-status-live" />}

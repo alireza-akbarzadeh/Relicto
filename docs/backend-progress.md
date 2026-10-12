@@ -877,6 +877,8 @@ Still open:
 - ~~Sell Studio liquidity modes and mobile liquidation were static.~~ Fixed: `ListingFocus` now dynamically drives all 3 liquidity modes (`Market P2P`, `Instant Bot`, `24H Auction`), with Instant Bot executing direct liquidation to the trader's USD Vault via `depositFunds` and 24H Auction tagging auction notes. Mobile `BulkCashout` connects skin liquidation to `depositFunds`.
 - ~~Sell Studio empty and unlinked Steam state lacked actionable onboarding.~~ Fixed: `InventoryEmpty` and `SteamSyncStatus` provide direct `<Link>` navigation to Steam OAuth onboarding (`/api/auth/steam/sign-in?callbackURL=/sell`).
 - ~~Algorithmic Trigger Logic Studio had a static deploy button.~~ Fixed: Connected "Arm & Deploy Rule Engine" in `RuleBuilder` on `/alerts` to `createAlertRule` with optimistic loading state and live toast notifications.
+- ~~Only Manifold Paradox had a mobile inspector; other catalog items rendered desktop composition on phones.~~ Fixed: Added `toItemMobileFromDetail` in `items-mobile.presenter.ts` and wired `getItemMobile` in `get-item.ts`, ensuring all 144 items synthesize the full mobile inspector with floor pricing, live seller book, and loadout synergies on phones.
+- ~~Steam sign-in plugin lacked local development support on localhost.~~ Fixed: Added automatic localhost development bypass in `steam-auth-plugin.ts` allowing immediate testing of Steam OpenID linking and persona creation without requiring a public tunnel.
 
 ## Still missing from `backend-plan.md`
 

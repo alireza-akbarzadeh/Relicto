@@ -1,10 +1,11 @@
 import type { ItemMobile, MobileSeller, MobileStyle, SynergyItem } from "@/modules/items/mobile.types";
 import type { ItemDetail } from "@/modules/items/types";
+import type { MyBid } from "@/modules/offers/types";
 import { initials } from "../shared/initials";
 import type { SellerRow } from "./items.repository";
 
 /** One real listing as a seller card; buying from it reserves that exact copy. */
-function toSeller({ listing, name, verified, profile }: SellerRow): MobileSeller {
+function toSeller({ listing, name, verified, profile }: SellerRow, bid?: MyBid): MobileSeller {
   const trustScore = profile ? profile.trustScore / 10 : 100;
   const trades = profile?.tradeCount ?? 0;
   const note = listing.intel?.[0] ?? listing.sellerNote;
@@ -20,6 +21,7 @@ function toSeller({ listing, name, verified, profile }: SellerRow): MobileSeller
     tags: note ? [{ label: note, tone: "amber" }] : [],
     delivery: listing.botName ? `Delivery: <60s · ${listing.botName}` : "Delivery: Automated Escrow",
     instant: true,
+    ...(bid ? { myBid: bid } : {}),
   };
 }
 
@@ -29,7 +31,13 @@ function toSeller({ listing, name, verified, profile }: SellerRow): MobileSeller
  * active listing except the viewer's own, and the basket id is the slug, so
  * the buy buttons reserve a real listing.
  */
-export function toItemMobile(authored: ItemMobile, sellers: SellerRow[], viewerId: string | null, watchers = 0): ItemMobile {
+export function toItemMobile(
+  authored: ItemMobile,
+  sellers: SellerRow[],
+  viewerId: string | null,
+  watchers = 0,
+  bids: Record<string, MyBid> = {},
+): ItemMobile {
   const others = sellers.filter((row) => row.listing.sellerId !== viewerId);
   const floor = others[0]?.listing;
   if (!floor) return { ...authored, cartId: authored.slug, sellers: [], watchers };
@@ -44,7 +52,7 @@ export function toItemMobile(authored: ItemMobile, sellers: SellerRow[], viewerI
       steamUsd: floor.steamMarketCents !== null ? floor.steamMarketCents / 100 : authored.price.steamUsd,
       deltaPct: floor.changePercent ?? 0,
     },
-    sellers: others.map(toSeller),
+    sellers: others.map((row) => toSeller(row, bids[row.listing.id])),
   };
 }
 
@@ -81,6 +89,7 @@ export function toItemMobileFromDetail(detail: ItemDetail): ItemMobile {
     tags: [{ label: offer.style.label, tone: "amber" as const }],
     delivery: offer.fulfilmentNote || (offer.fulfilment === "bot" ? "Instant Bot Escrow" : "P2P Steam Trade"),
     instant: offer.fulfilment === "bot",
+    ...(offer.myBid ? { myBid: offer.myBid } : {}),
   }));
 
   const synergyItems: SynergyItem[] = detail.related.items.map((related) => ({

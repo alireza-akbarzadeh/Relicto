@@ -884,6 +884,8 @@ Still open:
 - ~~`SlotDeck` filled vs empty slot buttons had variable heights.~~ Fixed: Unified slot button heights to `h-20` for consistent grid alignment across screen sizes.
 - ~~Tournament headers lacked command palette search, alerts, and profile link.~~ Fixed: Wired desktop tournament search to `useCommandSearch()` (`⌘K`), notification triggers to `/alerts`, and user avatars to `/profile` across desktop and mobile headers.
 - ~~Public trader storefronts (`/traders/[handle]`) only rendered desktop layout on mobile.~~ Fixed: Implemented `publicStorefrontMobile` in `profileService` and wired responsive mobile composition (`ProfileMobile` on phones, `ProfileView` on desktop).
+- ~~Mobile could not place bids or answer incoming offers.~~ Fixed: `SellerCard` on mobile `/items/[slug]` now supports placing and revising bids via `OfferDialog` with live bid badge feedback, and `SellMobile` features `MobileOffersInbox` with `#offers` deep linking for notification callbacks, rendering open bids and interactive Accept & Decline actions.
+- ~~Mobile headers lacked dedicated command palette search trigger.~~ Fixed: Added `MobileSearchButton` across `MarketMobileHeader`, `LinkedMobileHeader`, and `IntelMobileHeader`, providing instant one-tap access to universal command palette search.
 
 ## Still missing from `backend-plan.md`
 

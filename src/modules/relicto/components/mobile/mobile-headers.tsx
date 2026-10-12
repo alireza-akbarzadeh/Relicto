@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
+import { MobileSearchButton } from "./mobile-search-button";
 import { MobileWallet } from "./mobile-wallet";
 
 /** Mobile top bars, one per Stitch header family. Wallet, alerts and avatar come from the session. */
@@ -24,6 +25,7 @@ export function MarketMobileHeader() {
           </span>
         </div>
         <div className="flex items-center gap-space-xs">
+          <MobileSearchButton />
           <MobileWallet variant="market" />
           <NotificationsMenu trigger="mobile" />
           <UserMenu trigger="mobile" />
@@ -50,7 +52,8 @@ export function LinkedMobileHeader() {
             </span>
           </span>
         </Link>
-        <div className="flex shrink-0 items-center gap-space-sm">
+        <div className="flex shrink-0 items-center gap-space-xs sm:gap-space-sm">
+          <MobileSearchButton />
           <MobileWallet variant="linked" />
           <NotificationsMenu trigger="mobileLinked" />
           <UserMenu trigger="mobileLinked" />
@@ -80,7 +83,8 @@ export function IntelMobileHeader() {
             <span className="font-label-badge text-label-badge tracking-wider text-text-muted uppercase">INTEL EXCHANGE</span>
           </span>
         </Link>
-        <div className="flex items-center gap-space-sm">
+        <div className="flex items-center gap-space-xs sm:gap-space-sm">
+          <MobileSearchButton />
           <MobileWallet variant="intel" />
           <UserMenu trigger="mobilePlain" />
         </div>

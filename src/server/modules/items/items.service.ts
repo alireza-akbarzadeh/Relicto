@@ -57,7 +57,9 @@ export const itemService = {
       watchlistService.watchers([authored.slug]),
     ]);
     const watchers = watcherMap.get(authored.slug) ?? 0;
-    return toItemMobile(authored, sellers, viewerId, watchers);
+    const others = viewerId ? sellers.filter((row) => row.listing.sellerId !== viewerId).map((row) => row.listing.id) : [];
+    const bids = viewerId ? await offerService.bids(viewerId, others) : {};
+    return toItemMobile(authored, sellers, viewerId, watchers, bids);
   },
 
   async exists(slug: string) {

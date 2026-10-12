@@ -9,6 +9,8 @@ export type MobileStyle = {
   label: string;
 };
 
+import type { MyBid } from "@/modules/offers/types";
+
 export type SellerTagTone = "plain" | "amber" | "indigo" | "crimson";
 
 export type MobileSeller = {
@@ -24,6 +26,7 @@ export type MobileSeller = {
   delivery: string;
   /** Automated bot delivery (vs. direct P2P). */
   instant: boolean;
+  myBid?: MyBid;
 };
 
 export type SynergyItem = {

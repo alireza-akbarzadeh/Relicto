@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
+import { OfferDialog } from "@/modules/offers/components/offer-dialog";
 import type { MobileSeller, SellerTagTone } from "../../mobile.types";
 
 const TAG: Record<SellerTagTone, string> = {
@@ -13,10 +15,17 @@ const TAG: Record<SellerTagTone, string> = {
   indigo: "bg-secondary-container/40 font-medium text-secondary-fixed",
 };
 
-type SellerCardProps = { seller: MobileSeller; floor: boolean; onBuy: (seller: MobileSeller) => void };
+type SellerCardProps = {
+  seller: MobileSeller;
+  floor: boolean;
+  onBuy: (seller: MobileSeller) => void;
+  itemName?: string;
+};
 
-/** One verified listing: seller trust, price, item tags, delivery and buy. */
-export function SellerCard({ seller, floor, onBuy }: SellerCardProps) {
+/** One verified listing: seller trust, price, item tags, delivery, make offer, and buy. */
+export function SellerCard({ seller, floor, onBuy, itemName }: SellerCardProps) {
+  const [bidding, setBidding] = useState(false);
+
   return (
     <div className="flex flex-col gap-space-sm rounded-xl bg-surface-container-low p-space-md shadow-xs transition-all hover:bg-surface-container">
       <div className="flex items-start justify-between">
@@ -46,20 +55,58 @@ export function SellerCard({ seller, floor, onBuy }: SellerCardProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-between pt-space-xs">
-        <span className="font-label-badge text-label-badge text-text-muted">{seller.delivery}</span>
-        <Button
-          variant={null}
-          size={null}
-          onClick={() => onBuy(seller)}
-          className={cn(
-            "h-auto rounded-lg border-0 px-space-md py-2 font-label-caps text-label-caps font-bold uppercase transition-all active:scale-95",
-            floor ? "bg-primary text-on-primary" : "bg-surface-container-highest text-text-primary hover:bg-primary hover:text-on-primary",
+      <div className="flex items-center justify-between gap-2 pt-space-xs">
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate font-label-badge text-label-badge text-text-muted">{seller.delivery}</span>
+          {seller.myBid && (
+            <span className="font-data-mono-md text-[10px] text-tertiary">
+              Your bid: {formatMoney(seller.myBid.priceUsd)} · {seller.myBid.expires}
+            </span>
           )}
-        >
-          Buy Now
-        </Button>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {seller.id && (
+            <Button
+              variant={null}
+              size={null}
+              onClick={() => setBidding(true)}
+              aria-label={seller.myBid ? `Revise your offer to ${seller.name}` : `Make ${seller.name} an offer`}
+              className={cn(
+                "flex h-9 items-center justify-center rounded-lg border px-2.5 font-label-caps text-xs font-bold transition-all active:scale-95",
+                seller.myBid
+                  ? "border-tertiary/40 bg-tertiary/10 text-tertiary hover:bg-tertiary/20"
+                  : "border-border-subtle bg-surface-container-high text-text-secondary hover:border-tertiary/40 hover:text-tertiary",
+              )}
+            >
+              <Icon name="sell" className="mr-1 text-[15px]" />
+              {seller.myBid ? "Revise" : "Offer"}
+            </Button>
+          )}
+          <Button
+            variant={null}
+            size={null}
+            onClick={() => onBuy(seller)}
+            className={cn(
+              "h-9 rounded-lg border-0 px-space-md font-label-caps text-label-caps font-bold uppercase transition-all active:scale-95",
+              floor ? "bg-primary text-on-primary" : "bg-surface-container-highest text-text-primary hover:bg-primary hover:text-on-primary",
+            )}
+          >
+            Buy Now
+          </Button>
+        </div>
       </div>
+
+      {seller.id && (
+        <OfferDialog
+          open={bidding}
+          onOpenChange={setBidding}
+          listingId={seller.id}
+          sellerName={seller.name}
+          askUsd={seller.priceUsd}
+          myBid={seller.myBid}
+          itemName={itemName ?? seller.name}
+        />
+      )}
     </div>
   );
 }

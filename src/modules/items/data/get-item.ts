@@ -45,11 +45,16 @@ export const getItem = cache(async (slug: string): Promise<ItemDetail | null> =>
   };
 });
 
+import { toItemMobileFromDetail } from "@/server/modules/items/items-mobile.presenter";
+
 /**
- * The mobile inspector for items that have an authored mobile design, with the
- * market facts live. Other items use the responsive desktop view on phones.
+ * The mobile inspector for items. Hand-authored mobile designs take precedence,
+ * while all catalog items synthesize the mobile inspector from ItemDetail.
  */
-export async function getItemMobile(slug: string): Promise<ItemMobile | null> {
+export const getItemMobile = cache(async (slug: string): Promise<ItemMobile | null> => {
   const authored = MOBILE[slug];
-  return authored ? itemService.mobile(authored, await getUserId()) : null;
-}
+  if (authored) return itemService.mobile(authored, await getUserId());
+
+  const detail = await getItem(slug);
+  return detail ? toItemMobileFromDetail(detail) : null;
+});

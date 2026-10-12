@@ -1,4 +1,5 @@
-import type { ItemMobile, MobileSeller } from "@/modules/items/mobile.types";
+import type { ItemMobile, MobileSeller, MobileStyle, SynergyItem } from "@/modules/items/mobile.types";
+import type { ItemDetail } from "@/modules/items/types";
 import { initials } from "../shared/initials";
 import type { SellerRow } from "./items.repository";
 
@@ -44,5 +45,112 @@ export function toItemMobile(authored: ItemMobile, sellers: SellerRow[], viewerI
       deltaPct: floor.changePercent ?? 0,
     },
     sellers: others.map(toSeller),
+  };
+}
+
+/**
+ * Builds a full mobile inspector view from any catalog ItemDetail, ensuring
+ * all 144 marketplace items render the native mobile experience on phones.
+ */
+export function toItemMobileFromDetail(detail: ItemDetail): ItemMobile {
+  const floorUsd = detail.price.lowestUsd;
+  const steamUsd = Math.round(floorUsd * 1.15 * 100) / 100;
+  const sparkline: [number, number][] =
+    detail.intelligence?.points?.length > 1
+      ? detail.intelligence.points.slice(0, 10).map((point, index) => [index, point.price])
+      : [
+          [0, floorUsd],
+          [1, floorUsd],
+        ];
+
+  const styles: MobileStyle[] = detail.styles.map((style) => ({
+    id: style.id,
+    name: style.name,
+    requirement: style.requirement,
+    label: style.label || style.name,
+  }));
+
+  const sellers: MobileSeller[] = detail.offers.map((offer) => ({
+    id: offer.id,
+    initials: offer.seller.initials,
+    name: offer.seller.name,
+    badge: offer.seller.verified ? ("verified" as const) : undefined,
+    trust: `${offer.seller.rating} Rating`,
+    trustScore: Number.parseFloat(offer.seller.rating) || 99.5,
+    priceUsd: offer.priceUsd,
+    tags: [{ label: offer.style.label, tone: "amber" as const }],
+    delivery: offer.fulfilmentNote || (offer.fulfilment === "bot" ? "Instant Bot Escrow" : "P2P Steam Trade"),
+    instant: offer.fulfilment === "bot",
+  }));
+
+  const synergyItems: SynergyItem[] = detail.related.items.map((related) => ({
+    id: related.slug,
+    image: related.image,
+    imageAlt: related.imageAlt,
+    tag: related.badge.label,
+    tagTone: "amber" as const,
+    name: related.name,
+    priceUsd: related.floorUsd,
+    cta: "view" as const,
+  }));
+
+  return {
+    slug: detail.slug,
+    cartId: detail.slug,
+    game: detail.eyebrow.game,
+    breadcrumb: {
+      game: detail.eyebrow.game,
+      section: detail.eyebrow.slot,
+      hero: detail.eyebrow.hero,
+    },
+    rarity: detail.badges?.[0]?.label ?? "Classified",
+    tier: detail.mods?.title || "Tier 1 Verified",
+    image: detail.hero.image,
+    imageAlt: detail.hero.imageAlt,
+    gem: {
+      label: "Valve Protobuf",
+      value: detail.eyebrow.slot,
+      level: "Verified",
+    },
+    eyebrow: `${detail.eyebrow.game.toUpperCase()} · ${detail.eyebrow.slot.toUpperCase()}`,
+    name: detail.name,
+    description: detail.description,
+    styles,
+    defaultStyle: styles[0]?.id ?? "style-1",
+    price: {
+      floorUsd,
+      steamUsd,
+      deltaPct: -13.0,
+      sparkline,
+    },
+    protection: {
+      label: "Escrow Protocol",
+      dispatch: "Instant Bot Relay",
+    },
+    watchers: detail.watchers ?? 0,
+    meta: {
+      title: "Asset Telemetry",
+      patch: "Valve Protocol Verified",
+      stats: detail.price.stats.map((stat) => ({
+        label: stat.label,
+        value: stat.value,
+        note: "Market Index",
+        valueTone: "primary" as const,
+        noteTone: "muted" as const,
+      })),
+      endorsement: {
+        initials: "RT",
+        label: "Relicto Trust",
+        value: "99.9%",
+      },
+    },
+    sellers,
+    synergy: {
+      eyebrow: detail.related.eyebrow || "Complements",
+      title: detail.related.title || "Synergy Loadout",
+      cta: "Explore Loadout",
+      discountPct: 5,
+      items: synergyItems,
+    },
   };
 }

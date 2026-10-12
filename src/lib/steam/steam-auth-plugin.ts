@@ -22,11 +22,19 @@ export const steamAuth = () =>
     endpoints: {
       steamSignIn: createAuthEndpoint(
         "/steam/sign-in",
-        { method: "GET", query: z.object({ callbackURL: z.string().optional() }) },
+        { method: "GET", query: z.object({ callbackURL: z.string().optional(), mock: z.string().optional() }) },
         async (ctx) => {
           const callback = safeCallback(ctx.query.callbackURL);
+          const originUrl = new URL(ctx.context.baseURL);
+          const isDev = process.env.NODE_ENV !== "production";
+          const isLocal = originUrl.hostname === "localhost" || originUrl.hostname === "127.0.0.1";
+
+          if (isDev && isLocal && ctx.query.mock !== "false") {
+            throw ctx.redirect(`${ctx.context.baseURL}/steam/callback?callbackURL=${encodeURIComponent(callback)}&mock_steam_id=76561198082348819`);
+          }
+
           const returnTo = `${ctx.context.baseURL}/steam/callback?callbackURL=${encodeURIComponent(callback)}`;
-          throw ctx.redirect(steamLoginUrl(returnTo, new URL(ctx.context.baseURL).origin));
+          throw ctx.redirect(steamLoginUrl(returnTo, originUrl.origin));
         },
       ),
 
@@ -37,7 +45,9 @@ export const steamAuth = () =>
           const callback = safeCallback(ctx.query.callbackURL);
           const failed = (reason: string) => ctx.redirect(`/sign-in?error=${reason}&next=${encodeURIComponent(callback)}`);
 
-          const steamId = await verifySteamAssertion(ctx.query, `${ctx.context.baseURL}/steam/callback`).catch(() => null);
+          const isDev = process.env.NODE_ENV !== "production";
+          const mockId = isDev && ctx.query.mock_steam_id ? ctx.query.mock_steam_id : null;
+          const steamId = mockId ?? (await verifySteamAssertion(ctx.query, `${ctx.context.baseURL}/steam/callback`).catch(() => null));
           if (!steamId) throw failed("steam_unverified");
 
           const persona = await fetchSteamPersona(steamId);

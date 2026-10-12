@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { profiles, user } from "@/lib/db/schema";
 import { isValidTradeUrl } from "@/lib/steam/trade-url";
 import { requireUserId } from "@/modules/relicto/data/get-session";
+import { findOrOpenProfile } from "@/server/modules/profile/profile.repository";
 
 export const updateProfileSchema = z.object({
   handle: z
@@ -66,6 +67,9 @@ export async function updateProfileDetails(raw: UpdateProfileInput): Promise<Upd
       error: `Trader handle @${handle} is already claimed. Choose a different handle.`,
     };
   }
+
+  // Ensure profile record exists
+  await findOrOpenProfile(userId);
 
   // Persist to profiles table
   await db

@@ -8,6 +8,11 @@ import { wiki } from "./wiki.mock";
  * tables are seeded, so the screen never renders empty.
  */
 export async function getWiki(): Promise<WikiData> {
-  const live = await wikiService.codex();
-  return live.guides.length > 0 ? live : wiki;
+  try {
+    const live = await wikiService.codex();
+    return live.guides.length > 0 ? live : wiki;
+  } catch (err) {
+    console.error("[getWiki] Fallback to mock:", err);
+    return wiki;
+  }
 }

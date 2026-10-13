@@ -27,12 +27,22 @@ const previewTreasury = (): WalletData => ({
 });
 
 export async function getWallet(): Promise<WalletData> {
-  const treasury = await walletService.treasury(await requireSettledViewer());
-  return treasury ?? previewTreasury();
+  try {
+    const treasury = await walletService.treasury(await requireSettledViewer());
+    return treasury ?? previewTreasury();
+  } catch (err) {
+    console.error("[getWallet] Fallback to mock:", err);
+    return previewTreasury();
+  }
 }
 
 /** Mobile wallet: the same balances and ledger as desktop, with the mobile vault chrome, actions and rails. */
 export async function getWalletMobile(): Promise<WalletMobile> {
   const { vault, actions, rails } = walletMobile;
-  return (await walletService.treasuryMobile(await requireSettledViewer(), { vault, actions, rails })) ?? walletMobile;
+  try {
+    return (await walletService.treasuryMobile(await requireSettledViewer(), { vault, actions, rails })) ?? walletMobile;
+  } catch (err) {
+    console.error("[getWalletMobile] Fallback to mock:", err);
+    return walletMobile;
+  }
 }

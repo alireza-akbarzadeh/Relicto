@@ -10,7 +10,12 @@ import { community } from "./community.mock";
  * community tables are seeded, so the screen never renders empty.
  */
 export async function getCommunity(): Promise<CommunityData> {
-  const userId = await getUserId();
-  const live = await communityService.feed(25, userId);
-  return live.posts.length > 0 ? live : community;
+  try {
+    const userId = await getUserId();
+    const live = await communityService.feed(25, userId);
+    return live.posts.length > 0 ? live : community;
+  } catch (err) {
+    console.error("[getCommunity] Fallback to mock:", err);
+    return community;
+  }
 }

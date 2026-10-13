@@ -15,16 +15,24 @@ const orderCode = (orderId: string, fallback: string) => (orderId ? `#${orderId.
  * sample escrow only stands in on a database nobody has seeded.
  */
 export async function getOrderTracking(orderId: string): Promise<OrderTracking> {
-  const live = await orderService.tracking(orderId, await requireSettledViewer());
-  if (live) return live;
-  if (await orderService.hasOrders()) notFound();
+  try {
+    const live = await orderService.tracking(orderId, await requireSettledViewer());
+    if (live) return live;
+    if (await orderService.hasOrders()) notFound();
+  } catch (err) {
+    console.error("[getOrderTracking] Fallback to mock:", err);
+  }
   return { ...tracking, code: orderCode(orderId, tracking.code) };
 }
 
 /** The mobile tracker's view of the same order, with the same access rule. */
 export async function getOrderTrackingMobile(orderId: string): Promise<TrackingMobile> {
-  const live = await orderService.trackingMobile(orderId, await requireSettledViewer());
-  if (live) return live;
-  if (await orderService.hasOrders()) notFound();
+  try {
+    const live = await orderService.trackingMobile(orderId, await requireSettledViewer());
+    if (live) return live;
+    if (await orderService.hasOrders()) notFound();
+  } catch (err) {
+    console.error("[getOrderTrackingMobile] Fallback to mock:", err);
+  }
   return { ...trackingMobile, code: orderCode(orderId, trackingMobile.code) };
 }

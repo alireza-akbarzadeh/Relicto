@@ -33,19 +33,29 @@ const steamMirror = cache(async (userId: string): Promise<SteamSync> => {
  * back to the sample studio until they have inventory.
  */
 export async function getSell(): Promise<SellData> {
-  const userId = await requireUserId();
-  const steam = await steamMirror(userId);
-  const studio = await sellService.studio(userId);
-  return steam.linked || studio.inventory.length > 0 ? { ...studio, steam } : sell;
+  try {
+    const userId = await requireUserId();
+    const steam = await steamMirror(userId);
+    const studio = await sellService.studio(userId);
+    return steam.linked || studio.inventory.length > 0 ? { ...studio, steam } : sell;
+  } catch (err) {
+    console.error("[getSell] Fallback to mock:", err);
+    return sell;
+  }
 }
 
 /** Mobile studio: live vault totals, cashout tray and trade-up chamber, each falling back to its sample. */
 export async function getSellMobile(): Promise<SellMobile> {
-  const userId = await requireUserId();
-  await steamMirror(userId);
-  const [studio, contract] = await Promise.all([
-    sellService.mobile(userId, sellMobile),
-    tradeUpService.contract(userId, sellMobile.contract.bot),
-  ]);
-  return { ...(studio ?? sellMobile), contract: contract ?? sellMobile.contract };
+  try {
+    const userId = await requireUserId();
+    await steamMirror(userId);
+    const [studio, contract] = await Promise.all([
+      sellService.mobile(userId, sellMobile),
+      tradeUpService.contract(userId, sellMobile.contract.bot),
+    ]);
+    return { ...(studio ?? sellMobile), contract: contract ?? sellMobile.contract };
+  } catch (err) {
+    console.error("[getSellMobile] Fallback to mock:", err);
+    return sellMobile;
+  }
 }

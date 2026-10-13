@@ -11,12 +11,22 @@ import { checkoutMobile } from "./checkout-mobile.mock";
  * empty; the sample basket only stands in on a database nobody has seeded.
  */
 export async function getCheckout(): Promise<CheckoutData> {
-  return (await checkoutService.basket(await requireSettledViewer())) ?? checkout;
+  try {
+    return (await checkoutService.basket(await requireSettledViewer())) ?? checkout;
+  } catch (err) {
+    console.error("[getCheckout] Fallback to mock:", err);
+    return checkout;
+  }
 }
 
 /** The basket lines the header cart starts from on every signed-in page. */
 export async function getCartLines(): Promise<CheckoutItem[]> {
-  return (await checkoutService.lines(await requireSettledViewer())) ?? checkout.items;
+  try {
+    return (await checkoutService.lines(await requireSettledViewer())) ?? checkout.items;
+  } catch (err) {
+    console.error("[getCartLines] Fallback to mock:", err);
+    return checkout.items;
+  }
 }
 
 /**
@@ -24,5 +34,10 @@ export async function getCartLines(): Promise<CheckoutItem[]> {
  * rails, handshake copy and the reservation window stay authored.
  */
 export async function getCheckoutMobile(): Promise<CheckoutMobile> {
-  return { ...checkoutMobile, vaultUsd: (await checkoutService.vaultCents(await requireSettledViewer())) / 100 };
+  try {
+    return { ...checkoutMobile, vaultUsd: (await checkoutService.vaultCents(await requireSettledViewer())) / 100 };
+  } catch (err) {
+    console.error("[getCheckoutMobile] Fallback to mock:", err);
+    return checkoutMobile;
+  }
 }

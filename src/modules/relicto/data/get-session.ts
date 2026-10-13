@@ -17,30 +17,54 @@ import type { AppNotification, SessionUser } from "../session-types";
 const EXPIRED = "/sign-in?expired=1";
 
 /** One Better Auth lookup per request, however many loaders ask who is signed in. */
-const readSession = cache(async () => auth.api.getSession({ headers: await headers() }));
+const readSession = cache(async () => {
+  try {
+    return await auth.api.getSession({ headers: await headers() });
+  } catch (err) {
+    console.error("[getSession] Failed to read session:", err);
+    return null;
+  }
+});
 
 /** The signed-in trader, or null when there's no session. */
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
   const result = await readSession();
   if (!result) return null;
-  const [notifications, walletCents, profile] = await Promise.all([
-    notificationService.feed(result.user.id),
-    walletService.liquidCents(result.user.id),
-    findOrOpenProfile(result.user.id),
-  ]);
+  try {
+    const [notifications, walletCents, profile] = await Promise.all([
+      notificationService.feed(result.user.id),
+      walletService.liquidCents(result.user.id),
+      findOrOpenProfile(result.user.id),
+    ]);
 
-  const user: SessionUser = {
-    handle: profile?.handle ?? result.user.name,
-    avatar: profile?.avatar || result.user.image || "/images/lootora/avatar.jpg",
-    avatarAlt: profile?.avatarAlt ?? `${result.user.name} profile portrait`,
-    level: profile?.level ?? 1,
-    role: profile?.role ?? "Trader",
-    verified: result.user.emailVerified,
-    steamSynced: !!profile?.steamId,
-    walletUsd: walletCents / 100,
-  };
+    const user: SessionUser = {
+      handle: profile?.handle ?? result.user.name,
+      avatar: profile?.avatar || result.user.image || "/images/lootora/avatar.jpg",
+      avatarAlt: profile?.avatarAlt ?? `${result.user.name} profile portrait`,
+      level: profile?.level ?? 1,
+      role: profile?.role ?? "Trader",
+      verified: result.user.emailVerified,
+      steamSynced: !!profile?.steamId,
+      walletUsd: walletCents / 100,
+    };
 
-  return { user, notifications };
+    return { user, notifications };
+  } catch (err) {
+    console.error("[getSession] Error loading auxiliary session data:", err);
+    return {
+      user: {
+        handle: result.user.name,
+        avatar: result.user.image || "/images/lootora/avatar.jpg",
+        avatarAlt: `${result.user.name} profile portrait`,
+        level: 1,
+        role: "Trader",
+        verified: result.user.emailVerified,
+        steamSynced: false,
+        walletUsd: 0,
+      },
+      notifications: [],
+    };
+  }
 }
 
 /**

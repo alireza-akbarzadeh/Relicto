@@ -12,9 +12,14 @@ import { trackerMobile } from "./tracker-mobile.mock";
  * sample board until the account follows anything.
  */
 export async function getTracker(asset = ""): Promise<TrackerData> {
-  const terminal = await trackerService.terminal(await requireUserId(), asset || undefined);
-  // Without a board, the sample board shows — but the focused item's book and chart are always real.
-  return terminal.assets.length > 0 ? terminal : { ...tracker, live: terminal.live };
+  try {
+    const terminal = await trackerService.terminal(await requireUserId(), asset || undefined);
+    // Without a board, the sample board shows — but the focused item's book and chart are always real.
+    return terminal.assets.length > 0 ? terminal : { ...tracker, live: terminal.live };
+  } catch (err) {
+    console.error("[getTracker] Fallback to mock:", err);
+    return tracker;
+  }
 }
 
 /** The market panels' first frame; the market stream takes over in the browser. */
@@ -24,5 +29,10 @@ export async function getTrackerMarket(market: TrackerMarket, focus: string | nu
 
 /** Mobile terminal: the same board, depth, spreads and history as desktop, with the mobile chrome. */
 export async function getTrackerMobile() {
-  return (await trackerService.terminalMobile(await requireUserId(), trackerMobile)) ?? trackerMobile;
+  try {
+    return (await trackerService.terminalMobile(await requireUserId(), trackerMobile)) ?? trackerMobile;
+  } catch (err) {
+    console.error("[getTrackerMobile] Fallback to mock:", err);
+    return trackerMobile;
+  }
 }

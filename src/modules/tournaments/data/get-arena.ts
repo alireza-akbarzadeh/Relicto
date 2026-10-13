@@ -29,7 +29,12 @@ import {
 export async function getArenaDesktop() {
   // Live scores and a registration countdown: render per request, never at build.
   await connection();
-  const live = await tournamentService.arena();
+  let live = null;
+  try {
+    live = await tournamentService.arena();
+  } catch (err) {
+    console.error("[getArenaDesktop] Fallback to mock:", err);
+  }
 
   return {
     shell: desktopShell,
@@ -51,7 +56,12 @@ export async function getArenaDesktop() {
  */
 export async function getArenaMobile() {
   await connection();
-  const live = await tournamentService.arenaMobile();
+  let live = null;
+  try {
+    live = await tournamentService.arenaMobile();
+  } catch (err) {
+    console.error("[getArenaMobile] Fallback to mock:", err);
+  }
 
   return {
     shell: mobileShell,

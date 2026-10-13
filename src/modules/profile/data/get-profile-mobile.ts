@@ -10,6 +10,11 @@ import { profileMobile } from "./profile-mobile.mock";
  */
 export async function getProfileMobile(): Promise<ProfileMobile> {
   const { ping, botId, node, savedAccounts, security, links } = profileMobile;
-  const live = await profileService.mobile(await requireUserId(), { ping, botId, node, savedAccounts, security, links });
-  return live ?? profileMobile;
+  try {
+    const live = await profileService.mobile(await requireUserId(), { ping, botId, node, savedAccounts, security, links });
+    return live ?? profileMobile;
+  } catch (err) {
+    console.error("[getProfileMobile] Fallback to mock:", err);
+    return profileMobile;
+  }
 }

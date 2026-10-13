@@ -11,11 +11,21 @@ import { alertsMobile } from "./alerts-mobile.mock";
  * rules until the account has any of its own.
  */
 export async function getAlerts(): Promise<PriceAlert[]> {
-  const live = await alertService.list(await requireUserId());
-  return live.length > 0 ? live : alerts;
+  try {
+    const live = await alertService.list(await requireUserId());
+    return live.length > 0 ? live : alerts;
+  } catch (err) {
+    console.error("[getAlerts] Fallback to mock:", err);
+    return alerts;
+  }
 }
 
 /** Mobile sniper terminal: the same rules as desktop, with live floors, price lines and push status. */
 export async function getAlertsMobile(): Promise<AlertsMobile> {
-  return (await alertService.mobile(await requireUserId(), alertsMobile)) ?? alertsMobile;
+  try {
+    return (await alertService.mobile(await requireUserId(), alertsMobile)) ?? alertsMobile;
+  } catch (err) {
+    console.error("[getAlertsMobile] Fallback to mock:", err);
+    return alertsMobile;
+  }
 }

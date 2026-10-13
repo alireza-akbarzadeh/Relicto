@@ -24,25 +24,37 @@ const MOBILE: Record<string, ItemMobile> = { [manifoldParadoxMobile.slug]: manif
 export const getItem = cache(async (slug: string): Promise<ItemDetail | null> => {
   const viewerId = await getUserId();
   const authored = AUTHORED[slug];
-  if (!authored) return itemService.detail(slug, viewerId);
+  if (!authored) {
+    try {
+      return await itemService.detail(slug, viewerId);
+    } catch (err) {
+      console.error(`[getItem] Error loading detail for ${slug}:`, err);
+      return null;
+    }
+  }
 
-  const [book, watcherMap] = await Promise.all([
-    itemService.book(slug, viewerId),
-    watchlistService.watchers([slug]),
-  ]);
-  const watchers = watcherMap.get(slug) ?? 0;
-  const merged = book ? { ...authored, ...book } : authored;
-  return {
-    ...merged,
-    watchers,
-    price: {
-      ...merged.price,
-      stats: [
-        ...merged.price.stats.filter((s) => s.label !== "Watchers"),
-        { label: "Watchers", value: `${watchers} watching`, tone: "cyan" },
-      ],
-    },
-  };
+  try {
+    const [book, watcherMap] = await Promise.all([
+      itemService.book(slug, viewerId),
+      watchlistService.watchers([slug]),
+    ]);
+    const watchers = watcherMap.get(slug) ?? 0;
+    const merged = book ? { ...authored, ...book } : authored;
+    return {
+      ...merged,
+      watchers,
+      price: {
+        ...merged.price,
+        stats: [
+          ...merged.price.stats.filter((s) => s.label !== "Watchers"),
+          { label: "Watchers", value: `${watchers} watching`, tone: "cyan" },
+        ],
+      },
+    };
+  } catch (err) {
+    console.error(`[getItem] Error loading live book for ${slug}:`, err);
+    return authored;
+  }
 });
 
 import { toItemMobileFromDetail } from "@/server/modules/items/items-mobile.presenter";
@@ -53,7 +65,13 @@ import { toItemMobileFromDetail } from "@/server/modules/items/items-mobile.pres
  */
 export const getItemMobile = cache(async (slug: string): Promise<ItemMobile | null> => {
   const authored = MOBILE[slug];
-  if (authored) return itemService.mobile(authored, await getUserId());
+  if (authored) {
+    try {
+      return await itemService.mobile(authored, await getUserId());
+    } catch {
+      return authored;
+    }
+  }
 
   const detail = await getItem(slug);
   return detail ? toItemMobileFromDetail(detail) : null;

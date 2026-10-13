@@ -12,8 +12,13 @@ import { marketMobile } from "./market-mobile.mock";
  * hasn't been seeded yet (`npm run db:seed`) so the screen never renders empty.
  */
 export async function getMarketplaceCatalog() {
-  const listings = await listingService.catalog({ sort: "recent" });
-  return listings.length > 0 ? listings : LISTINGS;
+  try {
+    const listings = await listingService.catalog({ sort: "recent" });
+    return listings.length > 0 ? listings : LISTINGS;
+  } catch (err) {
+    console.error("[getMarketplaceCatalog] Fallback to mock:", err);
+    return LISTINGS;
+  }
 }
 
 /**
@@ -24,8 +29,12 @@ export async function getMarketplaceCatalog() {
  * screen still renders its designed state.
  */
 export async function getMarketplaceResults(filters: Filters) {
-  const results = await listingService.search(filters);
-  if (results.facets.total > 0) return results;
+  try {
+    const results = await listingService.search(filters);
+    if (results.facets.total > 0) return results;
+  } catch (err) {
+    console.error("[getMarketplaceResults] Fallback to mock:", err);
+  }
 
   const fallback = searchListings(LISTINGS, filters);
   return { ...fallback, facets: { games: {}, rarities: {}, slots: {}, heroes: {}, total: 0 } };
@@ -40,7 +49,13 @@ const usd = (value: number) =>
  * pills and the meta-spike banner stay authored.
  */
 export async function getMarketplaceMobile() {
-  const feed = await listingService.mobileFeed(await getUserId());
-  if (feed.listings.length === 0) return marketMobile;
-  return { ...marketMobile, listings: feed.listings, ticker: { ...marketMobile.ticker, pool: usd(feed.liquidityUsd) } };
+  try {
+    const feed = await listingService.mobileFeed(await getUserId());
+    if (feed.listings.length > 0) {
+      return { ...marketMobile, listings: feed.listings, ticker: { ...marketMobile.ticker, pool: usd(feed.liquidityUsd) } };
+    }
+  } catch (err) {
+    console.error("[getMarketplaceMobile] Fallback to mock:", err);
+  }
+  return marketMobile;
 }

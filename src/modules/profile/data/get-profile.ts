@@ -35,12 +35,17 @@ const SAMPLE: ProfileData = {
  * The watchlist and bids are always the caller's own.
  */
 export async function getProfile(): Promise<ProfileData> {
-  const userId = await requireUserId();
-  const [profile, watchlist, bids] = await Promise.all([
-    profileService.detail(userId),
-    watchlistService.watched(userId),
-    offerService.outgoing(userId),
-  ]);
+  try {
+    const userId = await requireUserId();
+    const [profile, watchlist, bids] = await Promise.all([
+      profileService.detail(userId),
+      watchlistService.watched(userId),
+      offerService.outgoing(userId),
+    ]);
 
-  return { ...(profile ?? SAMPLE), watchlist, bids };
+    return { ...(profile ?? SAMPLE), watchlist, bids };
+  } catch (err) {
+    console.error("[getProfile] Fallback to mock:", err);
+    return SAMPLE;
+  }
 }

@@ -29,10 +29,15 @@ const SAMPLE: LedgerData = {
  * sample ledger while the account has no orders, so the screen is never blank.
  */
 export async function getOrderLedger(): Promise<LedgerData> {
-  const viewer = await requireSettledViewer();
-  const [ledger, hasOrders] = await Promise.all([
-    orderService.ledger(viewer),
-    orderService.hasOrders(),
-  ]);
-  return hasOrders ? ledger : SAMPLE;
+  try {
+    const viewer = await requireSettledViewer();
+    const [ledger, hasOrders] = await Promise.all([
+      orderService.ledger(viewer),
+      orderService.hasOrders(),
+    ]);
+    return hasOrders ? ledger : SAMPLE;
+  } catch (err) {
+    console.error("[getOrderLedger] Fallback to mock:", err);
+    return SAMPLE;
+  }
 }

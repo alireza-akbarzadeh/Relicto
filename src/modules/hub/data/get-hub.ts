@@ -18,37 +18,53 @@ const money = (usd: number) => `$${usd.toLocaleString("en-US", { minimumFraction
  * drift from what the marketplace is actually selling.
  */
 export async function getHub(): Promise<HubData> {
-  const { liquidityUsd, floorsBySlug } = await listingService.marketStats(Object.values(SPOTLIGHT_FLOORS));
+  try {
+    const { liquidityUsd, floorsBySlug } = await listingService.marketStats(Object.values(SPOTLIGHT_FLOORS));
 
-  const dotaFloor = floorsBySlug.get(SPOTLIGHT_FLOORS.dota);
-  const cs2Floor = floorsBySlug.get(SPOTLIGHT_FLOORS.cs2);
+    const dotaFloor = floorsBySlug.get(SPOTLIGHT_FLOORS.dota);
+    const cs2Floor = floorsBySlug.get(SPOTLIGHT_FLOORS.cs2);
 
-  const live = {
-    ...spotlights,
-    dota: dotaFloor
-      ? {
-          ...spotlights.dota,
-          primaryCta: { ...spotlights.dota.primaryCta, label: `Inspect Arcana Floor (${money(dotaFloor / 100)})` },
-          chart: { ...spotlights.dota.chart, peak: money(dotaFloor / 100) },
-        }
-      : spotlights.dota,
-    cs2: cs2Floor
-      ? { ...spotlights.cs2, chart: { ...spotlights.cs2.chart, peak: money(cs2Floor / 100) } }
-      : spotlights.cs2,
-  };
+    const live = {
+      ...spotlights,
+      dota: dotaFloor
+        ? {
+            ...spotlights.dota,
+            primaryCta: { ...spotlights.dota.primaryCta, label: `Inspect Arcana Floor (${money(dotaFloor / 100)})` },
+            chart: { ...spotlights.dota.chart, peak: money(dotaFloor / 100) },
+          }
+        : spotlights.dota,
+      cs2: cs2Floor
+        ? { ...spotlights.cs2, chart: { ...spotlights.cs2.chart, peak: money(cs2Floor / 100) } }
+        : spotlights.cs2,
+    };
 
-  return {
-    pulse: { ...pulse, liquidityUsd: liquidityUsd > 0 ? liquidityUsd : pulse.liquidityUsd },
-    games,
-    spotlights: live,
-    metaCards,
-    patchDelta,
-    scrapedMarkets,
-    loadouts,
-    threads,
-    newThreads,
-    incentive,
-  };
+    return {
+      pulse: { ...pulse, liquidityUsd: liquidityUsd > 0 ? liquidityUsd : pulse.liquidityUsd },
+      games,
+      spotlights: live,
+      metaCards,
+      patchDelta,
+      scrapedMarkets,
+      loadouts,
+      threads,
+      newThreads,
+      incentive,
+    };
+  } catch (error) {
+    console.error("[getHub] Failed to fetch market stats, falling back to mock:", error);
+    return {
+      pulse,
+      games,
+      spotlights,
+      metaCards,
+      patchDelta,
+      scrapedMarkets,
+      loadouts,
+      threads,
+      newThreads,
+      incentive,
+    };
+  }
 }
 
 /**
@@ -57,17 +73,22 @@ export async function getHub(): Promise<HubData> {
  * floor copy's — the same figures the marketplace sells at.
  */
 export async function getHubMobile(): Promise<HubMobileData> {
-  const catalog = await listingService.catalog({ sort: "recent" });
-  const floor = new Map<string, (typeof catalog)[number]>();
-  for (const listing of catalog) {
-    const best = floor.get(listing.id);
-    if (!best || listing.priceUsd < best.priceUsd) floor.set(listing.id, listing);
+  try {
+    const catalog = await listingService.catalog({ sort: "recent" });
+    const floor = new Map<string, (typeof catalog)[number]>();
+    for (const listing of catalog) {
+      const best = floor.get(listing.id);
+      if (!best || listing.priceUsd < best.priceUsd) floor.set(listing.id, listing);
+    }
+
+    const items = hubMobile.surge.items.map((item) => {
+      const live = floor.get(item.slug);
+      return live ? { ...item, price: money(live.priceUsd), changePct: live.change.percent } : item;
+    });
+
+    return { ...hubMobile, surge: { ...hubMobile.surge, items } };
+  } catch (error) {
+    console.error("[getHubMobile] Failed to fetch catalog, falling back to mock:", error);
+    return hubMobile;
   }
-
-  const items = hubMobile.surge.items.map((item) => {
-    const live = floor.get(item.slug);
-    return live ? { ...item, price: money(live.priceUsd), changePct: live.change.percent } : item;
-  });
-
-  return { ...hubMobile, surge: { ...hubMobile.surge, items } };
 }

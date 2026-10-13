@@ -8,7 +8,7 @@ import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { updateProfileDetails } from "../../actions/profile";
-import { ProfileAvatarPicker } from "./profile-avatar-picker";
+import { ProfileAvatarPicker, AVATAR_PRESETS } from "./profile-avatar-picker";
 
 const ROLE_OPTIONS = ["Trader", "Arbitrageur", "Collector", "Market Maker", "Sentinel Auditor"].map((r) => ({
   value: r,

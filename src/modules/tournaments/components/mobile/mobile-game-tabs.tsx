@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { useMobileGameFilter } from "../../hooks/selection";
 import type { GameFilter } from "../../types";
@@ -27,8 +28,10 @@ export function MobileGameTabs({ tabs }: MobileGameTabsProps) {
           const isActive = tab.value === active;
           const dot = TAB_DOT[tab.value];
           return (
-            <button
+            <Button
               key={tab.value}
+              variant={null}
+              size={null}
               type="button"
               role="tab"
               aria-selected={isActive}
@@ -43,7 +46,7 @@ export function MobileGameTabs({ tabs }: MobileGameTabsProps) {
             >
               {dot && <span aria-hidden className={cn("h-2 w-2 rounded-full", dot)} />}
               {tab.label}
-            </button>
+            </Button>
           );
         })}
       </div>

@@ -355,7 +355,7 @@ images — including a real mobile payment that produced a new escrow order.
 | Escrow auto-cancel | ✅ expired on read + `/api/cron/escrow-timeouts` (daily on Vercel) |
 | **Trade-ups** | ✅ see below |
 | Steam sign-in | 🟡 redirect + forged-assertion rejection verified (phase 8); a real Steam login click-through still needs a human, and `STEAM_API_KEY` is empty |
-| Profile edits | ☐ no design yet — the hero button still toasts "on the roadmap" |
+| Profile edits | ✅ Phase 8 — ProfileEditModal & updateProfileDetails action |
 | Make an offer | ✅ Phase 7 — bid, revise, withdraw, accept → escrow, decline |
 | Steam inventory sync | ✅ phase 8 — `/sell` mirrors CS2, Dota 2 and TF2 inventories |
 | Price feed + cron | ✅ phase 8 — daily Skinport snapshot, Relicto sales recorded |

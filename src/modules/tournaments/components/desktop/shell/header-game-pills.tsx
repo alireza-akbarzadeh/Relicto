@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Dot } from "@/components/ui/dot";
 import { cn } from "@/lib/cn";
 import { GAME_DOT } from "../../../lib/game-theme";
@@ -24,8 +25,10 @@ export function HeaderGamePills({ pills }: { pills: DesktopShell["gamePills"] })
       {pills.map(({ game, label }) => {
         const isActive = game === active;
         return (
-          <button
+          <Button
             key={game}
+            variant={null}
+            size={null}
             type="button"
             role="tab"
             aria-selected={isActive}
@@ -39,7 +42,7 @@ export function HeaderGamePills({ pills }: { pills: DesktopShell["gamePills"] })
           >
             <Dot className={cn("h-2 w-2", GAME_DOT[game])} animation={isActive ? "pulse" : undefined} />
             {label}
-          </button>
+          </Button>
         );
       })}
     </div>

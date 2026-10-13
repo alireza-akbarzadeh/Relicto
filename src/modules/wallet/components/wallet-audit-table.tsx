@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { WalletTransaction } from "../types";
@@ -104,15 +105,17 @@ export function WalletAuditTable({
                     <LedgerStatus transaction={transaction} />
                   </td>
                   <td className="px-space-md py-3.5 text-right">
-                    <button
+                    <Button
                       type="button"
+                      variant={null}
+                      size={null}
                       onClick={() => handleTransactionAction(transaction)}
                       aria-label={`${transaction.action} proof for ${transaction.hash}`}
-                      className="inline-flex cursor-pointer items-center gap-1 rounded bg-transparent p-0 font-label-caps text-[11px] text-text-secondary uppercase transition-colors hover:text-text-primary focus-visible:outline-hidden"
+                      className="inline-flex cursor-pointer items-center gap-1 rounded border-0 bg-transparent p-0 font-label-caps text-[11px] text-text-secondary uppercase transition-colors hover:text-text-primary focus-visible:outline-hidden"
                     >
                       <span>{transaction.action}</span>
                       <Icon name={transaction.actionIcon} className="text-[14px]" />
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))

@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useQueryStates } from "nuqs";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
@@ -158,14 +159,16 @@ export function WalletAuditLedger({ transactions }: { transactions: WalletTransa
             triggerClassName="cursor-pointer rounded-lg bg-surface-card px-space-sm py-2 pr-7 font-label-caps text-[11px] text-text-secondary uppercase"
             iconClassName="absolute top-2.5 right-2 text-[16px] text-text-muted"
           />
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => exportCsv(visible, range)}
             className="inline-flex cursor-pointer items-center gap-1 rounded-lg border-0 bg-surface-container-high px-space-md py-2 font-label-caps text-[11px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
           >
             <Icon name="file_download" className="text-[16px]" />
             <span>CSV / Tax Audit</span>
-          </button>
+          </Button>
         </div>
       </div>
 

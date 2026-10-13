@@ -1,6 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { useToggleSet } from "../../hooks/use-toggle-set";
 import { TEXT_TONE } from "../../lib/tones";
@@ -16,12 +18,12 @@ export function MobileSearch({ placeholder, chips }: MobileSearchProps) {
     <div className="px-margin py-1">
       <div className="relative flex w-full items-center">
         <Icon name="search" className="absolute left-3 text-[18px] text-text-muted" />
-        <input
+        <Input
           type="text"
           enterKeyHint="search"
           aria-label="Search tournaments"
           placeholder={placeholder}
-          className="h-11 w-full rounded-lg bg-surface-container-low pr-14 pl-9 font-body-sm text-body-sm text-text-primary shadow-inner transition-colors placeholder:text-text-muted focus:bg-surface-container focus:outline-hidden"
+          className="h-11 w-full rounded-lg border-0 bg-surface-container-low pr-14 pl-9 font-body-sm text-body-sm text-text-primary shadow-inner transition-colors placeholder:text-text-muted focus:bg-surface-container focus-visible:ring-0"
         />
         <kbd className="absolute right-2.5 rounded bg-surface-container-high px-1.5 py-0.5 font-label-badge text-label-badge text-text-muted">
           ⌘K
@@ -32,8 +34,10 @@ export function MobileSearch({ placeholder, chips }: MobileSearchProps) {
         {chips.map((chip) => {
           const isActive = active.has(chip.label);
           return (
-            <button
+            <Button
               key={chip.label}
+              variant={null}
+              size={null}
               type="button"
               aria-pressed={isActive}
               onClick={() => active.toggle(chip.label)}
@@ -46,7 +50,7 @@ export function MobileSearch({ placeholder, chips }: MobileSearchProps) {
             >
               <Icon name={chip.icon} className={cn("text-[14px]", TEXT_TONE[chip.tone])} />
               <span>{chip.label}</span>
-            </button>
+            </Button>
           );
         })}
       </div>

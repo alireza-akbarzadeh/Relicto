@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 
 /** Marketplace search shortcut from the Stitch 404 diagnostic screen. */
 export function StatusSearch() {
@@ -24,11 +25,11 @@ export function StatusSearch() {
     <div className="relative mt-space-lg w-full max-w-xl">
       <div className="relative flex items-center">
         <Icon name="search" className="pointer-events-none absolute left-space-md text-xl text-text-muted" />
-        <input
+        <Input
           ref={inputRef}
           type="search"
           placeholder="Search skins, seed numbers, Doppler phases, or tourneys..."
-          className="w-full rounded-xl bg-surface-deep py-space-md pr-20 pl-12 font-body-md text-body-md text-on-surface shadow-lg transition-colors placeholder:text-text-muted focus:bg-surface-container focus:outline-none"
+          className="h-auto w-full rounded-xl border-0 bg-surface-deep py-space-md pr-20 pl-12 font-body-md text-body-md text-on-surface shadow-lg transition-colors placeholder:text-text-muted focus-visible:bg-surface-container focus-visible:ring-0"
           onKeyDown={(event) => {
             if (event.key !== "Enter") return;
             const query = event.currentTarget.value.trim();

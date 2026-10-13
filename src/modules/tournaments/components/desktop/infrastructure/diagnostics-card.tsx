@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { TEXT_TONE } from "../../../lib/tones";
 import type { Infrastructure } from "../../../types";
@@ -23,13 +24,15 @@ export function DiagnosticsCard({ diagnostics }: { diagnostics: Infrastructure["
           </div>
         ))}
       </dl>
-      <button
+      <Button
+        variant={null}
+        size={null}
         type="button"
         className="flex w-full items-center justify-center gap-1 rounded bg-surface-container-high py-2 font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright"
       >
         <Icon name={diagnostics.action.icon} className="text-[16px]" />
         {diagnostics.action.label}
-      </button>
+      </Button>
     </div>
   );
 }

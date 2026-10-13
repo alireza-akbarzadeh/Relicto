@@ -4,13 +4,9 @@ import { cn } from "@/lib/cn";
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import { OUTAGE } from "../data/status.mock";
+import { GatewayDiagnostic } from "./gateway-diagnostic";
+import { GatewayMonitors } from "./gateway-monitors";
 import { GatewayRetryControls } from "./gateway-retry-controls";
-
-const MONITOR_TONE: Record<string, { text: string; bar: string; dot: string }> = {
-  tertiary: { text: "text-tertiary", bar: "bg-tertiary", dot: "bg-tertiary" },
-  primary: { text: "text-primary", bar: "bg-primary-container", dot: "bg-status-live" },
-  cyan: { text: "text-status-upcoming", bar: "bg-status-upcoming", dot: "bg-status-upcoming" },
-};
 
 /** Stitch: 502/503 Valve API gateway outage with live infrastructure monitor. */
 export function GatewayErrorView({ onRetry }: { onRetry?: () => void }) {
@@ -81,92 +77,10 @@ export function GatewayErrorView({ onRetry }: { onRetry?: () => void }) {
                 </div>
               </div>
 
-              <div className="relative lg:col-span-5">
-                <div className="relative flex w-full flex-col gap-space-md overflow-hidden rounded-xl bg-surface-card p-space-md shadow-2xl">
-                  <div className="flex items-center justify-between pb-space-xs">
-                    <div className="flex items-center gap-space-xs">
-                      <span className="h-3 w-3 rounded-full bg-primary-container" />
-                      <span className="h-3 w-3 rounded-full bg-tertiary" />
-                      <span className="h-3 w-3 rounded-full bg-surface-container-highest" />
-                    </div>
-                    <span className="font-label-badge text-label-badge text-text-muted">DIAGNOSTIC_CORE // HARNESS_V4</span>
-                  </div>
-                  <div className="relative flex h-64 w-full items-center justify-center overflow-hidden rounded-lg bg-surface-container-lowest">
-                    <div
-                      className="h-full w-full bg-cover bg-center opacity-40 mix-blend-luminosity"
-                      style={{ backgroundImage: `url('${OUTAGE.diagnosticImage}')` }}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t/srgb from-surface-card via-transparent to-surface-card/60" />
-                    <div className="absolute inset-0 flex flex-col justify-between p-space-md">
-                      <div className="flex items-start justify-between">
-                        <div className="flex flex-col">
-                          <span className="font-label-badge text-label-badge font-bold text-primary">{OUTAGE.route}</span>
-                          <span className="font-data-mono-md text-data-mono-md text-text-muted">ERR_CONNECTION_TIMED_OUT</span>
-                        </div>
-                        <div className="rounded bg-surface-overlay px-space-sm py-space-xs font-data-mono-md text-data-mono-md text-error shadow-md">503 UNAVAILABLE</div>
-                      </div>
-                      <svg className="h-20 w-full overflow-visible text-primary" fill="none" viewBox="0 0 300 70">
-                        <path className="opacity-90" d="M 0 35 L 45 35 L 60 15 L 75 55 L 90 35 L 125 35 L 135 5 L 145 65 L 155 35 L 180 35" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                        <circle className="animate-ping" cx="180" cy="35" fill="currentColor" r="4" />
-                        <line className="opacity-40" stroke="currentColor" strokeDasharray="4 4" strokeWidth="2" x1="184" x2="204" y1="35" y2="35" />
-                        <path d="M 210 35 L 240 35 L 255 35 L 300 35" stroke="#64748b" strokeDasharray="2 6" strokeLinecap="round" strokeWidth="2" />
-                        <text fill="#ffb2b7" fontFamily="JetBrains Mono" fontSize="9" fontWeight="600" x="210" y="24">
-                          SEVERED LINK
-                        </text>
-                        <text fill="#ffb95f" fontFamily="JetBrains Mono" fontSize="9" x="25" y="62">
-                          HEARTBEAT DROP: 99.4%
-                        </text>
-                      </svg>
-                      <div className="flex items-center justify-between font-label-badge text-label-badge text-text-muted">
-                        <span>TX: 0.00 KB/S</span>
-                        <span>RX: 0.00 KB/S</span>
-                        <span className="text-primary">DESYNC DETECTED</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-space-sm text-center">
-                    <div className="flex flex-col rounded bg-surface-container-low p-space-sm">
-                      <span className="font-label-badge text-label-badge text-text-muted uppercase">Valve Response Time</span>
-                      <span className="font-data-mono-lg text-data-mono-lg text-tertiary">2,480 ms</span>
-                    </div>
-                    <div className="flex flex-col rounded bg-surface-container-low p-space-sm">
-                      <span className="font-label-badge text-label-badge text-text-muted uppercase">Escrow Intercept Status</span>
-                      <span className="font-data-mono-lg text-data-mono-lg text-text-primary">100% Locked</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <GatewayDiagnostic />
             </div>
 
-            <div className="flex flex-col gap-space-md">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-space-sm">
-                  <Icon name="tune" className="text-[20px] text-primary" />
-                  <h3 className="font-headline-sm text-headline-sm tracking-wide text-text-primary uppercase">Live Infrastructure Monitor Dashboard</h3>
-                </div>
-                <span className="font-label-badge text-label-badge text-text-muted">FREQUENCY: 500MS REFRESH</span>
-              </div>
-              <div className="grid grid-cols-1 gap-space-md md:grid-cols-2 xl:grid-cols-5">
-                {OUTAGE.monitors.map((tile) => {
-                  const palette = MONITOR_TONE[tile.tone] ?? MONITOR_TONE.cyan;
-                  return (
-                    <div key={tile.label} className="flex flex-col justify-between gap-space-md rounded-xl bg-surface-card p-space-md shadow-md">
-                      <div className="flex items-center justify-between">
-                        <span className="font-label-caps text-label-caps text-text-muted uppercase">{tile.label}</span>
-                        <span className={cn("h-2.5 w-2.5 rounded-full", palette.dot, tile.ping && "animate-ping")} />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className={cn("font-headline-sm text-headline-sm", palette.text)}>{tile.status}</span>
-                        <span className="font-label-badge text-label-badge text-text-secondary">{tile.detail}</span>
-                      </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-container-highest">
-                        <div className={cn("h-1.5 rounded-full", palette.bar, tile.bar)} />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <GatewayMonitors />
 
             <div className="grid grid-cols-1 gap-space-lg lg:grid-cols-12">
               <div className="flex flex-col gap-space-sm lg:col-span-8">

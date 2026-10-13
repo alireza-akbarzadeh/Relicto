@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
@@ -60,7 +61,9 @@ export function BracketCard({ card, highPriorityImage }: BracketCardProps) {
             +{card.extraTeams}
           </div>
         </div>
-        <button
+        <Button
+          variant={null}
+          size={null}
           type="button"
           className={cn(
             "flex h-8 items-center gap-1.5 rounded-md px-3.5 font-label-caps text-label-caps uppercase active:scale-95",
@@ -69,7 +72,7 @@ export function BracketCard({ card, highPriorityImage }: BracketCardProps) {
         >
           <span>{card.action.label}</span>
           <Icon name={card.action.icon} className="text-[15px]" />
-        </button>
+        </Button>
       </div>
     </article>
   );

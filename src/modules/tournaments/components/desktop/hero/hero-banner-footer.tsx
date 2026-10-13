@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { cn } from "@/lib/cn";
@@ -48,17 +49,24 @@ export function HeroBannerFooter({ event }: { event: HeroEvent }) {
       </div>
 
       <div className="flex shrink-0 items-center gap-space-sm">
-        <button type="button" className={cn(ACTION_BASE, "px-space-lg active:scale-[0.98]", theme.primaryAction)}>
+        <Button
+          type="button"
+          variant={null}
+          size={null}
+          className={cn(ACTION_BASE, "px-space-lg active:scale-[0.98]", theme.primaryAction)}
+        >
           <Icon name={event.primaryAction.icon} className="text-[20px]" />
           {event.primaryAction.label}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant={null}
+          size={null}
           className={cn(ACTION_BASE, "bg-surface-container-high px-space-md text-text-primary hover:bg-surface-bright")}
         >
           <Icon name={event.secondaryAction.icon} className="text-[20px]" />
           {event.secondaryAction.label}
-        </button>
+        </Button>
       </div>
     </div>
   );

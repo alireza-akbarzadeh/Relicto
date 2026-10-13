@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Dot } from "@/components/ui/dot";
 import { Icon } from "@/components/ui/icon";
 import type { QuickMatchData } from "../../../mobile.types";
@@ -29,13 +30,15 @@ export function QuickMatchCard({ match }: { match: QuickMatchData }) {
           <Icon name="speed" className="text-[15px] text-status-upcoming" />
           <span>{match.wait}</span>
         </div>
-        <button
+        <Button
+          variant={null}
+          size={null}
           type="button"
           className="flex h-7 items-center gap-1 rounded bg-primary-container/20 px-3 font-label-caps text-label-caps text-primary uppercase transition-transform active:scale-95"
         >
           <span>{match.action.label}</span>
           <Icon name={match.action.icon} className="text-[14px]" />
-        </button>
+        </Button>
       </div>
     </article>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition, type FormEvent } from "react";
-import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,15 +13,7 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { updateProfileDetails } from "../../actions/profile";
-
-const AVATAR_PRESETS = [
-  "/images/lootora/avatar.jpg",
-  "/images/lootora/items/butterfly-doppler.jpg",
-  "/images/lootora/items/manifold-paradox.jpg",
-  "/images/lootora/items/dark-artistry-cape.jpg",
-  "/images/lootora/items/dragonclaw-hook.jpg",
-  "/images/lootora/items/awp-fade.jpg",
-];
+import { AVATAR_PRESETS, ProfileAvatarPicker } from "./profile-avatar-picker";
 
 const ROLES = ["Trader", "Arbitrageur", "Collector", "Market Maker", "Sentinel Auditor"];
 
@@ -90,7 +81,7 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
         <DialogHeader className="gap-1 pb-2">
           <div className="flex items-center gap-2 text-primary">
             <Icon name="tune" className="text-[20px]" />
-            <DialogTitle className="font-headline-sm text-lg font-bold text-text-primary uppercase tracking-wider">
+            <DialogTitle className="font-headline-sm text-lg font-bold tracking-wider text-text-primary uppercase">
               Edit Trader Profile
             </DialogTitle>
           </div>
@@ -100,46 +91,8 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
-          {/* Avatar selector */}
-          <div className="flex flex-col gap-2">
-            <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
-              Profile Portrait / Avatar
-            </label>
-            <div className="flex items-center gap-3">
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-primary/40 bg-surface-container-highest shadow-inner">
-                <Image
-                  src={avatar || AVATAR_PRESETS[0]}
-                  alt="Avatar preview"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {AVATAR_PRESETS.map((preset) => (
-                  <button
-                    key={preset}
-                    type="button"
-                    onClick={() => setAvatar(preset)}
-                    className={`relative h-8 w-8 overflow-hidden rounded-lg border transition-all ${
-                      avatar === preset
-                        ? "border-primary ring-2 ring-primary/40 scale-105"
-                        : "border-white/10 opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <Image src={preset} alt="Preset avatar" fill className="object-cover" />
-                  </button>
-                ))}
-              </div>
-            </div>
-            <Input
-              value={avatar}
-              onChange={(e) => setAvatar(e.target.value)}
-              placeholder="Or enter custom image URL"
-              className="h-9 border-white/10 bg-surface-container-lowest font-data-mono-md text-xs text-text-primary"
-            />
-          </div>
+          <ProfileAvatarPicker avatar={avatar} setAvatar={setAvatar} />
 
-          {/* Trader Handle & Alias */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
               <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
@@ -169,7 +122,6 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
             </div>
           </div>
 
-          {/* Real Name & Role Badge */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
               <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
@@ -189,7 +141,7 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="h-9 rounded-md border border-white/10 bg-surface-container-lowest px-2.5 font-data-mono-md text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="h-9 rounded-md border border-white/10 bg-surface-container-lowest px-2.5 font-data-mono-md text-xs text-text-primary focus:ring-1 focus:ring-primary focus:outline-none"
               >
                 {ROLES.map((r) => (
                   <option key={r} value={r} className="bg-surface-card text-text-primary">
@@ -200,7 +152,6 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
             </div>
           </div>
 
-          {/* Steam Trade URL */}
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
@@ -229,14 +180,14 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
               variant="outline"
               disabled={pending}
               onClick={() => onOpenChange(false)}
-              className="h-9 border-white/15 bg-transparent font-headline-sm text-xs text-text-secondary hover:bg-white/5 uppercase"
+              className="h-9 border-white/15 bg-transparent font-headline-sm text-xs text-text-secondary uppercase hover:bg-white/5"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={pending}
-              className="h-9 gap-1.5 border-0 bg-primary px-4 font-headline-sm text-xs font-bold text-on-primary shadow-lg shadow-primary/20 hover:bg-primary/90 uppercase"
+              className="h-9 gap-1.5 border-0 bg-primary px-4 font-headline-sm text-xs font-bold text-on-primary uppercase shadow-lg shadow-primary/20 hover:bg-primary/90"
             >
               <Icon name={pending ? "progress_activity" : "check"} className={`text-[16px] ${pending ? "animate-spin" : ""}`} />
               <span>{pending ? "Saving..." : "Save Identity"}</span>

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon, IconName } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 
@@ -41,12 +42,14 @@ export function WalletActionButton({
   const style = ACTION_STYLES[action];
 
   return (
-    <button
+    <Button
       type="button"
+      variant={null}
+      size={null}
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-space-xs py-space-sm",
+        "flex min-w-0 items-center justify-center gap-1.5 rounded-lg border-0 px-space-xs py-space-sm",
         "font-headline-sm text-[13px]",
         "transition-all duration-200",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 focus-visible:ring-offset-surface-card",
@@ -67,6 +70,6 @@ export function WalletActionButton({
       />
 
       <span className="truncate">{children}</span>
-    </button>
+    </Button>
   );
 }

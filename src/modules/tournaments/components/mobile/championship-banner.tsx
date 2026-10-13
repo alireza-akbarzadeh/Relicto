@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Dot, PingDot } from "@/components/ui/dot";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -51,21 +52,25 @@ export function ChampionshipBanner({ data }: { data: Championship }) {
         </dl>
 
         <div className="mt-4 flex items-center gap-2.5">
-          <button
+          <Button
+            variant={null}
+            size={null}
             type="button"
             className="flex h-10 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 font-label-caps text-label-caps text-on-primary uppercase shadow-[0_0_18px_rgba(244,63,94,0.4)] transition-transform active:scale-[0.98]"
           >
             <Icon name={data.primaryAction.icon} className="text-[18px]" />
             <span>{data.primaryAction.label}</span>
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={null}
+            size={null}
             type="button"
             className="flex h-10 items-center justify-center gap-1.5 rounded-lg bg-surface-container-high px-3 font-label-caps text-label-caps text-text-primary transition-all active:scale-[0.98]"
           >
             <Dot className="h-2 w-2 bg-status-live" animation="pulse" />
             <Icon name={data.secondaryAction.icon} className="text-[18px] text-text-secondary" />
             <span>{data.secondaryAction.label}</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>

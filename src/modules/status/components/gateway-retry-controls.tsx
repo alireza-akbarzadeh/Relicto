@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 
@@ -39,14 +40,16 @@ export function GatewayRetryControls({ onRetry, initialSeconds = 14, initialAtte
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant={null}
+        size={null}
         onClick={handleRetry}
-        className="flex items-center gap-space-sm rounded bg-primary-container px-space-lg py-space-md font-label-caps text-label-caps text-on-primary-container uppercase shadow-lg shadow-primary-container/20 transition-all hover:brightness-110"
+        className="flex items-center gap-space-sm rounded border-0 bg-primary-container px-space-lg py-space-md font-label-caps text-label-caps text-on-primary-container uppercase shadow-lg shadow-primary-container/20 transition-all hover:brightness-110"
       >
         <Icon name="refresh" className={cn("text-[18px]", spinning && "animate-spin")} />
         <span>Retry Connection Now</span>
-      </button>
+      </Button>
       <div className="flex max-w-xl items-center gap-space-sm rounded bg-surface-deep p-space-sm shadow-inner">
         <div className="h-2 w-2 animate-pulse rounded-full bg-status-upcoming" />
         <span className="font-data-mono-md text-data-mono-md text-text-secondary">

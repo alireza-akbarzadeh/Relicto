@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { GAME_THEME } from "../../../lib/game-theme";
@@ -19,8 +20,10 @@ export function HeroTabs({ events, active, onSelect }: HeroTabsProps) {
       {events.map(({ game, tab }) => {
         const isActive = game === active;
         return (
-          <button
+          <Button
             key={game}
+            variant={null}
+            size={null}
             type="button"
             role="tab"
             aria-selected={isActive}
@@ -32,7 +35,7 @@ export function HeroTabs({ events, active, onSelect }: HeroTabsProps) {
           >
             <Icon name={tab.icon} className="text-[16px]" />
             {tab.label}
-          </button>
+          </Button>
         );
       })}
     </div>

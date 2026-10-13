@@ -1,6 +1,6 @@
 import "server-only";
-
 import { connection } from "next/server";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { tournamentService } from "@/server/modules/tournaments/tournaments.service";
 import { arenaCards, arenaSection, circuitFilters, filterChips } from "./desktop/arenas.mock";
 import { heroEvents, heroTelemetry, platformStats } from "./desktop/hero.mock";
@@ -33,6 +33,7 @@ export async function getArenaDesktop() {
   try {
     live = await tournamentService.arena();
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getArenaDesktop] Fallback to mock:", err);
   }
 
@@ -60,6 +61,7 @@ export async function getArenaMobile() {
   try {
     live = await tournamentService.arenaMobile();
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getArenaMobile] Fallback to mock:", err);
   }
 

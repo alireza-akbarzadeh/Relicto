@@ -1,4 +1,5 @@
 import "server-only";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { requireUserId } from "@/modules/relicto/data/get-session";
 import { offerService } from "@/server/modules/offers/offers.service";
 import { profileService } from "@/server/modules/profile/profile.service";
@@ -35,8 +36,8 @@ const SAMPLE: ProfileData = {
  * The watchlist and bids are always the caller's own.
  */
 export async function getProfile(): Promise<ProfileData> {
+  const userId = await requireUserId();
   try {
-    const userId = await requireUserId();
     const [profile, watchlist, bids] = await Promise.all([
       profileService.detail(userId),
       watchlistService.watched(userId),
@@ -45,6 +46,7 @@ export async function getProfile(): Promise<ProfileData> {
 
     return { ...(profile ?? SAMPLE), watchlist, bids };
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getProfile] Fallback to mock:", err);
     return SAMPLE;
   }

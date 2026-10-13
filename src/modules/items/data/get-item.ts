@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { itemService } from "@/server/modules/items/items.service";
 import type { ItemMobile } from "../mobile.types";
@@ -28,6 +29,7 @@ export const getItem = cache(async (slug: string): Promise<ItemDetail | null> =>
     try {
       return await itemService.detail(slug, viewerId);
     } catch (err) {
+      rethrowNextSignals(err);
       console.error(`[getItem] Error loading detail for ${slug}:`, err);
       return null;
     }
@@ -52,6 +54,7 @@ export const getItem = cache(async (slug: string): Promise<ItemDetail | null> =>
       },
     };
   } catch (err) {
+    rethrowNextSignals(err);
     console.error(`[getItem] Error loading live book for ${slug}:`, err);
     return authored;
   }
@@ -68,7 +71,8 @@ export const getItemMobile = cache(async (slug: string): Promise<ItemMobile | nu
   if (authored) {
     try {
       return await itemService.mobile(authored, await getUserId());
-    } catch {
+    } catch (err) {
+      rethrowNextSignals(err);
       return authored;
     }
   }

@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
 import { findOrOpenProfile } from "@/server/modules/profile/profile.repository";
 import { walletService } from "@/server/modules/wallet/wallet.service";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import type { AppNotification, SessionUser } from "../session-types";
 
 /**
@@ -21,6 +22,7 @@ const readSession = cache(async () => {
   try {
     return await auth.api.getSession({ headers: await headers() });
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getSession] Failed to read session:", err);
     return null;
   }
@@ -50,6 +52,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
 
     return { user, notifications };
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getSession] Error loading auxiliary session data:", err);
     return {
       user: {

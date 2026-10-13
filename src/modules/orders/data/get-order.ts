@@ -1,5 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { orderService } from "@/server/modules/orders/orders.service";
 import type { TrackingMobile } from "../mobile.types";
@@ -15,11 +16,13 @@ const orderCode = (orderId: string, fallback: string) => (orderId ? `#${orderId.
  * sample escrow only stands in on a database nobody has seeded.
  */
 export async function getOrderTracking(orderId: string): Promise<OrderTracking> {
+  const viewer = await requireSettledViewer();
   try {
-    const live = await orderService.tracking(orderId, await requireSettledViewer());
+    const live = await orderService.tracking(orderId, viewer);
     if (live) return live;
     if (await orderService.hasOrders()) notFound();
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getOrderTracking] Fallback to mock:", err);
   }
   return { ...tracking, code: orderCode(orderId, tracking.code) };
@@ -27,11 +30,13 @@ export async function getOrderTracking(orderId: string): Promise<OrderTracking> 
 
 /** The mobile tracker's view of the same order, with the same access rule. */
 export async function getOrderTrackingMobile(orderId: string): Promise<TrackingMobile> {
+  const viewer = await requireSettledViewer();
   try {
-    const live = await orderService.trackingMobile(orderId, await requireSettledViewer());
+    const live = await orderService.trackingMobile(orderId, viewer);
     if (live) return live;
     if (await orderService.hasOrders()) notFound();
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getOrderTrackingMobile] Fallback to mock:", err);
   }
   return { ...trackingMobile, code: orderCode(orderId, trackingMobile.code) };

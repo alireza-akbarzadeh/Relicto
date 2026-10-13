@@ -1,4 +1,5 @@
 import "server-only";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { walletService } from "@/server/modules/wallet/wallet.service";
 import type { WalletMobile } from "../mobile.types";
@@ -27,10 +28,12 @@ const previewTreasury = (): WalletData => ({
 });
 
 export async function getWallet(): Promise<WalletData> {
+  const viewerId = await requireSettledViewer();
   try {
-    const treasury = await walletService.treasury(await requireSettledViewer());
+    const treasury = await walletService.treasury(viewerId);
     return treasury ?? previewTreasury();
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getWallet] Fallback to mock:", err);
     return previewTreasury();
   }
@@ -38,10 +41,12 @@ export async function getWallet(): Promise<WalletData> {
 
 /** Mobile wallet: the same balances and ledger as desktop, with the mobile vault chrome, actions and rails. */
 export async function getWalletMobile(): Promise<WalletMobile> {
+  const viewerId = await requireSettledViewer();
   const { vault, actions, rails } = walletMobile;
   try {
-    return (await walletService.treasuryMobile(await requireSettledViewer(), { vault, actions, rails })) ?? walletMobile;
+    return (await walletService.treasuryMobile(viewerId, { vault, actions, rails })) ?? walletMobile;
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getWalletMobile] Fallback to mock:", err);
     return walletMobile;
   }

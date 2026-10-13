@@ -1,4 +1,5 @@
 import "server-only";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { orderService } from "@/server/modules/orders/orders.service";
 import type { LedgerData } from "../types";
@@ -29,14 +30,15 @@ const SAMPLE: LedgerData = {
  * sample ledger while the account has no orders, so the screen is never blank.
  */
 export async function getOrderLedger(): Promise<LedgerData> {
+  const viewer = await requireSettledViewer();
   try {
-    const viewer = await requireSettledViewer();
     const [ledger, hasOrders] = await Promise.all([
       orderService.ledger(viewer),
       orderService.hasOrders(),
     ]);
     return hasOrders ? ledger : SAMPLE;
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getOrderLedger] Fallback to mock:", err);
     return SAMPLE;
   }

@@ -1,5 +1,5 @@
 import "server-only";
-
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { listingService } from "@/server/modules/listings/listings.service";
 import { searchListings } from "../lib/filters";
@@ -16,6 +16,7 @@ export async function getMarketplaceCatalog() {
     const listings = await listingService.catalog({ sort: "recent" });
     return listings.length > 0 ? listings : LISTINGS;
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getMarketplaceCatalog] Fallback to mock:", err);
     return LISTINGS;
   }
@@ -33,6 +34,7 @@ export async function getMarketplaceResults(filters: Filters) {
     const results = await listingService.search(filters);
     if (results.facets.total > 0) return results;
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getMarketplaceResults] Fallback to mock:", err);
   }
 
@@ -55,6 +57,7 @@ export async function getMarketplaceMobile() {
       return { ...marketMobile, listings: feed.listings, ticker: { ...marketMobile.ticker, pool: usd(feed.liquidityUsd) } };
     }
   } catch (err) {
+    rethrowNextSignals(err);
     console.error("[getMarketplaceMobile] Fallback to mock:", err);
   }
   return marketMobile;

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { CommunityView } from "@/modules/community/components/community-view";
 import { getCommunity } from "@/modules/community/data/get-community";
@@ -10,5 +11,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default async function CommunityPage() {
-  return <CommunityView data={await getCommunity()} />;
+  const data = await getCommunity();
+  return (
+    <Suspense>
+      <CommunityView data={data} />
+    </Suspense>
+  );
 }

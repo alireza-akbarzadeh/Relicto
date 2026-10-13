@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Play, Pause } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import type { ItemDetail } from "../../types";
 import { PriceAlertCard } from "./price-alert-card";
 
@@ -51,14 +52,16 @@ export function VfxReplay({
                 className={`object-cover transition-transform duration-300 ${playing ? "scale-105" : "group-hover:scale-105"}`}
               />
               <div className="absolute inset-0 flex items-center justify-center bg-canvas-base/60 transition-all group-hover:bg-canvas-base/40">
-                <button
+                <Button
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={handleTogglePlay}
                   aria-label={playing ? "Pause animation clip" : "Play animation clip"}
                   className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 bg-status-live/90 text-text-primary shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-transform group-hover:scale-110 hover:bg-status-live focus-visible:outline-hidden"
                 >
                   {playing ? <Pause className="size-6 text-white" /> : <Play className="ml-0.5 size-6 text-white" />}
-                </button>
+                </Button>
               </div>
               <div className="absolute right-2 bottom-2 left-2 flex items-center justify-between rounded border border-border-subtle bg-surface-container-lowest/90 px-2 py-1 font-label-badge text-[10px] text-text-primary backdrop-blur-md">
                 <span>{replay.caption}</span>

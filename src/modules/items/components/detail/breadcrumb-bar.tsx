@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import type { ItemDetail } from "../../types";
 
@@ -38,14 +39,16 @@ export function BreadcrumbBar({ item }: { item: ItemDetail }) {
           <div className="flex items-center gap-2 rounded border border-border-subtle bg-surface-container px-3 py-1">
             <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
             <span className="font-data-mono-md text-[11px] text-text-secondary">Steam API Synced · {item.syncedAgo}</span>
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={handleRefresh}
               aria-label="Force cache recalculation"
               className="ml-1 inline-flex cursor-pointer items-center justify-center rounded-none border-0 p-0 text-text-muted transition-colors hover:text-tertiary focus-visible:outline-hidden"
             >
               <Icon name="sync" className="text-[15px]" />
-            </button>
+            </Button>
           </div>
           <div className="hidden items-center gap-1.5 rounded border border-border-subtle bg-surface-container-high px-2.5 py-1 sm:flex">
             <span className="font-data-mono-md text-[11px] font-bold text-tertiary">APPID: {item.appId}</span>

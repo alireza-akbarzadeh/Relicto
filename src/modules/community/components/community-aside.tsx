@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export function CommunityAside() {
   return (
@@ -60,13 +61,15 @@ export function CommunityAside() {
             </div>
           </div>
         ))}
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => toast.success("Cryptographic vote registered on-chain", { description: "Verified with Valve Steam session." })}
-          className="mt-4 flex h-auto w-full cursor-pointer items-center justify-center rounded bg-surface-container-high py-2 font-label-caps text-[10px] text-text-primary uppercase transition-colors hover:bg-surface-bright focus-visible:outline-hidden"
+          className="mt-4 flex h-auto w-full cursor-pointer items-center justify-center rounded border-0 bg-surface-container-high py-2 font-label-caps text-[10px] text-text-primary uppercase transition-colors hover:bg-surface-bright focus-visible:outline-hidden"
         >
           Cast Cryptographic Vote
-        </button>
+        </Button>
       </section>
     </aside>
   );

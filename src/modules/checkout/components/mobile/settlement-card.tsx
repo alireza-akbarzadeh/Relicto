@@ -95,13 +95,15 @@ export function SettlementCard({ data }: { data: CheckoutMobile }) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
               <span className={ROW}>Tournament Code (TI14-MAJOR-VIP)</span>
-              <button
+              <Button
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setPromo(false)}
-                className="ml-1 text-[10px] text-text-muted underline hover:text-text-primary"
+                className="ml-1 h-auto border-0 p-0 text-[10px] text-text-muted underline hover:text-text-primary"
               >
                 Remove
-              </button>
+              </Button>
             </div>
             <span className="font-data-mono-md text-[13px] font-bold text-status-upcoming">−{formatMoney(promoDiscount)}</span>
           </div>

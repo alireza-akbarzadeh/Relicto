@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -77,9 +78,11 @@ function RowActions({ row }: { row: LedgerRow }) {
       </LinkButton>
     ),
     fingerprint: (
-      <button
+      <Button
         key="fingerprint"
         type="button"
+        variant={null}
+        size={null}
         onClick={() => {
           navigator.clipboard.writeText(row.code);
           toast.success("Settlement reference copied", { description: row.code });
@@ -88,7 +91,7 @@ function RowActions({ row }: { row: LedgerRow }) {
         className={ICON_ACTION}
       >
         <Icon name="fingerprint" className="text-[18px]" />
-      </button>
+      </Button>
     ),
   };
 

@@ -1,6 +1,8 @@
-"use client"
+"use client";
+
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { STUDIO_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
@@ -10,7 +12,7 @@ import { CartButton } from "../cart/cart-button";
 import { StudioHeaderSearch } from "./header-search";
 import { MainNav } from "./main-nav";
 import { WalletChip } from "./wallet-chip";
-import { SheetContent, SheetTrigger ,Sheet} from "@/components/ui/sheet";
+import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
 
 export function StudioHeader() {
   return (
@@ -23,14 +25,16 @@ export function StudioHeader() {
             <Sheet>
               <SheetTrigger
                 render={(props) => (
-                  <button
+                  <Button
                     {...props}
                     type="button"
+                    variant={null}
+                    size={null}
                     aria-label="Toggle navigation menu"
                     className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-surface-container-low text-text-secondary transition-colors hover:bg-surface-container-high hover:text-text-primary active:scale-95"
                   >
                     <Icon name="menu" className="text-[20px]" />
-                  </button>
+                  </Button>
                 )}
               />
               <SheetContent  className="bg-surface-card border-t border-white/10 p-4">

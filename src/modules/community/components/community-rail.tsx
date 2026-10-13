@@ -77,14 +77,16 @@ export function ChannelRail({
             <Icon name="chevron_right" className="text-[18px] text-text-muted" />
           </div>
         ))}
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => toast.info("Guild registration", { description: "Guild creation requires Prime Tier 5 verification." })}
-          className="flex h-auto w-full cursor-pointer items-center justify-center gap-1 rounded bg-surface-container-highest py-space-xs font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright focus-visible:outline-hidden"
+          className="flex h-auto w-full cursor-pointer items-center justify-center gap-1 rounded border-0 bg-surface-container-highest py-space-xs font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright focus-visible:outline-hidden"
         >
           <Icon name="add_circle" className="text-[16px]" />
           <span>Register Guild</span>
-        </button>
+        </Button>
       </section>
       <section className="rounded-xl bg-surface-container-low p-space-md shadow-lg">
         <div className="flex justify-between">

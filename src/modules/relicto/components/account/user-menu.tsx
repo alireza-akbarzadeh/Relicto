@@ -1,22 +1,16 @@
-"use client"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger
-} from "@/components/ui/drawer";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Icon } from "@/components/ui/icon";
 import { useTheme } from "@/hooks/use-theme";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { authClient } from "@/lib/auth-client";
 import { formatMoney } from "@/lib/format";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { ACCOUNT_LINKS } from "../../data/navigation";
 import { useSession, useViewer } from "../../state/session-provider";
 import { AvatarImage } from "./avatar-image";
@@ -116,40 +110,44 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
       </div>
 
       <div className="px-1">
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => {
             toggle();
             onClose?.();
           }}
-          className="group flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
+          className="group flex w-full items-center gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2.5 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
         >
           <Icon
             name={theme === "light" ? "dark_mode" : "light_mode"}
             className="text-[18px] text-text-muted group-hover:text-amber-400"
           />
           <span>{theme === "light" ? "Dark mode" : "Light mode"}</span>
-        </button>
+        </Button>
       </div>
 
       <hr className="my-1.5 border-white/5" />
 
       {/* Sign Out Action */}
       <div className="px-1 pb-2">
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => {
             signOut();
             onClose?.();
           }}
-          className="group flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 text-xs font-semibold text-status-offline transition-all hover:bg-status-offline/10 hover:text-status-offline active:scale-[0.98]"
+          className="group flex w-full items-center gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2.5 text-xs font-semibold text-status-offline transition-all hover:bg-status-offline/10 hover:text-status-offline active:scale-[0.98]"
         >
           <Icon
             name="logout"
             className="text-[18px] text-status-offline transition-transform duration-200 group-hover:-translate-x-0.5"
           />
           <span>Sign Out</span>
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -166,20 +164,22 @@ function SignedInUserMenu({ trigger }: UserMenuProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const renderTrigger = (props: React.ComponentPropsWithoutRef<"button">) => (
-    <button
+    <Button
       {...props}
       type="button"
+      variant={null}
+      size={null}
       aria-label="Account menu"
-      className="group rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-tertiary/50 transition-transform active:scale-95"
+      className="group rounded-xl border-0 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-tertiary/50 transition-transform active:scale-95"
     >
       <Trigger user={user} />
-    </button>
+    </Button>
   );
 
   if (isMobile) {
     return (
       <Drawer showSwipeHandle>
-        <DrawerTrigger  render={renderTrigger} />
+        <DrawerTrigger render={renderTrigger} />
         <DrawerContent className="bg-menu-panel border-t border-white/10 p-2">
           <UserMenuInnerContent />
         </DrawerContent>
@@ -189,7 +189,7 @@ function SignedInUserMenu({ trigger }: UserMenuProps) {
 
   return (
     <DropdownMenu>
-    <DropdownMenuTrigger  render={renderTrigger} />
+      <DropdownMenuTrigger render={renderTrigger} />
       <DropdownMenuContent
         align="end"
         className="w-80 border border-white/10 bg-menu-panel/95 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden p-0"

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { setWatched } from "@/modules/relicto/actions/watchlist";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -101,26 +102,30 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
         </div>
 
         <div className="flex items-center gap-1">
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => {
               setWatched({ slug: item.id, watched: true })
                 .then(() => toast.success(`Saved ${item.name} to watchlist`))
                 .catch(() => toast.info(`Wishlisted ${item.name}`));
             }}
             aria-label={`Save ${item.name} to wishlist`}
-            className="inline-flex cursor-pointer items-center justify-center rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary focus-visible:outline-hidden"
+            className="inline-flex cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent p-1.5 text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary focus-visible:outline-hidden"
           >
             <Icon name="favorite" className="text-[16px]" />
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={onRemove}
             aria-label={`Remove ${item.name}`}
-            className="inline-flex cursor-pointer items-center justify-center rounded-lg p-1.5 text-text-muted transition-colors hover:bg-error-container/20 hover:text-error focus-visible:outline-hidden"
+            className="inline-flex cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent p-1.5 text-text-muted transition-colors hover:bg-error-container/20 hover:text-error focus-visible:outline-hidden"
           >
             <Icon name="close" className="text-[16px]" />
-          </button>
+          </Button>
         </div>
       </div>
     </article>

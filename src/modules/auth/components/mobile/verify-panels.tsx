@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import type { VerifyMobile } from "../../data/verify-mobile.mock";
 
@@ -36,13 +37,15 @@ export function ApprovalPanels({ data }: { data: VerifyMobile }) {
                   <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-secondary border-t-transparent" />
                   <span className="font-data-mono-md text-data-mono-md text-text-secondary">Awaiting signature handshake...</span>
                 </div>
-                <button
+                <Button
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={() => toast.info("Polling Steam Mobile handshake...", { description: "Checking approval session..." })}
                   className="cursor-pointer border-0 bg-transparent font-label-badge text-label-badge font-semibold tracking-wider text-secondary uppercase hover:text-text-primary focus-visible:outline-hidden"
                 >
                   Refresh
-                </button>
+                </Button>
               </div>
             </div>
           </div>

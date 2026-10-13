@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import type { SentinelBot, TradeToken } from "../../types";
@@ -80,8 +81,10 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
           <span>Open Steam Trade Offer</span>
           <Icon name="open_in_new" className="text-[18px]" />
         </LinkButton>
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => {
             toast.success("Trade offer re-dispatched", {
               description: `Sentinel Bot #${bot.offerId} queued a fresh offer to your Trade URL within 30 seconds.`,
@@ -91,7 +94,7 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
         >
           <Icon name="refresh" className="text-[18px]" />
           <span>Re-Send Offer</span>
-        </button>
+        </Button>
       </div>
       <div className="flex flex-col gap-space-sm rounded-lg bg-surface-container-low/60 p-space-md">
         <span className="font-label-caps text-label-caps font-semibold tracking-wider text-text-muted uppercase">How to confirm in 30 seconds:</span>

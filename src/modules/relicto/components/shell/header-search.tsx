@@ -14,10 +14,10 @@ export function MarketHeaderSearch() {
           name="search"
           className="mr-2.5 text-[18px] text-text-muted transition-colors group-focus-within:text-tertiary group-hover:text-text-primary"
         />
-        <input
+        <Input
           {...input}
           placeholder="Search skins, weapon tiers, floats or pattern ID..."
-          className="w-full bg-transparent font-body-sm text-xs font-medium text-text-primary placeholder:text-text-muted focus:outline-none"
+          className="h-auto w-full border-0 bg-transparent p-0 font-body-sm text-xs font-medium text-text-primary placeholder:text-text-muted focus-visible:ring-0"
         />
         <kbd className="ml-2 flex h-5 items-center justify-center rounded-md border border-white/5 bg-white/10 px-1.5 font-data-mono-md text-[10px] font-bold text-text-muted shadow-xs">
           ⌘K
@@ -36,10 +36,10 @@ export function LedgerHeaderSearch() {
           name="search"
           className="mr-2.5 text-[18px] text-text-muted transition-colors group-focus-within:text-tertiary group-hover:text-text-primary"
         />
-        <input
+        <Input
           {...input}
           placeholder="Search skins, Doppler phase, float, pattern index..."
-          className="w-full bg-transparent font-body-sm text-xs font-medium text-text-primary placeholder:text-text-muted focus:outline-none"
+          className="h-auto w-full border-0 bg-transparent p-0 font-body-sm text-xs font-medium text-text-primary placeholder:text-text-muted focus-visible:ring-0"
         />
         <kbd className="ml-2 flex h-5 items-center justify-center rounded-md border border-white/5 bg-white/10 px-1.5 font-data-mono-md text-[10px] font-bold text-text-muted shadow-xs">
           ⌘K
@@ -58,10 +58,10 @@ export function StudioHeaderSearch() {
           name="search"
           className="mr-2 text-[18px] text-text-muted transition-colors group-focus-within:text-secondary group-hover:text-text-primary"
         />
-        <input
+        <Input
           {...input}
           placeholder="Search skins, cases, collections..."
-          className="w-full bg-transparent font-body-sm text-xs font-medium text-on-surface placeholder:text-text-muted focus:outline-none"
+          className="h-auto w-full border-0 bg-transparent p-0 font-body-sm text-xs font-medium text-on-surface placeholder:text-text-muted focus-visible:ring-0"
         />
         <div className="ml-2 flex shrink-0 items-center gap-0.5 rounded-md border border-white/5 bg-white/10 px-1.5 py-0.5 font-data-mono-md text-[10px] font-bold text-text-muted">
           <span>⌘</span>

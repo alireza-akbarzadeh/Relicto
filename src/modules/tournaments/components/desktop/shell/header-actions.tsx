@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { useCommandSearch } from "@/modules/relicto/hooks/use-command-search";
 import type { ArenaUser } from "../../../shell.types";
 
@@ -14,10 +15,10 @@ export function HeaderSearch({ placeholder }: { placeholder: string }) {
       className="hidden w-48 cursor-pointer items-center rounded bg-surface-container-lowest px-space-md py-space-xs md:flex xl:w-64 transition-colors hover:bg-surface-container"
     >
       <Icon name="search" className="mr-space-sm text-body-md text-text-muted" />
-      <input
+      <Input
         {...input}
         placeholder={placeholder}
-        className="w-full border-none bg-transparent font-body-sm text-body-sm text-text-primary outline-hidden placeholder:text-text-muted focus:ring-0"
+        className="h-auto w-full border-0 bg-transparent p-0 font-body-sm text-body-sm text-text-primary outline-hidden placeholder:text-text-muted focus-visible:ring-0"
       />
       <kbd className="ml-1 flex h-4 items-center justify-center rounded border border-white/5 bg-white/10 px-1 font-data-mono-md text-[9px] text-text-muted">
         ⌘K

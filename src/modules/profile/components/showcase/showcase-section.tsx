@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import type { ShowcaseItem } from "../../types";
@@ -45,14 +46,16 @@ export function ShowcaseSection({ items }: { items: ShowcaseItem[] }) {
             <span className="font-label-badge text-label-badge text-text-muted uppercase">
               SORT: {desc ? "HIGHEST VALUATION" : "LOWEST VALUATION"}
             </span>
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setDesc((prev) => !prev)}
               aria-label={`Toggle showcase sorting to ${desc ? "lowest" : "highest"}`}
               className="inline-flex cursor-pointer items-center justify-center rounded border-0 bg-surface-container p-1 text-text-muted transition-colors hover:text-text-primary focus-visible:outline-hidden"
             >
               <Icon name="tune" className="text-[18px]" />
-            </button>
+            </Button>
           </div>
         )}
       </div>

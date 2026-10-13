@@ -73,11 +73,13 @@ export function CryptoModal({ open, onOpenChange, totalUsd, onConfirm, isPending
           <label className="font-data-mono-md text-[11px] text-text-muted uppercase">Select Settlement Chain</label>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
             {CRYPTO_NETWORKS.map((net) => (
-              <button
+              <Button
                 key={net.id}
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setNetwork(net)}
-                className={`flex flex-col items-center gap-1 rounded-xl border p-2 text-center transition-all ${
+                className={`flex h-auto flex-col items-center gap-1 rounded-xl border p-2 text-center transition-all ${
                   network.id === net.id
                     ? "border-amber-400/60 bg-amber-400/10 text-white shadow-xs"
                     : "border-white/6 bg-surface-container-lowest/80 text-text-muted hover:border-white/15"
@@ -85,7 +87,7 @@ export function CryptoModal({ open, onOpenChange, totalUsd, onConfirm, isPending
               >
                 <span className="font-data-mono-md text-xs font-bold">{net.symbol}</span>
                 <span className="truncate text-[10px] text-text-secondary">{net.name}</span>
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -119,13 +121,15 @@ export function CryptoModal({ open, onOpenChange, totalUsd, onConfirm, isPending
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between text-xs">
             <label className="font-data-mono-md text-[11px] text-text-muted uppercase">Transaction Hash / Proof</label>
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={handleSimulateBroadcast}
-              className="font-data-mono-md text-[11px] text-cyan-400 hover:underline"
+              className="h-auto border-0 p-0 font-data-mono-md text-[11px] text-cyan-400 hover:underline"
             >
               Simulate Instant Broadcast
-            </button>
+            </Button>
           </div>
           <Input
             value={txHash}

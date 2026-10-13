@@ -39,22 +39,26 @@ export function ItemViewer({ item }: { item: ItemDetail }) {
           ))}
         </div>
         <div className="flex items-center gap-1.5">
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={handleInspectInGame}
             aria-label="Inspect in game"
             className="flex h-auto cursor-pointer items-center justify-center rounded border border-border-subtle bg-surface-container-lowest/90 p-2 text-text-secondary transition-all hover:bg-surface-container hover:text-tertiary focus-visible:outline-hidden"
           >
             <Icon name="open_in_new" className="text-[18px]" />
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={handleToggleFullscreen}
             aria-label="Fullscreen 3D view"
             className="flex h-auto cursor-pointer items-center justify-center rounded border border-border-subtle bg-surface-container-lowest/90 p-2 text-text-secondary transition-all hover:bg-surface-container hover:text-text-primary focus-visible:outline-hidden"
           >
             <Icon name="fullscreen" className="text-[18px]" />
-          </button>
+          </Button>
         </div>
       </div>
       <div className="relative my-auto flex h-full w-full items-center justify-center">

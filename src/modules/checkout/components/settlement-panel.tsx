@@ -92,13 +92,15 @@ export function SettlementPanel({
               </span>
             )}
           </div>
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => setPromo((active) => !active)}
-            className="text-xs font-medium text-text-muted transition-colors hover:text-text-primary"
+            className="h-auto border-0 p-0 text-xs font-medium text-text-muted transition-colors hover:text-text-primary"
           >
             {promo ? "Remove" : "Apply"}
-          </button>
+          </Button>
         </div>
 
         {/* Order Summary Lines */}

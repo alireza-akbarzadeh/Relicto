@@ -4,13 +4,8 @@ import { useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { formatMoney } from "@/lib/format";
@@ -26,18 +21,13 @@ export interface PriceAlertModalProps {
 export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalProps) {
   const router = useRouter();
   const currentPrice = item.price.lowestUsd;
-  const [targetUsd, setTargetUsd] = useState<string>(() =>
-    currentPrice > 0 ? (currentPrice * 0.9).toFixed(2) : "100.00",
-  );
+  const [targetUsd, setTargetUsd] = useState<string>(() => (currentPrice > 0 ? (currentPrice * 0.9).toFixed(2) : "100.00"));
   const [maxFloat, setMaxFloat] = useState<string>("");
   const [autoBuy, setAutoBuy] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const applyDiscountPreset = (percent: number) => {
-    if (currentPrice > 0) {
-      const calculated = currentPrice * (1 - percent / 100);
-      setTargetUsd(calculated.toFixed(2));
-    }
+    if (currentPrice > 0) setTargetUsd((currentPrice * (1 - percent / 100)).toFixed(2));
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -47,7 +37,6 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
       toast.error("Invalid target price", { description: "Please enter a positive dollar amount." });
       return;
     }
-
     const parsedFloat = maxFloat.trim() ? parseFloat(maxFloat.trim()) : null;
     if (parsedFloat !== null && (isNaN(parsedFloat) || parsedFloat < 0 || parsedFloat > 1)) {
       toast.error("Invalid float condition", { description: "Wear float must be between 0.00 and 1.00." });
@@ -56,25 +45,14 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
 
     startTransition(async () => {
       try {
-        await createAlertRule({
-          name: item.name,
-          targetUsd: numericTarget,
-          maxFloat: parsedFloat,
-          autoBuy,
-        });
-
+        await createAlertRule({ name: item.name, targetUsd: numericTarget, maxFloat: parsedFloat, autoBuy });
         toast.success("Snipe alert deployed", {
           description: `Armed to trigger when ${item.name} drops below ${formatMoney(numericTarget)} USD.`,
-          action: {
-            label: "Open Rulebook",
-            onClick: () => router.push("/alerts"),
-          },
+          action: { label: "Open Rulebook", onClick: () => router.push("/alerts") },
         });
         onOpenChange(false);
       } catch {
-        toast.error("Could not deploy alert", {
-          description: "Check your connection and ensure you are signed in.",
-        });
+        toast.error("Could not deploy alert", { description: "Check your connection and ensure you are signed in." });
       }
     });
   };
@@ -95,7 +73,6 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-1">
-          {/* Item baseline info */}
           <div className="flex items-center justify-between rounded-xl border border-white/10 bg-surface-container-lowest p-3">
             <div className="flex flex-col">
               <span className="font-headline-sm text-xs font-semibold text-text-primary">{item.name}</span>
@@ -107,7 +84,6 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
             </div>
           </div>
 
-          {/* Target Price */}
           <div className="flex flex-col gap-1.5">
             <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
               Trigger Price Target (USD)
@@ -127,19 +103,20 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
             </div>
             <div className="flex items-center gap-1.5 pt-0.5">
               {[5, 10, 15, 25].map((pct) => (
-                <button
+                <Button
                   key={pct}
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={() => applyDiscountPreset(pct)}
-                  className="rounded bg-surface-container-high px-2 py-1 font-data-mono-md text-[11px] text-text-secondary hover:bg-surface-container-highest hover:text-text-primary"
+                  className="rounded border-0 bg-surface-container-high px-2 py-1 font-data-mono-md text-[11px] text-text-secondary hover:bg-surface-container-highest hover:text-text-primary"
                 >
                   -{pct}%
-                </button>
+                </Button>
               ))}
             </div>
           </div>
 
-          {/* Wear Float Cap */}
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
@@ -159,22 +136,20 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
             />
           </div>
 
-          {/* Auto Buy toggle */}
-          <div className="flex items-start justify-between rounded-xl border border-white/10 bg-surface-container-lowest p-3">
+          <label htmlFor="auto-buy-check" className="flex cursor-pointer items-start justify-between rounded-xl border border-white/10 bg-surface-container-lowest p-3">
             <div className="flex flex-col pr-3">
               <span className="font-headline-sm text-xs font-semibold text-text-primary">Instant Auto-Execution</span>
               <span className="font-body-sm text-[11px] text-text-muted">
                 Automatically lock escrow and purchase from vault liquid balance when listing appears.
               </span>
             </div>
-            <input
-              type="checkbox"
+            <Checkbox
               id="auto-buy-check"
               checked={autoBuy}
-              onChange={(e) => setAutoBuy(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-white/20 bg-surface-card text-primary focus:ring-primary"
+              onCheckedChange={(val) => setAutoBuy(!!val)}
+              className="mt-1"
             />
-          </div>
+          </label>
 
           <div className="mt-2 flex items-center justify-end gap-2.5 border-t border-white/10 pt-4">
             <Button

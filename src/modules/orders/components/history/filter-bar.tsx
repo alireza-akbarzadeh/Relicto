@@ -2,6 +2,7 @@
 
 import type { KeyboardEvent } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -115,14 +116,16 @@ export function FilterBar({ counts, rows, tab, onTab, game, onGame, range, onRan
             triggerClassName={SELECT}
             iconClassName="absolute right-2 top-2.5 text-[16px] text-text-muted"
           />
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => exportOrdersCsv(rows, game, range)}
             className="inline-flex cursor-pointer items-center gap-space-xs rounded-lg border-0 bg-surface-container px-space-md py-space-sm font-label-caps text-label-caps font-bold text-text-primary uppercase shadow-xs transition-colors hover:bg-surface-container-high focus-visible:outline-hidden"
           >
             <Icon name="download" className="text-[18px]" />
             <span>Export CSV</span>
-          </button>
+          </Button>
         </div>
       </div>
       <div className="flex items-center justify-between overflow-x-auto pt-space-xs pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

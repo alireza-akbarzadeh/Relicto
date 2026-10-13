@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import type { Broadcast } from "../../../types";
 
@@ -16,20 +17,24 @@ export function BroadcastControls({ broadcast }: { broadcast: Broadcast }) {
         </div>
       </div>
       <div className="flex items-center gap-space-xs">
-        <button
+        <Button
           type="button"
-          className="flex items-center gap-1 rounded bg-surface-container-high px-space-md py-1 font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright"
+          variant={null}
+          size={null}
+          className="flex items-center gap-1 rounded border-0 bg-surface-container-high px-space-md py-1 font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright"
         >
           <Icon name="forum" className="text-[16px]" />
           Live Chat
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant={null}
+          size={null}
           aria-label="Fullscreen"
-          className="rounded bg-surface-container-high p-1.5 text-text-primary transition-colors hover:bg-surface-bright"
+          className="rounded border-0 bg-surface-container-high p-1.5 text-text-primary transition-colors hover:bg-surface-bright"
         >
           <Icon name="fullscreen" className="text-[18px]" />
-        </button>
+        </Button>
       </div>
     </div>
   );

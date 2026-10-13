@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 import { CountdownText } from "@/components/countdown-text";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import type { OrderTracking } from "../../types";
 
@@ -53,8 +54,10 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
             </div>
           )}
         </div>
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => {
             navigator.clipboard.writeText(order.code);
             toast.success("Escrow proof hash copied", { description: order.code });
@@ -63,7 +66,7 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
         >
           <Icon name="receipt_long" className="text-[18px]" />
           <span>Proof Hash</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

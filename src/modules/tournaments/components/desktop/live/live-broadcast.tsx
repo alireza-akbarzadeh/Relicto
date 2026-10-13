@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import { Dot } from "@/components/ui/dot";
 import { Icon } from "@/components/ui/icon";
 import { formatCompact } from "../../../lib/format";
@@ -51,13 +52,15 @@ export function LiveBroadcast({ broadcast }: { broadcast: Broadcast }) {
           </div>
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               aria-label="Play broadcast"
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-container/90 text-on-primary shadow-[0_0_32px_rgba(244,63,94,0.6)] transition-transform hover:scale-110"
+              className="flex h-16 w-16 items-center justify-center rounded-full border-0 bg-primary-container/90 text-on-primary shadow-[0_0_32px_rgba(244,63,94,0.6)] transition-transform hover:scale-110"
             >
               <Icon name="play_arrow" className="ml-1 text-[32px]" />
-            </button>
+            </Button>
           </div>
 
           <BroadcastControls broadcast={broadcast} />

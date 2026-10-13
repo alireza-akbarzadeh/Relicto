@@ -3,19 +3,17 @@
 import { useState, useTransition, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { updateProfileDetails } from "../../actions/profile";
-import { AVATAR_PRESETS, ProfileAvatarPicker } from "./profile-avatar-picker";
+import { ProfileAvatarPicker } from "./profile-avatar-picker";
 
-const ROLES = ["Trader", "Arbitrageur", "Collector", "Market Maker", "Sentinel Auditor"];
+const ROLE_OPTIONS = ["Trader", "Arbitrageur", "Collector", "Market Maker", "Sentinel Auditor"].map((r) => ({
+  value: r,
+  label: r,
+}));
 
 export interface ProfileEditModalProps {
   open: boolean;

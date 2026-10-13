@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { AvatarImage } from "@/modules/relicto/components/account/avatar-image";
 import { useSession } from "@/modules/relicto/state/session-provider";
@@ -41,14 +42,16 @@ export function IdentityCard({ profile }: { profile: ProfileMobile }) {
             </div>
           </div>
         </div>
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => setEditOpen(true)}
           aria-label="Edit trader profile"
           className="flex h-9 w-9 items-center justify-center rounded-lg border-0 bg-surface-container-low text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
         >
           <Icon name="tune" className="text-[20px]" />
-        </button>
+        </Button>
       </div>
 
       <ProfileEditModal

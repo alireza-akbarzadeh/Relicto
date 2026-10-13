@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import { quote } from "@/modules/checkout/lib/pricing";
@@ -49,13 +50,15 @@ export function CartSummary({
           <span className="flex items-center gap-1.5 text-text-secondary">
             <span>Promo · TI14-MAJOR-VIP</span>
             {onTogglePromo && (
-              <button
+              <Button
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => onTogglePromo(false)}
-                className="text-[11px] text-text-muted hover:text-text-primary underline cursor-pointer"
+                className="h-auto border-0 p-0 text-[11px] text-text-muted hover:text-text-primary underline cursor-pointer"
               >
                 (Remove)
-              </button>
+              </Button>
             )}
           </span>
           <span className="font-data-mono-md font-semibold text-status-success">−{usd(q.promoCents)}</span>
@@ -63,13 +66,15 @@ export function CartSummary({
       ) : onTogglePromo ? (
         <div className="flex items-center justify-between font-body-sm text-xs">
           <span className="text-text-secondary">Promo code</span>
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => onTogglePromo(true)}
-            className="font-data-mono-md text-[11px] font-semibold text-primary hover:underline cursor-pointer"
+            className="h-auto border-0 p-0 font-data-mono-md text-[11px] font-semibold text-primary hover:underline cursor-pointer"
           >
             Apply TI14-MAJOR-VIP (−$15.00)
-          </button>
+          </Button>
         </div>
       ) : null}
 

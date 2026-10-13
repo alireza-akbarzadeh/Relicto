@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { GatewayMobile as GatewayMobileData } from "../../data/gateway-mobile.mock";
@@ -35,15 +36,17 @@ export function GatewayMobile({ data }: { data: GatewayMobileData }) {
             <div className="text-center font-label-caps text-label-caps tracking-widest text-text-muted uppercase">Alternative Hardware &amp; Credentials</div>
             <div className="grid grid-cols-3 gap-space-sm">
               {data.alternatives.map((option) => (
-                <button
+                <Button
                   key={option.id}
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={() => handleAltAuth(option)}
                   className="flex h-auto cursor-pointer flex-col items-center justify-center rounded-xl border-0 bg-surface-container p-3 text-text-secondary shadow-xs transition-colors hover:bg-surface-bright hover:text-text-primary focus-visible:outline-hidden"
                 >
                   <Icon name={option.icon} className={cn("text-[24px]", option.tone)} />
                   <span className="mt-1 font-label-badge text-label-badge font-semibold uppercase">{option.label}</span>
-                </button>
+                </Button>
               ))}
             </div>
           </div>

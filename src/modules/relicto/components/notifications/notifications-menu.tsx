@@ -1,7 +1,9 @@
 "use client";
+
 import Link from "next/link";
 import { Bell } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
@@ -85,19 +87,21 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
             </span>
           )}
         </div>
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={markAllRead}
           disabled={unreadCount === 0}
           className={cn(
-            "text-[11px] font-medium transition-all duration-150 rounded px-2 py-1",
+            "text-[11px] font-medium transition-all duration-150 rounded px-2 py-1 border-0",
             unreadCount
               ? "text-tertiary hover:text-text-primary hover:bg-white/5 active:scale-95"
               : "cursor-not-allowed text-text-muted opacity-50"
           )}
         >
           Mark all read
-        </button>
+        </Button>
       </div>
 
       <PushToggle />
@@ -148,9 +152,11 @@ function SignedInNotificationsMenu({ trigger }: { trigger: NotificationsTrigger 
   const style: TriggerStyle = TRIGGERS[trigger];
 
   const renderTrigger = (props: React.ComponentPropsWithoutRef<"button">) => (
-    <button
+    <Button
       {...props}
       type="button"
+      variant={null}
+      size={null}
       aria-label={unreadCount ? `Notifications, ${unreadCount} unread` : "Notifications"}
       className={style.button}
     >
@@ -161,7 +167,7 @@ function SignedInNotificationsMenu({ trigger }: { trigger: NotificationsTrigger 
       {unreadCount > 0 && (
         <span className={style.badge}>{trigger === "count" ? unreadCount : null}</span>
       )}
-    </button>
+    </Button>
   );
 
   if (isMobile) {

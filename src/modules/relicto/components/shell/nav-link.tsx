@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { NavItem } from "../../session-types";
@@ -75,9 +76,11 @@ export function NavLinks({ items, variant }: { items: NavItem[]; variant: NavSty
 
         if (item.comingSoon) {
           return (
-            <button
+            <Button
               key={item.id}
               type="button"
+              variant={null}
+              size={null}
               className={cn(className, "opacity-75 cursor-not-allowed")}
               onClick={() =>
                 toast(`${item.label} is on the roadmap`, {
@@ -96,7 +99,7 @@ export function NavLinks({ items, variant }: { items: NavItem[]; variant: NavSty
               <span className="ml-auto rounded bg-surface-container-high/80 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-text-muted border border-white/5">
                 Soon
               </span>
-            </button>
+            </Button>
           );
         }
 

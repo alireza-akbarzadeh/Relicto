@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { MobileBackButton } from "@/modules/relicto/components/mobile/mobile-back-button";
 
@@ -16,22 +17,26 @@ export function VerifyMobileHeader() {
           <h1 className="truncate font-headline-sm text-headline-sm font-semibold tracking-tight text-text-primary">Steam Guard 2FA Verification</h1>
         </div>
         <div className="flex items-center gap-1">
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => toast.success("Device trusted for 30 days", { description: "Steam Guard push challenge remembered on this client." })}
             aria-label="Trust this device"
             className={ACTION}
           >
             <Icon name="favorite" className="text-[20px]" />
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => toast.info("Steam Guard security assistance", { description: "Open Steam Mobile app on your phone and tap Steam Guard to view code." })}
             aria-label="Security help"
             className={ACTION}
           >
             <Icon name="share" className="text-[20px]" />
-          </button>
+          </Button>
           <span className="ml-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary" aria-hidden>
             <Icon name="person" className="text-[18px] text-on-primary" />
           </span>

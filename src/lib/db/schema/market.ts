@@ -74,6 +74,8 @@ export const listings = pgTable(
     imageUrl: text("image_url"),
     imageAlt: text("image_alt"),
     checkout: jsonb("checkout").$type<CheckoutPresentation>(),
+    allowOffers: boolean("allow_offers").notNull().default(true),
+    minOfferCents: integer("min_offer_cents"),
     ...timestamps,
   },
   (t) => [

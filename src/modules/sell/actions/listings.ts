@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { z } from "zod";
 import { requireUserId } from "@/modules/relicto/data/get-session";
-import { bulkListInput, delistInput, listItemInput } from "@/server/modules/sell/sell.schema";
+import { bulkListInput, delistInput, listItemInput, updateListingSettingsInput } from "@/server/modules/sell/sell.schema";
 import { sellService } from "@/server/modules/sell/sell.service";
 
 /** Lists an inventory item. Marketplace, profile and studio all change, so every page refreshes. */
@@ -26,4 +26,11 @@ export async function delistListing(input: z.input<typeof delistInput>) {
   const ok = await sellService.delist(await requireUserId(), listingId);
   if (ok) revalidatePath("/", "layout");
   return { ok };
+}
+
+/** Updates negotiation and counter-offer rules on an active listing. */
+export async function updateListingOfferSettings(input: z.input<typeof updateListingSettingsInput>) {
+  const result = await sellService.updateSettings(await requireUserId(), updateListingSettingsInput.parse(input));
+  if (result.ok) revalidatePath("/", "layout");
+  return result;
 }

@@ -69,10 +69,19 @@ export function SellerCard({ seller, floor, onBuy, itemName }: SellerCardProps) 
             <Button
               variant={null}
               size={null}
+              disabled={seller.allowOffers === false}
               onClick={() => setBidding(true)}
-              aria-label={seller.myBid ? `Revise your offer to ${seller.name}` : `Make ${seller.name} an offer`}
+              aria-label={
+                seller.allowOffers === false
+                  ? "Offers disabled by seller"
+                  : seller.myBid
+                    ? `Revise your offer to ${seller.name}`
+                    : `Make ${seller.name} an offer`
+              }
+              title={seller.allowOffers === false ? "Seller has disabled offers on this listing" : undefined}
               className={cn(
                 "flex h-9 items-center justify-center rounded-lg border px-2.5 font-label-caps text-xs font-bold transition-all active:scale-95",
+                seller.allowOffers === false && "cursor-not-allowed opacity-35",
                 seller.myBid
                   ? "border-tertiary/40 bg-tertiary/10 text-tertiary hover:bg-tertiary/20"
                   : "border-border-subtle bg-surface-container-high text-text-secondary hover:border-tertiary/40 hover:text-tertiary",
@@ -103,6 +112,8 @@ export function SellerCard({ seller, floor, onBuy, itemName }: SellerCardProps) 
           listingId={seller.id}
           sellerName={seller.name}
           askUsd={seller.priceUsd}
+          allowOffers={seller.allowOffers}
+          minOfferCents={seller.minOfferCents}
           myBid={seller.myBid}
           itemName={itemName ?? seller.name}
         />

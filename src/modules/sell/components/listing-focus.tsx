@@ -11,22 +11,10 @@ import { cn } from "@/lib/cn";
 import { depositFunds } from "@/modules/wallet/actions/treasury";
 import { useListingWrites } from "../hooks/use-listing-writes";
 import type { InventoryItem } from "../types";
-
-const MODES = ["Market P2P", "Instant Bot", "24H Auction"] as const;
-
-function getWearBadge(item: InventoryItem): string {
-  if (item.marker) return item.marker;
-  const w = item.wear.toLowerCase();
-  if (w.includes("factory new")) return "FN";
-  if (w.includes("minimal wear")) return "MW";
-  if (w.includes("field-tested")) return "FT";
-  if (w.includes("well-worn")) return "WW";
-  if (w.includes("battle-scarred")) return "BS";
-  return item.wear.slice(0, 3).toUpperCase() || "STD";
-}
+import { MODES, type LiquidityMode, getWearBadge, formatToken, getActionDetails } from "./listing-focus-helpers";
 
 export function ListingFocus({ item }: { item: InventoryItem }) {
-  const [mode, setMode] = useState<(typeof MODES)[number]>(MODES[0]);
+  const [mode, setMode] = useState<LiquidityMode>(MODES[0]);
   const [price, setPrice] = useState(item.price.toFixed(2));
   const [note, setNote] = useState(item.rank ? `Float ${item.float} · ${item.rank}` : `Float ${item.float}`);
   const { pending, list } = useListingWrites();
@@ -36,10 +24,12 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
   const fee = numPrice * 0.02;
   const proceeds = Math.max(0, numPrice - fee);
   const wearBadge = getWearBadge(item);
-  const token = `#L00T-${item.id.replace(/[^a-zA-Z0-9]/g, "").slice(-5).toUpperCase()}`;
+  const token = formatToken(item.id);
   const counterMin = (item.floor * 0.8).toFixed(0);
   const deltaVsFloor = item.floor > 0 ? (((numPrice - item.floor) / item.floor) * 100).toFixed(1) : "0.0";
   const deltaSign = Number(deltaVsFloor) >= 0 ? "+" : "";
+  const [allowOffers, setAllowOffers] = useState(true);
+  const action = getActionDetails(mode, liquidating, pending, proceeds, numPrice);
 
   const handleAction = () => {
     if (mode === "Instant Bot") {
@@ -69,11 +59,11 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
     }
 
     if (mode === "24H Auction") {
-      list(item, numPrice, `[24H Auction] ${note}`);
+      list(item, numPrice, `[24H Auction] ${note}`, allowOffers, allowOffers ? Number(counterMin) : undefined);
       return;
     }
 
-    list(item, numPrice, note);
+    list(item, numPrice, note, allowOffers, allowOffers ? Number(counterMin) : undefined);
   };
 
   return (
@@ -158,8 +148,11 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
           <span className="flex items-center gap-2 font-body-md text-xs text-text-primary"><Checkbox defaultChecked />Instant Crypto Settlement (USDT / Arbitrum)</span>
           <span className="font-label-badge text-[10px] font-bold text-status-upcoming uppercase">Zero Gas</span>
         </label>
-        <label className="flex items-center justify-between rounded border border-white/[0.06] bg-surface-container-lowest px-3 py-2">
-          <span className="flex items-center gap-2 font-body-md text-xs text-text-primary"><Checkbox defaultChecked />Allow Counter-Offers (Min: ${counterMin})</span>
+        <label className="flex cursor-pointer items-center justify-between rounded border border-white/[0.06] bg-surface-container-lowest px-3 py-2">
+          <span className="flex items-center gap-2 font-body-md text-xs text-text-primary">
+            <Checkbox checked={allowOffers} onCheckedChange={(val) => setAllowOffers(Boolean(val))} />
+            Allow Counter-Offers (Min: ${counterMin})
+          </span>
           <Icon name="tune" className="text-[15px] text-tertiary" />
         </label>
       </div>
@@ -180,28 +173,15 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
               : "bg-primary text-white shadow-[0_0_16px_rgba(244,63,94,0.35)] hover:bg-primary/90",
           )}
         >
-          {mode === "Instant Bot" ? (
-            <>
-              <Icon name="bolt" className="text-[18px]" />
-              {liquidating ? "Liquidating to Vault..." : `Instant Liquidate to Vault ($${proceeds.toFixed(2)})`}
-            </>
-          ) : mode === "24H Auction" ? (
-            <>
-              <Icon name="timer" className="text-[18px]" />
-              {pending ? "Launching Auction..." : `Launch 24H Auction ($${numPrice.toFixed(2)})`}
-            </>
-          ) : (
-            <>
-              <Icon name="lock" className="text-[18px]" />
-              {pending ? "Listing on Relicto..." : `List Item on Relicto ($${numPrice.toFixed(2)})`}
-            </>
-          )}
+          <Icon name={action.icon} className="text-[18px]" />
+          {action.label}
         </Button>
         <div className="flex items-center justify-center gap-1 text-center font-data-mono-md text-[11px] text-text-muted">
           <Icon name="verified_user" className="text-[13px] text-status-upcoming" />
-          {mode === "Instant Bot" ? "Instant Automated Steam Bot Settlement" : "Encrypted Steam P2P Escrow Bot Verification System"}
+          {action.notice}
         </div>
       </div>
     </aside>
   );
 }
+

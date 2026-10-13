@@ -22,12 +22,24 @@ type OfferDialogProps = {
   itemName: string;
   sellerName: string;
   askUsd: number;
+  allowOffers?: boolean;
+  minOfferCents?: number | null;
   myBid?: MyBid;
 };
 
 /** Bid below the ask on one copy — or revise or withdraw the bid already on it. */
-export function OfferDialog({ open, onOpenChange, listingId, itemName, sellerName, askUsd, myBid }: OfferDialogProps) {
-  const form = useBidForm(askUsd, myBid?.priceUsd);
+export function OfferDialog({
+  open,
+  onOpenChange,
+  listingId,
+  itemName,
+  sellerName,
+  askUsd,
+  allowOffers = true,
+  minOfferCents,
+  myBid,
+}: OfferDialogProps) {
+  const form = useBidForm(askUsd, myBid?.priceUsd, allowOffers, minOfferCents);
   const { pending, make, withdraw } = useOfferWrites();
   const close = () => onOpenChange(false);
 

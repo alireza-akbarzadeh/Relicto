@@ -26,6 +26,8 @@ export type MobileSeller = {
   delivery: string;
   /** Automated bot delivery (vs. direct P2P). */
   instant: boolean;
+  allowOffers?: boolean;
+  minOfferCents?: number | null;
   myBid?: MyBid;
 };
 

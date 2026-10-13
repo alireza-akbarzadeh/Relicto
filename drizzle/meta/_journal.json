@@ -162,6 +162,13 @@
       "when": 1791788890727,
       "tag": "0022_ordinary_living_lightning",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1791876846031,
+      "tag": "0023_aberrant_ultimo",
+      "breakpoints": true
     }
   ]
 }

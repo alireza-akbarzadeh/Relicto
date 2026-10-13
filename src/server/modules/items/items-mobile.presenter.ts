@@ -21,6 +21,8 @@ function toSeller({ listing, name, verified, profile }: SellerRow, bid?: MyBid):
     tags: note ? [{ label: note, tone: "amber" }] : [],
     delivery: listing.botName ? `Delivery: <60s · ${listing.botName}` : "Delivery: Automated Escrow",
     instant: true,
+    allowOffers: listing.allowOffers ?? true,
+    minOfferCents: listing.minOfferCents,
     ...(bid ? { myBid: bid } : {}),
   };
 }
@@ -89,6 +91,8 @@ export function toItemMobileFromDetail(detail: ItemDetail): ItemMobile {
     tags: [{ label: offer.style.label, tone: "amber" as const }],
     delivery: offer.fulfilmentNote || (offer.fulfilment === "bot" ? "Instant Bot Escrow" : "P2P Steam Trade"),
     instant: offer.fulfilment === "bot",
+    allowOffers: offer.allowOffers,
+    minOfferCents: offer.minOfferCents,
     ...(offer.myBid ? { myBid: offer.myBid } : {}),
   }));
 

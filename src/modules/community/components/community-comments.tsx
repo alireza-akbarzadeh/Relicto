@@ -72,11 +72,16 @@ export function PostCommentsThread({
           <span>Loading comments...</span>
         </div>
       ) : comments.length === 0 ? (
-        <p className="py-1 text-label-badge text-text-muted">No replies yet. Be the first to comment.</p>
+        <p className="py-1 text-label-badge text-text-muted">
+          No replies yet. Be the first to comment.
+        </p>
       ) : (
         <div className="flex max-h-56 flex-col gap-space-xs overflow-y-auto pr-1">
           {comments.map((c) => (
-            <div key={c.id} className="flex flex-col rounded bg-surface-container/60 p-2 text-body-sm">
+            <div
+              key={c.id}
+              className="flex flex-col rounded bg-surface-container/60 p-2 text-body-sm"
+            >
               <div className="flex items-center justify-between text-label-badge">
                 <span className="font-bold text-text-primary">{c.handle}</span>
                 <span className="text-text-muted">{c.age}</span>

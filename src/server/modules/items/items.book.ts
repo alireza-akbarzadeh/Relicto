@@ -30,6 +30,8 @@ function toBookRow({ listing, name, verified, profile }: SellerRow, index: numbe
     fulfilmentNote: listing.botName ?? "Instant bot escrow",
     priceUsd: listing.priceCents / 100,
     priceNote: listing.float !== null ? `Float ${listing.float.toFixed(4)}` : "Verified escrow",
+    allowOffers: listing.allowOffers ?? true,
+    minOfferCents: listing.minOfferCents,
     ...(index === 0 ? { best: true } : {}),
     ...(bid ? { myBid: bid } : {}),
   };

@@ -17,11 +17,23 @@ const failed = () => toast.error("Couldn't reach the market", { description: "Ch
 export function useListingWrites() {
   const [pending, startTransition] = useTransition();
 
-  const list = (item: { id: string; name: string }, priceUsd: number, note: string) => {
+  const list = (
+    item: { id: string; name: string },
+    priceUsd: number,
+    note: string,
+    allowOffers = true,
+    minOfferUsd?: number,
+  ) => {
     if (!(priceUsd > 0)) return toast.error("Set an ask price above $0");
     startTransition(async () => {
       try {
-        const { status } = await listInventoryItem({ inventoryId: item.id, priceUsd, note });
+        const { status } = await listInventoryItem({
+          inventoryId: item.id,
+          priceUsd,
+          note,
+          allowOffers,
+          minOfferUsd,
+        });
         if (status === "listed") {
           toast.success(`${item.name} is live`, { description: `Listed at ${formatMoney(priceUsd)}. Buyers see it on the marketplace now.` });
         } else {

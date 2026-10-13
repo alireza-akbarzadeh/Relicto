@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { inventoryItems, items, listings, offers, profiles } from "@/lib/db/schema";
 import type { SellMobile } from "@/modules/sell/mobile.types";
 import { toSellMobile } from "./sell-mobile.presenter";
-import { bulkList, delist, listItem } from "./sell.commands";
+import { bulkList, delist, listItem, updateListingSettings } from "./sell.commands";
 import type { ActiveListing, InventoryItem, SellData, SellGame, SellTone } from "@/modules/sell/types";
 import { ago } from "@/server/modules/shared/ago";
 import { notCommitted } from "@/server/modules/trade-ups/trade-ups.repository";
@@ -173,4 +173,6 @@ export const sellService = {
     if (inventory.length === 0 && !profile) return null;
     return toSellMobile(authored, inventory, profile ?? null);
   },
+
+  updateSettings: updateListingSettings,
 };

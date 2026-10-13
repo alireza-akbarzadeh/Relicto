@@ -16,7 +16,7 @@ const HOUR = 60 * 60 * 1000;
 
 export type MakeResult =
   | { status: "placed" | "revised"; offerId: string; notices: NotificationRow[] }
-  | { status: "not-listed" | "own-listing" | "too-low" | "at-price" | "insufficient-funds" | "vault-frozen" };
+  | { status: "not-listed" | "own-listing" | "too-low" | "at-price" | "insufficient-funds" | "vault-frozen" | "below-min-offer" | "offers-disabled" };
 
 /**
  * Places a bid on one copy, or revises the buyer's open bid on it. Nothing is
@@ -36,7 +36,7 @@ export async function makeOffer(buyerId: string, input: z.infer<typeof makeOffer
     if (row.listing.sellerId === buyerId) return { status: "own-listing" };
 
     const bidCents = toCents(input.amountUsd);
-    const check = checkBid(bidCents, row.listing.priceCents);
+    const check = checkBid(bidCents, row.listing.priceCents, row.listing.allowOffers, row.listing.minOfferCents);
     if (check !== "ok") return { status: check };
 
     const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, buyerId)).limit(1);

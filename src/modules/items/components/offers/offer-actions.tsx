@@ -50,10 +50,19 @@ export function OfferActions({ offer, itemName, onBuy, onAdd }: OfferActionsProp
           <Button
             variant={null}
             size={null}
+            disabled={offer.allowOffers === false}
             onClick={() => setBidding(true)}
-            aria-label={myBid ? `Revise your offer to ${offer.seller.name}` : `Make ${offer.seller.name} an offer`}
+            aria-label={
+              offer.allowOffers === false
+                ? "Offers disabled by seller"
+                : myBid
+                  ? `Revise your offer to ${offer.seller.name}`
+                  : `Make ${offer.seller.name} an offer`
+            }
+            title={offer.allowOffers === false ? "Seller has disabled offers on this listing" : undefined}
             className={cn(
               "h-auto rounded border p-2 transition-all hover:bg-surface-container-high",
+              offer.allowOffers === false && "cursor-not-allowed opacity-35",
               myBid ? "border-tertiary/40 bg-surface-container-high text-tertiary" : "border-border-subtle bg-surface-container text-text-secondary hover:text-tertiary",
             )}
           >
@@ -74,6 +83,8 @@ export function OfferActions({ offer, itemName, onBuy, onAdd }: OfferActionsProp
           itemName={itemName}
           sellerName={offer.seller.name}
           askUsd={offer.priceUsd}
+          allowOffers={offer.allowOffers}
+          minOfferCents={offer.minOfferCents}
           myBid={myBid}
         />
       )}

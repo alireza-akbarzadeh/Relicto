@@ -39,6 +39,8 @@ export type Offer = {
   best?: boolean;
   /** The exact copy behind the row; absent on authored sample rows. */
   listingId?: string;
+  allowOffers?: boolean;
+  minOfferCents?: number | null;
   /** The viewer's open bid on this copy. */
   myBid?: MyBid;
 };

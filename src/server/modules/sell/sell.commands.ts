@@ -4,7 +4,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { inventoryItems, items, listings } from "@/lib/db/schema";
 import type { z } from "zod";
-import type { bulkListInput, listItemInput } from "./sell.schema";
+import type { bulkListInput, listItemInput, updateListingSettingsInput } from "./sell.schema";
 
 type Wear = (typeof listings.$inferInsert)["wear"];
 const WEAR: Record<string, NonNullable<Wear>> = {
@@ -42,12 +42,31 @@ export async function listItem(userId: string, input: z.infer<typeof listItemInp
         sellerNote: input.note || null,
         imageUrl: row.imageUrl,
         imageAlt: row.imageAlt,
+        allowOffers: input.allowOffers ?? true,
+        minOfferCents: input.minOfferUsd ? Math.round(input.minOfferUsd * 100) : null,
       })
       .returning({ id: listings.id });
 
     await tx.update(inventoryItems).set({ listingId: listing.id }).where(eq(inventoryItems.id, row.id));
     return { status: "listed", listingId: listing.id };
   });
+}
+
+/** Updates counter-offer and negotiation settings on an active listing. */
+export async function updateListingSettings(
+  userId: string,
+  input: z.infer<typeof updateListingSettingsInput>,
+): Promise<{ ok: boolean }> {
+  const [res] = await db
+    .update(listings)
+    .set({
+      allowOffers: input.allowOffers,
+      minOfferCents: input.minOfferUsd ? Math.round(input.minOfferUsd * 100) : null,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(listings.id, input.listingId), eq(listings.sellerId, userId)))
+    .returning({ id: listings.id });
+  return { ok: !!res };
 }
 
 /**

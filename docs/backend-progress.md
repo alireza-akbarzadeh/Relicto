@@ -360,7 +360,7 @@ images — including a real mobile payment that produced a new escrow order.
 | Steam inventory sync | ✅ phase 8 — `/sell` mirrors CS2, Dota 2 and TF2 inventories |
 | Price feed + cron | ✅ phase 8 — daily Skinport snapshot, Relicto sales recorded |
 | Wallet deposits | ✅ phase 8 — simulated outside production (`CHECKOUT_MOCK_PAYMENTS`) |
-| Dota datafeed | ☐ not started |
+| Dota datafeed | ✅ OpenDota & canonical roster sync, cron `/api/cron/dota-feed` (05:00 daily) |
 
 ### Trade-ups ✅
 
@@ -668,9 +668,7 @@ cleared first; accepted-offer orders are `order-chk-` with the trader as
 - **Bids aren't held.** Funds are checked at bid time and debited at accept; a
   buyer who spends the vault in between gets `buyer-short`. Holding funds would
   need a ledger hold per bid.
-- **Counter-offers** (the studio's "Allow Counter-Offers (Min: $2,950)" toggle)
-  are still authored; there's no per-listing minimum, so the global 50% floor
-  applies.
+- ~~Counter-offers are still authored~~: Fixed: Migration `0023_aberrant_ultimo` adds `allow_offers` and `min_offer_cents` to `listings`. Sell Studio writes custom minimums, server validates seller floor (`below-min-offer`, `offers-disabled`), and desktop & mobile seller books enforce the setting in buyer `OfferDialog`.
 - **"Verified Traders (99%+)" is ticked by default** (the design's default), so
   a new trader's copies are hidden from the desktop book until it's unticked.
 - `.verify-writes.mts` fails "unknown names stay a custom watch": phase 5's

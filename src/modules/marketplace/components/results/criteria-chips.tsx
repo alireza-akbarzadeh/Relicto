@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { criteriaChips, type CriteriaChip } from "../../lib/filters";
@@ -28,19 +29,27 @@ export function CriteriaChips() {
           className={cn("inline-flex items-center gap-1 rounded bg-surface-container-low px-2.5 py-1 font-label-badge text-label-badge", TONE[chip.tone])}
         >
           <span>{chip.label}</span>
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             aria-label={`Remove ${chip.label}`}
             onClick={() => patch(chip.clear)}
             className="ml-0.5 text-text-muted hover:text-primary"
           >
             <Icon name="close" className="text-[12px]" />
-          </button>
+          </Button>
         </span>
       ))}
-      <button type="button" onClick={clearAll} className="ml-2 font-label-badge text-label-badge text-tertiary hover:underline">
+      <Button
+        type="button"
+        variant={null}
+        size={null}
+        onClick={clearAll}
+        className="ml-2 font-label-badge text-label-badge text-tertiary hover:underline"
+      >
         Clear All ({chips.length})
-      </button>
+      </Button>
     </div>
   );
 }

@@ -136,17 +136,13 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
               <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
                 Role Badge
               </label>
-              <select
+              <Select
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="h-9 rounded-md border border-white/10 bg-surface-container-lowest px-2.5 font-data-mono-md text-xs text-text-primary focus:ring-1 focus:ring-primary focus:outline-none"
-              >
-                {ROLES.map((r) => (
-                  <option key={r} value={r} className="bg-surface-card text-text-primary">
-                    {r}
-                  </option>
-                ))}
-              </select>
+                onValueChange={setRole}
+                options={ROLE_OPTIONS}
+                label="Role Badge"
+                triggerClassName="flex h-9 items-center justify-between rounded-md border border-white/10 bg-surface-container-lowest px-2.5 font-data-mono-md text-xs text-text-primary focus:ring-1 focus:ring-primary focus:outline-none"
+              />
             </div>
           </div>
 

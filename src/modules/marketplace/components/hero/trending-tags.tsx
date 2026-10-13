@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { TRENDING_TAGS } from "../../data/facets.mock";
 import { scrollToListings } from "../../lib/scroll";
@@ -13,9 +14,11 @@ export function TrendingTags() {
     <div className="flex flex-wrap items-center justify-center gap-space-xs font-body-sm text-body-sm text-text-muted">
       <span className="mr-1 font-label-badge text-label-badge tracking-wider text-text-secondary uppercase">Trending Hot:</span>
       {TRENDING_TAGS.map((tag) => (
-        <button
+        <Button
           key={tag.label}
           type="button"
+          variant={null}
+          size={null}
           onClick={() => {
             patch({ query: tag.query });
             scrollToListings();
@@ -26,7 +29,7 @@ export function TrendingTags() {
           )}
         >
           {tag.emoji} {tag.label}
-        </button>
+        </Button>
       ))}
     </div>
   );

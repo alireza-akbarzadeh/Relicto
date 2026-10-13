@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { PRICE_PRESETS } from "../../data/facets.mock";
@@ -32,14 +34,14 @@ export function PriceFacet() {
         ].map((field) => (
           <div key={field.label} className="flex items-center rounded bg-surface-container-lowest p-1.5">
             <span className="mr-1 text-[13px] text-text-muted">$</span>
-            <input
+            <Input
               type="number"
               min={0}
               inputMode="decimal"
               aria-label={field.label}
               value={field.value}
               onChange={(e) => patch({ price: field.set(e.target.value) })}
-              className={INPUT}
+              className={cn("h-auto border-0 p-0 shadow-none focus-visible:ring-0", INPUT)}
             />
           </div>
         ))}
@@ -48,9 +50,11 @@ export function PriceFacet() {
         {PRICE_PRESETS.map((p) => {
           const active = preset === p.value;
           return (
-            <button
+            <Button
               key={p.value}
               type="button"
+              variant={null}
+              size={null}
               aria-pressed={active}
               onClick={() => patch({ price: active ? { min: 0, max: 100_000, preset: null } : { min: p.min, max: p.max, preset: p.value } })}
               className={cn(
@@ -61,7 +65,7 @@ export function PriceFacet() {
               )}
             >
               {p.label}
-            </button>
+            </Button>
           );
         })}
       </div>

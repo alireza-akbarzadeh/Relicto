@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { useMarketplace } from "../../state/marketplace-provider";
@@ -79,9 +80,11 @@ export function GameContext() {
         {ENGINES.map((engine) => {
           const active = filters.ecosystem === engine.id;
           return (
-            <button
+            <Button
               key={engine.id}
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setGame(engine.id)}
               className={cn(
                 "flex items-center justify-center gap-1 rounded py-1.5 font-label-badge text-[11px] font-bold uppercase transition-all",
@@ -92,7 +95,7 @@ export function GameContext() {
             >
               <Icon name={engine.icon} className={cn("text-[13px]", active && current.badgeTone)} />
               <span>{engine.label}</span>
-            </button>
+            </Button>
           );
         })}
       </div>

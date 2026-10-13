@@ -180,9 +180,7 @@ function SignedInUserMenu({ trigger }: UserMenuProps) {
     return (
       <Drawer showSwipeHandle>
         <DrawerTrigger render={renderTrigger} />
-        <DrawerContent className="bg-menu-panel border-t border-white/10 p-2">
-          <UserMenuInnerContent />
-        </DrawerContent>
+        <DrawerContent className="bg-menu-panel border-t border-white/10 p-2"><UserMenuInnerContent /></DrawerContent>
       </Drawer>
     );
   }
@@ -190,10 +188,7 @@ function SignedInUserMenu({ trigger }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={renderTrigger} />
-      <DropdownMenuContent
-        align="end"
-        className="w-80 border border-white/10 bg-menu-panel/95 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden p-0"
-      >
+      <DropdownMenuContent align="end" className="w-80 border border-white/10 bg-menu-panel/95 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden p-0">
         <UserMenuInnerContent />
       </DropdownMenuContent>
     </DropdownMenu>

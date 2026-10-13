@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/cn";
 import { HEROES } from "../../data/facets.mock";
 import { toggle } from "../../lib/filters";
@@ -26,23 +28,25 @@ export function HeroFacet() {
         <span className="font-label-badge text-label-badge text-tertiary">124 Heroes</span>
       </div>
       <div className="relative mb-2">
-        <input
+        <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           type="text"
           aria-label="Filter heroes"
           placeholder="Filter hero..."
-          className="w-full rounded bg-surface-container-lowest px-2.5 py-1.5 font-body-sm text-body-sm text-text-primary placeholder:text-text-muted focus:outline-hidden"
+          className="h-8 w-full border-0 rounded bg-surface-container-lowest px-2.5 py-1.5 font-body-sm text-body-sm text-text-primary placeholder:text-text-muted focus:outline-hidden"
         />
-        <Icon name="filter_list" className="absolute top-2 right-2 text-[16px] text-text-muted" />
+        <Icon name="filter_list" className="absolute top-2 right-2 text-[16px] text-text-muted pointer-events-none" />
       </div>
       <div className="flex flex-wrap gap-1.5">
         {shown.map((hero) => {
           const active = filters.heroes.includes(hero);
           return (
-            <button
+            <Button
               key={hero}
               type="button"
+              variant={null}
+              size={null}
               aria-pressed={active}
               onClick={() => patch({ heroes: toggle(filters.heroes, hero) })}
               className={cn(
@@ -53,7 +57,7 @@ export function HeroFacet() {
               )}
             >
               {hero}
-            </button>
+            </Button>
           );
         })}
         {shown.length === 0 && <span className="font-body-sm text-[12px] text-text-muted">No hero matches “{search}”.</span>}

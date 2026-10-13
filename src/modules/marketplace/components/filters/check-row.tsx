@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/cn";
 
 type CheckMarkProps = { checked: boolean; checkedClassName: string; size?: "sm" | "md" };
@@ -21,11 +22,11 @@ type CheckRowProps = {
   children: ReactNode;
 };
 
-/** Label + visually hidden native checkbox, so the custom mark stays keyboard accessible. */
+/** Label + visually hidden checkbox, so the custom mark stays keyboard accessible. */
 export function CheckRow({ checked, onChange, className, children }: CheckRowProps) {
   return (
     <label className={cn("cursor-pointer has-[:focus-visible]:ring-1 has-[:focus-visible]:ring-border-focus", className)}>
-      <input type="checkbox" className="sr-only" checked={checked} onChange={onChange} />
+      <Checkbox className="sr-only" checked={checked} onCheckedChange={() => onChange()} />
       {children}
     </label>
   );

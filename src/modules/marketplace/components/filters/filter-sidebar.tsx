@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { criteriaChips } from "../../lib/filters";
 import { useMarketplace } from "../../state/marketplace-provider";
@@ -27,13 +28,15 @@ export function FilterSidebar() {
           <Icon name="tune" className="text-[20px] text-primary" />
           <h3 className="font-headline-sm text-headline-sm tracking-tight text-text-primary uppercase">Filter Catalog</h3>
         </div>
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={resetAll}
           className="font-label-badge text-label-badge text-text-muted uppercase transition-colors hover:text-primary"
         >
           Reset All
-        </button>
+        </Button>
       </div>
       <div className="mb-space-md flex items-center justify-between rounded bg-surface-container-low px-space-sm py-1.5">
         <span className="font-label-badge text-label-badge text-text-secondary uppercase">Active Criteria</span>
@@ -82,22 +85,26 @@ export function FilterSidebar() {
               Select an engine above or below to unlock CS2 wear & float or Dota 2 heroes & slots:
             </p>
             <div className="mt-0.5 grid grid-cols-2 gap-1.5">
-              <button
+              <Button
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setGame("cs2")}
                 className="flex items-center justify-center gap-1.5 rounded bg-surface-container px-2 py-1.5 font-label-badge text-[11px] font-bold text-tertiary transition-colors hover:bg-surface-container-high"
               >
                 <Icon name="target" className="text-[14px]" />
                 CS2 Engine
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setGame("dota2")}
                 className="flex items-center justify-center gap-1.5 rounded bg-surface-container px-2 py-1.5 font-label-badge text-[11px] font-bold text-primary-container transition-colors hover:bg-surface-container-high"
               >
                 <Icon name="shield" className="text-[14px]" />
                 Dota 2 Engine
-              </button>
+              </Button>
             </div>
           </div>
           <RarityFacet />

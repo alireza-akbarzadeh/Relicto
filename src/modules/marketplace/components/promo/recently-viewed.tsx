@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { RECENTLY_VIEWED } from "../../data/listings.mock";
@@ -20,13 +21,15 @@ export function RecentlyViewed() {
           <span className="font-label-caps text-label-caps text-text-muted uppercase">Recently Viewed Drops</span>
         </div>
         {items.length > 0 && (
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => setItems([])}
             className="font-label-badge text-label-badge text-text-muted transition-colors hover:text-text-primary"
           >
             Clear History
-          </button>
+          </Button>
         )}
       </div>
       {items.length === 0 ? (

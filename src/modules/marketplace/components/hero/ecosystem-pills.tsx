@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatCount } from "@/lib/format";
@@ -15,9 +16,11 @@ export function EcosystemPills() {
       {ECOSYSTEMS.map((eco) => {
         const active = filters.ecosystem === eco.value;
         return (
-          <button
+          <Button
             key={eco.value}
             type="button"
+            variant={null}
+            size={null}
             role="radio"
             aria-checked={active}
             onClick={() => setGame(eco.value)}
@@ -44,7 +47,7 @@ export function EcosystemPills() {
             >
               {formatCount(eco.count)}
             </span>
-          </button>
+          </Button>
         );
       })}
     </div>

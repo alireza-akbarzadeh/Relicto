@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/cn";
@@ -35,17 +36,26 @@ export function PaginationBar() {
         </div>
       </div>
       <nav aria-label="Pagination" className="flex items-center gap-1">
-        <button type="button" onClick={() => goTo(filters.page - 1)} disabled={filters.page <= 1} className={STEP}>
+        <Button
+          type="button"
+          variant={null}
+          size={null}
+          onClick={() => goTo(filters.page - 1)}
+          disabled={filters.page <= 1}
+          className={STEP}
+        >
           <Icon name="chevron_left" className="text-[14px]" />
           <span>Prev</span>
-        </button>
+        </Button>
         {pageWindow(filters.page, results.pages).map((entry, i) =>
           entry === "gap" ? (
             <span key={`gap-${i}`} className="px-2 font-data-mono-md text-text-muted">...</span>
           ) : (
-            <button
+            <Button
               key={entry}
               type="button"
+              variant={null}
+              size={null}
               onClick={() => goTo(entry)}
               aria-current={entry === filters.page ? "page" : undefined}
               className={cn(
@@ -56,13 +66,20 @@ export function PaginationBar() {
               )}
             >
               {entry}
-            </button>
+            </Button>
           ),
         )}
-        <button type="button" onClick={() => goTo(filters.page + 1)} disabled={filters.page >= results.pages} className={STEP}>
+        <Button
+          type="button"
+          variant={null}
+          size={null}
+          onClick={() => goTo(filters.page + 1)}
+          disabled={filters.page >= results.pages}
+          className={STEP}
+        >
           <span>Next</span>
           <Icon name="chevron_right" className="text-[14px]" />
-        </button>
+        </Button>
       </nav>
     </div>
   );

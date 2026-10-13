@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { toggle } from "../../lib/filters";
 import { useMarketplace } from "../../state/marketplace-provider";
@@ -68,9 +69,11 @@ export function WearFacet() {
       <span className="mb-1.5 block font-label-badge text-label-badge text-text-muted uppercase">Float Band</span>
       <div className="mb-space-sm grid grid-cols-2 gap-1">
         {BANDS.map((band) => (
-          <button
+          <Button
             key={band.value}
             type="button"
+            variant={null}
+            size={null}
             onClick={() => patch({ float: band.value })}
             aria-pressed={filters.float === band.value}
             className={cn(
@@ -81,7 +84,7 @@ export function WearFacet() {
             )}
           >
             {band.label}
-          </button>
+          </Button>
         ))}
       </div>
 

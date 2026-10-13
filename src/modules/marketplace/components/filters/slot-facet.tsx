@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { SLOTS } from "../../data/facets.mock";
 import { toggle } from "../../lib/filters";
@@ -18,9 +19,11 @@ export function SlotFacet() {
         {SLOTS.map((slot) => {
           const active = filters.slots.includes(slot.value);
           return (
-            <button
+            <Button
               key={slot.value}
               type="button"
+              variant={null}
+              size={null}
               aria-pressed={active}
               onClick={() => patch({ slots: toggle(filters.slots, slot.value) })}
               className={cn(
@@ -31,7 +34,7 @@ export function SlotFacet() {
               )}
             >
               {slot.value} ({countFor(slot)})
-            </button>
+            </Button>
           );
         })}
       </div>

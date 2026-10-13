@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -149,39 +150,35 @@ export function ListingCard({
 
       {/* Actions */}
       <div className="relative z-10 grid grid-cols-[1fr_1.15fr] gap-2 border-t border-outline-variant/20 bg-surface-container-low/40 p-space-md">
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={viewOffers}
           className={cn(
-            "flex min-w-0 items-center justify-center gap-1.5 rounded-lg",
-            "border border-outline-variant/30 bg-surface-container-high",
-            "px-space-sm py-2.5",
-            "font-headline-sm text-[12px] font-bold text-text-primary uppercase",
-            "transition-all duration-200",
-            "hover:border-outline-variant/50 hover:bg-surface-bright",
+            "flex min-w-0 items-center justify-center gap-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-high px-space-sm py-2.5 font-headline-sm text-[12px] font-bold text-text-primary uppercase transition-all duration-200 hover:border-outline-variant/50 hover:bg-surface-bright",
           )}
         >
           <span>Offers</span>
           <span className="font-data-mono-md text-[11px] text-text-secondary">
             {listing.offers}
           </span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={quickBuy}
           className={cn(
-            "rounded-lg px-space-sm py-2.5",
-            "font-headline-sm text-[12px] font-bold uppercase",
-            "transition-all duration-200",
-            "shadow-xs",
+            "rounded-lg px-space-sm py-2.5 font-headline-sm text-[12px] font-bold uppercase transition-all duration-200 shadow-xs",
             inBasket
               ? "cursor-default bg-status-upcoming/15 text-status-upcoming"
               : "bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary",
           )}
         >
           {inBasket ? "In Basket" : "Quick Buy"}
-        </button>
+        </Button>
       </div>
     </article>
   );

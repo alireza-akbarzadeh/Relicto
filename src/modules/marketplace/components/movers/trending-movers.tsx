@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { getMovers, MOVER_WINDOWS } from "../../data/movers.mock";
@@ -33,9 +34,11 @@ export function TrendingMovers() {
           <div className="flex items-center gap-space-md">
             <div role="radiogroup" aria-label="Time window" className="flex items-center rounded bg-surface-container-lowest p-1">
               {MOVER_WINDOWS.map((w) => (
-                <button
+                <Button
                   key={w.value}
                   type="button"
+                  variant={null}
+                  size={null}
                   role="radio"
                   aria-checked={w.value === range}
                   onClick={() => setRange(w.value)}
@@ -45,17 +48,19 @@ export function TrendingMovers() {
                   )}
                 >
                   {w.label}
-                </button>
+                </Button>
               ))}
             </div>
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => toast("Leaderboards are on the roadmap", { description: "Price Tracker ships after launch." })}
               className="flex items-center gap-1 font-label-caps text-label-caps text-tertiary uppercase transition-colors hover:text-primary"
             >
               <span>View {windowLabel} Leaderboard</span>
               <Icon name="arrow_forward" className="text-[16px]" />
-            </button>
+            </Button>
           </div>
         </div>
         <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-4">

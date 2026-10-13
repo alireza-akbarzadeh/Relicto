@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/cn";
@@ -39,9 +40,11 @@ export function ResultsToolbar() {
             const isActive = filters.view === view.value;
 
             return (
-              <button
+              <Button
                 key={view.value}
                 type="button"
+                variant={null}
+                size={null}
                 role="radio"
                 aria-checked={isActive}
                 title={view.title}
@@ -55,7 +58,7 @@ export function ResultsToolbar() {
                 )}
               >
                 <Icon name={view.icon} className=" shrink-0" />
-              </button>
+              </Button>
             );
           })}
         </div>

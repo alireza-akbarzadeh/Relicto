@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatDelta, formatMoney } from "@/lib/format";
@@ -18,8 +19,10 @@ export function MoverCard({ mover, onOpen }: MoverCardProps) {
   const up = mover.change >= 0;
 
   return (
-    <button
+    <Button
       type="button"
+      variant={null}
+      size={null}
       onClick={() => onOpen(mover)}
       className={cn(
         "group relative flex min-w-0 flex-col overflow-hidden rounded-2xl",
@@ -136,6 +139,6 @@ export function MoverCard({ mover, onOpen }: MoverCardProps) {
           className="text-[14px] transition-transform duration-200 group-hover:translate-x-0.5"
         />
       </span>
-    </button>
+    </Button>
   );
 }

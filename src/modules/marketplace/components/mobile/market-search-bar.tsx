@@ -1,6 +1,7 @@
 "use client";
 
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { useMobileMarket } from "../../state/mobile-market-provider";
@@ -66,14 +67,16 @@ export function MarketSearchBar({ placeholder }: { placeholder: string }) {
           placeholder={placeholder}
           className="h-11 rounded-xl border-0 bg-surface-container-low pr-9 pl-10 font-body-sm text-body-sm text-on-surface shadow-inner transition-all duration-200 placeholder:text-text-muted focus-visible:ring-2 focus-visible:ring-border-focus md:text-body-sm dark:bg-surface-container-low"
         />
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={handleVoiceScan}
           aria-label="Voice scan search"
           className="absolute right-2.5 flex h-6 w-6 cursor-pointer items-center justify-center rounded border-0 bg-transparent text-text-muted transition-colors hover:text-primary focus-visible:outline-hidden"
         >
           <Icon name="mic" className="text-[18px]" />
-        </button>
+        </Button>
       </div>
       <MarketFilterSheet />
     </section>

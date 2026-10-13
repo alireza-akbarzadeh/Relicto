@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import { useMarketplace } from "../../state/marketplace-provider";
 import { ListingCard } from "./listing-card";
@@ -20,13 +21,15 @@ export function ListingGrid() {
         <p className="max-w-md font-body-sm text-body-sm text-text-muted">
           Loosen the price band, remove a rarity, or clear the search to see more listings.
         </p>
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={resetAll}
           className="mt-2 rounded bg-surface-container-high px-space-md py-2 font-label-caps text-label-caps text-text-primary uppercase hover:bg-surface-bright"
         >
           Reset all filters
-        </button>
+        </Button>
       </div>
     );
   }

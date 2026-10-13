@@ -1,4 +1,5 @@
 import "server-only";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { countSitemapItems, findSitemapItems } from "@/server/modules/items/items.seo";
 
 /** Google reads at most 50,000 URLs per sitemap; stay well under. */
@@ -11,6 +12,7 @@ export async function getItemSitemapIds() {
     const pages = Math.max(1, Math.ceil(total / ITEMS_PER_SITEMAP));
     return Array.from({ length: pages }, (_, id) => ({ id }));
   } catch (error) {
+    rethrowNextSignals(error);
     console.warn("[sitemaps] countSitemapItems query timed out or failed; falling back to 1 sitemap page", error);
     return [{ id: 0 }];
   }
@@ -21,6 +23,7 @@ export async function getItemSitemapPage(id: number) {
   try {
     return await findSitemapItems(id * ITEMS_PER_SITEMAP, ITEMS_PER_SITEMAP);
   } catch (error) {
+    rethrowNextSignals(error);
     console.warn(`[sitemaps] findSitemapItems page ${id} failed; falling back to empty list`, error);
     return [];
   }

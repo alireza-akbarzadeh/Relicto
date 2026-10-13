@@ -1,4 +1,5 @@
 import "server-only";
+import { rethrowNextSignals } from "@/lib/next-signals";
 import { listingService } from "@/server/modules/listings/listings.service";
 import type { HubMobileData } from "../mobile.types";
 import type { HubData } from "../types";
@@ -51,6 +52,7 @@ export async function getHub(): Promise<HubData> {
       incentive,
     };
   } catch (error) {
+    rethrowNextSignals(error);
     console.error("[getHub] Failed to fetch market stats, falling back to mock:", error);
     return {
       pulse,
@@ -88,6 +90,7 @@ export async function getHubMobile(): Promise<HubMobileData> {
 
     return { ...hubMobile, surge: { ...hubMobile.surge, items } };
   } catch (error) {
+    rethrowNextSignals(error);
     console.error("[getHubMobile] Failed to fetch catalog, falling back to mock:", error);
     return hubMobile;
   }

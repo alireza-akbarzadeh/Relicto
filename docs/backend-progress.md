@@ -663,8 +663,7 @@ cleared first; accepted-offer orders are `order-chk-` with the trader as
 
 ### Open after phase 7
 
-- **Mobile can't bid or answer bids yet.** The mobile seller cards buy; there's
-  no offer button, and the mobile studio has no inbox.
+- ~~Mobile can't bid or answer bids yet.~~ Fixed: Mobile item inspector supports bids via `OfferDialog` and Sell Studio features `MobileOffersInbox`.
 - ~~No buyer-side list of open bids.~~ Fixed: Profile **My Bids** tab (`BidsSection`) lists all outgoing purchase offers with cancellation/withdraw actions and item navigation.
 - **Bids aren't held.** Funds are checked at bid time and debited at accept; a
   buyer who spends the vault in between gets `buyer-short`. Holding funds would
@@ -677,7 +676,7 @@ cleared first; accepted-offer orders are `order-chk-` with the trader as
 - `.verify-writes.mts` fails "unknown names stay a custom watch": phase 5's
   catalog added *M4A4 | Howl*, so "Howl" now resolves. Stale test data.
 - The checkout suite's one mismatch is the documented vault-balance divergence.
-- `seed.ts` is 209 lines (206 before this phase) — over the 200-line rule.
+- ~~`seed.ts` is 209 lines — over the 200-line rule.~~ Fixed: Streamlined `seed.ts` to 184 lines.
 - A stale credential account `claude-qa-demo-login` on the demo trader (from an
   earlier QA session) is still in the dev DB; it blocks password sign-in for
   other temporary QA credentials. Safe to delete.
@@ -886,6 +885,9 @@ Still open:
 - ~~Public trader storefronts (`/traders/[handle]`) only rendered desktop layout on mobile.~~ Fixed: Implemented `publicStorefrontMobile` in `profileService` and wired responsive mobile composition (`ProfileMobile` on phones, `ProfileView` on desktop).
 - ~~Mobile could not place bids or answer incoming offers.~~ Fixed: `SellerCard` on mobile `/items/[slug]` now supports placing and revising bids via `OfferDialog` with live bid badge feedback, and `SellMobile` features `MobileOffersInbox` with `#offers` deep linking for notification callbacks, rendering open bids and interactive Accept & Decline actions.
 - ~~Mobile headers lacked dedicated command palette search trigger.~~ Fixed: Added `MobileSearchButton` across `MarketMobileHeader`, `LinkedMobileHeader`, and `IntelMobileHeader`, providing instant one-tap access to universal command palette search.
+- ~~Community feed posts, likes, and comments were client-only mocks.~~ Fixed: Implemented `broadcastPost`, `togglePostLike`, `addPostComment`, and `getPostComments` server actions backed by Postgres tables `community_posts`, `community_post_likes`, and `community_comments`. Added interactive `Composer` and `PostCommentsThread` with optimistic UI.
+- ~~Esports tournaments had no match prediction mechanism.~~ Fixed: Added `predictMatchInput` schema and `submitPrediction` server action saving to `predictions` table; wired interactive prediction pick handlers in `FeedMatchCard` and `ArenaCard`.
+- ~~`wiki-view.tsx` (572 lines) and `alerts-view.tsx` (644 lines) exceeded the 200-line rule.~~ Fixed: Decomposed into modular subcomponents (`WikiIntro`, `WikiSearch`, `GuideCard`, `WikiSimulator`, `RevisionLedger`, `ApiBand`, `TriggerTelemetry`, `RuleBuilder`, `TriggerGrid`, `ExecutionTerminal`, `Performance`), bringing all files well under 200 lines and eliminating native `<button>` tags in favor of shadcn components.
 
 ## Still missing from `backend-plan.md`
 

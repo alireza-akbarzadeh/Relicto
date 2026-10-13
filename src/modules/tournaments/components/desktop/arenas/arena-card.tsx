@@ -1,3 +1,7 @@
+"use client";
+
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatCapacity } from "../../../lib/format";
@@ -13,6 +17,12 @@ const ACTION_EMPHASIS = {
 
 export function ArenaCard({ card }: { card: ArenaCardData }) {
   const accent = ACCENT_CARD[card.accent];
+
+  const handleAction = () => {
+    toast.success(`${card.title}: ${card.action.label}`, {
+      description: "Bracket registration & telemetry active.",
+    });
+  };
 
   return (
     <article
@@ -51,8 +61,9 @@ export function ArenaCard({ card }: { card: ArenaCardData }) {
       </div>
 
       <div className="p-space-md pt-0">
-        <button
+        <Button
           type="button"
+          onClick={handleAction}
           className={cn(
             "flex w-full items-center justify-center gap-1 rounded py-2.5 font-headline-sm text-body-sm tracking-wider uppercase transition-all",
             ACTION_EMPHASIS[card.action.emphasis],
@@ -60,7 +71,7 @@ export function ArenaCard({ card }: { card: ArenaCardData }) {
         >
           <span>{card.action.label}</span>
           <Icon name={card.action.icon} className="text-[16px]" />
-        </button>
+        </Button>
       </div>
     </article>
   );

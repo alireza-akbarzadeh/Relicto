@@ -45,7 +45,7 @@ const SELLER = {
   image: "/images/lootora/avatar.jpg",
 };
 
-const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const slugify = (v: string) => v.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const toCents = (usd: number) => Math.round(usd * 100);
 
 async function main() {
@@ -56,30 +56,17 @@ async function main() {
   const db = drizzle(pool, { schema });
 
   await db.insert(schema.user).values(SELLER).onConflictDoNothing();
-  // Before the catalog upserts, which restore the cached offer counts app-made bids moved.
   await clearOfferWrites(db);
 
-  await db
-    .insert(schema.games)
-    .values(GAMES)
-    .onConflictDoUpdate({ target: schema.games.id, set: { name: schema.games.name } });
+  await db.insert(schema.games).values(GAMES).onConflictDoUpdate({ target: schema.games.id, set: { name: schema.games.name } });
 
-  // Heroes are implied by the Dota listings.
   const heroNames = [...new Set(LISTINGS.map((l) => l.hero).filter((h): h is string => Boolean(h)))];
-  const heroRows = heroNames.map((name) => ({
-    id: `hero-${slugify(name)}`,
-    gameId: "dota2",
-    slug: slugify(name),
-    name,
-  }));
-  if (heroRows.length) {
-    await db.insert(schema.heroes).values(heroRows).onConflictDoNothing();
-  }
+  const heroRows = heroNames.map((name) => ({ id: `hero-${slugify(name)}`, gameId: "dota2", slug: slugify(name), name }));
+  if (heroRows.length) await db.insert(schema.heroes).values(heroRows).onConflictDoNothing();
   const heroIdByName = new Map(heroNames.map((name) => [name, `hero-${slugify(name)}`]));
 
   for (const listing of LISTINGS) {
     const itemId = `item-${listing.id}`;
-    // CS2 entries carry no rarity; their badge style is the equivalent grade.
     const rarity = (listing.rarity ?? listing.badge.style) as (typeof schema.itemRarity.enumValues)[number];
 
     await db
@@ -150,16 +137,13 @@ async function main() {
         set: {
           priceCents,
           offerCount: listing.offers,
-          // The catalog owns the quoted move; other seeds must not overwrite it.
           changePercent: listing.change.percent,
           changeWindow: listing.change.window ?? null,
           updatedAt: new Date(),
         },
       });
 
-    // Price history behind the detail chart, ending at today's price.
     const series = buildPriceSeries(priceCents, listing.change.percent, listing.id);
-    // Only the generated series — real market snapshots and settled sales survive a re-seed.
     await db.delete(schema.pricePoints).where(and(eq(schema.pricePoints.itemId, itemId), eq(schema.pricePoints.venue, "relicto"), notLike(schema.pricePoints.id, "pp-%")));
     await db.insert(schema.pricePoints).values(
       series.map((point) => ({
@@ -171,9 +155,7 @@ async function main() {
     );
   }
 
-  /* Depth behind the designed cards, so facets and pagination count real rows. */
   const depth = await seedCatalogDepth(db, SELLER.id);
-
   const { traderId, vendorId, handle } = await seedTrader(db, targetEmail(process.argv));
   await seedOrders(db, traderId, SELLER.id, vendorId);
   const entries = await seedWallet(db, traderId);
@@ -185,22 +167,14 @@ async function main() {
   const forge = await seedTradeUps(db, traderId);
   const basket = await seedCheckout(db, traderId, SELLER.id);
   const arena = await seedTournaments(db);
-  // Last: every catalog item now exists, whichever seed added it.
+
   await linkShowcaseItems(db);
   await linkAlertItems(db);
   await linkInventoryItems(db, traderId);
 
-  console.log(
-    `seeded games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} listings=${LISTINGS.length}`,
-  );
-  console.log(`catalog depth items=${depth.items} heroes=${depth.heroes}`);
-  console.log(`ledger + treasury attached to ${handle} (orders=6 entries=${entries})`);
-  console.log(`content posts=${content.posts} guides=${content.guides}`);
-  console.log(`profile showcase=${profile.showcase} seller-listings=${profile.listings} alerts=${alerts}`);
-  console.log(`tracker assets=${board.assets} depth=${board.levels} spreads=${board.spreads}`);
-  console.log(`studio inventory=${studio.inventory} active=${studio.active} basket=${basket}`);
-  console.log(`forge skins=${forge.skins} outcomes=${forge.outcomes} committed=${forge.committed}`);
-  console.log(`arena tournaments=${arena.tournaments} matches=${arena.matches}`);
+  console.log(`seeded catalog: games=${GAMES.length} heroes=${heroRows.length} items=${LISTINGS.length} depth=${depth.items}`);
+  console.log(`attached to ${handle}: orders=6 ledger=${entries} posts=${content.posts} guides=${content.guides} showcase=${profile.showcase} alerts=${alerts}`);
+  console.log(`market entities: board=${board.assets} studio=${studio.active} forge=${forge.skins} arena=${arena.tournaments} basket=${basket}`);
   await pool.end();
 }
 

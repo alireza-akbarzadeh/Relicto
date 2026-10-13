@@ -1,4 +1,6 @@
 import "server-only";
+
+import { getUserId } from "@/modules/relicto/data/get-session";
 import { communityService } from "@/server/modules/community/community.service";
 import type { CommunityData } from "../types";
 import { community } from "./community.mock";
@@ -8,6 +10,7 @@ import { community } from "./community.mock";
  * community tables are seeded, so the screen never renders empty.
  */
 export async function getCommunity(): Promise<CommunityData> {
-  const live = await communityService.feed();
+  const userId = await getUserId();
+  const live = await communityService.feed(25, userId);
   return live.posts.length > 0 ? live : community;
 }

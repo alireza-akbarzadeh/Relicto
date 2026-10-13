@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/cn";
+import { togglePostLike } from "../actions/community";
 import type { CommunityPost, CommunityTone } from "../types";
+import { PostCommentsThread } from "./community-comments";
+
+export { Composer } from "./community-composer";
 
 const TONE: Record<CommunityTone, string> = {
   primary: "text-primary",
@@ -18,64 +20,32 @@ const TONE: Record<CommunityTone, string> = {
   muted: "text-text-muted",
 };
 
-export function Composer({
-  draft,
-  setDraft,
-  onBroadcast,
-  initials = "TR",
-}: {
-  draft: string;
-  setDraft: (value: string) => void;
-  onBroadcast: () => void;
-  initials?: string;
-}) {
-  return (
-    <section className="rounded-xl bg-surface-container-low p-space-md shadow-lg">
-      <div className="flex gap-space-sm">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container font-headline-sm text-headline-sm text-on-primary-container">
-          {initials}
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-space-sm">
-          <Textarea
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            placeholder="Share a trade-up clip, market arbitrage theory, or broadcast a direct P2P offer..."
-            rows={2}
-            className="resize-none border-0 bg-surface-container text-text-primary placeholder:text-text-muted focus-visible:bg-surface-container-high"
-          />
-          <div className="flex flex-wrap items-center justify-between gap-space-xs">
-            <div className="flex gap-space-xs">
-              <Link
-                href="/sell"
-                className="flex h-auto cursor-pointer items-center gap-1 rounded bg-surface-container px-2 py-1 font-label-badge text-label-badge text-tertiary uppercase transition-colors hover:bg-surface-container-high"
-              >
-                <Icon name="monetization_on" className="text-[16px]" />
-                <span>Attach Skin</span>
-              </Link>
-              <Link
-                href="/tracker"
-                className="flex h-auto cursor-pointer items-center gap-1 rounded bg-surface-container px-2 py-1 font-label-badge text-label-badge text-status-upcoming uppercase transition-colors hover:bg-surface-container-high"
-              >
-                <Icon name="query_stats" className="text-[16px]" />
-                <span>Chart Signal</span>
-              </Link>
-            </div>
-            <Button
-              onClick={onBroadcast}
-              className="h-auto rounded bg-primary-container px-space-md py-1.5 font-headline-sm text-headline-sm text-on-primary-container uppercase"
-            >
-              Broadcast <Icon name="send" className="text-[16px]" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function PostCard({ post }: { post: CommunityPost }) {
   const [likes, setLikes] = useState(post.likes);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(post.liked ?? false);
+  const [commentsCount, setCommentsCount] = useState(post.comments);
+  const [showComments, setShowComments] = useState(false);
+  const [, startTransition] = useTransition();
+
+  const handleLike = () => {
+    const nextLiked = !liked;
+    const nextCount = nextLiked ? likes + 1 : Math.max(0, likes - 1);
+    setLiked(nextLiked);
+    setLikes(nextCount);
+
+    startTransition(async () => {
+      try {
+        const res = await togglePostLike({ postId: post.id });
+        setLiked(res.liked);
+        setLikes(res.likeCount);
+      } catch {
+        // Revert on error
+        setLiked(!nextLiked);
+        setLikes(likes);
+        toast.error("Sign in to like community posts");
+      }
+    });
+  };
 
   return (
     <article className="relative flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-low p-space-md shadow-xl">
@@ -111,10 +81,12 @@ export function PostCard({ post }: { post: CommunityPost }) {
           {post.tag}
         </span>
       </div>
+
       <div>
         <h3 className="font-headline-md text-headline-md text-text-primary">{post.title}</h3>
         <p className="mt-1 text-text-secondary">{post.body}</p>
       </div>
+
       {post.image && (
         <div className="grid grid-cols-1 gap-space-md rounded-lg bg-surface-container p-space-md md:grid-cols-2">
           <div className="relative h-44 overflow-hidden rounded bg-surface-container-lowest">
@@ -131,6 +103,7 @@ export function PostCard({ post }: { post: CommunityPost }) {
           </div>
         </div>
       )}
+
       {post.metric && !post.image && (
         <div className="flex items-center justify-between rounded bg-surface-container p-space-md">
           <div>
@@ -140,38 +113,51 @@ export function PostCard({ post }: { post: CommunityPost }) {
           <span className="font-data-mono-md text-status-upcoming">{post.metric.delta}</span>
         </div>
       )}
+
       <div className="flex items-center gap-space-md border-t border-white/6 pt-2 font-data-mono-md text-[11px] text-text-muted">
-        <button
+        <Button
           type="button"
-          onClick={() => {
-            setLiked(!liked);
-            setLikes(liked ? likes - 1 : likes + 1);
-          }}
+          variant="ghost"
+          onClick={handleLike}
           className={cn(
-            "cursor-pointer border-0 bg-transparent p-0 transition-colors focus-visible:outline-hidden",
+            "h-auto p-0 hover:bg-transparent focus-visible:outline-hidden",
             liked ? "font-bold text-primary" : "text-text-muted hover:text-primary",
           )}
         >
-          ♡ {likes}
-        </button>
-        <button
+          <Icon name="favorite" className={cn("text-[14px] mr-1", liked ? "text-primary fill-current" : "text-text-muted")} />
+          {likes}
+        </Button>
+
+        <Button
           type="button"
-          onClick={() => toast.info("Comments thread", { description: "Community replies load in real-time." })}
-          className="cursor-pointer border-0 bg-transparent p-0 text-text-muted hover:text-status-upcoming focus-visible:outline-hidden"
+          variant="ghost"
+          onClick={() => setShowComments(!showComments)}
+          className="h-auto p-0 text-text-muted hover:bg-transparent hover:text-status-upcoming focus-visible:outline-hidden"
         >
-          ▢ {post.comments}
-        </button>
-        <button
+          <Icon name="forum" className="text-[14px] mr-1" />
+          {commentsCount}
+        </Button>
+
+        <Button
           type="button"
+          variant="ghost"
           onClick={() => {
             if (typeof window !== "undefined") navigator.clipboard.writeText(window.location.href);
             toast.success("Post link copied to clipboard");
           }}
-          className="cursor-pointer border-0 bg-transparent p-0 text-text-muted hover:text-text-primary focus-visible:outline-hidden"
+          className="h-auto p-0 text-text-muted hover:bg-transparent hover:text-text-primary focus-visible:outline-hidden"
         >
+          <Icon name="share" className="text-[14px] mr-1" />
           Share
-        </button>
+        </Button>
       </div>
+
+      {showComments && (
+        <PostCommentsThread
+          postId={post.id}
+          onCommentAdded={() => setCommentsCount((c) => c + 1)}
+        />
+      )}
     </article>
   );
 }

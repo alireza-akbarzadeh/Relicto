@@ -1,14 +1,46 @@
+"use client";
+
+import { useTransition } from "react";
+import { toast } from "sonner";
 import { Dot } from "@/components/ui/dot";
 import { cn } from "@/lib/cn";
+import { submitPrediction } from "../../../actions/predictions";
 import { DOT_TONE, TEXT_TONE } from "../../../lib/tones";
 import type { FeedMatch, FeedTeam } from "../../../types";
 
-function FeedTeamRow({ team, pending }: { team: FeedTeam; pending?: boolean }) {
+function FeedTeamRow({
+  team,
+  pending,
+  matchId,
+}: {
+  team: FeedTeam;
+  pending?: boolean;
+  matchId?: string;
+}) {
+  const [, startTransition] = useTransition();
+
+  const handlePick = () => {
+    if (!matchId) return;
+    startTransition(async () => {
+      try {
+        await submitPrediction({ matchId, teamId: team.tag, stakeCents: 0 });
+        toast.success(`Prediction Placed: ${team.name}`, {
+          description: "Your victory prediction is locked in the arena ledger.",
+        });
+      } catch {
+        toast.info(`Selected ${team.name}`, {
+          description: "Sign in to record predictions to your trading profile.",
+        });
+      }
+    });
+  };
+
   return (
     <div
+      onClick={pending ? handlePick : undefined}
       className={cn(
-        "flex items-center justify-between rounded-lg bg-surface-container-lowest p-space-sm",
-        pending && "opacity-80",
+        "flex items-center justify-between rounded-lg bg-surface-container-lowest p-space-sm transition-colors",
+        pending ? "cursor-pointer hover:bg-surface-container-high/80 opacity-80" : "",
       )}
     >
       <div className="flex items-center gap-space-sm">
@@ -17,7 +49,9 @@ function FeedTeamRow({ team, pending }: { team: FeedTeam; pending?: boolean }) {
         </div>
         <div className="flex flex-col">
           <span className="font-headline-sm text-body-md leading-tight text-text-primary">{team.name}</span>
-          <span className="font-label-badge text-[10px] text-text-muted uppercase">{team.meta}</span>
+          <span className="font-label-badge text-[10px] text-text-muted uppercase">
+            {pending ? "Pick to Win" : team.meta}
+          </span>
         </div>
       </div>
       {team.score === undefined ? (
@@ -48,7 +82,7 @@ export function FeedMatchCard({ match }: { match: FeedMatch }) {
         </span>
       </div>
       {match.teams.map((team) => (
-        <FeedTeamRow key={team.tag} team={team} pending={match.pending} />
+        <FeedTeamRow key={team.tag} team={team} pending={match.pending} matchId={match.id} />
       ))}
     </article>
   );

@@ -1,17 +1,19 @@
 "use client";
 
 import { useQueryState } from "nuqs";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
+import { authClient } from "@/lib/auth-client";
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
-import type { CommunityData } from "../types";
+import { broadcastPost } from "../actions/community";
 import { communitySearchParams } from "../lib/search-params";
-import { ChannelRail } from "./community-rail";
+import type { CommunityData, CommunityPost } from "../types";
 import { CommunityAside } from "./community-aside";
-import { authClient } from "@/lib/auth-client";
-import { Composer, PostCard } from "./community-post-card";
+import { Composer } from "./community-composer";
+import { PostCard } from "./community-post-card";
+import { ChannelRail } from "./community-rail";
 
 const CHANNELS = [
   "All Discussions",
@@ -52,7 +54,8 @@ export function CommunityView({ data }: { data: CommunityData }) {
   );
   const setChannel = (value: string) => void setChannelParam(value);
   const [draft, setDraft] = useState("");
-  const [posts, setPosts] = useState(data.posts);
+  const [posts, setPosts] = useState<CommunityPost[]>(data.posts);
+  const [isPending, startTransition] = useTransition();
   const { data: session } = authClient.useSession();
 
   const userHandle = session?.user?.name ? `@${session.user.name}` : "@Trader";
@@ -76,25 +79,37 @@ export function CommunityView({ data }: { data: CommunityData }) {
 
   const broadcast = () => {
     if (!draft.trim()) return;
-    setPosts((current) => [
-      {
-        id: `post-${Date.now()}`,
-        initials: userInitials,
-        handle: userHandle,
-        role: "VERIFIED TRADER",
-        roleTone: "primary",
-        age: "now",
-        tag: "BROADCAST",
-        tagTone: "primary",
-        title: draft.trim(),
-        body: "Broadcast from the Relicto trader community feed.",
-        likes: 0,
-        comments: 0,
-      },
-      ...current,
-    ]);
+    const title = draft.trim();
+    const tempId = `post-${Date.now()}`;
+    const optimisticPost: CommunityPost = {
+      id: tempId,
+      initials: userInitials,
+      handle: userHandle,
+      role: "VERIFIED TRADER",
+      roleTone: "primary",
+      age: "just now",
+      tag: "BROADCAST",
+      tagTone: "primary",
+      title,
+      body: "Broadcast from the Relicto trader community feed.",
+      likes: 0,
+      comments: 0,
+      liked: false,
+    };
+    setPosts((current) => [optimisticPost, ...current]);
     setDraft("");
-    toast.success("Broadcast published to live channel");
+
+    startTransition(async () => {
+      try {
+        const res = await broadcastPost({ title });
+        if (res.post) {
+          setPosts((current) => current.map((p) => (p.id === tempId ? res.post : p)));
+        }
+        toast.success("Broadcast published to live channel");
+      } catch {
+        toast.error("Failed to publish broadcast. Please ensure you are signed in.");
+      }
+    });
   };
 
   return (
@@ -109,6 +124,7 @@ export function CommunityView({ data }: { data: CommunityData }) {
               draft={draft}
               setDraft={setDraft}
               onBroadcast={broadcast}
+              isPending={isPending}
               initials={userInitials}
             />
             <div className="flex flex-col gap-space-md">

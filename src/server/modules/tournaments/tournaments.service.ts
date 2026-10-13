@@ -1,10 +1,15 @@
 import "server-only";
 
-import type { ArenaCard, Broadcast, FeedMatch, HeroEvent } from "@/modules/tournaments/types";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { predictions } from "@/lib/db/schema";
 import type { BracketCardData, RadarMatch } from "@/modules/tournaments/mobile.types";
+import type { ArenaCard, Broadcast, FeedMatch, HeroEvent } from "@/modules/tournaments/types";
 import { toBracketCard, toRadarMatch } from "./tournaments-mobile.presenter";
-import { toArenaCard, toBroadcast, toFeedMatch, toHeroEvent } from "./tournaments.presenter";
 import * as repository from "./tournaments.repository";
+import { toArenaCard, toBroadcast, toFeedMatch, toHeroEvent } from "./tournaments.presenter";
+import type { predictMatchInput } from "./tournaments.schema";
+import type { z } from "zod";
 
 export type ArenaLive = {
   heroEvents: HeroEvent[];
@@ -43,5 +48,43 @@ export const tournamentService = {
       radar: games.filter((row) => row.match.status === "live").map(toRadarMatch),
       openEvents: events.length,
     };
+  },
+
+  /** Record or revise an esports match prediction. */
+  async predictMatch(userId: string, input: z.infer<typeof predictMatchInput>) {
+    const id = `pred-${crypto.randomUUID().slice(0, 8)}`;
+    await db
+      .insert(predictions)
+      .values({
+        id,
+        matchId: input.matchId,
+        userId,
+        teamId: input.teamId,
+        stakeCents: input.stakeCents,
+        status: "open",
+      })
+      .onConflictDoUpdate({
+        target: [predictions.matchId, predictions.userId],
+        set: {
+          teamId: input.teamId,
+          stakeCents: input.stakeCents,
+          updatedAt: new Date(),
+        },
+      });
+
+    return { status: "recorded" as const, matchId: input.matchId, teamId: input.teamId };
+  },
+
+  /** Get open predictions placed by an authenticated user. */
+  async userPredictions(userId: string) {
+    return await db
+      .select({
+        matchId: predictions.matchId,
+        teamId: predictions.teamId,
+        stakeCents: predictions.stakeCents,
+        status: predictions.status,
+      })
+      .from(predictions)
+      .where(eq(predictions.userId, userId));
   },
 };

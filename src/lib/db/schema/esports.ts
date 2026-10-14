@@ -145,3 +145,22 @@ export const predictions = pgTable(
   },
   (t) => [uniqueIndex("predictions_match_user_idx").on(t.matchId, t.userId), index("predictions_user_idx").on(t.userId)],
 );
+
+export const matchChatMessages = pgTable(
+  "match_chat_messages",
+  {
+    id: primaryId(),
+    matchId: text("match_id")
+      .notNull()
+      .references(() => matches.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    userHandle: text("user_handle").notNull(),
+    userAvatar: text("user_avatar"),
+    message: text("message").notNull(),
+    teamTag: text("team_tag"),
+    ...timestamps,
+  },
+  (t) => [index("match_chat_match_idx").on(t.matchId), index("match_chat_created_idx").on(t.createdAt)],
+);

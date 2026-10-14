@@ -1,8 +1,8 @@
 import "server-only";
 
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { predictions } from "@/lib/db/schema";
+import { matchChatMessages, predictions } from "@/lib/db/schema";
 import type { BracketCardData, RadarMatch } from "@/modules/tournaments/mobile.types";
 import type { ArenaCard, Broadcast, FeedMatch, HeroEvent } from "@/modules/tournaments/types";
 import { toBracketCard, toRadarMatch } from "./tournaments-mobile.presenter";
@@ -86,5 +86,75 @@ export const tournamentService = {
       })
       .from(predictions)
       .where(eq(predictions.userId, userId));
+  },
+
+  /** Post a spectator chat message for an active match. */
+  async postChatMessage(matchId: string, userId: string, handle: string, avatar: string | null, message: string, teamTag?: string) {
+    const id = `msg-${crypto.randomUUID().slice(0, 8)}`;
+    const [row] = await db
+      .insert(matchChatMessages)
+      .values({
+        id,
+        matchId,
+        userId,
+        userHandle: handle,
+        userAvatar: avatar,
+        message: message.trim(),
+        teamTag: teamTag ?? null,
+      })
+      .returning();
+    return row;
+  },
+
+  /** Get spectator chat messages for a match, seeded with crowd messages if empty. */
+  async getMatchChat(matchId: string) {
+    const rows = await db
+      .select()
+      .from(matchChatMessages)
+      .where(eq(matchChatMessages.matchId, matchId))
+      .orderBy(asc(matchChatMessages.createdAt));
+
+    if (rows.length > 0) return rows;
+
+    const initial = [
+      {
+        id: `msg-${matchId}-1`,
+        matchId,
+        userId: "seed-seller-relicto",
+        userHandle: "Relicto_Sentinel",
+        userAvatar: "/images/lootora/avatar.jpg",
+        message: "Match telemetry verified by VAC+ Kernel coordinator.",
+        teamTag: null,
+      },
+      {
+        id: `msg-${matchId}-2`,
+        matchId,
+        userId: "seed-seller-relicto",
+        userHandle: "KuroSkins",
+        userAvatar: "/avatars/trader-2.png",
+        message: "Locked in my prediction! Odds are swinging fast on this decider.",
+        teamTag: "LIQUID",
+      },
+      {
+        id: `msg-${matchId}-3`,
+        matchId,
+        userId: "seed-seller-relicto",
+        userHandle: "Vortex_CS",
+        userAvatar: "/avatars/trader-3.png",
+        message: "Both teams looking sharp. Let's see who takes the trophy bounty!",
+        teamTag: null,
+      },
+    ];
+
+    try {
+      await db.insert(matchChatMessages).values(initial).onConflictDoNothing();
+      return await db
+        .select()
+        .from(matchChatMessages)
+        .where(eq(matchChatMessages.matchId, matchId))
+        .orderBy(asc(matchChatMessages.createdAt));
+    } catch {
+      return initial.map((m) => ({ ...m, createdAt: new Date(), updatedAt: new Date() }));
+    }
   },
 };

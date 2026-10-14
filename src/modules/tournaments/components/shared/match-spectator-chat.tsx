@@ -41,7 +41,7 @@ export function MatchSpectatorChat({ matchId, teamTags }: MatchSpectatorChatProp
     const text = (textToSend ?? inputMsg).trim();
     if (!text) return;
 
-    const optimisticId = `temp-${Date.now()}`;
+    const optimisticId = `temp-${messages.length + 1}`;
     const optimisticMessage: ChatMessageDto = {
       id: optimisticId,
       matchId,
@@ -50,7 +50,7 @@ export function MatchSpectatorChat({ matchId, teamTags }: MatchSpectatorChatProp
       userAvatar: "/avatars/trader-1.png",
       message: text,
       teamTag: selectedTag,
-      createdAt: new Date(),
+      createdAt: new Date(0),
     };
 
     setMessages((prev) => [...prev, optimisticMessage]);

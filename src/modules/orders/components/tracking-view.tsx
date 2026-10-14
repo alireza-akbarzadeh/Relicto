@@ -1,6 +1,7 @@
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { LedgerHeader } from "@/modules/relicto/components/shell/ledger-header";
 import type { OrderTracking } from "../types";
+import { EscrowSandboxPanel } from "./tracking/escrow-sandbox-panel";
 import { EscrowSteps } from "./tracking/escrow-steps";
 import { FulfilmentPanel } from "./tracking/fulfilment-panel";
 import { GuaranteeCard } from "./tracking/guarantee-card";
@@ -17,6 +18,7 @@ export function TrackingView({ order }: { order: OrderTracking }) {
       <LedgerHeader />
       <main className="w-full pt-16">
         <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-space-lg px-gutter-desktop py-space-lg">
+          <EscrowSandboxPanel code={order.code} stage={order.fulfilment?.stage} statusText={order.status} />
           <StatusBanner order={order} />
           <EscrowSteps steps={order.steps} />
           <div className="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">

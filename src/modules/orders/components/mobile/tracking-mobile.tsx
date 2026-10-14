@@ -4,6 +4,7 @@ import { IntelMobileHeader } from "@/modules/relicto/components/mobile/mobile-he
 import { MobileTabBar } from "@/modules/relicto/components/mobile/mobile-tab-bar";
 import type { TrackingMobile as TrackingMobileData } from "../../mobile.types";
 import { EscrowSequence } from "./escrow-sequence";
+import { EscrowSandboxPanel } from "../tracking/escrow-sandbox-panel";
 import { OrderHashCard } from "./order-hash-card";
 import { OrderItemCard } from "./order-item-card";
 import { ShieldVerification } from "./shield-verification";
@@ -21,6 +22,7 @@ export function TrackingMobile({ order }: { order: TrackingMobileData }) {
       <IntelMobileHeader />
       <main className="relative flex w-full flex-col bg-surface pt-16 pb-20">
         <div className="flex w-full flex-col gap-space-md px-space-md py-space-sm text-on-surface">
+          <EscrowSandboxPanel code={order.code} stage={order.steps.find((s) => s.state === "active")?.id} />
           <OrderHashCard order={order} stage={stage} />
           <OrderItemCard item={order.item} seller={order.seller} />
           <EscrowSequence steps={order.steps} stage={stage} offerUrl={order.tradeOfferUrl} />

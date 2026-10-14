@@ -1,11 +1,11 @@
 "use client";
 
-import { Icon } from "@/components/ui/icon";
+import { Icon, type IconName } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { getTelemetryForMatch, type MatchTelemetryEvent } from "../../data/match-telemetry.mock";
 
-const TYPE_ICONS: Record<MatchTelemetryEvent["type"], { icon: string; className: string }> = {
-  objective: { icon: "flag", className: "text-primary bg-primary/10 border-primary/20" },
+const TYPE_ICONS: Record<MatchTelemetryEvent["type"], { icon: IconName; className: string }> = {
+  objective: { icon: "target", className: "text-primary bg-primary/10 border-primary/20" },
   kill: { icon: "sports_kabaddi", className: "text-status-live bg-status-live/10 border-status-live/20" },
   clutch: { icon: "bolt", className: "text-tertiary bg-tertiary/10 border-tertiary/20" },
   economy: { icon: "monetization_on", className: "text-accent-cyan bg-accent-cyan/10 border-accent-cyan/20" },
@@ -35,7 +35,7 @@ export function MatchTelemetryFeed({ matchId, game }: { matchId: string; game?: 
               className="flex items-start gap-2.5 rounded-lg bg-surface-container-lowest/80 p-2.5 border border-white/5 hover:border-white/10 transition-colors"
             >
               <div className={cn("flex h-7 w-7 shrink-0 items-center justify-center rounded-md border", cfg.className)}>
-                <Icon name={cfg.icon as any} className="text-[14px]" />
+                <Icon name={cfg.icon} className="text-[14px]" />
               </div>
 
               <div className="flex flex-col gap-0.5 flex-1 min-w-0">

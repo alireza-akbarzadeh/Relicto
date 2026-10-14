@@ -122,7 +122,7 @@ export async function seedTournaments(db: Db) {
       teamBId: await upsertTeam(db, b.tag, b.name),
       scoreA: a.score ?? 0,
       scoreB: b.score ?? 0,
-      status: feed.pending ? ("scheduled" as const) : ("live" as const),
+      status: feed.statusKind ?? (feed.pending ? ("scheduled" as const) : ("live" as const)),
       round: feed.label.split(" • ")[1] ?? null,
       featured: false,
       sortOrder: index,
@@ -131,6 +131,12 @@ export async function seedTournaments(db: Db) {
         state: feed.state,
         meta: [a.meta, b.meta] as [string, string],
         ...(a.scoreTone && b.scoreTone ? { scoreTones: [a.scoreTone, b.scoreTone] as [string, string] } : {}),
+        tournamentName: feed.tournamentName,
+        map: feed.map,
+        predictionSplit: feed.predictionSplit,
+        casters: feed.casters,
+        goldLead: feed.goldLead,
+        kills: feed.kills,
       },
     };
     await db.insert(schema.matches).values(row).onConflictDoUpdate({ target: schema.matches.id, set: row });

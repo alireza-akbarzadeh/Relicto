@@ -35,12 +35,18 @@ export const MAIN_NAV: MainNavSection[] = [
     ],
   },
   {
+    id: "tournaments",
+    label: "Tournaments",
+    icon: "trophy",
+    href: "/tournaments",
+  },
+  {
     id: "community",
     label: "Community",
     icon: "groups",
     links: [
       { href: "/community", label: "Community", description: "Trader posts, market talk and highlights.", icon: "groups" },
-      { href: "/tournaments", label: "Tournaments", description: "Live brackets, prize pools and match radar.", icon: "trophy" },
+      { href: "/tournaments", label: "Tournaments & Matches", description: "Live brackets, prize pools and match radar.", icon: "trophy" },
       { href: "/", label: "Game Hub", description: "Esports, meta picks and what's surging today.", icon: "sports_esports" },
     ],
   },

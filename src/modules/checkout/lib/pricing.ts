@@ -16,11 +16,13 @@ export type Quote = {
   dueCents: number;
 };
 
-const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
+const sum = (values: number[]) =>
+  values.reduce((total, value) => total + value, 0);
 
 export function quote(priceCents: number[], promo: boolean): Quote {
   const subtotalCents = sum(priceCents);
-  const comboCents = priceCents.length >= COMBO_THRESHOLD ? COMBO_DISCOUNT_CENTS : 0;
+  const comboCents =
+    priceCents.length >= COMBO_THRESHOLD ? COMBO_DISCOUNT_CENTS : 0;
   const promoCents = promo ? PROMO_DISCOUNT_CENTS : 0;
 
   return {
@@ -37,15 +39,26 @@ export function quote(priceCents: number[], promo: boolean): Quote {
  * per-line orders add up to exactly what was charged. Leftover cents go to the
  * priciest lines first.
  */
-export function allocate(priceCents: number[], discountCents: number): number[] {
+export function allocate(
+  priceCents: number[],
+  discountCents: number,
+): number[] {
   const subtotal = sum(priceCents);
   const discount = Math.min(discountCents, subtotal);
   if (discount === 0) return priceCents.map(() => 0);
 
-  const shares = priceCents.map((price) => Math.floor((discount * price) / subtotal));
-  const byPrice = priceCents.map((_, index) => index).sort((a, b) => priceCents[b] - priceCents[a]);
+  const shares = priceCents.map((price) =>
+    Math.floor((discount * price) / subtotal),
+  );
+  const byPrice = priceCents
+    .map((_, index) => index)
+    .sort((a, b) => priceCents[b] - priceCents[a]);
 
-  for (let rest = discount - sum(shares), k = 0; rest > 0; rest--, k = (k + 1) % byPrice.length) {
+  for (
+    let rest = discount - sum(shares), k = 0;
+    rest > 0;
+    rest--, k = (k + 1) % byPrice.length
+  ) {
     shares[byPrice[k]] += 1;
   }
 

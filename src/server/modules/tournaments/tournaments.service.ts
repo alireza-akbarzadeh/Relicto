@@ -45,7 +45,7 @@ export const tournamentService = {
 
     return {
       brackets: present(events.map((row) => toBracketCard(row, now))),
-      radar: games.filter((row) => row.match.status === "live").map(toRadarMatch),
+      radar: games.map(toRadarMatch),
       openEvents: events.length,
     };
   },

@@ -21,6 +21,8 @@ import {
   serverStatus,
 } from "./mobile/hub.mock";
 
+import { getSession, getUserId } from "@/modules/relicto/data/get-session";
+
 /**
  * The Arena hub. Tournaments, matches and the broadcast come from Postgres; the
  * page chrome, filters, platform marketing stats and infrastructure copy stay
@@ -37,8 +39,39 @@ export async function getArenaDesktop() {
     console.error("[getArenaDesktop] Fallback to mock:", err);
   }
 
+  const [session, userId] = await Promise.all([getSession(), getUserId()]);
+  const pickMap = new Map<string, string>();
+  if (userId) {
+    try {
+      const preds = await tournamentService.userPredictions(userId);
+      for (const p of preds) {
+        if (p.teamId) pickMap.set(p.matchId, p.teamId);
+      }
+    } catch {
+      // fallback to empty predictions gracefully
+    }
+  }
+
+  const rawFeeds = live?.feeds ?? feedMatches;
+  const feeds = rawFeeds.map((m) => ({
+    ...m,
+    userPick: pickMap.get(m.id),
+  }));
+
+  const shellUser = session?.user
+    ? {
+        handle: session.user.handle,
+        rank: `${session.user.role} Lv.${session.user.level}`,
+        status: "Verified Broker • 99.8%",
+        avatar: session.user.avatar || "/avatars/trader-1.png",
+      }
+    : desktopShell.user;
+
+  const unreadNotifications = (session?.notifications?.filter((n) => n.unread).length ?? 0) > 0;
+
   return {
-    shell: desktopShell,
+    shell: { ...desktopShell, user: shellUser },
+    unreadNotifications,
     hero: { events: live?.heroEvents ?? heroEvents, telemetry: heroTelemetry, stats: platformStats },
     arenas: {
       section: live ? { ...arenaSection, openEvents: live.openEvents } : arenaSection,
@@ -46,7 +79,7 @@ export async function getArenaDesktop() {
       chips: filterChips,
       cards: live?.cards ?? arenaCards,
     },
-    live: { broadcast: live?.broadcast ?? broadcast, feeds: live?.feeds ?? feedMatches },
+    live: { broadcast: live?.broadcast ?? broadcast, feeds },
     infrastructure,
   };
 }
@@ -65,6 +98,25 @@ export async function getArenaMobile() {
     console.error("[getArenaMobile] Fallback to mock:", err);
   }
 
+  const userId = await getUserId();
+  const pickMap = new Map<string, string>();
+  if (userId) {
+    try {
+      const preds = await tournamentService.userPredictions(userId);
+      for (const p of preds) {
+        if (p.teamId) pickMap.set(p.matchId, p.teamId);
+      }
+    } catch {
+      // fallback gracefully
+    }
+  }
+
+  const rawRadar = live?.radar ?? radarMatches;
+  const radar = rawRadar.map((m) => ({
+    ...m,
+    userPick: pickMap.get(m.id),
+  }));
+
   return {
     shell: mobileShell,
     gameTabs: mobileGameTabs,
@@ -75,7 +127,7 @@ export async function getArenaMobile() {
       cards: live?.brackets ?? bracketCards,
       quickMatch,
     },
-    radar: { section: radarSection, matches: live?.radar ?? radarMatches },
+    radar: { section: radarSection, matches: radar },
     infrastructure: { section: infrastructureSection, items: bentoItems, server: serverStatus },
   };
 }

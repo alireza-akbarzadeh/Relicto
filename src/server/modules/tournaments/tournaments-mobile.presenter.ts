@@ -96,5 +96,12 @@ export function toRadarMatch({ match, gameId, teamA, teamB }: MatchRow): RadarMa
     score: [score(match.scoreA), score(match.scoreB)],
     scoreTones: tones,
     separator: cs2 ? ":" : "-",
+    tournamentName: p?.tournamentName ?? (cs2 ? "CS2 Pro Circuit" : "Dota 2 Pro Circuit"),
+    game: cs2 ? "cs2" : "dota2",
+    statusKind: match.status as "live" | "scheduled" | "completed",
+    map: p?.map,
+    predictionSplit: p?.predictionSplit,
+    casters: p?.casters,
+    goldLead: p?.goldLead,
   };
 }

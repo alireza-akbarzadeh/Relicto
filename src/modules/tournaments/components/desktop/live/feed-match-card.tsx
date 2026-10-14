@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Dot } from "@/components/ui/dot";
+import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { submitPrediction } from "../../../actions/predictions";
 import { DOT_TONE, TEXT_TONE } from "../../../lib/tones";
@@ -12,10 +13,12 @@ function FeedTeamRow({
   team,
   pending,
   matchId,
+  isPicked,
 }: {
   team: FeedTeam;
   pending?: boolean;
   matchId?: string;
+  isPicked?: boolean;
 }) {
   const [, startTransition] = useTransition();
 
@@ -41,16 +44,28 @@ function FeedTeamRow({
       className={cn(
         "flex items-center justify-between rounded-lg bg-surface-container-lowest p-space-sm transition-colors",
         pending ? "cursor-pointer hover:bg-surface-container-high/80 opacity-80" : "",
+        isPicked ? "ring-1 ring-primary bg-primary/5 opacity-100" : "",
       )}
     >
       <div className="flex items-center gap-space-sm">
-        <div className="flex h-8 w-8 items-center justify-center rounded bg-surface-container-high font-label-caps text-label-caps font-bold text-text-primary">
+        <div
+          className={cn(
+            "flex h-8 w-8 items-center justify-center rounded font-label-caps text-label-caps font-bold",
+            isPicked ? "bg-primary text-on-primary" : "bg-surface-container-high text-text-primary",
+          )}
+        >
           {team.tag}
         </div>
         <div className="flex flex-col">
           <span className="font-headline-sm text-body-md leading-tight text-text-primary">{team.name}</span>
           <span className="font-label-badge text-[10px] text-text-muted uppercase">
-            {pending ? "Pick to Win" : team.meta}
+            {isPicked ? (
+              <span className="font-bold text-primary">✓ Your Pick</span>
+            ) : pending ? (
+              "Pick to Win"
+            ) : (
+              team.meta
+            )}
           </span>
         </div>
       </div>
@@ -65,12 +80,27 @@ function FeedTeamRow({
   );
 }
 
-export function FeedMatchCard({ match }: { match: FeedMatch }) {
-  const { state } = match;
+export function FeedMatchCard({
+  match,
+  onSelect,
+}: {
+  match: FeedMatch;
+  onSelect?: () => void;
+}) {
+  const { state, userPick } = match;
   return (
-    <article className="flex flex-col gap-space-sm rounded-xl bg-surface-card p-space-md transition-shadow hover:shadow-md">
-      <div className="flex items-center justify-between font-label-badge text-label-badge text-text-muted">
-        <span className={cn("font-bold", TEXT_TONE[match.labelTone])}>{match.label}</span>
+    <article className="flex flex-col gap-space-sm rounded-xl bg-surface-card p-space-md transition-all hover:bg-surface-card/90 hover:shadow-md">
+      <div
+        onClick={onSelect}
+        className={cn(
+          "flex items-center justify-between font-label-badge text-label-badge text-text-muted",
+          onSelect && "cursor-pointer hover:text-text-primary",
+        )}
+      >
+        <span className={cn("font-bold flex items-center gap-1", TEXT_TONE[match.labelTone])}>
+          {match.label}
+          {onSelect && <Icon name="open_in_new" className="text-[12px] opacity-60" />}
+        </span>
         <span className={cn("flex items-center gap-1 font-bold", TEXT_TONE[state.tone])}>
           {state.indicator && (
             <Dot
@@ -82,8 +112,25 @@ export function FeedMatchCard({ match }: { match: FeedMatch }) {
         </span>
       </div>
       {match.teams.map((team) => (
-        <FeedTeamRow key={team.tag} team={team} pending={match.pending} matchId={match.id} />
+        <FeedTeamRow
+          key={team.tag}
+          team={team}
+          pending={match.pending}
+          matchId={match.id}
+          isPicked={userPick === team.tag}
+        />
       ))}
+      {onSelect && (
+        <div className="flex justify-end pt-1">
+          <button
+            type="button"
+            onClick={onSelect}
+            className="flex items-center gap-1 text-[11px] font-label-caps text-text-muted hover:text-primary transition-colors cursor-pointer"
+          >
+            Inspect Match & Odds <Icon name="chevron_right" className="text-[14px]" />
+          </button>
+        </div>
+      )}
     </article>
   );
 }

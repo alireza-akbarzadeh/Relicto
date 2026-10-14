@@ -8,15 +8,15 @@ import type {
 } from "../../mobile.types";
 
 export const mobileShell: MobileShell = {
-  brand: { name: "Valve", accent: "Arena" },
+  brand: { name: "Relicto", accent: "Arena" },
   tierBadge: "Tier-1 Major",
   liveCount: 3,
   tabs: [
-    { id: "arena", label: "Arena", icon: "grid_view", href: "/tournaments" },
-    { id: "brackets", label: "Brackets", icon: "account_tree", href: "#" },
-    { id: "live", label: "Live", icon: "sensors", href: "#", badge: true },
-    { id: "ranks", label: "Ranks", icon: "military_tech", href: "#" },
-    { id: "dossier", label: "Dossier", icon: "shield_person", href: "#" },
+    { id: "arena", label: "Arena", icon: "trophy", href: "/tournaments" },
+    { id: "market", label: "Market", icon: "storefront", href: "/marketplace" },
+    { id: "brackets", label: "Brackets", icon: "account_tree", href: "#brackets" },
+    { id: "live", label: "Live", icon: "sensors", href: "#radar-feed", badge: true },
+    { id: "profile", label: "Profile", icon: "person", href: "/profile" },
   ],
   activeTab: "arena",
 };
@@ -51,35 +51,7 @@ export const quickChips: QuickChip[] = [
   { icon: "person", label: "Solo Queue", tone: "primary" },
 ];
 
-export const radarSection = { title: "Live Radar Feeds", meta: "Steam API Synced" };
-
-export const radarMatches: RadarMatch[] = [
-  {
-    id: "spirit-vs-gg",
-    label: "Dota 2 • Game 3 Decider",
-    labelIcon: "sports_kabaddi",
-    labelTone: "primary",
-    clock: { label: "38:14 Game Time", tone: "muted" },
-    home: { tag: "TS", name: "Spirit", meta: "+4.2k Gold", metaTone: "cyan" },
-    away: { tag: "GG", name: "Gladiators", meta: "Roshan Down", metaTone: "muted" },
-    score: ["24", "19"],
-    scoreTones: ["strong", "secondary"],
-    separator: "-",
-    goldShare: 58,
-  },
-  {
-    id: "navi-vs-faze",
-    label: "CS2 • Inferno (Map 2)",
-    labelIcon: "military_tech",
-    labelTone: "amber",
-    clock: { label: "Bomb Planted", tone: "amber", icon: "bomb", emphasis: true },
-    home: { tag: "NV", name: "NaVi", meta: "3 Alive (T)", metaTone: "amber" },
-    away: { tag: "FZ", name: "FaZe", meta: "2 Retake (CT)", metaTone: "cyan" },
-    score: ["11", "09"],
-    scoreTones: ["amber", "secondary"],
-    separator: ":",
-  },
-];
+export { radarMatches, radarSection } from "./radar.mock";
 
 export const infrastructureSection = { title: "Tactical Infrastructure" };
 

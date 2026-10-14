@@ -1,6 +1,4 @@
-"use client";
-
-import { toast } from "sonner";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -8,6 +6,7 @@ import { formatCapacity } from "../../../lib/format";
 import { ACCENT_CARD, TEXT_TONE } from "../../../lib/tones";
 import type { ArenaCard as ArenaCardData } from "../../../types";
 import { TeamStack } from "../../shared/team-stack";
+import { TournamentBracketModal } from "../../shared/tournament-bracket-modal";
 import { ArenaCardMedia } from "./arena-card-media";
 
 const ACTION_EMPHASIS = {
@@ -16,21 +15,18 @@ const ACTION_EMPHASIS = {
 } as const;
 
 export function ArenaCard({ card }: { card: ArenaCardData }) {
+  const [openModal, setOpenModal] = useState(false);
   const accent = ACCENT_CARD[card.accent];
 
-  const handleAction = () => {
-    toast.success(`${card.title}: ${card.action.label}`, {
-      description: "Bracket registration & telemetry active.",
-    });
-  };
-
   return (
-    <article
-      className={cn(
-        "group flex flex-col justify-between overflow-hidden rounded-xl bg-surface-card transition-all duration-300 hover:-translate-y-1",
-        accent.hoverGlow,
-      )}
-    >
+    <>
+      <article
+        onClick={() => setOpenModal(true)}
+        className={cn(
+          "group flex flex-col justify-between overflow-hidden rounded-xl bg-surface-card transition-all duration-300 hover:-translate-y-1 cursor-pointer",
+          accent.hoverGlow,
+        )}
+      >
       <ArenaCardMedia card={card} />
 
       <div className="flex flex-1 flex-col gap-space-sm p-space-md">
@@ -63,7 +59,10 @@ export function ArenaCard({ card }: { card: ArenaCardData }) {
       <div className="p-space-md pt-0">
         <Button
           type="button"
-          onClick={handleAction}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenModal(true);
+          }}
           className={cn(
             "flex w-full items-center justify-center gap-1 rounded py-2.5 font-headline-sm text-body-sm tracking-wider uppercase transition-all",
             ACTION_EMPHASIS[card.action.emphasis],
@@ -74,5 +73,7 @@ export function ArenaCard({ card }: { card: ArenaCardData }) {
         </Button>
       </div>
     </article>
+    <TournamentBracketModal card={card} open={openModal} onOpenChange={setOpenModal} />
+  </>
   );
 }

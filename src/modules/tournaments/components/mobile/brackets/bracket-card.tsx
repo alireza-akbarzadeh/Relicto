@@ -17,11 +17,14 @@ const ACTION = {
   secondary: "bg-surface-container-high text-text-primary transition-all hover:bg-surface-bright",
 } as const;
 
-type BracketCardProps = { card: BracketCardData; highPriorityImage?: boolean };
+type BracketCardProps = { card: BracketCardData; highPriorityImage?: boolean; onSelect?: () => void };
 
-export function BracketCard({ card, highPriorityImage }: BracketCardProps) {
+export function BracketCard({ card, highPriorityImage, onSelect }: BracketCardProps) {
   return (
-    <article className="relative overflow-hidden rounded-xl bg-surface-card p-4 shadow-lg transition-transform active:scale-[0.99]">
+    <article
+      onClick={onSelect}
+      className="relative overflow-hidden rounded-xl bg-surface-card p-4 shadow-lg transition-transform active:scale-[0.99] cursor-pointer"
+    >
       <BracketMedia card={card} highPriority={highPriorityImage} />
 
       <div className="flex items-center justify-between py-1">
@@ -65,6 +68,10 @@ export function BracketCard({ card, highPriorityImage }: BracketCardProps) {
           variant={null}
           size={null}
           type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.();
+          }}
           className={cn(
             "flex h-8 items-center gap-1.5 rounded-md px-3.5 font-label-caps text-label-caps uppercase active:scale-95",
             ACTION[card.action.emphasis],

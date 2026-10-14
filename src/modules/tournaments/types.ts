@@ -91,6 +91,15 @@ export type FeedMatch = {
   state: { label: string; tone: Tone; indicator?: "ping" | "dot" };
   teams: [FeedTeam, FeedTeam];
   pending?: boolean;
+  userPick?: string;
+  tournamentName?: string;
+  game?: GameId;
+  map?: string;
+  statusKind?: "live" | "scheduled" | "completed";
+  predictionSplit?: [number, number];
+  goldLead?: string;
+  casters?: string;
+  kills?: [number, number];
 };
 
 export type InfraFeature = { label: string; tone: Tone };

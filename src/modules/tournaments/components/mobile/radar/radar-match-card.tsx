@@ -13,10 +13,12 @@ function RadarTeamBlock({
   team,
   align,
   matchId,
+  isPicked,
 }: {
   team: RadarTeam;
   align: "start" | "end";
   matchId?: string;
+  isPicked?: boolean;
 }) {
   const [pending, startTransition] = useTransition();
 
@@ -46,25 +48,49 @@ function RadarTeamBlock({
       className={cn(
         "flex h-auto items-center gap-2 rounded-lg p-1.5 transition-all text-left",
         align === "end" && "flex-row-reverse text-right",
-        "hover:bg-surface-container active:scale-95",
+        isPicked ? "ring-1 ring-primary bg-primary/10" : "hover:bg-surface-container active:scale-95",
       )}
     >
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container-high text-xs font-bold text-text-primary">
+      <div
+        className={cn(
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+          isPicked ? "bg-primary text-on-primary" : "bg-surface-container-high text-text-primary",
+        )}
+      >
         {team.tag}
       </div>
       <div className={cn("flex flex-col", align === "end" && "items-end")}>
         <span className="font-headline-sm text-sm font-semibold text-text-primary">{team.name}</span>
-        <span className={cn("font-label-badge text-label-badge", TEXT_TONE[team.metaTone])}>{team.meta}</span>
+        <span
+          className={cn(
+            "font-label-badge text-label-badge",
+            isPicked ? "text-primary font-bold" : TEXT_TONE[team.metaTone],
+          )}
+        >
+          {isPicked ? "✓ Locked Pick" : team.meta}
+        </span>
       </div>
     </Button>
   );
 }
 
-export function RadarMatchCard({ match }: { match: RadarMatch }) {
-  const { clock } = match;
+export function RadarMatchCard({
+  match,
+  onSelect,
+}: {
+  match: RadarMatch;
+  onSelect?: () => void;
+}) {
+  const { clock, userPick } = match;
   return (
-    <article className="rounded-lg bg-surface-container-low p-3 shadow-xs">
-      <div className="mb-2 flex items-center justify-between">
+    <article className="rounded-lg bg-surface-container-low p-3 shadow-xs transition-all hover:bg-surface-container">
+      <div
+        onClick={onSelect}
+        className={cn(
+          "mb-2 flex items-center justify-between",
+          onSelect && "cursor-pointer hover:opacity-90",
+        )}
+      >
         <span
           className={cn(
             "flex items-center gap-1 font-label-badge text-label-badge font-bold uppercase",
@@ -72,6 +98,7 @@ export function RadarMatchCard({ match }: { match: RadarMatch }) {
           )}
         >
           <Icon name={match.labelIcon} className="text-[13px]" /> {match.label}
+          {onSelect && <Icon name="open_in_new" className="text-[11px] opacity-60 ml-0.5" />}
         </span>
         <span
           className={cn(
@@ -85,13 +112,19 @@ export function RadarMatchCard({ match }: { match: RadarMatch }) {
       </div>
 
       <div className="flex items-center justify-between">
-        <RadarTeamBlock team={match.home} align="start" matchId={match.id} />
-        <div className="flex items-center gap-2 rounded bg-surface-deep px-3 py-1 font-data-mono-lg text-data-mono-lg font-bold">
+        <RadarTeamBlock team={match.home} align="start" matchId={match.id} isPicked={userPick === match.home.tag} />
+        <div
+          onClick={onSelect}
+          className={cn(
+            "flex items-center gap-2 rounded bg-surface-deep px-3 py-1 font-data-mono-lg text-data-mono-lg font-bold",
+            onSelect && "cursor-pointer hover:ring-1 hover:ring-white/10",
+          )}
+        >
           <span className={TEXT_TONE[match.scoreTones[0]]}>{match.score[0]}</span>
           <span className="text-sm text-text-muted">{match.separator}</span>
           <span className={TEXT_TONE[match.scoreTones[1]]}>{match.score[1]}</span>
         </div>
-        <RadarTeamBlock team={match.away} align="end" matchId={match.id} />
+        <RadarTeamBlock team={match.away} align="end" matchId={match.id} isPicked={userPick === match.away.tag} />
       </div>
 
       {match.goldShare !== undefined && (

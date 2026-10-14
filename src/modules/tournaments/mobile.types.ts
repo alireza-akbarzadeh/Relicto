@@ -63,6 +63,14 @@ export type RadarMatch = {
   separator: string;
   /** Radiant share of the gold lead bar, in percent. */
   goldShare?: number;
+  userPick?: string;
+  tournamentName?: string;
+  game?: GameId;
+  statusKind?: "live" | "scheduled" | "completed";
+  map?: string;
+  predictionSplit?: [number, number];
+  casters?: string;
+  goldLead?: string;
 };
 
 export type BentoItem = { icon: IconName; tone: Tone; title: string; description: string };

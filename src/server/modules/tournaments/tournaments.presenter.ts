@@ -93,6 +93,14 @@ export function toFeedMatch({ match, gameId, teamA, teamB }: MatchRow): FeedMatc
       side(teamA, p?.meta[0] ?? "", match.scoreA, p?.scoreTones?.[0], scored),
       side(teamB, p?.meta[1] ?? "", match.scoreB, p?.scoreTones?.[1], scored),
     ],
+    tournamentName: p?.tournamentName ?? (GAME_LABEL[gameId] ? `${GAME_LABEL[gameId]} Pro Circuit` : "Esports Championship"),
+    game: gameId === "cs2" ? "cs2" : "dota2",
+    statusKind: match.status as "live" | "scheduled" | "completed",
+    map: p?.map,
+    predictionSplit: p?.predictionSplit,
+    casters: p?.casters,
+    goldLead: p?.goldLead,
+    kills: p?.kills,
     ...(scored ? {} : { pending: true }),
   };
 }

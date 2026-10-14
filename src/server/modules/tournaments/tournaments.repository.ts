@@ -19,7 +19,7 @@ export type TournamentRow = Awaited<ReturnType<typeof findOpenTournaments>>[numb
 const teamA = alias(teams, "team_a");
 const teamB = alias(teams, "team_b");
 
-/** Live and upcoming matches with both sides and the game they're played in. */
+/** Live, scheduled and recently completed matches with both sides and game. */
 export async function findActiveMatches() {
   return db
     .select({ match: matches, gameId: tournaments.gameId, teamA, teamB })
@@ -27,7 +27,6 @@ export async function findActiveMatches() {
     .innerJoin(tournaments, eq(matches.tournamentId, tournaments.id))
     .leftJoin(teamA, eq(matches.teamAId, teamA.id))
     .leftJoin(teamB, eq(matches.teamBId, teamB.id))
-    .where(ne(matches.status, "completed"))
     .orderBy(asc(matches.sortOrder));
 }
 

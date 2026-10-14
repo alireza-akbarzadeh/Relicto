@@ -886,6 +886,7 @@ Still open:
 - ~~Community feed posts, likes, and comments were client-only mocks.~~ Fixed: Implemented `broadcastPost`, `togglePostLike`, `addPostComment`, and `getPostComments` server actions backed by Postgres tables `community_posts`, `community_post_likes`, and `community_comments`. Added interactive `Composer` and `PostCommentsThread` with optimistic UI.
 - ~~Esports tournaments had no match prediction mechanism.~~ Fixed: Added `predictMatchInput` schema and `submitPrediction` server action saving to `predictions` table; wired interactive prediction pick handlers in `FeedMatchCard` and `ArenaCard`.
 - ~~`wiki-view.tsx` (572 lines) and `alerts-view.tsx` (644 lines) exceeded the 200-line rule.~~ Fixed: Decomposed into modular subcomponents (`WikiIntro`, `WikiSearch`, `GuideCard`, `WikiSimulator`, `RevisionLedger`, `ApiBand`, `TriggerTelemetry`, `RuleBuilder`, `TriggerGrid`, `ExecutionTerminal`, `Performance`), bringing all files well under 200 lines and eliminating native `<button>` tags in favor of shadcn components.
+- ~~`/tournaments` route was at root `src/app/tournaments`, causing missing `SearchProvider` crash on desktop search and rendering static mock user.~~ Fixed: Relocated to `src/app/(lootora)/tournaments/page.tsx` inheriting `RelictoLayout` with universal `SearchProvider` (fixing ⌘K command palette), live session user avatar/handle resolution, real notification unread badge, and visual locked-in match prediction badges across desktop `FeedMatchCard` and mobile `RadarMatchCard`.
 
 ## Still missing from `backend-plan.md`
 

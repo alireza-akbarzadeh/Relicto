@@ -4,7 +4,7 @@ import { DesktopNav } from "./desktop-nav";
 import { HeaderSearch, NotificationButton, UserChip } from "./header-actions";
 import { HeaderGamePills } from "./header-game-pills";
 
-export function DesktopHeader({ shell }: { shell: DesktopShell }) {
+export function DesktopHeader({ shell, unread = false }: { shell: DesktopShell; unread?: boolean }) {
   return (
     <header className="fixed top-0 left-0 z-50 w-full bg-surface-deep/90 shadow-[0_1px_8px_rgba(0,0,0,0.4)] backdrop-blur-xl">
       <div className="flex h-20 w-full items-center justify-between gap-space-lg px-margin-desktop">
@@ -15,7 +15,7 @@ export function DesktopHeader({ shell }: { shell: DesktopShell }) {
         <DesktopNav links={shell.nav} activeId={shell.activeNav} />
         <div className="flex items-center gap-space-md">
           <HeaderSearch placeholder={shell.searchPlaceholder} />
-          <NotificationButton unread />
+          <NotificationButton unread={unread} />
           <UserChip user={shell.user} />
         </div>
       </div>

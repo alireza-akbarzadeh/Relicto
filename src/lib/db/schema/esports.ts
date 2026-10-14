@@ -41,6 +41,12 @@ export type MatchPresentation = {
   state: { label: string; tone: string; indicator?: string };
   meta: [string, string];
   scoreTones?: [string, string];
+  tournamentName?: string;
+  map?: string;
+  predictionSplit?: [number, number];
+  casters?: string;
+  goldLead?: string;
+  kills?: [number, number];
   /** Present on the one match the live player is showing. */
   broadcast?: {
     quality: string;

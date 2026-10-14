@@ -15,7 +15,7 @@ export function ArenaDesktop({ data }: { data: ArenaDesktopData }) {
 
   return (
     <FeaturedGameProvider initial={hero.events[0].game}>
-      <DesktopHeader shell={shell} />
+      <DesktopHeader shell={shell} unread={data.unreadNotifications} />
       <main className="w-full bg-canvas-base pt-20">
         <div className="relative w-full overflow-hidden">
           <AmbientGlows />

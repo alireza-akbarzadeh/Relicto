@@ -10,7 +10,7 @@ export const radarMatches: RadarMatch[] = [
     labelTone: "crimson",
     clock: { label: "BO5 • Map 3 (Live)", tone: "live", emphasis: true },
     home: { tag: "LIQUID", name: "Liquid", meta: "+4.8k Gold Lead", metaTone: "primary" },
-    away: { tag: "SPIRIT", name: "Spirit", meta: "Aegis Secured", metaTone: "tertiary" },
+    away: { tag: "SPIRIT", name: "Spirit", meta: "Aegis Secured", metaTone: "amber" },
     score: ["01", "01"],
     scoreTones: ["strong", "strong"],
     separator: "-",

@@ -3,7 +3,6 @@ import type {
   BentoItem,
   Championship,
   QuickChip,
-  RadarMatch,
   ServerStatus,
 } from "../../mobile.types";
 

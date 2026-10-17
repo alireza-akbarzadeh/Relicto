@@ -1,9 +1,9 @@
 import "server-only";
 
-import { createHmac, randomBytes } from "node:crypto";
+import { createHmac } from "node:crypto";
 import { CRYPTO_NETWORKS, isValidCryptoTxHash, type CryptoNetwork } from "@/lib/crypto/networks";
 import { db } from "@/lib/db";
-import { ledgerEntries, walletAccounts } from "@/lib/db/schema";
+import { ledgerEntries } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { deposit, type DepositResult } from "../wallet/wallet.deposit";
 import { notificationService } from "../notifications/notifications.service";
@@ -134,13 +134,19 @@ export async function verifyAndSettleCryptoDeposit(
 
   if (result.status === "credited") {
     // 4. Send high-priority confirmation notification to user
-    await notificationService.notifyUser(userId, {
-      type: "order",
-      title: `${network.symbol} Crypto Deposit Settled`,
-      message: `+$${input.amountUsd.toFixed(2)} USD vault liquidity confirmed after ${confirmations} on-chain block confirmations.`,
-      actionUrl: "/wallet",
-      entityId: input.txHash,
-    });
+    const notices = await notificationService.record(db, [
+      {
+        userId,
+        kind: "system",
+        icon: "payments",
+        tone: "success",
+        title: `${network.symbol} Crypto Deposit Settled`,
+        body: `+$${input.amountUsd.toFixed(2)} USD vault liquidity confirmed after ${confirmations} on-chain block confirmations.`,
+        href: "/wallet",
+        dedupeKey: `crypto_deposit:${input.txHash}:${userId}`,
+      },
+    ]);
+    void notificationService.deliver(notices);
 
     return {
       status: "settled",

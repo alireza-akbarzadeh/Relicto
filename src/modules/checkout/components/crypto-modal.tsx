@@ -126,7 +126,7 @@ export function CryptoModal({ open, onOpenChange, totalUsd, onConfirm, isPending
             <span className="font-data-mono-md text-[11px] text-text-muted">Relicto Escrow Vault Address</span>
             <div className="flex items-center gap-2">
               <span className="flex-1 truncate rounded-lg border border-white/6 bg-black/40 px-3 py-2 font-data-mono-md text-xs text-slate-200">
-                {network.depositAddress}
+                {activeAddress}
               </span>
               <Button type="button" size="sm" variant="outline" onClick={copyAddress} className="h-9 gap-1 border-white/10 px-3 text-xs">
                 <Icon name="content_copy" className="text-[14px]" />

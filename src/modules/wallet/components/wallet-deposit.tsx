@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
-import { Ref, useState } from "react";
+import { Ref, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { isMoneyRail, useDeposit } from "../hooks/use-deposit";
 import type { WalletRail as WalletRailType } from "../types";
@@ -27,12 +27,25 @@ export function WalletDeposit({
   const [rail, setRail] = useState("crypto");
   const [amount, setAmount] = useState("250.00");
   const [cryptoOpen, setCryptoOpen] = useState(false);
+  const [dedicatedAddress, setDedicatedAddress] = useState("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
   const { pending, deposit } = useDeposit();
   const numericAmount = Number(amount) || 0;
   const skins = !isMoneyRail(rail);
+
+  useEffect(() => {
+    fetch("/api/crypto/address?network=usdt-trc20")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.depositAddress) {
+          setDedicatedAddress(data.depositAddress);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const copyAddress = async () => {
-    await navigator.clipboard.writeText("0x71C92a46B9f76D2189CB91823B492");
-    toast.success("Deposit address copied");
+    await navigator.clipboard.writeText(dedicatedAddress);
+    toast.success("Deposit address copied", { description: dedicatedAddress });
   };
   return (
     <section className="flex h-full flex-col justify-between gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
@@ -59,7 +72,7 @@ export function WalletDeposit({
             </div>
             <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-card px-space-md py-2">
               <span className="truncate font-data-mono-md text-body-sm text-text-primary">
-                0x71C92a46B9f76D2189CB91823B492
+                {dedicatedAddress}
               </span>
               <Button
                 variant={null}

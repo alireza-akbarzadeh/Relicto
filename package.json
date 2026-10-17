@@ -14,7 +14,8 @@
     "db:backfill-traders": "tsx src/server/seed/backfill-traders.ts",
     "db:pull": "drizzle-kit introspect",
     "db:studio": "drizzle-kit studio",
-    "db:check": "drizzle-kit check"
+    "db:check": "drizzle-kit check",
+    "daemon:steam": "tsx scripts/steam-bot-daemon.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

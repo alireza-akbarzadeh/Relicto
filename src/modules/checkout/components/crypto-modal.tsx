@@ -24,6 +24,25 @@ export function CryptoModal({ open, onOpenChange, totalUsd, onConfirm, isPending
   const [network, setNetwork] = useState<CryptoNetwork>(CRYPTO_NETWORKS[0]);
   const [txHash, setTxHash] = useState("");
   const [secondsLeft, setSecondsLeft] = useState(899);
+  const [dedicatedAddress, setDedicatedAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    let active = true;
+    fetch(`/api/crypto/address?network=${network.id}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data?.depositAddress) {
+          setDedicatedAddress(data.depositAddress);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [open, network.id]);
+
+  const activeAddress = dedicatedAddress || network.depositAddress;
 
   useEffect(() => {
     if (!open) return;
@@ -38,8 +57,8 @@ export function CryptoModal({ open, onOpenChange, totalUsd, onConfirm, isPending
   const cryptoAmount = calculateCryptoAmount(totalUsd, network);
 
   const copyAddress = () => {
-    void navigator.clipboard.writeText(network.depositAddress);
-    toast.success("Deposit Address Copied", { description: network.depositAddress });
+    void navigator.clipboard.writeText(activeAddress);
+    toast.success("Deposit Address Copied", { description: activeAddress });
   };
 
   const handleSimulateBroadcast = () => {

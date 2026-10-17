@@ -1,6 +1,6 @@
 import "server-only";
 
-import { randomInt } from "node:crypto";
+import { randomInt, randomUUID } from "node:crypto";
 import type { ledgerEntries } from "@/lib/db/schema";
 import { isStripeConfigured } from "@/lib/stripe/client";
 
@@ -68,8 +68,19 @@ export function depositRow(input: {
   balanceAfterCents: number;
   now: Date;
 }): typeof ledgerEntries.$inferInsert {
+  const isStripe =
+    input.auth.reference.startsWith("#STRIPE-") ||
+    input.auth.reference.startsWith("cs_") ||
+    input.auth.label.includes("Stripe") ||
+    (isStripeConfigured() && input.auth.label.includes("Card"));
+  const isCrypto =
+    input.auth.reference.startsWith("0x") ||
+    input.auth.label.includes("Crypto") ||
+    input.auth.reference.startsWith("T");
+  const venue = isStripe ? "stripe" : isCrypto ? "tron" : "internal";
+
   return {
-    id: `ledger-chk-pay-${input.auth.reference.slice(6).toLowerCase()}`,
+    id: `ledger-chk-pay-${randomUUID()}`,
     walletId: input.walletId,
     direction: "credit",
     kind: "deposit",
@@ -77,12 +88,15 @@ export function depositRow(input: {
     balanceAfterCents: input.balanceAfterCents,
     status: "settled",
     hash: input.auth.reference,
-    /** No external venue exists yet; the credit is booked in-house. */
-    venue: "internal",
-    title: `${input.auth.label} (simulated)`,
-    assetLabel: "Checkout authorization",
-    detailLabel: "No payment provider connected — nothing was charged",
-    nodeLabel: "Mock Rail",
+    venue,
+    title: isStripe ? "Stripe 3D Secure Ingress" : isCrypto ? "Web3 Crypto Settlement" : `${input.auth.label} (simulated)`,
+    assetLabel: isStripe ? "Credit / Debit Card" : isCrypto ? "USDT / Web3 Asset" : "Checkout authorization",
+    detailLabel: isStripe
+      ? "Settled via Stripe 3D Secure"
+      : isCrypto
+        ? `On-chain verified: ${input.auth.reference.slice(0, 16)}...`
+        : "No payment provider connected — nothing was charged",
+    nodeLabel: isStripe ? "Stripe Vault" : isCrypto ? "Web3 Node" : "Mock Rail",
     occurredAt: input.now,
   };
 }

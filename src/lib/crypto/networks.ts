@@ -69,6 +69,17 @@ export const CRYPTO_NETWORKS: CryptoNetwork[] = [
     type: "bitcoin",
     badge: "Deep Cold Storage",
   },
+  {
+    id: "usdt-trc20",
+    name: "Tron (TRC-20)",
+    asset: "usdt",
+    symbol: "USDT",
+    usdRate: 1.0,
+    decimals: 6,
+    depositAddress: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+    type: "tron",
+    badge: "12 Block Finality",
+  },
 ];
 
 export function calculateCryptoAmount(usdTotal: number, network: CryptoNetwork): string {
@@ -84,5 +95,6 @@ export function isValidCryptoTxHash(type: CryptoNetwork["type"], hash: string): 
   if (type === "evm") return /^0x[a-fA-F0-9]{64}$/.test(trimmed);
   if (type === "solana") return /^[1-9A-HJ-NP-za-km-z]{64,88}$/.test(trimmed);
   if (type === "bitcoin") return /^[a-fA-F0-9]{64}$/.test(trimmed);
+  if (type === "tron") return /^[a-fA-F0-9]{64}$/.test(trimmed) || /^0x[a-fA-F0-9]{64}$/.test(trimmed);
   return trimmed.length >= 24;
 }

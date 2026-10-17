@@ -91,7 +91,7 @@ export async function processStripeWebhook(
         const amountCents = Number(session.metadata.amountCents) || 0;
         if (amountCents > 0) {
           const { deposit } = await import("@/server/modules/wallet/wallet.deposit");
-          await deposit(userId, { rail: "cards", amountUsd: amountCents / 100 });
+          await deposit(userId, { rail: "cards", amountUsd: amountCents / 100, txHash: session.id });
           return { status: "settled" };
         }
       }
@@ -100,7 +100,7 @@ export async function processStripeWebhook(
       const promo = session.metadata?.promo === "true";
 
       if (userId && cartIds.length > 0) {
-        await settle(userId, { rail: "card", promo, cartIds });
+        await settle(userId, { rail: "card", promo, cartIds, txHash: session.id });
         return { status: "settled" };
       }
     }

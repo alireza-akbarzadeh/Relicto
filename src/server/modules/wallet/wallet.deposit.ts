@@ -35,6 +35,17 @@ export async function deposit(userId: string, input: z.infer<typeof depositInput
     const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, userId)).for("update");
     if (wallet.frozenAt) return { status: "vault-frozen" };
 
+    if (input.txHash) {
+      const [existing] = await tx
+        .select({ id: ledgerEntries.id, balanceAfterCents: ledgerEntries.balanceAfterCents })
+        .from(ledgerEntries)
+        .where(eq(ledgerEntries.hash, input.txHash))
+        .limit(1);
+      if (existing) {
+        return { status: "credited", balanceCents: wallet.balanceCents };
+      }
+    }
+
     const amountCents = Math.round(input.amountUsd * 100);
     const balanceCents = wallet.balanceCents + amountCents;
     await tx.update(walletAccounts).set({ balanceCents }).where(eq(walletAccounts.id, wallet.id));
@@ -48,6 +59,12 @@ export async function deposit(userId: string, input: z.infer<typeof depositInput
       ? `On-chain verified: ${input.txHash?.slice(0, 16)}...`
       : (isLiveStripe ? "Settled via Stripe 3D Secure" : "Test mode — no payment provider connected, nothing was charged");
     const nodeLabel = isCrypto ? "Web3 Node" : (isLiveStripe ? "Stripe Vault" : "Mock Rail");
+    const venue =
+      input.rail === "cards" || isLiveStripe || hash.startsWith("#STRIPE-") || hash.startsWith("cs_")
+        ? "stripe"
+        : isCrypto || input.rail === "crypto"
+          ? "tron"
+          : "internal";
 
     await tx.insert(ledgerEntries).values({
       id: `ledger-dep-${randomUUID()}`,
@@ -58,7 +75,7 @@ export async function deposit(userId: string, input: z.infer<typeof depositInput
       balanceAfterCents: balanceCents,
       status: "settled",
       hash,
-      venue: "internal",
+      venue,
       title,
       assetLabel: RAIL[input.rail],
       detailLabel,

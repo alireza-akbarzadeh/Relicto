@@ -26,6 +26,7 @@ import { seedTrader, targetEmail } from "./seed-trader";
 import { seedTournaments } from "./seed-tournaments";
 import { seedTracker } from "./seed-tracker";
 import { seedWallet } from "./seed-wallet";
+import { KNOWN_ITEM_COLLECTIONS } from "../modules/trade-ups/trade-ups.collections";
 
 config({ path: ".env.local" });
 config();
@@ -77,6 +78,7 @@ async function main() {
         heroId: listing.hero ? heroIdByName.get(listing.hero) : null,
         slug: listing.id,
         name: listing.name,
+        collection: KNOWN_ITEM_COLLECTIONS[listing.name] ?? null,
         rarity,
         slot: listing.slot ?? null,
         imageUrl: listing.image,
@@ -96,6 +98,7 @@ async function main() {
         target: schema.items.id,
         set: {
           name: listing.name,
+          collection: KNOWN_ITEM_COLLECTIONS[listing.name] ?? null,
           imageUrl: listing.image,
           imageAlt: listing.imageAlt,
           slot: listing.slot ?? null,

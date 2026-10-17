@@ -10,8 +10,8 @@ This document serves as the master execution tracker for bringing **Relicto** fr
 | :--- | :---: | :--- | :--- |
 | **Foundations & Core Domains** | ✅ Complete | Mocks → Postgres DB | Auth, Marketplace, Orders, Escrow, Tournaments, Community, Mobile Parity (23 migrations) |
 | **Milestone 1: Financial Hardening** | ✅ Complete | Wallet & Bids | Bid Escrow Holds, Overcommitment Protection, Uncommitted Liquidity Sync |
-| **Milestone 2: Collection Trade-Ups** | 🟡 Next Up | CS2 Trade-Up Engine | Canonical Weapon Collections, Dynamic Odds Matrix, Wear Float Transfer |
-| **Milestone 3: Unique Catalog Art** | ⏳ Queued | Catalog Media Depth | Elimination of repeating item shots, authentic game renders for all 162 items |
+| **Milestone 2: Collection Trade-Ups** | ✅ Complete | CS2 Trade-Up Engine | Canonical Weapon Collections, Dynamic Odds Matrix, Wear Float Transfer |
+| **Milestone 3: Unique Catalog Art** | 🟡 In Progress | Catalog Media Depth | Elimination of repeating item shots, authentic game renders for all 162 items |
 | **Milestone 4: Live Payment Rails** | ⏳ Queued | Fiat & Crypto Gateways | Stripe Checkout Session webhook, Web3 Crypto payment listener, Vault auto-credit |
 | **Milestone 5: Steam Trade Daemon** | ⏳ Queued | Physical Asset Bots | Worker daemon architecture connecting `/api/escrow/events` to real Steam trade sessions |
 
@@ -38,7 +38,7 @@ Currently, incoming buyer bids verify vault liquidity at placement and only debi
 
 ---
 
-## Milestone 2: Authentic CS2 Weapon Collections for Trade-Up Chamber
+## Milestone 2: Authentic CS2 Weapon Collections for Trade-Up Chamber ✅ Done
 
 ### Objectives
 The Trade-Up Chamber currently draws from a generic per-game outcome pool. In Counter-Strike 2, trade-up contracts require items from specific collections and calculate outcomes dynamically from the next tier of those exact collections.

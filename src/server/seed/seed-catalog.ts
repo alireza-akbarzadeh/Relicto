@@ -107,6 +107,7 @@ export async function seedCatalogDepth(db: Db, sellerId: string) {
           slot: sql`excluded.slot`,
           imageUrl: sql`excluded.image_url`,
           imageAlt: sql`excluded.image_alt`,
+          collection: sql`excluded.collection`,
           presentation: sql`excluded.presentation`,
           updatedAt: new Date(),
         },

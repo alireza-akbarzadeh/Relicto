@@ -20,28 +20,72 @@ export function hash(slug: string): number {
   return Math.abs(h);
 }
 
-const pick = <T>(list: readonly T[], slug: string, salt: number) => list[(hash(slug) + salt) % list.length];
+const pick = <T>(list: readonly T[], slug: string, salt: number) =>
+  list[(hash(slug) + salt) % list.length];
 
-const IMAGE_BY_SLOT: Record<string, string> = {
-  "dota2:Weapon:arcana": "manifold-paradox",
-  "dota2:Weapon": "dragonclaw-hook",
-  "dota2:Head": "codicil-veiled",
-  "dota2:Armor": "bladeform-legacy",
-  "dota2:Back": "dark-artistry-cape",
-  "cs2:Weapon:melee": "butterfly-doppler",
-  "cs2:Gloves": "sport-gloves-vice",
-  "cs2:Weapon": "awp-fade",
-  "tf2:Head": "codicil-veiled",
-  "tf2:Weapon": "awp-fade",
-};
+function imageFor(item: CatalogSeedItem): string {
+  const slug = item.slug.toLowerCase();
+  if (slug.includes("karambit"))
+    return "/images/lootora/items/karambit-doppler.jpg";
+  if (slug.includes("butterfly"))
+    return "/images/lootora/items/butterfly-doppler.jpg";
+  if (slug.includes("talon")) return "/images/lootora/sell-items-07.jpg";
+  if (
+    slug.includes("vulcan") ||
+    slug.includes("bloodsport") ||
+    slug.includes("neon-rider")
+  ) {
+    return "/images/lootora/items/ak47-vulcan.jpg";
+  }
+  if (slug.includes("ak-") || slug.includes("case-hardened"))
+    return "/images/lootora/sell-items-04.jpg";
+  if (
+    slug.includes("printstream") ||
+    slug.includes("deagle") ||
+    slug.includes("desert")
+  ) {
+    return "/images/lootora/items/deagle-printstream.jpg";
+  }
+  if (slug.includes("howl")) return "/images/lootora/market-mobile-06.jpg";
+  if (slug.includes("m4a1") || slug.includes("m4a4"))
+    return "/images/lootora/sell-items-06.jpg";
+  if (slug.includes("dragon-lore")) return "/images/lootora/sell-items-02.jpg";
+  if (slug.includes("awp")) return "/images/lootora/items/awp-fade.jpg";
+  if (slug.includes("specialist")) return "/images/lootora/sell-items-09.jpg";
+  if (slug.includes("glove") || item.slot === "Gloves")
+    return "/images/lootora/items/sport-gloves-vice.jpg";
 
-/** Falls back to the cape, which reads as generic cosmetic art. */
+  if (
+    slug.includes("abscession") ||
+    (item.hero === "Pudge" && item.rarity === "arcana")
+  ) {
+    return "/images/lootora/items/pudge-feast-abscession.jpg";
+  }
+  if (
+    slug.includes("frost-avalanche") ||
+    (item.hero === "Crystal Maiden" && item.rarity === "arcana")
+  ) {
+    return "/images/lootora/items/crystal-maiden-frost-avalanche.jpg";
+  }
+  if (item.hero === "Pudge") return "/images/lootora/items/dragonclaw-hook.jpg";
+  if (item.hero === "Phantom Assassin")
+    return "/images/lootora/items/manifold-paradox.jpg";
+  if (item.hero === "Juggernaut")
+    return "/images/lootora/items/bladeform-legacy.jpg";
+  if (item.hero === "Invoker")
+    return "/images/lootora/items/dark-artistry-cape.jpg";
+
+  if (item.gameId === "tf2")
+    return "/images/lootora/items/tf2-australium-rocket.jpg";
+  if (item.slot === "Head") return "/images/lootora/items/codicil-veiled.jpg";
+  if (item.slot === "Armor")
+    return "/images/lootora/items/bladeform-legacy.jpg";
+  return "/images/lootora/items/dark-artistry-cape.jpg";
+}
+
+/** Resolves bespoke artwork per hero, weapon class and skin family. */
 export function artworkFor(item: CatalogSeedItem) {
-  const key =
-    IMAGE_BY_SLOT[`${item.gameId}:${item.slot}:${item.rarity}`] ??
-    IMAGE_BY_SLOT[`${item.gameId}:${item.slot}`] ??
-    "dark-artistry-cape";
-  return { url: `/images/lootora/items/${key}.jpg`, alt: `${item.name} listed on Relicto` };
+  return { url: imageFor(item), alt: `${item.name} listed on Relicto` };
 }
 
 const BADGE: Record<string, { label: string; style: string }> = {
@@ -55,11 +99,30 @@ const BADGE: Record<string, { label: string; style: string }> = {
   gloves: { label: "★ Gloves", style: "gloves" },
 };
 
-const TAG_ACCENT = ["amber", "indigo", "cyan", "pink", "gold", "neutral"] as const;
+const TAG_ACCENT = [
+  "amber",
+  "indigo",
+  "cyan",
+  "pink",
+  "gold",
+  "neutral",
+] as const;
 const BLOBS = ["primary", "secondary", "amber", "indigo"] as const;
-const SHADOWS = ["crimson-30", "crimson-20", "amber-20", "amber-25", "cyan-20", "indigo-30", "indigo-25"] as const;
+const SHADOWS = [
+  "crimson-30",
+  "crimson-20",
+  "amber-20",
+  "amber-25",
+  "cyan-20",
+  "indigo-30",
+  "indigo-25",
+] as const;
 
-const GAME_TAG: Record<string, string> = { dota2: "Dota 2", cs2: "CS2", tf2: "TF2" };
+const GAME_TAG: Record<string, string> = {
+  dota2: "Dota 2",
+  cs2: "CS2",
+  tf2: "TF2",
+};
 
 const WEAR_LABEL: Record<string, string> = {
   fn: "Factory New",
@@ -82,19 +145,30 @@ export function safeguardsFor(item: CatalogSeedItem): string[] {
   return safeguards;
 }
 
-export function presentationFor(item: CatalogSeedItem, offers: number): ItemPresentation {
+export function presentationFor(
+  item: CatalogSeedItem,
+  offers: number,
+): ItemPresentation {
   const badge = BADGE[item.rarity] ?? { label: item.rarity, style: "covert" };
-  const subtitle = item.hero ?? (item.wear ? WEAR_LABEL[item.wear] : GAME_TAG[item.gameId]);
+  const subtitle =
+    item.hero ?? (item.wear ? WEAR_LABEL[item.wear] : GAME_TAG[item.gameId]);
 
   return {
     badge,
-    tag: { label: GAME_TAG[item.gameId], accent: pick(TAG_ACCENT, item.slug, 0), bold: item.gameId === "cs2" },
+    tag: {
+      label: GAME_TAG[item.gameId],
+      accent: pick(TAG_ACCENT, item.slug, 0),
+      bold: item.gameId === "cs2",
+    },
     subtitle,
     detail: {
       label: item.wear ? `Float ${item.float?.toFixed(4)}` : item.slot,
       accent: item.stattrak ? "amber" : "neutral",
     },
-    glow: { blob: pick(BLOBS, item.slug, 1), shadow: pick(SHADOWS, item.slug, 2) },
+    glow: {
+      blob: pick(BLOBS, item.slug, 1),
+      shadow: pick(SHADOWS, item.slug, 2),
+    },
     mediaBadge: item.wear
       ? { kind: "float", value: item.float!.toFixed(3) }
       : { kind: "escrow", label: "Instant Escrow" },

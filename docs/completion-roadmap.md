@@ -11,9 +11,9 @@ This document serves as the master execution tracker for bringing **Relicto** fr
 | **Foundations & Core Domains** | ✅ Complete | Mocks → Postgres DB | Auth, Marketplace, Orders, Escrow, Tournaments, Community, Mobile Parity (23 migrations) |
 | **Milestone 1: Financial Hardening** | ✅ Complete | Wallet & Bids | Bid Escrow Holds, Overcommitment Protection, Uncommitted Liquidity Sync |
 | **Milestone 2: Collection Trade-Ups** | ✅ Complete | CS2 Trade-Up Engine | Canonical Weapon Collections, Dynamic Odds Matrix, Wear Float Transfer |
-| **Milestone 3: Unique Catalog Art** | 🟡 In Progress | Catalog Media Depth | Elimination of repeating item shots, authentic game renders for all 162 items |
-| **Milestone 4: Live Payment Rails** | ⏳ Queued | Fiat & Crypto Gateways | Stripe Checkout Session webhook, Web3 Crypto payment listener, Vault auto-credit |
-| **Milestone 5: Steam Trade Daemon** | ⏳ Queued | Physical Asset Bots | Worker daemon architecture connecting `/api/escrow/events` to real Steam trade sessions |
+| **Milestone 3: Unique Catalog Art** | ✅ Complete | Catalog Media Depth | Elimination of repeating item shots, authentic game renders for all 162 items |
+| **Milestone 4: Live Payment Rails** | ✅ Complete | Fiat & Crypto Gateways | Stripe Checkout Session webhook, Web3 Crypto payment listener, Vault auto-credit |
+| **Milestone 5: Steam Trade Daemon** | ✅ Complete | Physical Asset Bots | Worker daemon architecture connecting `/api/escrow/events` to real Steam trade sessions |
 
 ---
 
@@ -57,37 +57,50 @@ The Trade-Up Chamber currently draws from a generic per-game outcome pool. In Co
 
 ---
 
-## Milestone 3: Catalog Media Depth & Unique Artwork
+## Milestone 3: Catalog Media Depth & Unique Artwork ✅ Done
 
 ### Objectives
 All 162 catalog items resolve without error, but 144 generated items share 8 fallback images.
 
 ### Execution Tasks:
-1. Map high-fidelity SVG/PNG icons and skin renders per hero, weapon class, and exterior wear.
-2. Update seed scripts to associate unique visual assets to all catalog records.
+1. **High-Fidelity Artwork Mapping**:
+   - Mapped bespoke visual assets across CS2 knife families (Karambit Doppler, Butterfly Doppler, Talon Knife), rifles (AK-47 Vulcan, Bloodsport, Case Hardened, M4A4 Howl), sidearms (Desert Eagle Printstream), and gloves (Sport Gloves Vice).
+   - Dota 2 Arcana and Immortal hero models mapped (Pudge Feast of Abscession, Crystal Maiden Frost Avalanche, Phantom Assassin Manifold Paradox, Juggernaut Bladeform Legacy).
+   - TF2 Australium Rocket Launcher and Class headgear mapped.
+2. **Seed Pipeline Enrichment**:
+   - Seed scripts updated (`catalog-presentation.ts`, `seed-catalog.ts`, `seed.ts`) to resolve authentic game artwork and collection tags on all 162 database entries.
 
 ---
 
-## Milestone 4: Production Payment Gateways
+## Milestone 4: Production Payment Gateways ✅ Done
 
 ### Objectives
-Transition from test-mode payments (`CHECKOUT_MOCK_PAYMENTS`) to live financial rails.
+Transition from test-mode payments (`CHECKOUT_MOCK_PAYMENTS`) to live financial rails with verified signatures and automated ledger settlement.
 
 ### Execution Tasks:
 1. **Stripe Integration**:
-   - Implement `/api/webhooks/stripe` with signature verification.
-   - Settle card deposits directly into `walletAccounts` and create `ledgerEntries` with `venue = 'stripe'`.
+   - Implemented standard `/api/webhooks/stripe` route with HMAC signature verification.
+   - Settled card deposits and basket orders with `venue = 'stripe'` in `ledgerEntries` and exact Stripe session reference tracking.
+   - Maintained backward compatibility with `/api/checkout/stripe/webhook`.
 2. **Web3 Crypto Gateways**:
-   - Implement address generation and transaction confirmation listeners for USDT (TRC20/ERC20) and BTC/ETH.
+   - Added dedicated user deposit address derivation (`/api/crypto/address`) for USDT (TRC-20, Arbitrum, Base), Ethereum, Solana, and Bitcoin (Native SegWit).
+   - Added transaction verification and auto-settlement endpoint (`/api/crypto/verify`) with idempotency and confirmation threshold enforcement.
+   - Implemented incoming blockchain listener webhook (`/api/webhooks/crypto`) with bearer authentication.
+   - Updated client UI modals (`CryptoModal` and `WalletDeposit`) to fetch and display the trader's dedicated on-chain address.
 
 ---
 
-## Milestone 5: Autonomous Steam Trade Bot Daemon
+## Milestone 5: Autonomous Steam Trade Bot Daemon ✅ Done
 
 ### Objectives
 Automate the physical delivery of items between buyers, sellers, and Relicto Sentinel Bots.
 
 ### Execution Tasks:
-1. Standardize Steam Trade Offer Manager queue.
-2. Dispatch trade offers when escrow orders transition to `bot_dispatched`.
-3. Post status webhooks back to `/api/escrow/events` (`offer_sent`, `delivered`, `cancelled`).
+1. **Sentinel Bot Pool & Trade Offer Queue**:
+   - Created `SteamDaemonService` (`steam-daemon.service.ts`) managing Sentinel bot load balancing, anti-phishing security token generation (`SEC-XXXX`), and Valve Steam offer identifiers.
+2. **Autonomous Dispatch & Escrow Webhook Integration**:
+   - Automated queue scanning for active escrow orders without dispatched trade offers.
+   - Integrated with `/api/escrow/events` (`offer_sent`, `delivered`, `cancelled`) to advance escrow timeline steps and dispatch buyer mobile push notifications.
+3. **Execution Harness**:
+   - Added scheduled cron endpoint (`/api/cron/steam-daemon`) with bearer secret verification.
+   - Added standalone runner script (`scripts/steam-bot-daemon.ts`) and `pnpm daemon:steam` npm script supporting single-pass and continuous loop polling (`--loop`).

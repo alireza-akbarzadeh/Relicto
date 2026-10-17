@@ -63,6 +63,8 @@ export type MobileTotals = {
   liquidCents: number;
   escrowCents: number;
   escrowHolds: number;
+  bidHoldsCents?: number;
+  bidHolds?: number;
   dayNetCents: number;
   changePct: number;
 };
@@ -82,8 +84,12 @@ export function toWalletMobile(
     // Read on this request, so it is exactly as fresh as the page.
     sync: "live",
     availableUsd: totals.liquidCents / 100,
-    escrowUsd: totals.escrowCents / 100,
-    escrowNote: totals.escrowHolds === 0 ? "No open escrows" : `${totals.escrowHolds} open escrow${totals.escrowHolds === 1 ? "" : "s"}`,
+    escrowUsd: (totals.escrowCents + (totals.bidHoldsCents ?? 0)) / 100,
+    escrowNote: totals.escrowHolds === 0
+      ? totals.bidHolds
+        ? `${totals.bidHolds} active bid hold${totals.bidHolds === 1 ? "" : "s"}`
+        : "No open escrows"
+      : `${totals.escrowHolds} open escrow${totals.escrowHolds === 1 ? "" : "s"}${totals.bidHolds ? ` · ${totals.bidHolds} bid${totals.bidHolds === 1 ? "" : "s"}` : ""}`,
     ledger: { total, entries: rows.map((row) => toLedgerEntry(row, now)) },
   };
 }

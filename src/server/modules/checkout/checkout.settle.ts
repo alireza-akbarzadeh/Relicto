@@ -1,8 +1,8 @@
 import "server-only";
 
-import { asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { cartItems, escrowEvents, items, ledgerEntries, listings, orderItems, orders, walletAccounts } from "@/lib/db/schema";
+import { cartItems, escrowEvents, items, ledgerEntries, listings, offers, orderItems, orders, walletAccounts } from "@/lib/db/schema";
 import { draft, type NotificationDraft } from "../notifications/notifications.catalog";
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
@@ -11,6 +11,7 @@ import { authorize, depositRow, isExternalRail, mockPaymentsEnabled, railLabel, 
 import { allocate, quote } from "@/modules/checkout/lib/pricing";
 import { cartLinesWhere, LINE } from "./checkout.repository";
 import { isStripeConfigured } from "@/lib/stripe/client";
+import { recount, sumCommittedBids } from "../offers/offers.repository";
 
 export type SettleInput = { rail: string; promo: boolean; cartIds: string[]; txHash?: string };
 
@@ -78,7 +79,12 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
       );
     }
 
-    if (balance < due.dueCents) return { status: "insufficient-funds" };
+    const cartListingIds = lines.map((line) => line.listing.id);
+    const committedBids = input.rail === VAULT_RAIL
+      ? await sumCommittedBids(tx, userId, undefined, now, cartListingIds)
+      : 0;
+
+    if (balance - committedBids < due.dueCents) return { status: "insufficient-funds" };
 
     const shares = allocate(prices, due.comboCents + due.promoCents);
     const codes: string[] = [];
@@ -111,9 +117,33 @@ export async function settle(userId: string, input: SettleInput): Promise<Settle
     await tx
       .update(listings)
       .set({ status: "reserved" })
-      .where(inArray(listings.id, lines.map((line) => line.listing.id)));
+      .where(inArray(listings.id, cartListingIds));
     await tx.update(walletAccounts).set({ balanceCents: balance }).where(eq(walletAccounts.id, wallet.id));
     await tx.delete(cartItems).where(inArray(cartItems.id, lines.map((line) => line.cartId)));
+
+    // Any open bids on the purchased copies are declined and bidders notified.
+    for (const line of lines) {
+      const outbid = await tx
+        .update(offers)
+        .set({ status: "declined" })
+        .where(and(eq(offers.listingId, line.listing.id), eq(offers.status, "pending")))
+        .returning({ id: offers.id, buyerId: offers.buyerId, priceCents: offers.priceCents });
+      if (outbid.length > 0) {
+        await recount(tx, line.listing.id, now);
+        drafts.push(
+          ...outbid.map((other) =>
+            draft.offerDeclined({
+              offerId: other.id,
+              item: line.name,
+              bidCents: other.priceCents,
+              buyerId: other.buyerId,
+              slug: line.slug,
+              reason: "sold",
+            }),
+          ),
+        );
+      }
+    }
 
     // Both sides hear about it in the same transaction, so a rolled-back order never notifies.
     const notices = await notificationService.record(tx, drafts);

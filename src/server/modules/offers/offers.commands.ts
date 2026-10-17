@@ -10,7 +10,7 @@ import { draft } from "../notifications/notifications.catalog";
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
 import type { makeOfferInput } from "./offers.schema";
-import { recount } from "./offers.repository";
+import { recount, sumCommittedBids } from "./offers.repository";
 
 const HOUR = 60 * 60 * 1000;
 
@@ -19,9 +19,9 @@ export type MakeResult =
   | { status: "not-listed" | "own-listing" | "too-low" | "at-price" | "insufficient-funds" | "vault-frozen" | "below-min-offer" | "offers-disabled" };
 
 /**
- * Places a bid on one copy, or revises the buyer's open bid on it. Nothing is
- * held yet: the vault only has to cover the bid now, and is debited when the
- * seller accepts. Offer-made ids carry a `bid` prefix so the seed can undo them.
+ * Places a bid on one copy, or revises the buyer's open bid on it. The vault
+ * must cover all currently committed active bids plus this bid. Offer-made
+ * ids carry a `bid` prefix so the seed can undo them.
  */
 export async function makeOffer(buyerId: string, input: z.infer<typeof makeOfferInput>): Promise<MakeResult> {
   return db.transaction(async (tx): Promise<MakeResult> => {
@@ -39,18 +39,21 @@ export async function makeOffer(buyerId: string, input: z.infer<typeof makeOffer
     const check = checkBid(bidCents, row.listing.priceCents, row.listing.allowOffers, row.listing.minOfferCents);
     if (check !== "ok") return { status: check };
 
-    const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, buyerId)).limit(1);
-    if (wallet?.frozenAt) return { status: "vault-frozen" };
-    if (!wallet || wallet.balanceCents < bidCents) return { status: "insufficient-funds" };
-
     const now = new Date();
-    const fields = { priceCents: bidCents, note: input.note || null, expiresAt: new Date(now.getTime() + OFFER_TTL_HOURS * HOUR) };
     const [open] = await tx
       .select({ id: offers.id })
       .from(offers)
       .where(and(eq(offers.listingId, row.listing.id), eq(offers.buyerId, buyerId), eq(offers.status, "pending")))
       .for("update");
 
+    const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, buyerId)).limit(1);
+    if (wallet?.frozenAt) return { status: "vault-frozen" };
+    if (!wallet) return { status: "insufficient-funds" };
+
+    const committedOther = await sumCommittedBids(tx, buyerId, open?.id, now);
+    if (wallet.balanceCents - committedOther < bidCents) return { status: "insufficient-funds" };
+
+    const fields = { priceCents: bidCents, note: input.note || null, expiresAt: new Date(now.getTime() + OFFER_TTL_HOURS * HOUR) };
     const offerId = open?.id ?? `offer-bid-${randomUUID()}`;
     if (open) await tx.update(offers).set(fields).where(eq(offers.id, offerId));
     else await tx.insert(offers).values({ id: offerId, listingId: row.listing.id, buyerId, ...fields });

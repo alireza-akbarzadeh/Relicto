@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { ledgerEntries, payouts, walletAccounts } from "@/lib/db/schema";
 import type { z } from "zod";
 import type { cashoutInput } from "./wallet.schema";
+import { sumCommittedBids } from "../offers/offers.repository";
 
 type Rail = z.infer<typeof cashoutInput>["rail"];
 
@@ -34,7 +35,8 @@ export async function requestCashout(userId: string, input: z.infer<typeof casho
     if (wallet.frozenAt) return { status: "vault-frozen" };
 
     const amountCents = Math.round(input.amountUsd * 100);
-    if (amountCents > wallet.balanceCents) return { status: "insufficient-funds" };
+    const committedBids = await sumCommittedBids(tx, userId);
+    if (amountCents > wallet.balanceCents - committedBids) return { status: "insufficient-funds" };
 
     const rail = RAIL[input.rail];
     const balanceAfterCents = wallet.balanceCents - amountCents;

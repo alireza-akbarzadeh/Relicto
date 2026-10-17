@@ -31,13 +31,14 @@ type Account = NonNullable<Awaited<ReturnType<typeof repository.findWallet>>>;
 
 /** Every balance both wallet screens show, from one read of the ledger. */
 async function loadTotals(account: Account, userId: string) {
-  const [pending, escrow, dayNetCents] = await Promise.all([
+  const [pending, escrow, bidHolds, dayNetCents] = await Promise.all([
     repository.sumPending(account.id),
     repository.sumEscrowHolds(userId),
+    repository.sumBidHolds(userId),
     repository.sumLastDay(account.id),
   ]);
 
-  const totals = { liquidCents: account.balanceCents, ...escrow, ...pending };
+  const totals = { liquidCents: account.balanceCents, ...escrow, ...bidHolds, ...pending };
   const equityCents = totals.liquidCents + totals.escrowCents + totals.clearingCents + totals.rebateCents;
   return { totals, equityCents, dayNetCents, changePct: pct(dayNetCents, equityCents - dayNetCents) };
 }
@@ -52,6 +53,14 @@ export const walletService = {
   /** Spendable balance in cents — the header chip on every page. */
   async liquidCents(userId: string) {
     return (await repository.findWallet(userId))?.balanceCents ?? 0;
+  },
+
+  /** Spendable uncommitted balance in cents — takes active open bids into account. */
+  async uncommittedLiquidCents(userId: string) {
+    const account = await repository.findWallet(userId);
+    if (!account) return 0;
+    const { bidHoldsCents } = await repository.sumBidHolds(userId);
+    return Math.max(0, account.balanceCents - bidHoldsCents);
   },
 
   /** Treasury snapshot for one trader, or null when they have no wallet yet. */

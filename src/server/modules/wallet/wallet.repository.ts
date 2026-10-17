@@ -1,8 +1,8 @@
 import "server-only";
 
-import { and, count, desc, eq, gte, sql } from "drizzle-orm";
+import { and, count, desc, eq, gt, gte, isNull, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { items, ledgerEntries, orderItems, orders, walletAccounts } from "@/lib/db/schema";
+import { items, ledgerEntries, offers, orderItems, orders, walletAccounts } from "@/lib/db/schema";
 
 export async function findWallet(userId: string) {
   const [row] = await db.select().from(walletAccounts).where(eq(walletAccounts.userId, userId)).limit(1);
@@ -43,6 +43,19 @@ export async function sumEscrowHolds(userId: string) {
     .where(and(eq(orders.buyerId, userId), eq(orders.state, "escrow")));
 
   return { escrowCents: row?.cents ?? 0, escrowHolds: row?.holds ?? 0 };
+}
+
+/** Funds committed to active purchase bids that haven't been accepted or expired yet. */
+export async function sumBidHolds(userId: string, now = new Date()) {
+  const [row] = await db
+    .select({
+      cents: sql<number>`coalesce(sum(${offers.priceCents}), 0)::int`,
+      holds: sql<number>`count(*)::int`,
+    })
+    .from(offers)
+    .where(and(eq(offers.buyerId, userId), eq(offers.status, "pending"), or(isNull(offers.expiresAt), gt(offers.expiresAt, now))));
+
+  return { bidHoldsCents: row?.cents ?? 0, bidHolds: row?.holds ?? 0 };
 }
 
 /** Net movement over the trailing day, for the equity delta line. */

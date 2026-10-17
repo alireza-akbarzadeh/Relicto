@@ -665,9 +665,7 @@ cleared first; accepted-offer orders are `order-chk-` with the trader as
 
 - ~~Mobile can't bid or answer bids yet.~~ Fixed: Mobile item inspector supports bids via `OfferDialog` and Sell Studio features `MobileOffersInbox`.
 - ~~No buyer-side list of open bids.~~ Fixed: Profile **My Bids** tab (`BidsSection`) lists all outgoing purchase offers with cancellation/withdraw actions and item navigation.
-- **Bids aren't held.** Funds are checked at bid time and debited at accept; a
-  buyer who spends the vault in between gets `buyer-short`. Holding funds would
-  need a ledger hold per bid.
+- ~~Bids aren't held.~~ Fixed: Active pending bids commit the buyer's liquid balance. `makeOffer` enforces uncommitted funds on new/revised bids, checkout and cashouts protect committed bid balances, and purchased listings automatically decline open rival bids and notify outbid traders.
 - ~~Counter-offers are still authored~~: Fixed: Migration `0023_aberrant_ultimo` adds `allow_offers` and `min_offer_cents` to `listings`. Sell Studio writes custom minimums, server validates seller floor (`below-min-offer`, `offers-disabled`), and desktop & mobile seller books enforce the setting in buyer `OfferDialog`.
 - **"Verified Traders (99%+)" is ticked by default** (the design's default), so
   a new trader's copies are hidden from the desktop book until it's unticked.

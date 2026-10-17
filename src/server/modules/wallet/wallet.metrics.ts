@@ -5,6 +5,8 @@ export type WalletTotals = {
   liquidCents: number;
   escrowCents: number;
   escrowHolds: number;
+  bidHoldsCents?: number;
+  bidHolds?: number;
   clearingCents: number;
   clearingCount: number;
   rebateCents: number;
@@ -27,11 +29,13 @@ export function toWalletMetrics(totals: WalletTotals): WalletMetric[] {
       id: "escrow",
       label: "Active Escrow Lock",
       icon: "lock_clock",
-      value: usd(totals.escrowCents),
-      description: `Held across ${totals.escrowHolds} pending Steam bot trade confirmation${
-        totals.escrowHolds === 1 ? "" : "s"
-      }.`,
-      foot: totals.escrowHolds > 0 ? "BOT MULTI-SIG HOLD · Releases on acceptance" : "NO ACTIVE HOLDS",
+      value: usd(totals.escrowCents + (totals.bidHoldsCents ?? 0)),
+      description: totals.bidHoldsCents
+        ? `Held across ${totals.escrowHolds} Steam trade${totals.escrowHolds === 1 ? "" : "s"} and ${totals.bidHolds} active bid${totals.bidHolds === 1 ? "" : "s"}.`
+        : `Held across ${totals.escrowHolds} pending Steam bot trade confirmation${
+            totals.escrowHolds === 1 ? "" : "s"
+          }.`,
+      foot: totals.escrowHolds > 0 || (totals.bidHolds ?? 0) > 0 ? "BOT MULTI-SIG HOLD · Releases on acceptance" : "NO ACTIVE HOLDS",
       tone: "amber",
     },
     {

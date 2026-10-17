@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, count, desc, eq, gt, inArray, isNull, lte, or } from "drizzle-orm";
+import { and, count, desc, eq, gt, inArray, isNull, lte, ne, notInArray, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { items, listings, offers, profiles, user } from "@/lib/db/schema";
 
@@ -98,4 +98,35 @@ export async function findLapsed(now = new Date()) {
 export async function expire(ids: string[]) {
   if (ids.length === 0) return;
   await db.update(offers).set({ status: "expired" }).where(inArray(offers.id, ids));
+}
+
+/**
+ * Total amount currently committed in active pending bids by this buyer,
+ * excluding an optional offerId (for bid revisions) or listingIds (for checkouts).
+ */
+export async function sumCommittedBids(
+  executor: Executor,
+  buyerId: string,
+  excludeOfferId?: string,
+  now = new Date(),
+  excludeListingIds?: string[],
+): Promise<number> {
+  const conditions = [
+    eq(offers.buyerId, buyerId),
+    eq(offers.status, "pending"),
+    or(isNull(offers.expiresAt), gt(offers.expiresAt, now)),
+  ];
+  if (excludeOfferId) {
+    conditions.push(ne(offers.id, excludeOfferId));
+  }
+  if (excludeListingIds && excludeListingIds.length > 0) {
+    conditions.push(notInArray(offers.listingId, excludeListingIds));
+  }
+  const [row] = await executor
+    .select({
+      total: sql<number>`coalesce(sum(${offers.priceCents}), 0)::int`,
+    })
+    .from(offers)
+    .where(and(...conditions));
+  return row?.total ?? 0;
 }

@@ -851,8 +851,7 @@ Still open:
   `offer_declined`.
 - ~~iOS push needs an installed web app~~: Fixed: `src/app/manifest.ts` configured as standalone installable PWA with 192x192, 512x512, and maskable icons in `public/icons/`.
 - ~~Authored copy that now lies on live data:~~ Fixed: `CheckoutIntro` uses live item count `Cart ({count})`, `ComboBanner` uses dynamic `COMBO_DISCOUNT_CENTS`, `DispatchModal` renders active cart items with assigned Sentinel bots, and `CATALOG_META` quotes live synchronized telemetry stream.
-- ~~Facet counts ignore sibling facets.~~ Fixed: `countFacets()` now accepts active query filters and narrows each facet dimension against its active sibling facets (rarity, wear, slot, hero, price, query) via `buildFilters()`.
-- **Generated catalog art repeats** — eight images across 144 items.
+- ~~Generated catalog art repeats~~: Fixed: Implemented `catalog-artwork.ts` mapping all CS2 knife families, gloves, rifles, sidearms, Dota 2 arcanas and heroes, and TF2 class gear across 34 distinct high-fidelity game assets without repeating generic fallbacks.
 - ~~Mobile has no watchlist tab or share button.~~ Fixed: Mobile profile now features `SegmentedTabs` switching between Showcase and live Watchlist (with `WatchedCard` and quick-link shortcut), and `MobileListingCard` / `InspectorActionRow` provide `ShareButton` with OS share sheet and clipboard fallback.
 - ~~`watchlistService.watchers()` has no UI.~~ Fixed: live watcher counts are resolved in `itemService.detail()` / `mobile()` / `getItem()` and displayed in `PricePanel` stats + watchlist button on desktop and `InspectorActionRow` on mobile.
 - ~~Mobile wallet has no interactive deposit, cashout, or transfer flow.~~ Fixed: `WalletMobile` now features interactive modal sheets (`MobileDepositSheet`, `MobileCashoutSheet`, `MobileSendSheet`) with Web3 Crypto, Stripe Card, and Steam Guard 2FA support, plus Stripe return callback handling.

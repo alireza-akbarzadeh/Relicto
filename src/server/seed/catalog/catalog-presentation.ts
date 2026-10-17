@@ -23,69 +23,11 @@ export function hash(slug: string): number {
 const pick = <T>(list: readonly T[], slug: string, salt: number) =>
   list[(hash(slug) + salt) % list.length];
 
-function imageFor(item: CatalogSeedItem): string {
-  const slug = item.slug.toLowerCase();
-  if (slug.includes("karambit"))
-    return "/images/lootora/items/karambit-doppler.jpg";
-  if (slug.includes("butterfly"))
-    return "/images/lootora/items/butterfly-doppler.jpg";
-  if (slug.includes("talon")) return "/images/lootora/sell-items-07.jpg";
-  if (
-    slug.includes("vulcan") ||
-    slug.includes("bloodsport") ||
-    slug.includes("neon-rider")
-  ) {
-    return "/images/lootora/items/ak47-vulcan.jpg";
-  }
-  if (slug.includes("ak-") || slug.includes("case-hardened"))
-    return "/images/lootora/sell-items-04.jpg";
-  if (
-    slug.includes("printstream") ||
-    slug.includes("deagle") ||
-    slug.includes("desert")
-  ) {
-    return "/images/lootora/items/deagle-printstream.jpg";
-  }
-  if (slug.includes("howl")) return "/images/lootora/market-mobile-06.jpg";
-  if (slug.includes("m4a1") || slug.includes("m4a4"))
-    return "/images/lootora/sell-items-06.jpg";
-  if (slug.includes("dragon-lore")) return "/images/lootora/sell-items-02.jpg";
-  if (slug.includes("awp")) return "/images/lootora/items/awp-fade.jpg";
-  if (slug.includes("specialist")) return "/images/lootora/sell-items-09.jpg";
-  if (slug.includes("glove") || item.slot === "Gloves")
-    return "/images/lootora/items/sport-gloves-vice.jpg";
-
-  if (
-    slug.includes("abscession") ||
-    (item.hero === "Pudge" && item.rarity === "arcana")
-  ) {
-    return "/images/lootora/items/pudge-feast-abscession.jpg";
-  }
-  if (
-    slug.includes("frost-avalanche") ||
-    (item.hero === "Crystal Maiden" && item.rarity === "arcana")
-  ) {
-    return "/images/lootora/items/crystal-maiden-frost-avalanche.jpg";
-  }
-  if (item.hero === "Pudge") return "/images/lootora/items/dragonclaw-hook.jpg";
-  if (item.hero === "Phantom Assassin")
-    return "/images/lootora/items/manifold-paradox.jpg";
-  if (item.hero === "Juggernaut")
-    return "/images/lootora/items/bladeform-legacy.jpg";
-  if (item.hero === "Invoker")
-    return "/images/lootora/items/dark-artistry-cape.jpg";
-
-  if (item.gameId === "tf2")
-    return "/images/lootora/items/tf2-australium-rocket.jpg";
-  if (item.slot === "Head") return "/images/lootora/items/codicil-veiled.jpg";
-  if (item.slot === "Armor")
-    return "/images/lootora/items/bladeform-legacy.jpg";
-  return "/images/lootora/items/dark-artistry-cape.jpg";
-}
+import { resolveArtwork } from "./catalog-artwork";
 
 /** Resolves bespoke artwork per hero, weapon class and skin family. */
 export function artworkFor(item: CatalogSeedItem) {
-  return { url: imageFor(item), alt: `${item.name} listed on Relicto` };
+  return { url: resolveArtwork(item), alt: `${item.name} listed on Relicto` };
 }
 
 const BADGE: Record<string, { label: string; style: string }> = {

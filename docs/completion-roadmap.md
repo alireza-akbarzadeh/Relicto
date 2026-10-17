@@ -64,11 +64,11 @@ All 162 catalog items resolve without error, but 144 generated items share 8 fal
 
 ### Execution Tasks:
 1. **High-Fidelity Artwork Mapping**:
-   - Mapped bespoke visual assets across CS2 knife families (Karambit Doppler, Butterfly Doppler, Talon Knife), rifles (AK-47 Vulcan, Bloodsport, Case Hardened, M4A4 Howl), sidearms (Desert Eagle Printstream), and gloves (Sport Gloves Vice).
-   - Dota 2 Arcana and Immortal hero models mapped (Pudge Feast of Abscession, Crystal Maiden Frost Avalanche, Phantom Assassin Manifold Paradox, Juggernaut Bladeform Legacy).
-   - TF2 Australium Rocket Launcher and Class headgear mapped.
+   - Mapped bespoke visual assets across CS2 knife families (Karambit Doppler, Butterfly Doppler, Talon Knife, Butterfly Fade, M9 Bayonet), rifles (AK-47 Redline, Vulcan, Bloodsport, Case Hardened, Fire Serpent, M4A4 Howl, The Emperor, M4A1-S Hyper Beast, Player Two), sidearms (Desert Eagle Printstream, Fennec Fox, USP-S Kill Confirmed, Glock-18 Water Elemental, High Beam), snipers (AWP Dragon Lore, Wildfire, Asiimov, Fade, SSG Blood in the Water), and gloves (Sport Gloves Vice, Specialist Gloves Fade, Crimson Web).
+   - Dota 2 Arcana and Immortal hero models mapped (Pudge Feast of Abscession, Crystal Maiden Frost Avalanche, Phantom Assassin Manifold Paradox & Asan Persona, Juggernaut Bladeform Legacy, Invoker Dark Artistry).
+   - TF2 Australium Rocket Launcher, Class headgear (Burning/Scorching unusuals), and specialized loadouts mapped.
 2. **Seed Pipeline Enrichment**:
-   - Seed scripts updated (`catalog-presentation.ts`, `seed-catalog.ts`, `seed.ts`) to resolve authentic game artwork and collection tags on all 162 database entries.
+   - Modularized into `catalog-artwork.ts` and `catalog-presentation.ts`, resolving 34 distinct authentic assets across all 162 catalog items without cross-game fallback leaks.
 
 ---
 

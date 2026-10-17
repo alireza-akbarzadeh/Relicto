@@ -6,6 +6,8 @@ export const CASHOUT_RAILS = ["usdt", "sepa", "keys", "visa"] as const;
 export const cashoutInput = z.object({
   rail: z.enum(CASHOUT_RAILS),
   amountUsd: z.number().positive().max(20_000),
+  destinationAddress: z.string().trim().max(256).optional(),
+  steamGuardCode: z.string().trim().max(16).optional(),
 });
 
 export const freezeInput = z.object({ frozen: z.boolean() });

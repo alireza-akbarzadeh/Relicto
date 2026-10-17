@@ -21,6 +21,8 @@ export function WalletCashout({
   const [rail, setRail] = useState("usdt");
   const [amount, setAmount] = useState(() => (maxUsd > 0 ? Math.min(850, maxUsd).toFixed(2) : "0.00"));
   const [token, setToken] = useState("");
+  const [customAddress, setCustomAddress] = useState("");
+  const [isCustomAddress, setIsCustomAddress] = useState(false);
   return (
     <section className="flex h-full flex-col justify-between gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
       <div className="flex flex-col gap-space-md">
@@ -52,31 +54,43 @@ export function WalletCashout({
             <Button
               variant={null}
               size={null}
-              onClick={() => undefined}
+              onClick={() => setIsCustomAddress(!isCustomAddress)}
               className="h-auto rounded-none border-0 p-0 font-label-badge text-label-badge text-primary hover:underline"
             >
-              + New Address
+              {isCustomAddress ? "Use Whitelist" : "+ New Address"}
             </Button>
           </div>
-          <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-container-lowest p-space-sm">
-            <div className="flex min-w-0 items-center gap-space-sm">
-              <Icon
-                name="account_balance_wallet"
-                className="text-[20px] text-tertiary"
+          {isCustomAddress ? (
+            <div className="flex items-center gap-space-sm rounded-lg bg-surface-container-lowest p-space-sm">
+              <Icon name="account_balance_wallet" className="text-[20px] text-primary" />
+              <Input
+                value={customAddress}
+                onChange={(e) => setCustomAddress(e.target.value)}
+                placeholder="Enter TRC-20, IBAN, or recipient address..."
+                className="h-auto flex-1 border-0 bg-transparent p-0 font-data-mono-md text-[12px] text-text-primary focus-visible:ring-0"
               />
-              <div className="flex min-w-0 flex-col">
-                <span className="truncate font-body-sm text-body-sm text-text-primary">
-                  Binance Treasury Vault #1 (TRC-20)
-                </span>
-                <span className="truncate font-data-mono-md text-[11px] text-text-muted">
-                  TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La
-                </span>
-              </div>
             </div>
-            <span className="shrink-0 rounded bg-surface-container-high px-2 py-1 font-label-badge text-[10px] text-status-upcoming uppercase">
-              Verified Whitelist
-            </span>
-          </div>
+          ) : (
+            <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-container-lowest p-space-sm">
+              <div className="flex min-w-0 items-center gap-space-sm">
+                <Icon
+                  name="account_balance_wallet"
+                  className="text-[20px] text-tertiary"
+                />
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate font-body-sm text-body-sm text-text-primary">
+                    Binance Treasury Vault #1 (TRC-20)
+                  </span>
+                  <span className="truncate font-data-mono-md text-[11px] text-text-muted">
+                    TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La
+                  </span>
+                </div>
+              </div>
+              <span className="shrink-0 rounded bg-surface-container-high px-2 py-1 font-label-badge text-[10px] text-status-upcoming uppercase">
+                Verified Whitelist
+              </span>
+            </div>
+          )}
         </div>
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
           <span className="flex justify-between">
@@ -155,7 +169,15 @@ export function WalletCashout({
         variant={null}
         size={null}
         disabled={pending || maxUsd <= 0}
-        onClick={() => request(rail, Number(amount), maxUsd, token)}
+        onClick={() =>
+          request(
+            rail,
+            Number(amount),
+            maxUsd,
+            token,
+            isCustomAddress ? customAddress : "TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La"
+          )
+        }
         className="h-auto w-full gap-space-xs rounded-lg border-0 bg-surface-container-high py-space-md font-headline-sm text-[14px] text-text-primary uppercase shadow-md hover:bg-primary hover:text-on-primary disabled:opacity-50"
       >
         <Icon name="lock_reset" className="text-[18px]" />

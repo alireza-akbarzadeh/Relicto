@@ -20,7 +20,7 @@ export function useCashout() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  const request = (rail: string, amountUsd: number, maxUsd: number, steamToken: string) => {
+  const request = (rail: string, amountUsd: number, maxUsd: number, steamToken: string, destinationAddress?: string) => {
     if (!RAILS.includes(rail as Rail)) return toast.error("Pick a cashout rail");
     if (!(amountUsd > 0)) return toast.error("Enter an amount to withdraw");
     if (amountUsd > maxUsd) {
@@ -34,7 +34,12 @@ export function useCashout() {
 
     startTransition(async () => {
       try {
-        const { status } = await requestCashout({ rail: rail as Rail, amountUsd });
+        const { status } = await requestCashout({
+          rail: rail as Rail,
+          amountUsd,
+          destinationAddress: destinationAddress?.trim() || undefined,
+          steamGuardCode: steamToken.trim(),
+        });
         if (status === "requested") {
           router.refresh();
           toast.success("Cashout requested", {

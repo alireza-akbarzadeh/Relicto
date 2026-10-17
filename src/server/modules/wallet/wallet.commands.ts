@@ -59,7 +59,12 @@ export async function requestCashout(userId: string, input: z.infer<typeof casho
       venue: rail.venue,
       title: `Cashout Request (${rail.label})`,
       assetLabel: rail.label,
-      detailLabel: rail.feeCents ? `Network fee $${(rail.feeCents / 100).toFixed(2)}` : "No network fee",
+      detailLabel: [
+        rail.feeCents ? `Network fee $${(rail.feeCents / 100).toFixed(2)}` : "No network fee",
+        input.destinationAddress ? `To: ${input.destinationAddress.slice(0, 16)}...` : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
       nodeLabel: "Relicto Treasury",
     });
 

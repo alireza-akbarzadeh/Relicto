@@ -4,6 +4,7 @@
  * marketplace facets, pagination and totals count something real.
  */
 import type * as schema from "../../../lib/db/schema";
+import { KNOWN_ITEM_COLLECTIONS } from "../../modules/trade-ups/trade-ups.collections";
 
 export type SeedRarity = (typeof schema.itemRarity.enumValues)[number];
 export type SeedWear = (typeof schema.itemWear.enumValues)[number];
@@ -19,6 +20,7 @@ export type CatalogSeedItem = {
   hero?: string;
   priceUsd: number;
   /** CS2 only. */
+  collection?: string;
   wear?: SeedWear;
   float?: number;
   stattrak?: boolean;
@@ -47,6 +49,7 @@ export const fromCs2 = ([name, slug, rarity, wear, float, stattrak, pattern, pri
   name,
   rarity,
   slot: rarity === "gloves" ? "Gloves" : "Weapon",
+  collection: KNOWN_ITEM_COLLECTIONS[name] ?? "The Phoenix Collection",
   priceUsd,
   wear,
   float,

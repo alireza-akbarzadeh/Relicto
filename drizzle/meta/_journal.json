@@ -169,6 +169,13 @@
       "when": 1791876846031,
       "tag": "0023_aberrant_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792000000000,
+      "tag": "0024_trade_up_collections",
+      "breakpoints": true
     }
   ]
 }

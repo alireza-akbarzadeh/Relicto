@@ -54,6 +54,8 @@ const WEAR = [[0.07, "Factory New"], [0.15, "Minimal Wear"], [0.38, "Field-Teste
 /** Uniform in [0, 1) from the platform CSPRNG; the draw never runs in the browser. */
 const roll = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
 
+import { calculateCollectionOutcomes, calculateOutcomeFloat } from "./trade-ups.collections";
+
 /**
  * Burns the ten committed copies and forges one outcome into the trader's
  * inventory, in one transaction. The draw happens here, after every input is
@@ -74,28 +76,36 @@ export async function ignite(userId: string, expected: (string | null)[]): Promi
     const inputs = await repo.lockOwned(tx, userId, held as string[]);
     if (inputs.length !== CONTRACT_SLOTS || refusal(inputs)) return { status: "stale" };
 
-    const pool = await repo.outcomes(tx);
+    const dynamicPool = calculateCollectionOutcomes(inputs);
+    const fallbackPool = await repo.outcomes(tx);
+    const pool = dynamicPool.length > 0 ? dynamicPool : fallbackPool;
     if (!pool.length) return { status: "unavailable" };
-    const won = drawOutcome(pool.map((row) => ({ ...row, chance: row.chancePct })), roll());
+
+    const drawn = drawOutcome(pool.map((row) => ({ ...row, chance: row.chancePct })), roll());
     const totalChance = pool.reduce((sum, row) => sum + row.chancePct, 0);
     const inputCents = inputs.reduce((sum, row) => sum + row.priceCents, 0);
+    const won = "id" in drawn && drawn.id ? (drawn as repo.OutcomeRow) : await repo.findOrCreateOutcome(tx, drawn);
 
-    // The outcome's wear follows the inputs' average float.
+    // The outcome's wear follows the inputs' average float with CS2 boundary scaling.
     const floats = inputs.map((row) => Number(row.floatLabel)).filter(Number.isFinite);
     const avg = floats.length ? floats.reduce((sum, value) => sum + value, 0) / floats.length : null;
+    const finalFloat = avg !== null
+      ? calculateOutcomeFloat(avg, "minFloat" in drawn ? drawn.minFloat : 0, "maxFloat" in drawn ? drawn.maxFloat : 1)
+      : null;
 
     await tx.insert(inventoryItems).values({
       userId,
       gameId: won.gameId,
       itemId: won.itemId,
       name: won.name,
-      wearLabel: avg === null ? null : WEAR.find(([max]) => avg < max)![1],
-      floatLabel: avg === null ? null : avg.toFixed(4),
-      wearPct: avg === null ? 0 : Math.round(avg * 100),
+      wearLabel: finalFloat === null ? null : WEAR.find(([max]) => finalFloat < max)![1],
+      floatLabel: finalFloat === null ? null : finalFloat.toFixed(4),
+      wearPct: finalFloat === null ? 0 : Math.round(finalFloat * 100),
       imageUrl: won.imageUrl,
       imageAlt: won.imageAlt,
       priceCents: won.valueCents,
       floorCents: won.valueCents,
+      collection: won.collection ?? null,
       tone: SELL_TONE[won.tone] ?? "muted",
     });
 

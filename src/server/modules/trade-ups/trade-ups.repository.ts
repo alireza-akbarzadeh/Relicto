@@ -89,3 +89,31 @@ export async function outcomes(executor: Executor = db) {
     .where(eq(tradeUpOutcomes.gameId, TRADE_UP_GAME))
     .orderBy(asc(tradeUpOutcomes.sortOrder));
 }
+
+/** Finds an existing outcome row or persists a dynamic collection outcome. */
+export async function findOrCreateOutcome(
+  tx: Executor,
+  outcome: { name: string; collection?: string | null; valueCents: number; chancePct: number; tone: string; imageUrl?: string | null },
+): Promise<OutcomeRow> {
+  const [existing] = await tx
+    .select()
+    .from(tradeUpOutcomes)
+    .where(eq(tradeUpOutcomes.name, outcome.name))
+    .limit(1);
+  if (existing) return existing;
+
+  const [created] = await tx
+    .insert(tradeUpOutcomes)
+    .values({
+      gameId: TRADE_UP_GAME,
+      name: outcome.name,
+      imageUrl: outcome.imageUrl ?? null,
+      imageAlt: outcome.name,
+      valueCents: outcome.valueCents,
+      chancePct: outcome.chancePct,
+      collection: outcome.collection ?? null,
+      tone: outcome.tone,
+    })
+    .returning();
+  return created;
+}

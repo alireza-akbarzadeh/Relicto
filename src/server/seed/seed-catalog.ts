@@ -66,6 +66,7 @@ export async function seedCatalogDepth(db: Db, sellerId: string) {
       name: item.name,
       rarity: item.rarity,
       slot: item.slot,
+      collection: item.collection ?? null,
       imageUrl: art.url,
       imageAlt: art.alt,
       presentation: presentationFor(item, offers),

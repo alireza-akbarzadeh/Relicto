@@ -1,4 +1,4 @@
-import { index, integer, jsonb, pgEnum, pgTable, text, uniqueIndex } from "drizzle-orm/pg-core";
+import { index, integer, jsonb, pgEnum, pgTable, real, text, uniqueIndex } from "drizzle-orm/pg-core";
 import { primaryId, timestamps } from "./_shared";
 
 /**
@@ -77,6 +77,10 @@ export const items = pgTable(
     imageAlt: text("image_alt"),
     /** Steam inventory identifiers, used when binding a real inventory. */
     steamClassId: text("steam_class_id"),
+    /** Canonical weapon/hero collection name (e.g. "The Phoenix Collection"). */
+    collection: text("collection"),
+    minFloat: real("min_float").default(0),
+    maxFloat: real("max_float").default(1),
     presentation: jsonb("presentation").$type<ItemPresentation>(),
     ...timestamps,
   },
@@ -86,6 +90,7 @@ export const items = pgTable(
     index("items_hero_idx").on(t.heroId),
     index("items_rarity_idx").on(t.rarity),
     index("items_slot_idx").on(t.slot),
+    index("items_collection_idx").on(t.collection),
   ],
 );
 

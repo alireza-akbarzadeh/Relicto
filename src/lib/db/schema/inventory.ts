@@ -43,6 +43,7 @@ export const inventoryItems = pgTable(
     /** Wear bar fill, 0–100. */
     wearPct: real("wear_pct").notNull().default(0),
     tone: text("tone").notNull().default("muted"),
+    collection: text("collection"),
     sortOrder: integer("sort_order").notNull().default(0),
     ...timestamps,
   },

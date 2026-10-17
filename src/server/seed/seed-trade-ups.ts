@@ -32,19 +32,24 @@ const NAMES: Record<string, string> = {
   "glock-high-beam": "Glock-18 | High Beam",
 };
 
+import { KNOWN_ITEM_COLLECTIONS } from "../modules/trade-ups/trade-ups.collections";
+
 const WEAR = [[0.07, "Factory New"], [0.15, "Minimal Wear"], [0.38, "Field-Tested"], [0.45, "Well-Worn"], [1.01, "Battle-Scarred"]] as const;
 
 const inventoryId = (traderId: string, id: string) => `inv-${traderId}-tu-${id}`;
 
 async function seedSkin(db: Db, traderId: string, item: ContractItem, order: number) {
   const float = item.float ?? 0;
+  const fullName = NAMES[item.id] ?? item.imageAlt;
+  const collection = KNOWN_ITEM_COLLECTIONS[fullName] ?? "The Phoenix Collection";
   const row = {
     id: inventoryId(traderId, item.id),
     userId: traderId,
     gameId: "cs2",
     assetId: `steam-tu-${item.id}`,
-    name: NAMES[item.id] ?? item.imageAlt,
+    name: fullName,
     rarityLabel: item.rarity,
+    collection,
     wearLabel: WEAR.find(([max]) => float < max)![1],
     floatLabel: float.toFixed(4),
     imageUrl: item.image,
@@ -61,6 +66,7 @@ async function seedSkin(db: Db, traderId: string, item: ContractItem, order: num
 
 async function seedOutcomes(db: Db) {
   for (const [order, outcome] of sellMobile.contract.outcomes.entries()) {
+    const collection = KNOWN_ITEM_COLLECTIONS[outcome.name] ?? "The Breakout Collection";
     const row = {
       id: `tuo-${outcome.id}`,
       gameId: "cs2",
@@ -69,6 +75,7 @@ async function seedOutcomes(db: Db) {
       imageAlt: outcome.imageAlt,
       valueCents: cents(outcome.valueUsd),
       chancePct: outcome.chance,
+      collection,
       tone: outcome.tone,
       sortOrder: order,
     } satisfies typeof schema.tradeUpOutcomes.$inferInsert;

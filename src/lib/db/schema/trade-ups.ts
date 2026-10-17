@@ -28,11 +28,12 @@ export const tradeUpOutcomes = pgTable(
     valueCents: integer("value_cents").notNull(),
     /** Share of the draw, 0–100. The pool's chances are normalised at draw time. */
     chancePct: real("chance_pct").notNull(),
+    collection: text("collection"),
     tone: text("tone").notNull().default("mid"),
     sortOrder: integer("sort_order").notNull().default(0),
     ...timestamps,
   },
-  (t) => [index("trade_up_outcomes_game_idx").on(t.gameId, t.sortOrder)],
+  (t) => [index("trade_up_outcomes_game_idx").on(t.gameId, t.sortOrder), index("trade_up_outcomes_collection_idx").on(t.collection)],
 );
 
 /** The forge: N inputs burned for one outcome item. */

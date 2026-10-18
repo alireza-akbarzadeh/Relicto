@@ -1,37 +1,79 @@
 "use client";
 
 import * as React from "react";
-import { Users, Shield, Lock, Unlock, CheckCircle2, Search } from "lucide-react";
+import { Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import type { DashboardUser } from "../types";
 import { updateUserRoleAction, toggleUserFreezeAction } from "../actions/admin-users";
+import { UsersFilterBar, type UsersFilterState } from "./users-filter-bar";
+import { UsersTable, DASHBOARD_ROLES } from "./users-table";
 
-const ROLES = ["Admin", "Operator", "Trader", "VIP Trader", "Moderator", "Suspended"] as const;
+const INITIAL_FILTERS: UsersFilterState = {
+  search: "",
+  role: "all",
+  status: "all",
+  balance: "all",
+  sortBy: "balance_desc",
+};
 
 export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[] }) {
   const [users, setUsers] = React.useState(initialUsers);
-  const [search, setSearch] = React.useState("");
-  const [roleFilter, setRoleFilter] = React.useState<string>("all");
+  const [filters, setFilters] = React.useState<UsersFilterState>(INITIAL_FILTERS);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
 
-  const filtered = users.filter((u) => {
-    const matchesSearch =
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.handle.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase());
-    const matchesRole = roleFilter === "all" ? true : u.role.toLowerCase() === roleFilter.toLowerCase();
-    return matchesSearch && matchesRole;
-  });
+  const handleFilterChange = <K extends keyof UsersFilterState>(key: K, value: UsersFilterState[K]) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleResetFilters = () => setFilters(INITIAL_FILTERS);
+
+  const filteredAndSorted = React.useMemo(() => {
+    const q = filters.search.trim().toLowerCase();
+    const result = users.filter((u) => {
+      const matchSearch =
+        !q ||
+        u.name.toLowerCase().includes(q) ||
+        u.handle.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q) ||
+        u.id.toLowerCase().includes(q);
+      const matchRole = filters.role === "all" || u.role.toLowerCase() === filters.role.toLowerCase();
+      const matchStatus =
+        filters.status === "all" ||
+        (filters.status === "active" && !u.isFrozen) ||
+        (filters.status === "frozen" && u.isFrozen) ||
+        (filters.status === "2fa" && u.twoFactorEnabled) ||
+        (filters.status === "verified" && u.emailVerified);
+      const matchBalance =
+        filters.balance === "all" ||
+        (filters.balance === "funded" && u.balanceCents > 0) ||
+        (filters.balance === "whale" && u.balanceCents >= 50000) ||
+        (filters.balance === "zero" && u.balanceCents === 0);
+      return matchSearch && matchRole && matchStatus && matchBalance;
+    });
+
+    return result.sort((a, b) => {
+      if (filters.sortBy === "balance_desc") return b.balanceCents - a.balanceCents;
+      if (filters.sortBy === "balance_asc") return a.balanceCents - b.balanceCents;
+      if (filters.sortBy === "trust_desc") return b.trustScore - a.trustScore;
+      if (filters.sortBy === "name_asc") return a.name.localeCompare(b.name);
+      if (filters.sortBy === "name_desc") return b.name.localeCompare(a.name);
+      if (filters.sortBy === "created_desc") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return 0;
+    });
+  }, [users, filters]);
+
+  const totalVaultCents = React.useMemo(
+    () => filteredAndSorted.reduce((acc, u) => acc + u.balanceCents, 0),
+    [filteredAndSorted]
+  );
 
   const handleRoleChange = async (userId: string, newRole: string) => {
     setLoadingId(userId);
     try {
       const res = await updateUserRoleAction(userId, newRole);
       if (res.success) {
-        toast.success(`User role updated to ${newRole}`);
+        toast.success(`Role updated to ${newRole}`);
         setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u)));
       } else {
         toast.error(res.error);
@@ -60,135 +102,44 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
 
   return (
     <Card className="bg-surface-card border-border-subtle">
-      <CardHeader className="flex flex-col gap-3 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <CardHeader className="flex flex-col gap-3 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <CardTitle className="text-sm font-heading font-bold text-text-primary flex items-center gap-2">
               <Users className="size-4 text-primary" />
               User Directory & Role Administration
             </CardTitle>
             <CardDescription className="text-xs text-text-muted mt-0.5">
-              Manage platform permissions, operator privileges, and vault emergency locks
+              Live identity registry, security state, and emergency account freeze controls
             </CardDescription>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted" />
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search trader or email..."
-                className="pl-8 h-8 text-xs w-48 sm:w-60 bg-surface-container border-border-subtle"
-              />
-            </div>
+          <div className="flex items-center gap-3 text-xs font-mono">
+            <span className="text-text-muted">
+              Showing: <strong className="text-text-primary">{filteredAndSorted.length}</strong> / {users.length}
+            </span>
+            <span className="text-text-muted">
+              Vault: <strong className="text-emerald-400">{formatUsd(totalVaultCents)}</strong>
+            </span>
           </div>
         </div>
 
-        {/* Role Filters */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-surface-container border border-border-subtle text-xs">
-          {["all", ...ROLES].map((role) => (
-            <button
-              key={role}
-              type="button"
-              onClick={() => setRoleFilter(role)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium capitalize transition-colors ${
-                roleFilter.toLowerCase() === role.toLowerCase()
-                  ? "bg-primary text-primary-foreground font-semibold"
-                  : "text-text-muted hover:text-text-primary"
-              }`}
-            >
-              {role}
-            </button>
-          ))}
-        </div>
+        <UsersFilterBar
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onReset={handleResetFilters}
+          filteredCount={filteredAndSorted.length}
+          filteredUsers={filteredAndSorted}
+          availableRoles={DASHBOARD_ROLES}
+        />
       </CardHeader>
 
       <CardContent>
-        <div className="overflow-x-auto no-scrollbar">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-border-subtle text-[11px] font-mono uppercase tracking-wider text-text-muted">
-              <tr>
-                <th className="pb-3 font-semibold">User Identity</th>
-                <th className="pb-3 font-semibold">Role & Access</th>
-                <th className="pb-3 font-semibold">Vault Balance</th>
-                <th className="pb-3 font-semibold">Trust & Tier</th>
-                <th className="pb-3 font-semibold">Security Status</th>
-                <th className="pb-3 font-semibold text-right">Emergency Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-subtle/40">
-              {filtered.map((u) => (
-                <tr key={u.id} className="hover:bg-surface-container/40 transition-colors">
-                  <td className="py-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="size-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center font-bold text-xs text-primary shrink-0">
-                        {u.name.slice(0, 2).toUpperCase()}
-                      </div>
-                      <div>
-                        <span className="font-semibold text-text-primary block leading-tight">{u.name}</span>
-                        <span className="text-[11px] text-text-muted font-mono block">@{u.handle}</span>
-                        <span className="text-[10px] text-text-muted/80">{u.email}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3">
-                    <select
-                      value={u.role}
-                      disabled={loadingId === u.id}
-                      onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                      className="bg-surface-container border border-border-subtle text-text-primary rounded px-2 py-1 text-xs font-mono font-medium outline-none focus:border-primary cursor-pointer"
-                    >
-                      {ROLES.map((r) => (
-                        <option key={r} value={r}>
-                          {r}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="py-3 font-mono font-bold text-text-primary">
-                    {formatUsd(u.balanceCents)}
-                  </td>
-                  <td className="py-3">
-                    <span className="text-text-primary font-mono text-[11px] block">{u.tier ?? "Standard"}</span>
-                    <span className="text-text-muted text-[10px] font-mono">{u.trustScore}% Trust Score</span>
-                  </td>
-                  <td className="py-3">
-                    <div className="flex flex-col gap-0.5 text-[10px] font-mono">
-                      <span className="text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="size-3" />
-                        {u.emailVerified ? "Verified Email" : "Unverified"}
-                      </span>
-                      {u.twoFactorEnabled && (
-                        <span className="text-cyan-400 flex items-center gap-1">
-                          <Shield className="size-3" /> 2FA Active
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="py-3 text-right">
-                    <Button
-                      size="xs"
-                      variant={u.isFrozen ? "destructive" : "outline"}
-                      disabled={loadingId === u.id}
-                      onClick={() => handleToggleFreeze(u.id, u.isFrozen)}
-                      className="gap-1 text-[11px] font-mono"
-                    >
-                      {u.isFrozen ? (
-                        <>
-                          <Unlock className="size-3" /> Unfreeze
-                        </>
-                      ) : (
-                        <>
-                          <Lock className="size-3" /> Freeze
-                        </>
-                      )}
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <UsersTable
+          users={filteredAndSorted}
+          loadingId={loadingId}
+          onRoleChange={handleRoleChange}
+          onToggleFreeze={handleToggleFreeze}
+        />
       </CardContent>
     </Card>
   );

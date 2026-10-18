@@ -22,7 +22,7 @@ import { DashboardUsers } from "./dashboard-users";
 import { ChargeWalletDialog } from "./charge-wallet-dialog";
 
 export function DashboardShell({ data }: { data: DashboardData }) {
-  const [tab, setTab] = React.useState<DashboardTab>("overview");
+  const [tab, setTab] = React.useState<DashboardTab>("users");
   const [chargeOpen, setChargeOpen] = React.useState(false);
 
   const TAB_TITLES: Record<DashboardTab, { title: string; desc: string }> = {
@@ -37,7 +37,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="flex min-h-screen w-full bg-background overflow-x-hidden">
+      <div className="flex min-h-screen w-full bg-background">
         <Sidebar collapsible="icon" variant="sidebar">
           <DashboardNav
             currentTab={tab}
@@ -49,9 +49,9 @@ export function DashboardShell({ data }: { data: DashboardData }) {
           <SidebarRail />
         </Sidebar>
 
-        <SidebarInset className="bg-background flex flex-col min-w-0 flex-1">
+        <SidebarInset className="bg-background flex flex-col min-w-0 flex-1 w-full">
           {/* Top Operational Bar */}
-          <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border-subtle bg-background/80 px-4 backdrop-blur-md">
+          <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border-subtle bg-background/95 px-4 md:px-6 backdrop-blur-md">
             <div className="flex items-center gap-3">
               <SidebarTrigger />
               <div className="h-4 w-px bg-border-subtle" />
@@ -86,8 +86,8 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             </div>
           </header>
 
-          {/* Tab Content Canvas */}
-          <main className="flex-1 p-4 md:p-6 space-y-6 max-w-7xl w-full mx-auto overflow-x-hidden">
+          {/* Full-width content container without arbitrary centered margin gaps */}
+          <div className="flex-1 p-4 md:p-6 space-y-6 w-full">
             {tab === "overview" && (
               <>
                 <DashboardOverview
@@ -128,7 +128,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             {tab === "monitoring" && (
               <DashboardSystemMonitor system={data.system} />
             )}
-          </main>
+          </div>
         </SidebarInset>
       </div>
 

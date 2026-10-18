@@ -14,16 +14,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import {
-  SidebarHeader,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarMenuBadge,
+  SidebarHeader, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel,
+  SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuBadge, useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import type { DashboardTab, DashboardKpis } from "../types";
@@ -39,24 +31,32 @@ interface DashboardNavProps {
 
 export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }: DashboardNavProps) {
   const [chargeOpen, setChargeOpen] = React.useState(false);
+  const { state, toggleSidebar } = useSidebar();
 
   return (
     <>
       <SidebarHeader>
         <div className="flex items-center justify-between px-2 py-1.5 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
-          <Link href="/dashboard" className="flex items-center gap-2 group">
-            <div className="size-8 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary font-heading font-black text-sm tracking-wider group-hover:bg-primary/20 transition-colors shrink-0 group-data-[collapsible=icon]:mx-auto">
+          <div className="flex items-center gap-2 group">
+            <button
+              type="button"
+              onClick={() => {
+                if (state === "collapsed") toggleSidebar();
+              }}
+              title={state === "collapsed" ? "Expand sidebar" : "Relicto Ops"}
+              className="size-8 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary font-heading font-black text-sm tracking-wider hover:bg-primary/20 transition-colors shrink-0 group-data-[collapsible=icon]:mx-auto cursor-pointer"
+            >
               R
-            </div>
-            <div className="group-data-[collapsible=icon]:hidden overflow-hidden">
-              <span className="font-heading font-bold text-sm tracking-wide text-text-primary block leading-none">
+            </button>
+            <Link href="/dashboard" className="group-data-[collapsible=icon]:hidden overflow-hidden">
+              <span className="font-heading font-bold text-sm tracking-wide text-text-primary block leading-none hover:text-primary transition-colors">
                 RELICTO
               </span>
               <span className="text-[10px] font-mono tracking-widest text-text-muted uppercase">
                 OPS TERMINAL
               </span>
-            </div>
-          </Link>
+            </Link>
+          </div>
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container border border-border-subtle text-[10px] font-mono text-primary group-data-[collapsible=icon]:hidden">
             <span className="size-1.5 rounded-full bg-primary animate-pulse" />
             LIVE

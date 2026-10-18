@@ -1,14 +1,24 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { forbidden } from "next/navigation";
+import { getSession } from "@/modules/relicto/data/get-session";
 import { getDashboardData } from "@/modules/dashboard/data/get-dashboard";
 import { DashboardShell } from "@/modules/dashboard/components/dashboard-shell";
 
 export const metadata: Metadata = {
-  title: "Operations Dashboard | Relicto",
-  description: "Real-time monitoring of orders, income, audited treasury transactions, and wallet deposits.",
+  title: "Admin Operations Dashboard | Relicto",
+  description: "Restricted command terminal for verified administrators, order monitoring, and treasury telemetry.",
 };
 
 export default async function DashboardPage() {
+  const session = await getSession();
+  const userRole = session?.user?.role?.toLowerCase() ?? "";
+
+  // Strictly restrict dashboard access to users with the Admin role
+  if (userRole !== "admin") {
+    forbidden();
+  }
+
   const data = await getDashboardData();
 
   return (

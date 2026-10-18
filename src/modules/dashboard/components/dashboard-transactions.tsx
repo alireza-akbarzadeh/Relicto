@@ -1,15 +1,50 @@
 "use client";
 
 import * as React from "react";
-import { ArrowDownLeft, ArrowUpRight, Copy, Check } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, Copy, Check, Receipt } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import type { DashboardTransaction } from "../types";
+import { TransactionsFilterBar, type TransactionsFilterState } from "./transactions-filter-bar";
+
+const INITIAL_FILTERS: TransactionsFilterState = {
+  search: "",
+  kind: "all",
+  direction: "all",
+  status: "all",
+  sortBy: "newest",
+};
 
 export function DashboardTransactions({ transactions }: { transactions: DashboardTransaction[] }) {
-  const [filter, setFilter] = React.useState<string>("all");
+  const [filters, setFilters] = React.useState<TransactionsFilterState>(INITIAL_FILTERS);
   const [copiedHash, setCopiedHash] = React.useState<string | null>(null);
 
-  const filtered = transactions.filter((t) => (filter === "all" ? true : t.kind === filter));
+  const handleFilterChange = <K extends keyof TransactionsFilterState>(key: K, value: TransactionsFilterState[K]) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleReset = () => setFilters(INITIAL_FILTERS);
+
+  const filteredAndSorted = React.useMemo(() => {
+    const q = filters.search.trim().toLowerCase();
+    const result = transactions.filter((t) => {
+      const matchSearch =
+        !q ||
+        t.title.toLowerCase().includes(q) ||
+        t.venue.toLowerCase().includes(q) ||
+        (t.hash ?? "").toLowerCase().includes(q);
+      const matchKind = filters.kind === "all" || t.kind === filters.kind;
+      const matchDirection = filters.direction === "all" || t.direction === filters.direction;
+      const matchStatus = filters.status === "all" || t.status === filters.status;
+      return matchSearch && matchKind && matchDirection && matchStatus;
+    });
+
+    return result.sort((a, b) => {
+      if (filters.sortBy === "newest") return new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime();
+      if (filters.sortBy === "amount_desc") return b.amountCents - a.amountCents;
+      if (filters.sortBy === "amount_asc") return a.amountCents - b.amountCents;
+      return 0;
+    });
+  }, [transactions, filters]);
 
   const copyToClipboard = (hash: string) => {
     navigator.clipboard.writeText(hash);
@@ -22,36 +57,34 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
 
   return (
     <Card className="bg-surface-card border-border-subtle">
-      <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4">
-        <div>
-          <CardTitle className="text-sm font-heading font-bold text-text-primary">
-            Audited Treasury & Vault Ledger
-          </CardTitle>
-          <CardDescription className="text-xs text-text-muted mt-0.5">
-            Cryptographic settlement receipts, on-chain deposits, and cashouts
-          </CardDescription>
+      <CardHeader className="flex flex-col gap-3 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <CardTitle className="text-sm font-heading font-bold text-text-primary">
+              Audited Treasury & Vault Ledger
+            </CardTitle>
+            <CardDescription className="text-xs text-text-muted mt-0.5">
+              Cryptographic settlement receipts, on-chain deposits, and cashouts
+            </CardDescription>
+          </div>
+          <span className="text-xs font-mono text-text-muted">
+            Showing: <strong className="text-text-primary">{filteredAndSorted.length}</strong> / {transactions.length}
+          </span>
         </div>
-        <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-surface-container border border-border-subtle text-xs">
-          {["all", "deposit", "purchase", "sale", "withdrawal", "promo"].map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => setFilter(tab)}
-              className={`px-2 py-1 rounded-md text-xs font-medium capitalize transition-colors ${
-                filter === tab
-                  ? "bg-primary text-primary-foreground font-semibold"
-                  : "text-text-muted hover:text-text-primary"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+
+        <TransactionsFilterBar
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onReset={handleReset}
+          filteredCount={filteredAndSorted.length}
+          filteredTransactions={filteredAndSorted}
+        />
       </CardHeader>
       <CardContent>
-        {filtered.length === 0 ? (
-          <div className="py-12 text-center text-xs text-text-muted font-mono">
-            No transactions found for &quot;{filter}&quot;.
+        {filteredAndSorted.length === 0 ? (
+          <div className="py-12 text-center text-xs text-text-muted font-mono border border-dashed border-border-subtle rounded-lg">
+            <Receipt className="size-6 text-text-muted mx-auto mb-2 opacity-50" />
+            No ledger transactions match current filter criteria.
           </div>
         ) : (
           <div className="overflow-x-auto no-scrollbar">
@@ -66,7 +99,7 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle/40">
-                {filtered.map((tx) => {
+                {filteredAndSorted.map((tx) => {
                   const isCredit = tx.direction === "credit";
                   return (
                     <tr key={tx.id} className="hover:bg-surface-container/40 transition-colors">
@@ -104,9 +137,7 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
                             className="flex items-center gap-1 hover:text-text-primary transition-colors"
                           >
                             <span>
-                              {tx.hash.length > 20
-                                ? `${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}`
-                                : tx.hash}
+                              {tx.hash.length > 20 ? `${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}` : tx.hash}
                             </span>
                             {copiedHash === tx.hash ? (
                               <Check className="size-3 text-emerald-400" />

@@ -2,31 +2,55 @@
 
 import * as React from "react";
 import { Users } from "lucide-react";
+import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
 import type { DashboardUser } from "../types";
 import { updateUserRoleAction, toggleUserFreezeAction } from "../actions/admin-users";
 import { UsersFilterBar, type UsersFilterState } from "./users-filter-bar";
 import { UsersTable, DASHBOARD_ROLES } from "./users-table";
-
-const INITIAL_FILTERS: UsersFilterState = {
-  search: "",
-  role: "all",
-  status: "all",
-  balance: "all",
-  sortBy: "balance_desc",
-};
+import { GridPagination } from "./grid-pagination";
+import { usersSearchParams } from "../lib/search-params";
 
 export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[] }) {
   const [users, setUsers] = React.useState(initialUsers);
-  const [filters, setFilters] = React.useState<UsersFilterState>(INITIAL_FILTERS);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
 
+  const [query, setQuery] = useQueryStates(usersSearchParams, {
+    history: "replace",
+    shallow: true,
+    clearOnDefault: true,
+  });
+
+  const filters: UsersFilterState = React.useMemo(() => ({
+    search: query.uq,
+    role: query.urole,
+    status: query.ustatus as UsersFilterState["status"],
+    balance: query.ubalance as UsersFilterState["balance"],
+    sortBy: query.usort as UsersFilterState["sortBy"],
+  }), [query]);
+
   const handleFilterChange = <K extends keyof UsersFilterState>(key: K, value: UsersFilterState[K]) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    const keyMap: Record<keyof UsersFilterState, string> = {
+      search: "uq",
+      role: "urole",
+      status: "ustatus",
+      balance: "ubalance",
+      sortBy: "usort",
+    };
+    void setQuery({ [keyMap[key]]: value, upage: 1 });
   };
 
-  const handleResetFilters = () => setFilters(INITIAL_FILTERS);
+  const handleResetFilters = () => {
+    void setQuery({
+      uq: "",
+      urole: "all",
+      ustatus: "all",
+      ubalance: "all",
+      usort: "balance_desc",
+      upage: 1,
+    });
+  };
 
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -62,6 +86,11 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
       return 0;
     });
   }, [users, filters]);
+
+  const paginatedUsers = React.useMemo(() => {
+    const start = (query.upage - 1) * query.upageSize;
+    return filteredAndSorted.slice(start, start + query.upageSize);
+  }, [filteredAndSorted, query.upage, query.upageSize]);
 
   const totalVaultCents = React.useMemo(
     () => filteredAndSorted.reduce((acc, u) => acc + u.balanceCents, 0),
@@ -133,12 +162,20 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
         />
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-3">
         <UsersTable
-          users={filteredAndSorted}
+          users={paginatedUsers}
           loadingId={loadingId}
           onRoleChange={handleRoleChange}
           onToggleFreeze={handleToggleFreeze}
+        />
+
+        <GridPagination
+          page={query.upage}
+          pageSize={query.upageSize}
+          totalItems={filteredAndSorted.length}
+          onPageChange={(page) => void setQuery({ upage: page })}
+          onPageSizeChange={(pageSize) => void setQuery({ upageSize: pageSize })}
         />
       </CardContent>
     </Card>

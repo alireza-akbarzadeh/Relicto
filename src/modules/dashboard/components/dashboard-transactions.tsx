@@ -2,27 +2,36 @@
 
 import * as React from "react";
 import { ArrowDownLeft, ArrowUpRight, Copy, Check, Receipt } from "lucide-react";
+import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import type { DashboardTransaction } from "../types";
 import { TransactionsFilterBar, type TransactionsFilterState } from "./transactions-filter-bar";
-
-const INITIAL_FILTERS: TransactionsFilterState = {
-  search: "",
-  kind: "all",
-  direction: "all",
-  status: "all",
-  sortBy: "newest",
-};
+import { GridPagination } from "./grid-pagination";
+import { transactionsSearchParams } from "../lib/search-params";
 
 export function DashboardTransactions({ transactions }: { transactions: DashboardTransaction[] }) {
-  const [filters, setFilters] = React.useState<TransactionsFilterState>(INITIAL_FILTERS);
   const [copiedHash, setCopiedHash] = React.useState<string | null>(null);
 
+  const [query, setQuery] = useQueryStates(transactionsSearchParams, {
+    history: "replace",
+    shallow: true,
+    clearOnDefault: true,
+  });
+
+  const filters: TransactionsFilterState = React.useMemo(() => ({
+    search: query.tq,
+    kind: query.tkind,
+    direction: query.tdir as TransactionsFilterState["direction"],
+    status: query.tstatus as TransactionsFilterState["status"],
+    sortBy: query.tsort as TransactionsFilterState["sortBy"],
+  }), [query]);
+
   const handleFilterChange = <K extends keyof TransactionsFilterState>(key: K, value: TransactionsFilterState[K]) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    const keyMap = { search: "tq", kind: "tkind", direction: "tdir", status: "tstatus", sortBy: "tsort" } as const;
+    void setQuery({ [keyMap[key]]: value, tpage: 1 });
   };
 
-  const handleReset = () => setFilters(INITIAL_FILTERS);
+  const handleReset = () => void setQuery({ tq: "", tkind: "all", tdir: "all", tstatus: "all", tsort: "newest", tpage: 1 });
 
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -45,6 +54,11 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
       return 0;
     });
   }, [transactions, filters]);
+
+  const paginatedTransactions = React.useMemo(() => {
+    const start = (query.tpage - 1) * query.tpageSize;
+    return filteredAndSorted.slice(start, start + query.tpageSize);
+  }, [filteredAndSorted, query.tpage, query.tpageSize]);
 
   const copyToClipboard = (hash: string) => {
     navigator.clipboard.writeText(hash);
@@ -80,7 +94,7 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
           filteredTransactions={filteredAndSorted}
         />
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3">
         {filteredAndSorted.length === 0 ? (
           <div className="py-12 text-center text-xs text-text-muted font-mono border border-dashed border-border-subtle rounded-lg">
             <Receipt className="size-6 text-text-muted mx-auto mb-2 opacity-50" />
@@ -99,31 +113,19 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle/40">
-                {filteredAndSorted.map((tx) => {
+                {paginatedTransactions.map((tx) => {
                   const isCredit = tx.direction === "credit";
                   return (
                     <tr key={tx.id} className="hover:bg-surface-container/40 transition-colors">
                       <td className="py-3">
                         <div className="flex items-center gap-2.5">
-                          <div
-                            className={`p-1.5 rounded-md ${
-                              isCredit
-                                ? "bg-emerald-500/10 text-emerald-400"
-                                : "bg-amber-500/10 text-amber-500"
-                            }`}
-                          >
-                            {isCredit ? (
-                              <ArrowDownLeft className="size-3.5" />
-                            ) : (
-                              <ArrowUpRight className="size-3.5" />
-                            )}
+                          <div className={`p-1.5 rounded-md ${isCredit ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-500"}`}>
+                            {isCredit ? <ArrowDownLeft className="size-3.5" /> : <ArrowUpRight className="size-3.5" />}
                           </div>
                           <div>
                             <span className="font-semibold text-text-primary block">{tx.title}</span>
                             <div className="flex items-center gap-2 text-[10px] text-text-muted font-mono mt-0.5">
-                              <span className="uppercase px-1 rounded bg-surface-container border border-border-subtle">
-                                {tx.venue}
-                              </span>
+                              <span className="uppercase px-1 rounded bg-surface-container border border-border-subtle">{tx.venue}</span>
                               <span>{new Date(tx.occurredAt).toLocaleDateString()}</span>
                             </div>
                           </div>
@@ -134,7 +136,7 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
                           <button
                             type="button"
                             onClick={() => copyToClipboard(tx.hash!)}
-                            className="flex items-center gap-1 hover:text-text-primary transition-colors"
+                            className="flex items-center gap-1 hover:text-text-primary transition-colors cursor-pointer"
                           >
                             <span>
                               {tx.hash.length > 20 ? `${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}` : tx.hash}
@@ -178,6 +180,14 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
             </table>
           </div>
         )}
+
+        <GridPagination
+          page={query.tpage}
+          pageSize={query.tpageSize}
+          totalItems={filteredAndSorted.length}
+          onPageChange={(page) => void setQuery({ tpage: page })}
+          onPageSizeChange={(pageSize) => void setQuery({ tpageSize: pageSize })}
+        />
       </CardContent>
     </Card>
   );

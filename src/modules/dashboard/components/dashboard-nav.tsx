@@ -2,15 +2,8 @@
 
 import * as React from "react";
 import {
-  LayoutDashboard,
-  Receipt,
-  TrendingUp,
-  History,
-  Activity,
-  Users,
-  PlusCircle,
-  ShieldCheck,
-  ExternalLink,
+  LayoutDashboard, Receipt, TrendingUp, History, Tag, Scale, Users, Activity,
+  Sliders, PlusCircle, ShieldCheck, ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -33,6 +26,24 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
   const [chargeOpen, setChargeOpen] = React.useState(false);
   const { state, toggleSidebar } = useSidebar();
 
+  const TELEMETRY_NAV = [
+    { tab: "overview" as const, label: "Overview & KPIs", icon: LayoutDashboard },
+    { tab: "orders" as const, label: "Orders & Escrow", icon: Receipt, badge: kpis.activeEscrowCount > 0 ? kpis.activeEscrowCount : null },
+    { tab: "income" as const, label: "Income & Yield", icon: TrendingUp },
+    { tab: "transactions" as const, label: "Treasury Ledger", icon: History },
+  ];
+
+  const MANAGEMENT_NAV = [
+    { tab: "listings" as const, label: "Market Listings", icon: Tag },
+    { tab: "disputes" as const, label: "Arbitration & Disputes", icon: Scale, badge: kpis.disputesCount > 0 ? kpis.disputesCount : null },
+    { tab: "users" as const, label: "User & Role Directory", icon: Users, badge: usersCount },
+  ];
+
+  const SYSTEM_NAV = [
+    { tab: "monitoring" as const, label: "Sentinel Daemon", icon: Activity, badgeText: "12 BOTS" },
+    { tab: "settings" as const, label: "Platform Settings", icon: Sliders },
+  ];
+
   return (
     <>
       <SidebarHeader>
@@ -40,9 +51,7 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
           <div className="flex items-center gap-2 group">
             <button
               type="button"
-              onClick={() => {
-                if (state === "collapsed") toggleSidebar();
-              }}
+              onClick={() => { if (state === "collapsed") toggleSidebar(); }}
               title={state === "collapsed" ? "Expand sidebar" : "Relicto Ops"}
               className="size-8 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary font-heading font-black text-sm tracking-wider hover:bg-primary/20 transition-colors shrink-0 group-data-[collapsible=icon]:mx-auto cursor-pointer"
             >
@@ -65,77 +74,68 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
       </SidebarHeader>
 
       <SidebarContent>
+        {/* Operations Telemetry */}
         <SidebarGroup>
           <SidebarGroupLabel>Operations Telemetry</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={currentTab === "overview"} onClick={() => onTabChange("overview")}>
-                  <LayoutDashboard />
-                  <span>Overview & KPIs</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={currentTab === "orders"} onClick={() => onTabChange("orders")}>
-                  <Receipt />
-                  <span>Orders & Escrow</span>
-                  {kpis.activeEscrowCount > 0 && (
-                    <SidebarMenuBadge className="bg-amber-500/10 text-amber-500 border border-amber-500/20">
-                      {kpis.activeEscrowCount}
-                    </SidebarMenuBadge>
-                  )}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={currentTab === "income"} onClick={() => onTabChange("income")}>
-                  <TrendingUp />
-                  <span>Income & Analytics</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={currentTab === "transactions"} onClick={() => onTabChange("transactions")}>
-                  <History />
-                  <span>Transactions Ledger</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={currentTab === "users"} onClick={() => onTabChange("users")}>
-                  <Users />
-                  <span>User & Role Admin</span>
-                  {usersCount !== undefined && (
-                    <SidebarMenuBadge className="bg-cyan-500/10 text-cyan-400">
-                      {usersCount}
-                    </SidebarMenuBadge>
-                  )}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive={currentTab === "monitoring"} onClick={() => onTabChange("monitoring")}>
-                  <Activity />
-                  <span>Daemon Monitoring</span>
-                  <SidebarMenuBadge className="bg-primary/10 text-primary">12 BOTS</SidebarMenuBadge>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {TELEMETRY_NAV.map((item) => (
+                <SidebarMenuItem key={item.tab}>
+                  <SidebarMenuButton isActive={currentTab === item.tab} onClick={() => onTabChange(item.tab)}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <SidebarMenuBadge className="bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                        {item.badge}
+                      </SidebarMenuBadge>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Marketplace Management */}
         <SidebarGroup className="mt-1">
-          <SidebarGroupLabel>Quick Actions</SidebarGroupLabel>
+          <SidebarGroupLabel>Marketplace Management</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton onClick={() => setChargeOpen(true)}>
-                  <PlusCircle className="text-primary" />
-                  <span className="font-medium text-primary">Charge Vault</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {MANAGEMENT_NAV.map((item) => (
+                <SidebarMenuItem key={item.tab}>
+                  <SidebarMenuButton isActive={currentTab === item.tab} onClick={() => onTabChange(item.tab)}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <SidebarMenuBadge className="bg-cyan-500/10 text-cyan-400">
+                        {item.badge}
+                      </SidebarMenuBadge>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
+        {/* Infrastructure & Controls */}
+        <SidebarGroup className="mt-1">
+          <SidebarGroupLabel>Infrastructure & Settings</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {SYSTEM_NAV.map((item) => (
+                <SidebarMenuItem key={item.tab}>
+                  <SidebarMenuButton isActive={currentTab === item.tab} onClick={() => onTabChange(item.tab)}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                    {item.badgeText && (
+                      <SidebarMenuBadge className="bg-primary/10 text-primary">
+                        {item.badgeText}
+                      </SidebarMenuBadge>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
               <SidebarMenuItem>
                 <Link href="/marketplace" className="w-full">
                   <SidebarMenuButton>

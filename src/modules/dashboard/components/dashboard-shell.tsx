@@ -19,10 +19,15 @@ import { DashboardOrders } from "./dashboard-orders";
 import { DashboardTransactions } from "./dashboard-transactions";
 import { DashboardSystemMonitor } from "./dashboard-system-monitor";
 import { DashboardUsers } from "./dashboard-users";
+import { useQueryState } from "nuqs";
+import { dashboardTabParam } from "../lib/search-params";
+import { DashboardListings } from "./dashboard-listings";
+import { DashboardDisputes } from "./dashboard-disputes";
+import { DashboardSettingsView } from "./dashboard-settings";
 import { ChargeWalletDialog } from "./charge-wallet-dialog";
 
 export function DashboardShell({ data }: { data: DashboardData }) {
-  const [tab, setTab] = React.useState<DashboardTab>("users");
+  const [tab, setTab] = useQueryState("tab", dashboardTabParam);
   const [chargeOpen, setChargeOpen] = React.useState(false);
 
   const TAB_TITLES: Record<DashboardTab, { title: string; desc: string }> = {
@@ -30,8 +35,11 @@ export function DashboardShell({ data }: { data: DashboardData }) {
     orders: { title: "Orders & Escrow Handoffs", desc: "Live tradebot execution and multi-sig escrow settlements" },
     income: { title: "Income & Revenue Telemetry", desc: "Platform escrow fee yield and game ecosystem distribution" },
     transactions: { title: "Treasury Ledger", desc: "Audited cryptographic transaction receipts and vault balance after" },
+    listings: { title: "Market Listings & Inventory", desc: "Live peer-to-peer inventory, price floors, wear validation, and moderation" },
+    disputes: { title: "Escrow Disputes & Arbitration", desc: "Review trade confirmation disputes, inspect evidence, and arbitrate settlements" },
     users: { title: "User Directory & Role Administration", desc: "Manage operator roles, VIP tiers, and emergency vault locks" },
     monitoring: { title: "Steam Daemon & Fleet Health", desc: "Active Sentinel trade bot nodes and database synchronization" },
+    settings: { title: "Platform Controls & Safety Settings", desc: "Set platform take rates, cashout ceilings, and emergency switches" },
     wallet: { title: "Vault & Deposit Chamber", desc: "Top up and charge balance via crypto, card, or SEPA" },
   };
 
@@ -86,19 +94,12 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             </div>
           </header>
 
-          {/* Full-width content container without arbitrary centered margin gaps */}
+          {/* Full-width content container */}
           <div className="flex-1 p-4 md:p-6 space-y-6 w-full">
             {tab === "overview" && (
               <>
-                <DashboardOverview
-                  kpis={data.kpis}
-                  system={data.system}
-                  onNavigateTab={setTab}
-                />
-                <DashboardCharts
-                  chartData={data.chartData}
-                  gameBreakdown={data.gameBreakdown}
-                />
+                <DashboardOverview kpis={data.kpis} system={data.system} onNavigateTab={setTab} />
+                <DashboardCharts chartData={data.chartData} gameBreakdown={data.gameBreakdown} />
                 <DashboardOrders orders={data.orders.slice(0, 8)} />
               </>
             )}
@@ -107,10 +108,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
 
             {tab === "income" && (
               <div className="space-y-6">
-                <DashboardCharts
-                  chartData={data.chartData}
-                  gameBreakdown={data.gameBreakdown}
-                />
+                <DashboardCharts chartData={data.chartData} gameBreakdown={data.gameBreakdown} />
                 <DashboardTransactions
                   transactions={data.transactions.filter(
                     (t) => t.kind === "sale" || t.kind === "fee" || t.kind === "promo"
@@ -119,15 +117,17 @@ export function DashboardShell({ data }: { data: DashboardData }) {
               </div>
             )}
 
-            {tab === "transactions" && (
-              <DashboardTransactions transactions={data.transactions} />
-            )}
+            {tab === "transactions" && <DashboardTransactions transactions={data.transactions} />}
+
+            {tab === "listings" && <DashboardListings listings={data.listings} />}
+
+            {tab === "disputes" && <DashboardDisputes disputes={data.disputes} />}
 
             {tab === "users" && <DashboardUsers users={data.users} />}
 
-            {tab === "monitoring" && (
-              <DashboardSystemMonitor system={data.system} />
-            )}
+            {tab === "monitoring" && <DashboardSystemMonitor system={data.system} />}
+
+            {tab === "settings" && <DashboardSettingsView settings={data.settings} />}
           </div>
         </SidebarInset>
       </div>

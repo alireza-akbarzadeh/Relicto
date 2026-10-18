@@ -3,26 +3,34 @@
 import * as React from "react";
 import Link from "next/link";
 import { ArrowUpRight, CheckCircle2, Clock, Ban, Bot, User, Inbox } from "lucide-react";
+import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { DashboardOrder } from "../types";
 import { OrdersFilterBar, type OrdersFilterState } from "./orders-filter-bar";
-
-const INITIAL_FILTERS: OrdersFilterState = {
-  search: "",
-  state: "all",
-  flow: "all",
-  sortBy: "newest",
-};
+import { GridPagination } from "./grid-pagination";
+import { ordersSearchParams } from "../lib/search-params";
 
 export function DashboardOrders({ orders }: { orders: DashboardOrder[] }) {
-  const [filters, setFilters] = React.useState<OrdersFilterState>(INITIAL_FILTERS);
+  const [query, setQuery] = useQueryStates(ordersSearchParams, {
+    history: "replace",
+    shallow: true,
+    clearOnDefault: true,
+  });
+
+  const filters: OrdersFilterState = React.useMemo(() => ({
+    search: query.oq,
+    state: query.ostate as OrdersFilterState["state"],
+    flow: query.oflow as OrdersFilterState["flow"],
+    sortBy: query.osort as OrdersFilterState["sortBy"],
+  }), [query]);
 
   const handleFilterChange = <K extends keyof OrdersFilterState>(key: K, value: OrdersFilterState[K]) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    const keyMap = { search: "oq", state: "ostate", flow: "oflow", sortBy: "osort" } as const;
+    void setQuery({ [keyMap[key]]: value, opage: 1 });
   };
 
-  const handleReset = () => setFilters(INITIAL_FILTERS);
+  const handleReset = () => void setQuery({ oq: "", ostate: "all", oflow: "all", osort: "newest", opage: 1 });
 
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -45,6 +53,11 @@ export function DashboardOrders({ orders }: { orders: DashboardOrder[] }) {
       return 0;
     });
   }, [orders, filters]);
+
+  const paginatedOrders = React.useMemo(() => {
+    const start = (query.opage - 1) * query.opageSize;
+    return filteredAndSorted.slice(start, start + query.opageSize);
+  }, [filteredAndSorted, query.opage, query.opageSize]);
 
   const formatUsd = (cents: number) =>
     `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -74,7 +87,8 @@ export function DashboardOrders({ orders }: { orders: DashboardOrder[] }) {
           filteredOrders={filteredAndSorted}
         />
       </CardHeader>
-      <CardContent>
+
+      <CardContent className="space-y-3">
         {filteredAndSorted.length === 0 ? (
           <div className="py-12 text-center text-xs text-text-muted font-mono border border-dashed border-border-subtle rounded-lg">
             <Inbox className="size-6 text-text-muted mx-auto mb-2 opacity-50" />
@@ -94,7 +108,7 @@ export function DashboardOrders({ orders }: { orders: DashboardOrder[] }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle/40">
-                {filteredAndSorted.map((order) => {
+                {paginatedOrders.map((order) => {
                   const isEscrow = order.state === "escrow";
                   const isCompleted = order.state === "completed";
                   return (
@@ -165,6 +179,14 @@ export function DashboardOrders({ orders }: { orders: DashboardOrder[] }) {
             </table>
           </div>
         )}
+
+        <GridPagination
+          page={query.opage}
+          pageSize={query.opageSize}
+          totalItems={filteredAndSorted.length}
+          onPageChange={(page) => void setQuery({ opage: page })}
+          onPageSizeChange={(pageSize) => void setQuery({ opageSize: pageSize })}
+        />
       </CardContent>
     </Card>
   );

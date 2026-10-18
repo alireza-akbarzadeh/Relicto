@@ -2,30 +2,39 @@
 
 import * as React from "react";
 import { Tag, ShieldAlert, Ban, CheckCircle } from "lucide-react";
+import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { DashboardListing } from "../types";
 import { ListingsFilterBar, type ListingsFilterState } from "./listings-filter-bar";
+import { GridPagination } from "./grid-pagination";
 import { updateListingStatusAction } from "../actions/admin-listings";
-
-const INITIAL_FILTERS: ListingsFilterState = {
-  search: "",
-  game: "all",
-  status: "all",
-  sortBy: "newest",
-};
+import { listingsSearchParams } from "../lib/search-params";
 
 export function DashboardListings({ listings: initialListings }: { listings: DashboardListing[] }) {
   const [listings, setListings] = React.useState(initialListings);
-  const [filters, setFilters] = React.useState<ListingsFilterState>(INITIAL_FILTERS);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
 
+  const [query, setQuery] = useQueryStates(listingsSearchParams, {
+    history: "replace",
+    shallow: true,
+    clearOnDefault: true,
+  });
+
+  const filters: ListingsFilterState = React.useMemo(() => ({
+    search: query.lq,
+    game: query.lgame,
+    status: query.lstatus as ListingsFilterState["status"],
+    sortBy: query.lsort as ListingsFilterState["sortBy"],
+  }), [query]);
+
   const handleFilterChange = <K extends keyof ListingsFilterState>(key: K, value: ListingsFilterState[K]) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    const keyMap = { search: "lq", game: "lgame", status: "lstatus", sortBy: "lsort" } as const;
+    void setQuery({ [keyMap[key]]: value, lpage: 1 });
   };
 
-  const handleReset = () => setFilters(INITIAL_FILTERS);
+  const handleReset = () => void setQuery({ lq: "", lgame: "all", lstatus: "all", lsort: "newest", lpage: 1 });
 
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -47,6 +56,11 @@ export function DashboardListings({ listings: initialListings }: { listings: Das
       return 0;
     });
   }, [listings, filters]);
+
+  const paginatedListings = React.useMemo(() => {
+    const start = (query.lpage - 1) * query.lpageSize;
+    return filteredAndSorted.slice(start, start + query.lpageSize);
+  }, [filteredAndSorted, query.lpage, query.lpageSize]);
 
   const handleToggleStatus = async (listingId: string, currentStatus: string) => {
     const nextStatus = currentStatus === "active" ? "cancelled" : "active";
@@ -85,15 +99,12 @@ export function DashboardListings({ listings: initialListings }: { listings: Das
         </div>
 
         <ListingsFilterBar
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          onReset={handleReset}
-          filteredCount={filteredAndSorted.length}
-          filteredListings={filteredAndSorted}
+          filters={filters} onFilterChange={handleFilterChange} onReset={handleReset}
+          filteredCount={filteredAndSorted.length} filteredListings={filteredAndSorted}
         />
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-3">
         {filteredAndSorted.length === 0 ? (
           <div className="py-12 text-center text-xs text-text-muted font-mono border border-dashed border-border-subtle rounded-lg">
             <ShieldAlert className="size-6 text-text-muted mx-auto mb-2 opacity-50" />
@@ -113,7 +124,7 @@ export function DashboardListings({ listings: initialListings }: { listings: Das
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle/40">
-                {filteredAndSorted.map((l) => (
+                {paginatedListings.map((l) => (
                   <tr key={l.id} className="hover:bg-surface-container/40 transition-colors">
                     <td className="py-3">
                       <div className="flex flex-col">
@@ -135,27 +146,16 @@ export function DashboardListings({ listings: initialListings }: { listings: Das
                     <td className="py-3 font-mono text-[11px] uppercase text-text-muted">{l.gameId}</td>
                     <td className="py-3 font-mono text-[11px] text-text-secondary">@{l.sellerHandle}</td>
                     <td className="py-3">
-                      <span
-                        className={`font-mono text-[10px] px-2 py-0.5 rounded-full uppercase ${
-                          l.status === "active"
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                            : l.status === "reserved"
-                              ? "bg-amber-500/10 text-amber-500 border border-amber-500/20 animate-pulse"
-                              : l.status === "sold"
-                                ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
-                                : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                        }`}
-                      >
-                        {l.status}
-                      </span>
+                      <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full uppercase ${
+                        l.status === "active" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
+                        l.status === "reserved" ? "bg-amber-500/10 text-amber-500 border border-amber-500/20 animate-pulse" :
+                        l.status === "sold" ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20" :
+                        "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                      }`}>{l.status}</span>
                     </td>
                     <td className="py-3 text-right font-mono font-bold text-text-primary">
                       {formatUsd(l.priceCents)}
-                      {l.floorCents && (
-                        <span className="block text-[10px] font-normal text-text-muted">
-                          Floor: {formatUsd(l.floorCents)}
-                        </span>
-                      )}
+                      {l.floorCents && <span className="block text-[10px] font-normal text-text-muted">Floor: {formatUsd(l.floorCents)}</span>}
                     </td>
                     <td className="py-3 text-right">
                       <Button
@@ -182,6 +182,14 @@ export function DashboardListings({ listings: initialListings }: { listings: Das
             </table>
           </div>
         )}
+
+        <GridPagination
+          page={query.lpage}
+          pageSize={query.lpageSize}
+          totalItems={filteredAndSorted.length}
+          onPageChange={(page) => void setQuery({ lpage: page })}
+          onPageSizeChange={(pageSize) => void setQuery({ lpageSize: pageSize })}
+        />
       </CardContent>
     </Card>
   );

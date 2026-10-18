@@ -22,7 +22,7 @@ export async function getAdminListings(): Promise<DashboardListing[]> {
     return rows.map((r) => ({
       id: r.listing.id,
       itemName: r.item?.name ?? "Field Combat Asset",
-      category: r.item?.category ?? "Weapon Skin",
+      category: r.item?.slot ?? "Weapon Skin",
       gameId: r.item?.gameId ?? "cs2",
       sellerId: r.listing.sellerId,
       sellerHandle: r.profile?.handle ?? "Seller",

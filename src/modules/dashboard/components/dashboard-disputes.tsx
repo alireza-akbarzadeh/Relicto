@@ -1,30 +1,39 @@
 "use client";
 
 import * as React from "react";
-import { Scale, CheckCircle2, RotateCcw, AlertTriangle, ShieldCheck, FileText } from "lucide-react";
+import { Scale, ShieldCheck, FileText } from "lucide-react";
+import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { DashboardDispute } from "../types";
 import { DisputesFilterBar, type DisputesFilterState } from "./disputes-filter-bar";
+import { GridPagination } from "./grid-pagination";
 import { resolveDisputeAction } from "../actions/admin-disputes";
-
-const INITIAL_FILTERS: DisputesFilterState = {
-  search: "",
-  status: "all",
-  sortBy: "newest",
-};
+import { disputesSearchParams } from "../lib/search-params";
 
 export function DashboardDisputes({ disputes: initialDisputes }: { disputes: DashboardDispute[] }) {
   const [disputes, setDisputes] = React.useState(initialDisputes);
-  const [filters, setFilters] = React.useState<DisputesFilterState>(INITIAL_FILTERS);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
 
+  const [query, setQuery] = useQueryStates(disputesSearchParams, {
+    history: "replace",
+    shallow: true,
+    clearOnDefault: true,
+  });
+
+  const filters: DisputesFilterState = React.useMemo(() => ({
+    search: query.dq,
+    status: query.dstatus as DisputesFilterState["status"],
+    sortBy: query.dsort as DisputesFilterState["sortBy"],
+  }), [query]);
+
   const handleFilterChange = <K extends keyof DisputesFilterState>(key: K, value: DisputesFilterState[K]) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    const keyMap = { search: "dq", status: "dstatus", sortBy: "dsort" } as const;
+    void setQuery({ [keyMap[key]]: value, dpage: 1 });
   };
 
-  const handleReset = () => setFilters(INITIAL_FILTERS);
+  const handleReset = () => void setQuery({ dq: "", dstatus: "all", dsort: "newest", dpage: 1 });
 
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
@@ -45,6 +54,11 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
       return 0;
     });
   }, [disputes, filters]);
+
+  const paginatedDisputes = React.useMemo(() => {
+    const start = (query.dpage - 1) * query.dpageSize;
+    return filteredAndSorted.slice(start, start + query.dpageSize);
+  }, [filteredAndSorted, query.dpage, query.dpageSize]);
 
   const handleResolve = async (disputeId: string, decision: "refund_buyer" | "release_seller") => {
     setLoadingId(disputeId);
@@ -91,7 +105,7 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
         />
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-3">
         {filteredAndSorted.length === 0 ? (
           <div className="py-12 text-center text-xs text-text-muted font-mono border border-dashed border-border-subtle rounded-lg">
             <ShieldCheck className="size-6 text-emerald-400 mx-auto mb-2 opacity-50" />
@@ -111,7 +125,7 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-subtle/40">
-                {filteredAndSorted.map((d) => {
+                {paginatedDisputes.map((d) => {
                   const isPending = d.status === "open" || d.status === "under_review";
                   return (
                     <tr key={d.id} className="hover:bg-surface-container/40 transition-colors">
@@ -130,17 +144,11 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
                         </span>
                       </td>
                       <td className="py-3">
-                        <span
-                          className={`font-mono text-[10px] px-2 py-0.5 rounded-full uppercase ${
-                            d.status === "open"
-                              ? "bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse"
-                              : d.status === "under_review"
-                                ? "bg-amber-500/10 text-amber-500 border border-amber-500/20"
-                                : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                          }`}
-                        >
-                          {d.status.replace("_", " ")}
-                        </span>
+                        <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full uppercase ${
+                          d.status === "open" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse" :
+                          d.status === "under_review" ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" :
+                          "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                        }`}>{d.status.replace("_", " ")}</span>
                       </td>
                       <td className="py-3 text-right font-mono font-bold text-text-primary">
                         {formatUsd(d.amountCents)}
@@ -148,22 +156,10 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
                       <td className="py-3 text-right">
                         {isPending ? (
                           <div className="flex items-center justify-end gap-1.5">
-                            <Button
-                              size="xs"
-                              variant="destructive"
-                              disabled={loadingId === d.id}
-                              onClick={() => handleResolve(d.id, "refund_buyer")}
-                              className="text-[10px] font-mono h-7 px-2"
-                            >
+                            <Button size="xs" variant="destructive" disabled={loadingId === d.id} onClick={() => handleResolve(d.id, "refund_buyer")} className="text-[10px] font-mono h-7 px-2">
                               Refund Buyer
                             </Button>
-                            <Button
-                              size="xs"
-                              variant="outline"
-                              disabled={loadingId === d.id}
-                              onClick={() => handleResolve(d.id, "release_seller")}
-                              className="text-[10px] font-mono h-7 px-2 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
-                            >
+                            <Button size="xs" variant="outline" disabled={loadingId === d.id} onClick={() => handleResolve(d.id, "release_seller")} className="text-[10px] font-mono h-7 px-2 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10">
                               Release Seller
                             </Button>
                           </div>
@@ -180,6 +176,14 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
             </table>
           </div>
         )}
+
+        <GridPagination
+          page={query.dpage}
+          pageSize={query.dpageSize}
+          totalItems={filteredAndSorted.length}
+          onPageChange={(page) => void setQuery({ dpage: page })}
+          onPageSizeChange={(pageSize) => void setQuery({ dpageSize: pageSize })}
+        />
       </CardContent>
     </Card>
   );

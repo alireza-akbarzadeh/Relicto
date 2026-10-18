@@ -27,11 +27,14 @@ export function MobileCashoutSheet({ open, onOpenChange, availableUsd }: Props) 
   const [rail, setRail] = useState("usdt");
   const [amount, setAmount] = useState(() => (availableUsd > 0 ? Math.min(100, availableUsd).toFixed(2) : "0.00"));
   const [token, setToken] = useState("");
+  const [customAddress, setCustomAddress] = useState("");
+  const [isCustomAddress, setIsCustomAddress] = useState(false);
 
   const numericAmount = Number(amount) || 0;
 
   const handleCashout = () => {
-    request(rail, numericAmount, availableUsd, token);
+    const destination = isCustomAddress ? customAddress.trim() : "TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La";
+    request(rail, numericAmount, availableUsd, token, destination);
     if (numericAmount > 0 && token.trim().length >= 5) {
       onOpenChange(false);
     }
@@ -80,6 +83,37 @@ export function MobileCashoutSheet({ open, onOpenChange, availableUsd }: Props) 
                 </Button>
               );
             })}
+          </div>
+
+          <div className="flex flex-col gap-1 rounded-xl bg-surface-container-lowest p-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-label-caps text-[10px] text-text-secondary uppercase">
+                Destination Address
+              </span>
+              <Button
+                variant={null}
+                size={null}
+                onClick={() => setIsCustomAddress(!isCustomAddress)}
+                className="h-auto p-0 font-label-badge text-[10px] text-primary hover:underline"
+              >
+                {isCustomAddress ? "Use Whitelist" : "+ Custom"}
+              </Button>
+            </div>
+            {isCustomAddress ? (
+              <Input
+                value={customAddress}
+                onChange={(e) => setCustomAddress(e.target.value)}
+                placeholder="TRC-20, IBAN, or address..."
+                className="h-8 rounded border-0 bg-surface-card px-2 font-data-mono-md text-[11px] text-text-primary"
+              />
+            ) : (
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="truncate font-data-mono-md text-text-muted">TQ7sWk...99La</span>
+                <span className="shrink-0 rounded bg-surface-container-high px-1.5 py-0.5 font-label-badge text-[9px] text-status-upcoming uppercase">
+                  Whitelist #1
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-1.5 pt-1">

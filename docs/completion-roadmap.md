@@ -14,6 +14,7 @@ This document serves as the master execution tracker for bringing **Relicto** fr
 | **Milestone 3: Unique Catalog Art** | ✅ Complete | Catalog Media Depth | Elimination of repeating item shots, authentic game renders for all 162 items |
 | **Milestone 4: Live Payment Rails** | ✅ Complete | Fiat & Crypto Gateways | Stripe Checkout Session webhook, Web3 Crypto payment listener, Vault auto-credit |
 | **Milestone 5: Steam Trade Daemon** | ✅ Complete | Physical Asset Bots | Worker daemon architecture connecting `/api/escrow/events` to real Steam trade sessions |
+| **Milestone 6: System Hardening & E2E Suite** | ✅ Complete | E2E Suite & Egress | Mobile cashout destination parity, exhaustive env validation, automated E2E test harness (`pnpm test:e2e`) |
 
 ---
 
@@ -104,3 +105,21 @@ Automate the physical delivery of items between buyers, sellers, and Relicto Sen
 3. **Execution Harness**:
    - Added scheduled cron endpoint (`/api/cron/steam-daemon`) with bearer secret verification.
    - Added standalone runner script (`scripts/steam-bot-daemon.ts`) and `pnpm daemon:steam` npm script supporting single-pass and continuous loop polling (`--loop`).
+
+---
+
+## Milestone 6: System Hardening, Egress Parity & E2E Suite ✅ Done
+
+### Objectives
+Validate end-to-end integration across all core domains and bring mobile cashout egress to 100% parity with desktop.
+
+### Execution Tasks:
+1. **Mobile Cashout Destination Parity**:
+   - Added custom destination address and whitelist toggle to `MobileCashoutSheet` ([mobile-cashout-sheet.tsx](file:///c:/Users/akbarzadeh.ali/Relicto/src/modules/wallet/components/mobile/mobile-cashout-sheet.tsx)), allowing mobile traders to specify custom TRC-20, IBAN, or whitelisted addresses alongside Steam Guard 2FA verification.
+2. **Defensive Search Filtering**:
+   - Hardened `toListingQuery` ([listings.search.ts](file:///c:/Users/akbarzadeh.ali/Relicto/src/server/modules/listings/listings.search.ts)) with defensive optional chaining, protecting against undefined query/facet parameters.
+3. **Environment Configuration Hardening**:
+   - Extended `src/lib/env.ts` with `CRYPTO_WEBHOOK_SECRET` and updated `.env.example` with comprehensive documentation of all production credentials (Stripe, Steam, VAPID, Crons, Neon).
+4. **Automated E2E Verification Suite**:
+   - Created `scripts/verify-e2e.mts` and added `pnpm test:e2e` to `package.json`, systematically testing Marketplace search (163 listings), item details, live seller books, profile & public storefronts, wallet treasury & committed bid balance protection, cashout schemas, basket quote/allocation arithmetic, CS2 collection pools, and Steam bot daemon cycles.
+

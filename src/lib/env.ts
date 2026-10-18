@@ -11,6 +11,7 @@ const serverSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   CRON_SECRET: z.string().optional(),
   ESCROW_WEBHOOK_SECRET: z.string().optional(),
+  CRYPTO_WEBHOOK_SECRET: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_SUBJECT: z.string().optional(),
   CHECKOUT_MOCK_PAYMENTS: z.string().optional(),

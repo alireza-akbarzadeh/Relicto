@@ -37,7 +37,7 @@ export function StudioHeader() {
                   </Button>
                 )}
               />
-              <SheetContent  className="bg-surface-card border-t border-white/10 p-4">
+              <SheetContent className="bg-surface-card border-t border-white/10 p-4">
                 <div className="flex flex-col gap-4">
                   <span className="font-label-caps text-[10px] font-bold uppercase tracking-widest text-text-muted">
                     Studio Navigation
@@ -51,7 +51,10 @@ export function StudioHeader() {
                         className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
                       >
                         {item.icon && (
-                          <Icon name={item.icon} className="text-[18px] text-text-muted" />
+                          <Icon
+                            name={item.icon}
+                            className="text-[18px] text-text-muted"
+                          />
                         )}
                         <span>{item.label}</span>
                       </Link>

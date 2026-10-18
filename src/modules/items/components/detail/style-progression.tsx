@@ -11,7 +11,7 @@ const REQUIREMENT = { muted: "text-text-muted", cyan: "font-bold text-status-upc
 
 /** The three arcana styles; the equipped one is highlighted. */
 export function StyleProgression({ styles, unlocked }: { styles: ArcanaStyle[]; unlocked: string }) {
-  const fallback = styles.find((style) => style.active)?.id ?? styles[0].id;
+  const fallback = styles.find((style) => style.active)?.id ?? styles[0]?.id ?? "style-1";
   const [selected, setSelected] = useQueryState("style", itemSearchParams.style.withOptions({ history: "replace", clearOnDefault: true }));
   const active = selected || fallback;
 

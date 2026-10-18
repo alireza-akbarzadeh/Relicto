@@ -50,6 +50,7 @@ export const RARITIES = DOTA_RARITIES;
 
 export const SLOTS = [
   { value: "Weapon", count: 482 },
+  { value: "Gloves", count: 28 },
   { value: "Head", count: 312 },
   { value: "Armor", count: 240 },
   { value: "Back", count: 198 },

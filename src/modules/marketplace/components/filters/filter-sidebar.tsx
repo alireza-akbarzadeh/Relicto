@@ -60,6 +60,7 @@ export function FilterSidebar() {
         <>
           <WearFacet />
           <RarityFacet />
+          <SlotFacet />
         </>
       )}
 
@@ -71,8 +72,13 @@ export function FilterSidebar() {
         </>
       )}
 
-      {/* Universal Rarity Facet */}
-      {isAll && <RarityFacet />}
+      {/* Universal Rarity & Slot Facets */}
+      {isAll && (
+        <>
+          <SlotFacet />
+          <RarityFacet />
+        </>
+      )}
 
       <PriceFacet />
       <SafeguardFacet />

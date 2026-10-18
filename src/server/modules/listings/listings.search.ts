@@ -27,7 +27,7 @@ export function toListingQuery(filters: Partial<Filters> = {}): Partial<ListList
     /* Facets only apply to their own economy — the sidebar hides the others. */
     heroSlugs: isDota && filters.heroes?.length ? filters.heroes.map(slugify) : undefined,
     rarities: filters.rarities?.length ? filters.rarities : undefined,
-    slots: (isDota || filters.ecosystem === "tf2") && filters.slots?.length ? filters.slots : undefined,
+    slots: filters.slots?.length ? filters.slots : undefined,
     minCents: filters.price?.min && filters.price.min > 0 ? Math.round(filters.price.min * 100) : undefined,
     maxCents: filters.price?.max !== undefined ? Math.round(filters.price.max * 100) : undefined,
     wear: isCs2 && filters.wear?.length ? filters.wear : undefined,

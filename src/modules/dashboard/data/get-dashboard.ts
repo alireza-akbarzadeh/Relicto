@@ -6,6 +6,8 @@ import { items, ledgerEntries, orderItems, orders, profiles, user, walletAccount
 import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import type { DashboardData, DashboardOrder, DashboardTransaction, DashboardUser } from "../types";
 import { buildChartSeries, buildGameDistribution, calculateKpis } from "./dashboard-aggregates";
+import { getAdminListings } from "./get-admin-listings";
+import { getAdminDisputes } from "./get-admin-disputes";
 
 export async function getDashboardData(): Promise<DashboardData> {
   const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
@@ -116,6 +118,8 @@ export async function getDashboardData(): Promise<DashboardData> {
     rawOrders.map((r) => ({ gameId: r.gameId, priceCents: r.order.totalCents })),
   );
 
+  const [listingsData, disputesData] = await Promise.all([getAdminListings(), getAdminDisputes()]);
+
   return {
     user: {
       id: userId,
@@ -130,6 +134,16 @@ export async function getDashboardData(): Promise<DashboardData> {
     orders: mappedOrders,
     transactions: mappedTransactions,
     users: mappedUsers,
+    listings: listingsData,
+    disputes: disputesData,
+    settings: {
+      platformFeeBps: 250,
+      vipFeeBps: 150,
+      maxWithdrawalUsd: 10000,
+      autoCancelTimeoutSeconds: 900,
+      maintenanceMode: false,
+      activeAnnouncement: null,
+    },
     system: {
       daemonStatus: "online",
       activeBots: 12,

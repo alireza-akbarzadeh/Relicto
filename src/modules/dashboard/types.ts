@@ -1,4 +1,14 @@
-export type DashboardTab = "overview" | "orders" | "income" | "transactions" | "monitoring" | "users" | "wallet";
+export type DashboardTab =
+  | "overview"
+  | "orders"
+  | "income"
+  | "transactions"
+  | "listings"
+  | "disputes"
+  | "users"
+  | "monitoring"
+  | "settings"
+  | "wallet";
 
 export type DashboardKpis = {
   liquidBalanceCents: number;
@@ -76,6 +86,45 @@ export type DashboardUser = {
   createdAt: string;
 };
 
+export type DashboardListing = {
+  id: string;
+  itemName: string;
+  category: string;
+  gameId: string;
+  sellerId: string;
+  sellerHandle: string;
+  priceCents: number;
+  status: "active" | "reserved" | "sold" | "cancelled";
+  wear?: string | null;
+  float?: number | null;
+  paintSeed?: number | null;
+  stattrak: boolean;
+  listedAt: string;
+  floorCents?: number | null;
+};
+
+export type DashboardDispute = {
+  id: string;
+  orderCode: string;
+  itemName: string;
+  buyerName: string;
+  sellerName: string;
+  amountCents: number;
+  reason: string;
+  status: "open" | "under_review" | "resolved_buyer" | "resolved_seller";
+  openedAt: string;
+  evidenceCount: number;
+};
+
+export type DashboardSettings = {
+  platformFeeBps: number;
+  vipFeeBps: number;
+  maxWithdrawalUsd: number;
+  autoCancelTimeoutSeconds: number;
+  maintenanceMode: boolean;
+  activeAnnouncement?: string | null;
+};
+
 export type SystemStatusData = {
   daemonStatus: "online" | "degraded" | "offline";
   activeBots: number;
@@ -100,5 +149,8 @@ export type DashboardData = {
   orders: DashboardOrder[];
   transactions: DashboardTransaction[];
   users: DashboardUser[];
+  listings: DashboardListing[];
+  disputes: DashboardDispute[];
+  settings: DashboardSettings;
   system: SystemStatusData;
 };

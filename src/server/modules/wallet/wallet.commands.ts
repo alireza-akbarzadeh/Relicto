@@ -4,11 +4,10 @@ import { randomInt, randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { ledgerEntries, payouts, walletAccounts } from "@/lib/db/schema";
-import type { z } from "zod";
-import type { cashoutInput } from "./wallet.schema";
+import type { CashoutInput, CashoutRail } from "./wallet.schema";
 import { sumCommittedBids } from "../offers/offers.repository";
 
-type Rail = z.infer<typeof cashoutInput>["rail"];
+type Rail = CashoutRail;
 
 /** Where each rail settles, what the audit row calls it, and the network fee it carries. */
 const RAIL: Record<Rail, { venue: "tron" | "sepa" | "internal" | "stripe"; label: string; feeCents: number }> = {
@@ -28,7 +27,7 @@ export type CashoutResult =
  * Phase 4), so the request stays "requested" until one exists. Checkout-made
  * and cashout ledger rows use generated ids the seed can undo.
  */
-export async function requestCashout(userId: string, input: z.infer<typeof cashoutInput>): Promise<CashoutResult> {
+export async function requestCashout(userId: string, input: CashoutInput): Promise<CashoutResult> {
   return db.transaction(async (tx): Promise<CashoutResult> => {
     const [wallet] = await tx.select().from(walletAccounts).where(eq(walletAccounts.userId, userId)).for("update");
     if (!wallet) return { status: "no-wallet" };

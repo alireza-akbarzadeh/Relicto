@@ -2,6 +2,7 @@ import { z } from "zod";
 
 /** Cashout rails the desktop egress panel offers. */
 export const CASHOUT_RAILS = ["usdt", "sepa", "keys", "visa"] as const;
+export type CashoutRail = (typeof CASHOUT_RAILS)[number];
 
 export const cashoutInput = z.object({
   rail: z.enum(CASHOUT_RAILS),
@@ -9,14 +10,18 @@ export const cashoutInput = z.object({
   destinationAddress: z.string().trim().max(256).optional(),
   steamGuardCode: z.string().trim().max(16).optional(),
 });
+export type CashoutInput = z.infer<typeof cashoutInput>;
 
 export const freezeInput = z.object({ frozen: z.boolean() });
+export type FreezeInput = z.infer<typeof freezeInput>;
 
 /** Money rails the deposit panel offers. "skins" is liquidation, which the sell studio handles. */
 export const DEPOSIT_RAILS = ["crypto", "cards", "bank"] as const;
+export type DepositRail = (typeof DEPOSIT_RAILS)[number];
 
 export const depositInput = z.object({
   rail: z.enum(DEPOSIT_RAILS),
   amountUsd: z.number().positive().max(10_000),
   txHash: z.string().trim().max(128).optional(),
 });
+export type DepositInput = z.infer<typeof depositInput>;

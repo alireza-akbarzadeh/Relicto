@@ -7,7 +7,7 @@ import { getSessionCookie } from "better-auth/cookies";
  * community) is public so guests and search engines can read it; these hold
  * one trader's money, orders and boards.
  */
-const PRIVATE_PREFIXES = ["/alerts", "/checkout", "/orders", "/profile", "/sell", "/tracker", "/wallet"];
+const PRIVATE_PREFIXES = ["/alerts", "/checkout", "/dashboard", "/orders", "/profile", "/sell", "/tracker", "/wallet"];
 
 /** Entry points a signed-in trader shouldn't land back on. */
 const AUTH_ENTRY_PATHS = ["/sign-in", "/sign-up"];

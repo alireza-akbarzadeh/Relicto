@@ -41,6 +41,7 @@ export const HUB_NAV: NavItem[] = [
 
 /** Account menu shared by every header. */
 export const ACCOUNT_LINKS = [
+  { href: "/dashboard", label: "Operations Dashboard", icon: "analytics" },
   { href: "/profile", label: "Trader Profile", icon: "person" },
   { href: "/orders", label: "Orders & Escrow", icon: "receipt_long" },
   { href: "/wallet", label: "Wallet & Income", icon: "account_balance_wallet" },

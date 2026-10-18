@@ -2,14 +2,13 @@ import "server-only";
 
 import { randomInt, randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
-import type { z } from "zod";
 import { db } from "@/lib/db";
 import { ledgerEntries, walletAccounts } from "@/lib/db/schema";
 import { isStripeConfigured } from "@/lib/stripe/client";
 import { mockPaymentsEnabled } from "../checkout/checkout.payment";
-import type { depositInput } from "./wallet.schema";
+import type { DepositInput, DepositRail } from "./wallet.schema";
 
-type Rail = z.infer<typeof depositInput>["rail"];
+type Rail = DepositRail;
 
 const RAIL: Record<Rail, string> = { crypto: "Web3 Crypto", cards: "Card / Apple Pay", bank: "SEPA / Wire" };
 
@@ -26,7 +25,7 @@ const canDeposit = (rail: Rail, txHash?: string) =>
 /**
  * Tops up the vault via Web3 Crypto, Stripe Card, or simulated test mode.
  */
-export async function deposit(userId: string, input: z.infer<typeof depositInput>): Promise<DepositResult> {
+export async function deposit(userId: string, input: DepositInput): Promise<DepositResult> {
   if (!canDeposit(input.rail, input.txHash)) return { status: "rail-unavailable" };
 
   return db.transaction(async (tx): Promise<DepositResult> => {

@@ -8,7 +8,20 @@ export type DashboardTab =
   | "users"
   | "monitoring"
   | "settings"
+  | "audit"
   | "wallet";
+
+export type DashboardAuditLog = {
+  id: string;
+  adminId: string;
+  adminName: string;
+  action: string;
+  targetType: string;
+  targetId?: string | null;
+  details: string;
+  severity: "info" | "warning" | "critical";
+  createdAt: string;
+};
 
 export type DashboardKpis = {
   liquidBalanceCents: number;
@@ -153,4 +166,5 @@ export type DashboardData = {
   disputes: DashboardDispute[];
   settings: DashboardSettings;
   system: SystemStatusData;
+  auditLogs: DashboardAuditLog[];
 };

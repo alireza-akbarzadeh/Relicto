@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { profiles, walletAccounts, ledgerEntries } from "@/lib/db/schema";
 import { getSession } from "@/modules/relicto/data/get-session";
+import { auditService } from "@/server/modules/audit/audit.service";
 
 const ROLE_TONES: Record<string, string> = {
   Admin: "primary",
@@ -29,6 +30,16 @@ export async function updateUserRoleAction(targetUserId: string, newRole: string
       .set({ role: newRole, roleTone })
       .where(eq(profiles.userId, targetUserId));
 
+    void auditService.record({
+      adminId: session.user.id,
+      adminName: session.user.name,
+      action: "role_update",
+      targetType: "user",
+      targetId: targetUserId,
+      details: `Changed role to ${newRole}`,
+      severity: newRole === "Admin" ? "critical" : "info",
+    });
+
     revalidatePath("/dashboard");
     revalidatePath("/profile");
     return { success: true, message: `Role updated to ${newRole}` };
@@ -49,6 +60,16 @@ export async function toggleUserFreezeAction(targetUserId: string, freeze: boole
       .update(walletAccounts)
       .set({ frozenAt: freeze ? new Date() : null })
       .where(eq(walletAccounts.userId, targetUserId));
+
+    void auditService.record({
+      adminId: session.user.id,
+      adminName: session.user.name,
+      action: freeze ? "vault_freeze" : "vault_unfreeze",
+      targetType: "user",
+      targetId: targetUserId,
+      details: freeze ? "Emergency freeze locked user vault" : "Unlocked user vault",
+      severity: "warning",
+    });
 
     revalidatePath("/dashboard");
     revalidatePath("/wallet");
@@ -109,6 +130,16 @@ export async function adjustUserBalanceAction(
       venue: "internal",
       nodeLabel: "admin_operator",
       occurredAt: new Date(),
+    });
+
+    void auditService.record({
+      adminId: session.user.id,
+      adminName: session.user.name,
+      action: "balance_adjustment",
+      targetType: "user",
+      targetId: targetUserId,
+      details: `Adjusted vault by ${amountCentsDelta > 0 ? "+" : ""}${(amountCentsDelta / 100).toFixed(2)}. Note: ${reason || "None"}`,
+      severity: Math.abs(amountCentsDelta) >= 10000 ? "critical" : "warning",
     });
 
     revalidatePath("/dashboard");

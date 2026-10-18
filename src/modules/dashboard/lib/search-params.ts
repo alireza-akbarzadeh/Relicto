@@ -10,6 +10,7 @@ export const DASHBOARD_TABS = [
   "users",
   "monitoring",
   "settings",
+  "audit",
   "wallet",
 ] as const;
 
@@ -59,4 +60,13 @@ export const disputesSearchParams = {
   dsort: parseAsString.withDefault("newest"),
   dpage: parseAsInteger.withDefault(1),
   dpageSize: parseAsInteger.withDefault(10),
+};
+
+export const auditSearchParams = {
+  aq: parseAsString.withDefault(""),
+  aaction: parseAsString.withDefault("all"),
+  aseverity: parseAsString.withDefault("all"),
+  asort: parseAsString.withDefault("newest"),
+  apage: parseAsInteger.withDefault(1),
+  apageSize: parseAsInteger.withDefault(10),
 };

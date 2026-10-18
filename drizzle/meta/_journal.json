@@ -176,6 +176,13 @@
       "when": 1792000000000,
       "tag": "0024_trade_up_collections",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1792327118007,
+      "tag": "0025_soft_felicia_hardy",
+      "breakpoints": true
     }
   ]
 }

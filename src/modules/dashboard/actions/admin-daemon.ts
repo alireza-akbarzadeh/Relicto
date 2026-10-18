@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/modules/relicto/data/get-session";
 import { steamDaemonService } from "@/server/modules/steam-daemon/steam-daemon.service";
+import { auditService } from "@/server/modules/audit/audit.service";
 
 export interface DaemonCycleResult {
   scannedCount: number;
@@ -23,6 +24,17 @@ export async function triggerDaemonCycleAction(): Promise<{
 
   try {
     const summary = await steamDaemonService.runDaemonCycle();
+
+    void auditService.record({
+      adminId: session.user.id,
+      adminName: session.user.name,
+      action: "daemon_trigger",
+      targetType: "system",
+      targetId: "sentinel_fleet",
+      details: `Manual bot dispatch: scanned ${summary.scannedCount}, dispatched ${summary.dispatchedCount} trade offers`,
+      severity: "info",
+    });
+
     revalidatePath("/dashboard");
     return { success: true, summary };
   } catch (err) {

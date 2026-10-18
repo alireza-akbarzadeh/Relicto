@@ -1,6 +1,7 @@
 "use server";
 
 import { getSession } from "@/modules/relicto/data/get-session";
+import { auditService } from "@/server/modules/audit/audit.service";
 import type { DashboardSettings } from "../types";
 
 let currentSettings: DashboardSettings = {
@@ -22,6 +23,16 @@ export async function updatePlatformSettingsAction(
     }
 
     currentSettings = { ...currentSettings, ...updates };
+
+    void auditService.record({
+      adminId: session.user.id,
+      adminName: session.user.name,
+      action: "settings_update",
+      targetType: "system",
+      targetId: "platform_config",
+      details: `Updated parameters: ${Object.keys(updates).join(", ")}`,
+      severity: updates.maintenanceMode !== undefined ? "critical" : "warning",
+    });
 
     return {
       success: true,

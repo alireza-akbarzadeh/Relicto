@@ -18,3 +18,4 @@ export * from "./esports";
 export * from "./trade-ups";
 export * from "./community";
 export * from "./wiki";
+export * from "./audit";

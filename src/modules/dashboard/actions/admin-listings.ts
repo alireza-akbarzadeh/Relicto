@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { getSession } from "@/modules/relicto/data/get-session";
+import { auditService } from "@/server/modules/audit/audit.service";
 
 export async function updateListingStatusAction(
   listingId: string,
@@ -19,6 +20,16 @@ export async function updateListingStatusAction(
       .update(listings)
       .set({ status: newStatus })
       .where(eq(listings.id, listingId));
+
+    void auditService.record({
+      adminId: session.user.id,
+      adminName: session.user.name,
+      action: newStatus === "cancelled" ? "listing_delist" : "listing_relist",
+      targetType: "listing",
+      targetId: listingId,
+      details: `Listing status set to ${newStatus}`,
+      severity: newStatus === "cancelled" ? "warning" : "info",
+    });
 
     return {
       success: true,

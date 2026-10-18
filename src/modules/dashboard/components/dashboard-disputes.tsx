@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { DashboardDispute } from "../types";
 import { DisputesFilterBar, type DisputesFilterState } from "./disputes-filter-bar";
+import { DisputeDetailSheet } from "./dispute-detail-sheet";
 import { GridPagination } from "./grid-pagination";
 import { resolveDisputeAction } from "../actions/admin-disputes";
 import { disputesSearchParams } from "../lib/search-params";
@@ -15,6 +16,7 @@ import { disputesSearchParams } from "../lib/search-params";
 export function DashboardDisputes({ disputes: initialDisputes }: { disputes: DashboardDispute[] }) {
   const [disputes, setDisputes] = React.useState(initialDisputes);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
+  const [selectedDispute, setSelectedDispute] = React.useState<DashboardDispute | null>(null);
 
   const [query, setQuery] = useQueryStates(disputesSearchParams, {
     history: "replace",
@@ -38,20 +40,14 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
     const result = disputes.filter((d) => {
-      const matchSearch =
-        !q ||
-        d.orderCode.toLowerCase().includes(q) ||
-        d.itemName.toLowerCase().includes(q) ||
-        d.buyerName.toLowerCase().includes(q) ||
-        d.sellerName.toLowerCase().includes(q);
+      const matchSearch = !q || d.orderCode.toLowerCase().includes(q) || d.itemName.toLowerCase().includes(q) || d.buyerName.toLowerCase().includes(q) || d.sellerName.toLowerCase().includes(q);
       const matchStatus = filters.status === "all" || d.status === filters.status;
       return matchSearch && matchStatus;
     });
 
     return result.sort((a, b) => {
       if (filters.sortBy === "newest") return new Date(b.openedAt).getTime() - new Date(a.openedAt).getTime();
-      if (filters.sortBy === "amount_desc") return b.amountCents - a.amountCents;
-      return 0;
+      return b.amountCents - a.amountCents;
     });
   }, [disputes, filters]);
 
@@ -68,6 +64,7 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
         toast.success(res.message);
         const nextStatus = decision === "refund_buyer" ? "resolved_buyer" : "resolved_seller";
         setDisputes((prev) => prev.map((d) => (d.id === disputeId ? { ...d, status: nextStatus } : d)));
+        setSelectedDispute((prev) => (prev?.id === disputeId ? { ...prev, status: nextStatus } : prev));
       } else {
         toast.error(res.error);
       }
@@ -124,7 +121,7 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
                   <th className="pb-3 font-semibold text-right">Arbitration Ruling</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border-subtle/40">
+              <tbody className="divide-y border-border-subtle/40">
                 {paginatedDisputes.map((d) => {
                   const isPending = d.status === "open" || d.status === "under_review";
                   return (
@@ -145,7 +142,7 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
                       </td>
                       <td className="py-3">
                         <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full uppercase ${
-                          d.status === "open" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20 animate-pulse" :
+                          d.status === "open" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
                           d.status === "under_review" ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" :
                           "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                         }`}>{d.status.replace("_", " ")}</span>
@@ -154,20 +151,21 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
                         {formatUsd(d.amountCents)}
                       </td>
                       <td className="py-3 text-right">
-                        {isPending ? (
-                          <div className="flex items-center justify-end gap-1.5">
-                            <Button size="xs" variant="destructive" disabled={loadingId === d.id} onClick={() => handleResolve(d.id, "refund_buyer")} className="text-[10px] font-mono h-7 px-2">
-                              Refund Buyer
-                            </Button>
-                            <Button size="xs" variant="outline" disabled={loadingId === d.id} onClick={() => handleResolve(d.id, "release_seller")} className="text-[10px] font-mono h-7 px-2 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10">
-                              Release Seller
-                            </Button>
-                          </div>
-                        ) : (
-                          <span className="text-[11px] font-mono text-text-muted capitalize">
-                            {d.status === "resolved_buyer" ? "Buyer Refunded" : "Seller Paid Out"}
-                          </span>
-                        )}
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button size="xs" variant="ghost" onClick={() => setSelectedDispute(d)} className="text-[11px] font-mono h-7 px-2 text-text-secondary hover:text-text-primary">
+                            Inspect
+                          </Button>
+                          {isPending && (
+                            <>
+                              <Button size="xs" variant="destructive" disabled={loadingId === d.id} onClick={() => handleResolve(d.id, "refund_buyer")} className="text-[10px] font-mono h-7 px-2">
+                                Refund
+                              </Button>
+                              <Button size="xs" variant="outline" disabled={loadingId === d.id} onClick={() => handleResolve(d.id, "release_seller")} className="text-[10px] font-mono h-7 px-2 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10">
+                                Release
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -183,6 +181,14 @@ export function DashboardDisputes({ disputes: initialDisputes }: { disputes: Das
           totalItems={filteredAndSorted.length}
           onPageChange={(page) => void setQuery({ dpage: page })}
           onPageSizeChange={(pageSize) => void setQuery({ dpageSize: pageSize })}
+        />
+
+        <DisputeDetailSheet
+          dispute={selectedDispute}
+          open={!!selectedDispute}
+          onOpenChange={(open) => !open && setSelectedDispute(null)}
+          onResolve={handleResolve}
+          resolving={loadingId === selectedDispute?.id}
         />
       </CardContent>
     </Card>

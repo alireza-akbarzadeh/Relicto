@@ -25,6 +25,7 @@ import { DashboardListings } from "./dashboard-listings";
 import { DashboardDisputes } from "./dashboard-disputes";
 import { DashboardSettingsView } from "./dashboard-settings";
 import { DashboardAudit } from "./dashboard-audit";
+import { DashboardAlertsFeed } from "./dashboard-alerts-feed";
 import { ChargeWalletDialog } from "./charge-wallet-dialog";
 
 export function DashboardShell({ data }: { data: DashboardData }) {
@@ -76,6 +77,8 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             </div>
 
             <div className="flex items-center gap-2">
+              <DashboardAlertsFeed data={data} onNavigateTab={setTab} />
+
               <Link href="/wallet">
                 <Button size="xs" variant="ghost" className="gap-1.5 font-mono text-xs hidden md:flex">
                   <Wallet className="size-3.5 text-text-muted" />

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { profiles, walletAccounts, ledgerEntries } from "@/lib/db/schema";
-import { getSession } from "@/modules/relicto/data/get-session";
+import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { auditService } from "@/server/modules/audit/audit.service";
 
 const ROLE_TONES: Record<string, string> = {
@@ -17,7 +17,7 @@ const ROLE_TONES: Record<string, string> = {
 };
 
 export async function updateUserRoleAction(targetUserId: string, newRole: string) {
-  const session = await getSession();
+  const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
   if (session?.user?.role?.toLowerCase() !== "admin") {
     return { success: false, error: "Unauthorized. Administrator access required." };
   }
@@ -31,8 +31,8 @@ export async function updateUserRoleAction(targetUserId: string, newRole: string
       .where(eq(profiles.userId, targetUserId));
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: "role_update",
       targetType: "user",
       targetId: targetUserId,
@@ -50,7 +50,7 @@ export async function updateUserRoleAction(targetUserId: string, newRole: string
 }
 
 export async function toggleUserFreezeAction(targetUserId: string, freeze: boolean) {
-  const session = await getSession();
+  const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
   if (session?.user?.role?.toLowerCase() !== "admin") {
     return { success: false, error: "Unauthorized. Administrator access required." };
   }
@@ -62,8 +62,8 @@ export async function toggleUserFreezeAction(targetUserId: string, freeze: boole
       .where(eq(walletAccounts.userId, targetUserId));
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: freeze ? "vault_freeze" : "vault_unfreeze",
       targetType: "user",
       targetId: targetUserId,
@@ -88,7 +88,7 @@ export async function adjustUserBalanceAction(
   amountCentsDelta: number,
   reason: string
 ) {
-  const session = await getSession();
+  const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
   if (session?.user?.role?.toLowerCase() !== "admin") {
     return { success: false, error: "Unauthorized. Administrator access required." };
   }
@@ -133,8 +133,8 @@ export async function adjustUserBalanceAction(
     });
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: "balance_adjustment",
       targetType: "user",
       targetId: targetUserId,

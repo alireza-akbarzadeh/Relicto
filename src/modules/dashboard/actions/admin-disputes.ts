@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { orders } from "@/lib/db/schema";
-import { getSession } from "@/modules/relicto/data/get-session";
+import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { auditService } from "@/server/modules/audit/audit.service";
 
 export async function resolveDisputeAction(
@@ -11,7 +11,7 @@ export async function resolveDisputeAction(
   decision: "refund_buyer" | "release_seller"
 ): Promise<{ success: boolean; message?: string; error?: string }> {
   try {
-    const session = await getSession();
+    const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
     if (session?.user?.role?.toLowerCase() !== "admin") {
       return { success: false, error: "Unauthorized: Administrator privileges required." };
     }
@@ -29,8 +29,8 @@ export async function resolveDisputeAction(
       .where(eq(orders.id, orderIdOrCode));
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: "dispute_resolution",
       targetType: "order",
       targetId: orderIdOrCode,

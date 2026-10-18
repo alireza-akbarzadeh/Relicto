@@ -41,6 +41,7 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
 
   const SYSTEM_NAV = [
     { tab: "monitoring" as const, label: "Sentinel Daemon", icon: Activity, badgeText: "12 BOTS" },
+    { tab: "audit" as const, label: "Audit Trail", icon: ShieldCheck },
     { tab: "settings" as const, label: "Platform Settings", icon: Sliders },
   ];
 

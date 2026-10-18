@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/modules/relicto/data/get-session";
+import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { auditService } from "@/server/modules/audit/audit.service";
 import type { DashboardSettings } from "../types";
 
@@ -17,7 +17,7 @@ export async function updatePlatformSettingsAction(
   updates: Partial<DashboardSettings>
 ): Promise<{ success: boolean; settings?: DashboardSettings; error?: string }> {
   try {
-    const session = await getSession();
+    const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
     if (session?.user?.role?.toLowerCase() !== "admin") {
       return { success: false, error: "Unauthorized: Administrator privileges required." };
     }
@@ -25,8 +25,8 @@ export async function updatePlatformSettingsAction(
     currentSettings = { ...currentSettings, ...updates };
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: "settings_update",
       targetType: "system",
       targetId: "platform_config",

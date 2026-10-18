@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSession } from "@/modules/relicto/data/get-session";
+import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { steamDaemonService } from "@/server/modules/steam-daemon/steam-daemon.service";
 import { auditService } from "@/server/modules/audit/audit.service";
 
@@ -17,7 +17,7 @@ export async function triggerDaemonCycleAction(): Promise<{
   summary?: DaemonCycleResult;
   error?: string;
 }> {
-  const session = await getSession();
+  const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
   if (session?.user?.role?.toLowerCase() !== "admin") {
     return { success: false, error: "Unauthorized. Administrator access required." };
   }
@@ -26,8 +26,8 @@ export async function triggerDaemonCycleAction(): Promise<{
     const summary = await steamDaemonService.runDaemonCycle();
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: "daemon_trigger",
       targetType: "system",
       targetId: "sentinel_fleet",

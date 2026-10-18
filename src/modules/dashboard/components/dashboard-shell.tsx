@@ -24,6 +24,7 @@ import { dashboardTabParam } from "../lib/search-params";
 import { DashboardListings } from "./dashboard-listings";
 import { DashboardDisputes } from "./dashboard-disputes";
 import { DashboardSettingsView } from "./dashboard-settings";
+import { DashboardAudit } from "./dashboard-audit";
 import { ChargeWalletDialog } from "./charge-wallet-dialog";
 
 export function DashboardShell({ data }: { data: DashboardData }) {
@@ -40,6 +41,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
     users: { title: "User Directory & Role Administration", desc: "Manage operator roles, VIP tiers, and emergency vault locks" },
     monitoring: { title: "Steam Daemon & Fleet Health", desc: "Active Sentinel trade bot nodes and database synchronization" },
     settings: { title: "Platform Controls & Safety Settings", desc: "Set platform take rates, cashout ceilings, and emergency switches" },
+    audit: { title: "Administrative Audit Trail", desc: "Append-only security log tracking mutations, balance adjustments, and dispute rulings" },
     wallet: { title: "Vault & Deposit Chamber", desc: "Top up and charge balance via crypto, card, or SEPA" },
   };
 
@@ -128,6 +130,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             {tab === "monitoring" && <DashboardSystemMonitor system={data.system} />}
 
             {tab === "settings" && <DashboardSettingsView settings={data.settings} />}
+            {tab === "audit" && <DashboardAudit auditLogs={data.auditLogs} />}
           </div>
         </SidebarInset>
       </div>

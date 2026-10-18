@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
-import { getSession } from "@/modules/relicto/data/get-session";
+import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { auditService } from "@/server/modules/audit/audit.service";
 
 export async function updateListingStatusAction(
@@ -11,7 +11,7 @@ export async function updateListingStatusAction(
   newStatus: "active" | "cancelled"
 ): Promise<{ success: boolean; message?: string; error?: string }> {
   try {
-    const session = await getSession();
+    const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
     if (session?.user?.role?.toLowerCase() !== "admin") {
       return { success: false, error: "Unauthorized: Administrator privileges required." };
     }
@@ -22,8 +22,8 @@ export async function updateListingStatusAction(
       .where(eq(listings.id, listingId));
 
     void auditService.record({
-      adminId: session.user.id,
-      adminName: session.user.name,
+      adminId: authedUserId ?? "admin_root",
+      adminName: session.user.handle,
       action: newStatus === "cancelled" ? "listing_delist" : "listing_relist",
       targetType: "listing",
       targetId: listingId,

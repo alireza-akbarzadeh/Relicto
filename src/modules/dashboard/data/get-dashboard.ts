@@ -8,6 +8,7 @@ import type { DashboardData, DashboardOrder, DashboardTransaction, DashboardUser
 import { buildChartSeries, buildGameDistribution, calculateKpis } from "./dashboard-aggregates";
 import { getAdminListings } from "./get-admin-listings";
 import { getAdminDisputes } from "./get-admin-disputes";
+import { getAdminAuditLogs } from "./get-admin-audit-logs";
 
 export async function getDashboardData(): Promise<DashboardData> {
   const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
@@ -118,7 +119,11 @@ export async function getDashboardData(): Promise<DashboardData> {
     rawOrders.map((r) => ({ gameId: r.gameId, priceCents: r.order.totalCents })),
   );
 
-  const [listingsData, disputesData] = await Promise.all([getAdminListings(), getAdminDisputes()]);
+  const [listingsData, disputesData, auditLogsData] = await Promise.all([
+    getAdminListings(),
+    getAdminDisputes(),
+    getAdminAuditLogs(),
+  ]);
 
   return {
     user: {
@@ -153,5 +158,6 @@ export async function getDashboardData(): Promise<DashboardData> {
       lastHeartbeat: new Date().toISOString(),
       escrowVaultHealth: "healthy",
     },
+    auditLogs: auditLogsData,
   };
 }

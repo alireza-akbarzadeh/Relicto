@@ -12,9 +12,10 @@ interface UsersTableProps {
   loadingId: string | null;
   onRoleChange: (userId: string, newRole: string) => void;
   onToggleFreeze: (userId: string, currentFrozen: boolean) => void;
+  onInspect: (user: DashboardUser) => void;
 }
 
-export function UsersTable({ users, loadingId, onRoleChange, onToggleFreeze }: UsersTableProps) {
+export function UsersTable({ users, loadingId, onRoleChange, onToggleFreeze, onInspect }: UsersTableProps) {
   const formatUsd = (cents: number) => `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 
   if (users.length === 0) {
@@ -36,7 +37,7 @@ export function UsersTable({ users, loadingId, onRoleChange, onToggleFreeze }: U
             <th className="pb-3 font-semibold">Vault Balance</th>
             <th className="pb-3 font-semibold">Trust & Tier</th>
             <th className="pb-3 font-semibold">Security Status</th>
-            <th className="pb-3 font-semibold text-right">Emergency Action</th>
+            <th className="pb-3 font-semibold text-right">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-border-subtle/40">
@@ -88,23 +89,33 @@ export function UsersTable({ users, loadingId, onRoleChange, onToggleFreeze }: U
                 </div>
               </td>
               <td className="py-3 text-right">
-                <Button
-                  size="xs"
-                  variant={u.isFrozen ? "destructive" : "outline"}
-                  disabled={loadingId === u.id}
-                  onClick={() => onToggleFreeze(u.id, u.isFrozen)}
-                  className="gap-1 text-[11px] font-mono"
-                >
-                  {u.isFrozen ? (
-                    <>
-                      <Unlock className="size-3" /> Unfreeze
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="size-3" /> Freeze
-                    </>
-                  )}
-                </Button>
+                <div className="flex items-center justify-end gap-1.5">
+                  <Button
+                    size="xs"
+                    variant="ghost"
+                    onClick={() => onInspect(u)}
+                    className="h-7 text-[11px] font-mono text-text-secondary hover:text-text-primary"
+                  >
+                    Inspect
+                  </Button>
+                  <Button
+                    size="xs"
+                    variant={u.isFrozen ? "destructive" : "outline"}
+                    disabled={loadingId === u.id}
+                    onClick={() => onToggleFreeze(u.id, u.isFrozen)}
+                    className="gap-1 text-[11px] font-mono h-7"
+                  >
+                    {u.isFrozen ? (
+                      <>
+                        <Unlock className="size-3" /> Unfreeze
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="size-3" /> Freeze
+                      </>
+                    )}
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

@@ -9,12 +9,14 @@ import type { DashboardUser } from "../types";
 import { updateUserRoleAction, toggleUserFreezeAction } from "../actions/admin-users";
 import { UsersFilterBar, type UsersFilterState } from "./users-filter-bar";
 import { UsersTable, DASHBOARD_ROLES } from "./users-table";
+import { UserDetailSheet } from "./user-detail-sheet";
 import { GridPagination } from "./grid-pagination";
 import { usersSearchParams } from "../lib/search-params";
 
 export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[] }) {
   const [users, setUsers] = React.useState(initialUsers);
   const [loadingId, setLoadingId] = React.useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = React.useState<DashboardUser | null>(null);
 
   const [query, setQuery] = useQueryStates(usersSearchParams, {
     history: "replace",
@@ -30,26 +32,16 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
     sortBy: query.usort as UsersFilterState["sortBy"],
   }), [query]);
 
+  const keyMap: Record<keyof UsersFilterState, string> = {
+    search: "uq", role: "urole", status: "ustatus", balance: "ubalance", sortBy: "usort",
+  };
+
   const handleFilterChange = <K extends keyof UsersFilterState>(key: K, value: UsersFilterState[K]) => {
-    const keyMap: Record<keyof UsersFilterState, string> = {
-      search: "uq",
-      role: "urole",
-      status: "ustatus",
-      balance: "ubalance",
-      sortBy: "usort",
-    };
     void setQuery({ [keyMap[key]]: value, upage: 1 });
   };
 
   const handleResetFilters = () => {
-    void setQuery({
-      uq: "",
-      urole: "all",
-      ustatus: "all",
-      ubalance: "all",
-      usort: "balance_desc",
-      upage: 1,
-    });
+    void setQuery({ uq: "", urole: "all", ustatus: "all", ubalance: "all", usort: "balance_desc", upage: 1 });
   };
 
   const filteredAndSorted = React.useMemo(() => {
@@ -104,6 +96,7 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
       if (res.success) {
         toast.success(`Role updated to ${newRole}`);
         setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u)));
+        setSelectedUser((prev) => (prev?.id === userId ? { ...prev, role: newRole } : prev));
       } else {
         toast.error(res.error);
       }
@@ -119,12 +112,18 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
       if (res.success) {
         toast.success(res.message);
         setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, isFrozen: !currentFrozen } : u)));
+        setSelectedUser((prev) => (prev?.id === userId ? { ...prev, isFrozen: !currentFrozen } : prev));
       } else {
         toast.error(res.error);
       }
     } finally {
       setLoadingId(null);
     }
+  };
+
+  const handleBalanceAdjusted = (userId: string, newBalanceCents: number) => {
+    setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, balanceCents: newBalanceCents } : u)));
+    setSelectedUser((prev) => (prev?.id === userId ? { ...prev, balanceCents: newBalanceCents } : prev));
   };
 
   const formatUsd = (cents: number) => `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
@@ -168,6 +167,7 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
           loadingId={loadingId}
           onRoleChange={handleRoleChange}
           onToggleFreeze={handleToggleFreeze}
+          onInspect={(u) => setSelectedUser(u)}
         />
 
         <GridPagination
@@ -176,6 +176,15 @@ export function DashboardUsers({ users: initialUsers }: { users: DashboardUser[]
           totalItems={filteredAndSorted.length}
           onPageChange={(page) => void setQuery({ upage: page })}
           onPageSizeChange={(pageSize) => void setQuery({ upageSize: pageSize })}
+        />
+
+        <UserDetailSheet
+          user={selectedUser}
+          open={!!selectedUser}
+          onOpenChange={(open) => !open && setSelectedUser(null)}
+          onRoleChange={handleRoleChange}
+          onToggleFreeze={handleToggleFreeze}
+          onBalanceAdjusted={handleBalanceAdjusted}
         />
       </CardContent>
     </Card>

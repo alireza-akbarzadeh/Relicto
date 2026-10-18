@@ -26,7 +26,7 @@ export default async function TraderStorefrontPage({ params }: { params: Params 
   return (
     <>
       <div className="md:hidden">
-        <ProfileMobile profile={mobile ?? profileMobile} />
+        <ProfileMobile profile={mobile ?? profileMobile} isPublic />
       </div>
       <div className="hidden md:block">
         <ProfileView data={data} />

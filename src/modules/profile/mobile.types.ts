@@ -45,7 +45,17 @@ export type QuickLink = {
   badge?: { text: string; style: "cyan-pill" | "plain" | "crimson-pill" };
 };
 
+export type ProfileMobileUser = {
+  handle: string;
+  level: number;
+  avatar: string;
+  avatarAlt?: string;
+  verified: boolean;
+  steamSynced?: boolean;
+};
+
 export type ProfileMobile = {
+  user?: ProfileMobileUser;
   tier: string;
   role: string;
   ping: string;

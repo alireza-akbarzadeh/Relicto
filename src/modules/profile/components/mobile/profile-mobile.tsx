@@ -22,10 +22,11 @@ type ProfileMobileProps = {
   profile: ProfileMobileData;
   watchlist?: WatchedItem[];
   bids?: BuyerBid[];
+  isPublic?: boolean;
 };
 
 /** Mobile trader profile with live showcase, watchlist and bids tabs. */
-export function ProfileMobile({ profile, watchlist = [], bids = [] }: ProfileMobileProps) {
+export function ProfileMobile({ profile, watchlist = [], bids = [], isPublic = false }: ProfileMobileProps) {
   const [tab, setTab] = useQueryState(
     "tab",
     profileSearchParams.tab.withOptions({ history: "replace", clearOnDefault: true }),
@@ -33,8 +34,8 @@ export function ProfileMobile({ profile, watchlist = [], bids = [] }: ProfileMob
 
   const tabs = [
     { value: "showcase" as const, content: `Showcase (${profile.showcase.total})` },
-    { value: "watchlist" as const, content: `Watchlist (${watchlist.length})` },
-    ...(bids.length > 0 ? [{ value: "bids" as const, content: `Bids (${bids.length})` }] : []),
+    ...(!isPublic || watchlist.length > 0 ? [{ value: "watchlist" as const, content: `Watchlist (${watchlist.length})` }] : []),
+    ...(!isPublic && bids.length > 0 ? [{ value: "bids" as const, content: `Bids (${bids.length})` }] : []),
   ];
 
   return (
@@ -44,7 +45,7 @@ export function ProfileMobile({ profile, watchlist = [], bids = [] }: ProfileMob
         <div className="flex w-full flex-col gap-space-md px-space-md py-space-sm">
           <IdentityCard profile={profile} />
           <TrustMatrix stats={profile.trust} />
-          <VaultBalance escrow={profile.escrow} />
+          {!isPublic && <VaultBalance escrow={profile.escrow} />}
           <SecurityCard security={profile.security} />
 
           <SegmentedTabs
@@ -64,7 +65,7 @@ export function ProfileMobile({ profile, watchlist = [], bids = [] }: ProfileMob
             <>
               <ShowcaseRail showcase={profile.showcase} />
               <QuickLinks links={profile.links} />
-              <AccountControls savedAccounts={profile.savedAccounts} />
+              {!isPublic && <AccountControls savedAccounts={profile.savedAccounts} />}
             </>
           )}
 
@@ -81,4 +82,3 @@ export function ProfileMobile({ profile, watchlist = [], bids = [] }: ProfileMob
     </div>
   );
 }
-

@@ -88,6 +88,14 @@ export function toProfileMobile(
   escrow: Escrow,
 ): ProfileMobile {
   return {
+    user: {
+      handle: profile.handle,
+      level: profile.level,
+      avatar: profile.avatar ?? "/images/lootora/user-profile-08.jpg",
+      avatarAlt: profile.avatarAlt ?? `@${profile.handle}`,
+      verified: profile.trustScore >= 950,
+      steamSynced: true,
+    },
     tier: reputation(profile.ratingHundredths / 100).tier,
     role: profile.role.toUpperCase(),
     ping: chrome.ping,

@@ -3,14 +3,16 @@
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { formatMoney } from "@/lib/format";
-import { useSession } from "@/modules/relicto/state/session-provider";
+import { useViewer } from "@/modules/relicto/state/session-provider";
 import type { ProfileMobile } from "../../mobile.types";
 
 const ACTION = "h-auto w-full gap-1.5 rounded-lg border-0 px-3 py-2.5 whitespace-normal font-headline-sm text-[13px] font-bold tracking-wider text-text-primary uppercase transition-all active:scale-[0.98]";
 
 /** Instant (session wallet) and escrow-held balances with deposit / cashout. */
 export function VaultBalance({ escrow }: { escrow: ProfileMobile["escrow"] }) {
-  const { user } = useSession();
+  const viewer = useViewer();
+
+  if (!viewer) return null;
 
   return (
     <div className="relative flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-card p-space-md shadow-xl">
@@ -26,7 +28,7 @@ export function VaultBalance({ escrow }: { escrow: ProfileMobile["escrow"] }) {
       <div className="grid grid-cols-2 gap-space-sm">
         <div className="flex flex-col rounded-lg bg-surface-container-lowest p-space-sm">
           <span className="font-label-badge text-label-badge tracking-wider text-text-muted uppercase">Instant Available</span>
-          <span className="mt-1 font-data-mono-lg text-data-mono-lg font-bold tracking-tight text-tertiary">{formatMoney(user.walletUsd)}</span>
+          <span className="mt-1 font-data-mono-lg text-data-mono-lg font-bold tracking-tight text-tertiary">{formatMoney(viewer.walletUsd)}</span>
           <span className="mt-0.5 font-body-sm text-[11px] text-text-muted">Ready for dispatch</span>
         </div>
         <div className="flex flex-col rounded-lg bg-surface-container-lowest p-space-sm">

@@ -42,6 +42,9 @@
 
 /* Raw variables for components that read them directly (e.g. sonner, charts). */
 :root {
+  --sidebar-width: 16rem;
+  --sidebar-width-icon: 3.5rem;
+  --sidebar-width-mobile: 18rem;
   --background: var(--color-background);
   --foreground: var(--color-on-surface);
   --card: var(--color-surface-card);

@@ -2,9 +2,9 @@ import "server-only";
 
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { items, ledgerEntries, orderItems, orders, walletAccounts } from "@/lib/db/schema";
+import { items, ledgerEntries, orderItems, orders, profiles, user, walletAccounts } from "@/lib/db/schema";
 import { getSession, getUserId } from "@/modules/relicto/data/get-session";
-import type { DashboardData, DashboardOrder, DashboardTransaction } from "../types";
+import type { DashboardData, DashboardOrder, DashboardTransaction, DashboardUser } from "../types";
 import { buildChartSeries, buildGameDistribution, calculateKpis } from "./dashboard-aggregates";
 
 export async function getDashboardData(): Promise<DashboardData> {
@@ -72,6 +72,36 @@ export async function getDashboardData(): Promise<DashboardData> {
     occurredAt: e.occurredAt.toISOString(),
   }));
 
+  // Fetch users with profiles & wallets
+  const rawUsers = await db
+    .select({
+      user,
+      profile: profiles,
+      wallet: walletAccounts,
+    })
+    .from(user)
+    .leftJoin(profiles, eq(profiles.userId, user.id))
+    .leftJoin(walletAccounts, eq(walletAccounts.userId, user.id))
+    .limit(50);
+
+  const mappedUsers: DashboardUser[] = rawUsers.map((r) => ({
+    id: r.user.id,
+    name: r.user.name,
+    email: r.user.email,
+    handle: r.profile?.handle ?? r.user.name,
+    avatar: r.profile?.avatar ?? r.user.image,
+    role: r.profile?.role ?? "Trader",
+    roleTone: r.profile?.roleTone ?? "muted",
+    tier: r.profile?.tier ?? "Standard",
+    level: r.profile?.level ?? 1,
+    trustScore: r.profile?.trustScore ?? 98,
+    balanceCents: r.wallet?.balanceCents ?? 0,
+    isFrozen: Boolean(r.wallet?.frozenAt),
+    emailVerified: r.user.emailVerified,
+    twoFactorEnabled: Boolean(r.user.twoFactorEnabled),
+    createdAt: r.user.createdAt.toISOString(),
+  }));
+
   const activeEscrows = rawOrders.filter((r) => r.order.state === "escrow");
   const escrowLockedCents = activeEscrows.reduce((sum, r) => sum + r.order.totalCents, 0);
 
@@ -99,6 +129,7 @@ export async function getDashboardData(): Promise<DashboardData> {
     gameBreakdown,
     orders: mappedOrders,
     transactions: mappedTransactions,
+    users: mappedUsers,
     system: {
       daemonStatus: "online",
       activeBots: 12,

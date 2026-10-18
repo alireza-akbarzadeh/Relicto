@@ -18,6 +18,7 @@ import { DashboardCharts } from "./dashboard-charts";
 import { DashboardOrders } from "./dashboard-orders";
 import { DashboardTransactions } from "./dashboard-transactions";
 import { DashboardSystemMonitor } from "./dashboard-system-monitor";
+import { DashboardUsers } from "./dashboard-users";
 import { ChargeWalletDialog } from "./charge-wallet-dialog";
 
 export function DashboardShell({ data }: { data: DashboardData }) {
@@ -29,24 +30,26 @@ export function DashboardShell({ data }: { data: DashboardData }) {
     orders: { title: "Orders & Escrow Handoffs", desc: "Live tradebot execution and multi-sig escrow settlements" },
     income: { title: "Income & Revenue Telemetry", desc: "Platform escrow fee yield and game ecosystem distribution" },
     transactions: { title: "Treasury Ledger", desc: "Audited cryptographic transaction receipts and vault balance after" },
+    users: { title: "User Directory & Role Administration", desc: "Manage operator roles, VIP tiers, and emergency vault locks" },
     monitoring: { title: "Steam Daemon & Fleet Health", desc: "Active Sentinel trade bot nodes and database synchronization" },
     wallet: { title: "Vault & Deposit Chamber", desc: "Top up and charge balance via crypto, card, or SEPA" },
   };
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="flex min-h-screen w-full bg-background">
+      <div className="flex min-h-screen w-full bg-background overflow-x-hidden">
         <Sidebar collapsible="icon" variant="sidebar">
           <DashboardNav
             currentTab={tab}
             onTabChange={setTab}
             kpis={data.kpis}
             user={data.user}
+            usersCount={data.users.length}
           />
           <SidebarRail />
         </Sidebar>
 
-        <SidebarInset className="bg-background flex flex-col min-w-0">
+        <SidebarInset className="bg-background flex flex-col min-w-0 flex-1">
           {/* Top Operational Bar */}
           <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border-subtle bg-background/80 px-4 backdrop-blur-md">
             <div className="flex items-center gap-3">
@@ -84,7 +87,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
           </header>
 
           {/* Tab Content Canvas */}
-          <main className="flex-1 p-4 md:p-6 space-y-6 max-w-7xl w-full mx-auto">
+          <main className="flex-1 p-4 md:p-6 space-y-6 max-w-7xl w-full mx-auto overflow-x-hidden">
             {tab === "overview" && (
               <>
                 <DashboardOverview
@@ -119,6 +122,8 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             {tab === "transactions" && (
               <DashboardTransactions transactions={data.transactions} />
             )}
+
+            {tab === "users" && <DashboardUsers users={data.users} />}
 
             {tab === "monitoring" && (
               <DashboardSystemMonitor system={data.system} />

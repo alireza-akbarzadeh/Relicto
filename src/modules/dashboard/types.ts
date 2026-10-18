@@ -1,4 +1,4 @@
-export type DashboardTab = "overview" | "orders" | "income" | "transactions" | "monitoring" | "wallet";
+export type DashboardTab = "overview" | "orders" | "income" | "transactions" | "monitoring" | "users" | "wallet";
 
 export type DashboardKpis = {
   liquidBalanceCents: number;
@@ -58,6 +58,24 @@ export type DashboardTransaction = {
   occurredAt: string;
 };
 
+export type DashboardUser = {
+  id: string;
+  name: string;
+  email: string;
+  handle: string;
+  avatar?: string | null;
+  role: string;
+  roleTone: string;
+  tier?: string | null;
+  level: number;
+  trustScore: number;
+  balanceCents: number;
+  isFrozen: boolean;
+  emailVerified: boolean;
+  twoFactorEnabled: boolean;
+  createdAt: string;
+};
+
 export type SystemStatusData = {
   daemonStatus: "online" | "degraded" | "offline";
   activeBots: number;
@@ -81,5 +99,6 @@ export type DashboardData = {
   gameBreakdown: GameDistribution[];
   orders: DashboardOrder[];
   transactions: DashboardTransaction[];
+  users: DashboardUser[];
   system: SystemStatusData;
 };

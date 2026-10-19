@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import { getItemMedia, type ItemMediaData } from "../../data/item-media.mock";
 import type { ItemDetail } from "../../types";
+import { getItemMedia, type ItemMediaData } from "../../data/item-media.mock";
+import { useItemBuy } from "../../hooks/use-item-buy";
 import { ItemMediaGalleryPane } from "./item-media-gallery-pane";
 import { ItemMediaVideoPane } from "./item-media-video-pane";
 
@@ -23,11 +24,11 @@ export function ItemMediaDialog({
 }) {
   const media: ItemMediaData = getItemMedia(item);
   const [tab, setTab] = useState<"video" | "gallery" | "sfx">("video");
+  const { buyNow, pending } = useItemBuy(item);
 
   const handleInstantBuy = () => {
-    toast.success(`Reserved ${item.name} ($${item.price.lowestUsd.toFixed(2)})`, {
-      description: "Added to instant escrow checkout queue.",
-    });
+    onOpenChange(false);
+    void buyNow();
   };
 
   return (
@@ -148,11 +149,12 @@ export function ItemMediaDialog({
           </div>
           <Button
             type="button"
+            disabled={pending}
             onClick={handleInstantBuy}
             className="h-9 gap-2 border-0 bg-primary px-5 font-headline-sm text-xs font-bold text-on-primary uppercase shadow-lg shadow-primary/30 hover:bg-primary/90 whitespace-nowrap"
           >
             <ShoppingBag className="size-4" />
-            <span>Instant Buy — ${item.price.lowestUsd.toFixed(2)}</span>
+            <span>{pending ? "Reserving..." : `Instant Buy — $${item.price.lowestUsd.toFixed(2)}`}</span>
           </Button>
         </div>
       </DialogContent>

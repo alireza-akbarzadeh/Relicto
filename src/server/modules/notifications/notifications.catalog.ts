@@ -130,7 +130,7 @@ export const draft = {
   }),
 
   /** Buyer: the seller proposed a counter-offer with a revised price and note. */
-  offerCountered: (o: Bid & { buyerId: string; counterCents: number; slug: string; note?: string | null }): NotificationDraft => ({
+  offerCountered: (o: { offerId: string; item: string; buyerId: string; counterCents: number; slug: string; note?: string | null }): NotificationDraft => ({
     userId: o.buyerId,
     kind: "offer_received",
     icon: "swap_horiz",

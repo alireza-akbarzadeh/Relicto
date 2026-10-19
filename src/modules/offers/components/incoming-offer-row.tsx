@@ -1,16 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
+import { CounterOfferDialog } from "./counter-offer-dialog";
 import { useOfferWrites } from "../hooks/use-offer-writes";
 import type { IncomingOffer } from "../types";
 
-/** One bid on the seller's listing, with the two answers they can give. */
+/** One bid on the seller's listing, with accept, decline, and counter negotiation. */
 export function IncomingOfferRow({ offer }: { offer: IncomingOffer }) {
+  const [counterOpen, setCounterOpen] = useState(false);
   const { pending, accept, decline } = useOfferWrites();
 
   return (
@@ -72,6 +75,16 @@ export function IncomingOfferRow({ offer }: { offer: IncomingOffer }) {
             variant={null}
             size={null}
             disabled={pending}
+            onClick={() => setCounterOpen(true)}
+            className="h-auto gap-1 rounded border-0 bg-surface-container px-2 py-1 font-label-caps text-[10px] text-tertiary uppercase hover:bg-surface-container-high hover:text-text-primary"
+          >
+            <Icon name="swap_horiz" className="text-[12px]" />
+            Counter
+          </Button>
+          <Button
+            variant={null}
+            size={null}
+            disabled={pending}
             onClick={() => accept(offer.id, offer.item.name)}
             className="h-auto gap-1 rounded border-0 bg-primary/20 px-2 py-1 font-label-caps text-[10px] text-primary uppercase hover:bg-primary/30"
           >
@@ -79,6 +92,7 @@ export function IncomingOfferRow({ offer }: { offer: IncomingOffer }) {
             Accept {formatMoney(offer.bidUsd, { whole: offer.bidUsd >= 1000 })}
           </Button>
         </div>
+        <CounterOfferDialog open={counterOpen} onOpenChange={setCounterOpen} offer={offer} />
       </td>
     </tr>
   );

@@ -1,15 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
+import { CounterOfferDialog } from "@/modules/offers/components/counter-offer-dialog";
 import { useOfferWrites } from "@/modules/offers/hooks/use-offer-writes";
 import type { IncomingOffer } from "@/modules/offers/types";
 
 export function MobileOffersInbox({ offers }: { offers: IncomingOffer[] }) {
+  const [counterOffer, setCounterOffer] = useState<IncomingOffer | null>(null);
   const { pending, accept, decline } = useOfferWrites();
 
   return (
@@ -133,6 +136,16 @@ export function MobileOffersInbox({ offers }: { offers: IncomingOffer[] }) {
                     variant={null}
                     size={null}
                     disabled={pending}
+                    onClick={() => setCounterOffer(offer)}
+                    className="flex h-8 items-center gap-1 rounded-lg border border-border-subtle bg-surface-container px-2.5 font-label-caps text-xs font-semibold text-tertiary transition-all hover:bg-surface-container-high hover:text-text-primary active:scale-95 disabled:opacity-50"
+                  >
+                    <Icon name="swap_horiz" className="text-[14px]" />
+                    Counter
+                  </Button>
+                  <Button
+                    variant={null}
+                    size={null}
+                    disabled={pending}
                     onClick={() => accept(offer.id, offer.item.name)}
                     className="flex h-8 items-center gap-1 rounded-lg border-0 bg-tertiary px-3 font-label-caps text-xs font-bold text-on-tertiary-container shadow-xs transition-all hover:bg-tertiary-fixed active:scale-95 disabled:opacity-50"
                   >
@@ -145,6 +158,14 @@ export function MobileOffersInbox({ offers }: { offers: IncomingOffer[] }) {
           </div>
         )}
       </div>
+
+      {counterOffer && (
+        <CounterOfferDialog
+          open={Boolean(counterOffer)}
+          onOpenChange={(open) => !open && setCounterOffer(null)}
+          offer={counterOffer}
+        />
+      )}
     </section>
   );
 }

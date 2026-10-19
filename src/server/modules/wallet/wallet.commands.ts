@@ -5,13 +5,14 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { ledgerEntries, payouts, walletAccounts } from "@/lib/db/schema";
 import type { CashoutInput, CashoutRail } from "./wallet.schema";
+import { CRYPTO_NETWORK_CONFIGS, TF2_KEY_RATE_USD, calculateKeysFromUsd } from "./wallet.schema";
 import { sumCommittedBids } from "../offers/offers.repository";
 
 type Rail = CashoutRail;
 
-/** Where each rail settles, what the audit row calls it, and the network fee it carries. */
+/** Where each rail settles, what the audit row calls it, and the default network fee it carries. */
 const RAIL: Record<Rail, { venue: "tron" | "sepa" | "internal" | "stripe"; label: string; feeCents: number }> = {
-  usdt: { venue: "tron", label: "USDT (TRC20)", feeCents: 100 },
+  usdt: { venue: "tron", label: "USDT (TRC-20)", feeCents: 100 },
   sepa: { venue: "sepa", label: "SEPA Instant", feeCents: 0 },
   keys: { venue: "internal", label: "Steam Keys", feeCents: 0 },
   visa: { venue: "stripe", label: "Visa Direct", feeCents: 0 },
@@ -37,13 +38,26 @@ export async function requestCashout(userId: string, input: CashoutInput): Promi
     const committedBids = await sumCommittedBids(tx, userId);
     if (amountCents > wallet.balanceCents - committedBids) return { status: "insufficient-funds" };
 
-    const rail = RAIL[input.rail];
+    const baseRail = RAIL[input.rail];
+    let label = baseRail.label;
+    let feeCents = baseRail.feeCents;
+    let venue = baseRail.venue;
+
+    if (input.rail === "usdt" && input.network) {
+      const netConfig = CRYPTO_NETWORK_CONFIGS[input.network];
+      if (netConfig) {
+        label = `USDT (${netConfig.name})`;
+        feeCents = Math.round(netConfig.feeUsd * 100);
+        venue = input.network === "trc20" ? "tron" : "internal";
+      }
+    }
+
     const balanceAfterCents = wallet.balanceCents - amountCents;
     await tx.update(walletAccounts).set({ balanceCents: balanceAfterCents }).where(eq(walletAccounts.id, wallet.id));
 
     const [payout] = await tx
       .insert(payouts)
-      .values({ walletId: wallet.id, amountCents, feeCents: rail.feeCents, status: "requested" })
+      .values({ walletId: wallet.id, amountCents, feeCents, status: "requested" })
       .returning({ id: payouts.id });
 
     await tx.insert(ledgerEntries).values({
@@ -55,11 +69,12 @@ export async function requestCashout(userId: string, input: CashoutInput): Promi
       balanceAfterCents,
       status: "pending",
       hash: `#TX-${randomInt(1_000_000, 10_000_000)}`,
-      venue: rail.venue,
-      title: `Cashout Request (${rail.label})`,
-      assetLabel: rail.label,
+      venue,
+      title: `Cashout Request (${label})`,
+      assetLabel: label,
       detailLabel: [
-        rail.feeCents ? `Network fee $${(rail.feeCents / 100).toFixed(2)}` : "No network fee",
+        input.rail === "keys" ? `${calculateKeysFromUsd(input.amountUsd)} Keys (@ $${TF2_KEY_RATE_USD.toFixed(2)})` : null,
+        feeCents ? `Network fee $${(feeCents / 100).toFixed(2)}` : "Zero network fee",
         input.destinationAddress ? `To: ${input.destinationAddress.slice(0, 16)}...` : null,
       ]
         .filter(Boolean)

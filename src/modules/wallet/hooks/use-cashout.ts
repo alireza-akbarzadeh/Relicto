@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
+import type { CryptoNetwork } from "@/server/modules/wallet/wallet.schema";
 import { requestCashout } from "../actions/treasury";
 
 const RAILS = ["usdt", "sepa", "keys", "visa"] as const;
@@ -20,7 +21,14 @@ export function useCashout() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  const request = (rail: string, amountUsd: number, maxUsd: number, steamToken: string, destinationAddress?: string) => {
+  const request = (
+    rail: string,
+    amountUsd: number,
+    maxUsd: number,
+    steamToken: string,
+    destinationAddress?: string,
+    network?: CryptoNetwork,
+  ) => {
     if (!RAILS.includes(rail as Rail)) return toast.error("Pick a cashout rail");
     if (!(amountUsd > 0)) return toast.error("Enter an amount to withdraw");
     if (amountUsd > maxUsd) {
@@ -36,6 +44,7 @@ export function useCashout() {
       try {
         const { status } = await requestCashout({
           rail: rail as Rail,
+          network,
           amountUsd,
           destinationAddress: destinationAddress?.trim() || undefined,
           steamGuardCode: steamToken.trim(),

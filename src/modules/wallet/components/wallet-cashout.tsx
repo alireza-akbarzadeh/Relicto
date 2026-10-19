@@ -6,8 +6,10 @@ import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { formatMoney } from "@/lib/format";
+import type { CryptoNetwork } from "@/server/modules/wallet/wallet.schema";
 import { useCashout } from "../hooks/use-cashout";
 import type { WalletRail as WalletRailType } from "../types";
+import { WalletCashoutNetworkPicker } from "./wallet-cashout-network-picker";
 import { WalletRail } from "./wallet-rail";
 
 /** Egress panel: the maximum is the live spendable balance; submitting files a real cashout request. */
@@ -20,10 +22,14 @@ export function WalletCashout({
 }) {
   const { pending, request } = useCashout();
   const [rail, setRail] = useState("usdt");
+  const [network, setNetwork] = useState<CryptoNetwork>("trc20");
   const [amount, setAmount] = useState(() => (maxUsd > 0 ? Math.min(850, maxUsd).toFixed(2) : "0.00"));
   const [token, setToken] = useState("");
   const [customAddress, setCustomAddress] = useState("");
   const [isCustomAddress, setIsCustomAddress] = useState(false);
+
+  const numericAmount = Number(amount) || 0;
+
   return (
     <section className="flex h-full flex-col justify-between gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
       <div className="flex flex-col gap-space-md">
@@ -46,11 +52,13 @@ export function WalletCashout({
             SLA: &lt; 120s Guarantee
           </span>
         </div>
+
         <WalletRail rails={rails} value={rail} onChange={setRail} />
+
         <div className="flex flex-col gap-space-xs">
           <div className="flex items-center justify-between">
             <span className="font-label-caps text-label-caps text-text-secondary uppercase">
-              Destination Vault / Address
+              {rail === "keys" ? "Steam Trade URL / Profile" : "Destination Vault / Address"}
             </span>
             <Button
               variant={null}
@@ -67,20 +75,17 @@ export function WalletCashout({
               <Input
                 value={customAddress}
                 onChange={(e) => setCustomAddress(e.target.value)}
-                placeholder="Enter TRC-20, IBAN, or recipient address..."
+                placeholder={rail === "keys" ? "https://steamcommunity.com/tradeoffer/new/..." : "Enter wallet address or IBAN..."}
                 className="h-auto flex-1 border-0 bg-transparent p-0 font-data-mono-md text-[12px] text-text-primary focus-visible:ring-0"
               />
             </div>
           ) : (
             <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-container-lowest p-space-sm">
               <div className="flex min-w-0 items-center gap-space-sm">
-                <Icon
-                  name="account_balance_wallet"
-                  className="text-[20px] text-tertiary"
-                />
+                <Icon name="account_balance_wallet" className="text-[20px] text-tertiary" />
                 <div className="flex min-w-0 flex-col">
                   <span className="truncate font-body-sm text-body-sm text-text-primary">
-                    Binance Treasury Vault #1 (TRC-20)
+                    Binance Treasury Vault #1 ({network.toUpperCase()})
                   </span>
                   <span className="truncate font-data-mono-md text-[11px] text-text-muted">
                     TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La
@@ -93,18 +98,25 @@ export function WalletCashout({
             </div>
           )}
         </div>
+
+        <WalletCashoutNetworkPicker
+          rail={rail}
+          network={network}
+          onNetworkChange={setNetwork}
+          amountUsd={numericAmount}
+          customAddress={customAddress}
+          isCustomAddress={isCustomAddress}
+        />
+
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
           <span className="flex justify-between">
             Withdrawal Amount{" "}
             <span className="font-data-mono-md text-[11px] normal-case text-text-muted">
-              Max Withdrawable:{" "}
-              <strong className="text-text-primary">
-                {formatMoney(maxUsd)}
-              </strong>
+              Max Withdrawable: <strong className="text-text-primary">{formatMoney(maxUsd)}</strong>
             </span>
           </span>
           <PriceInput
-            value={Number(amount) || 0}
+            value={numericAmount}
             onChange={(val) => setAmount(val.toString())}
             max={maxUsd}
             className="h-12 bg-surface-container-lowest px-space-md text-base"
@@ -123,45 +135,31 @@ export function WalletCashout({
             </Button>
           ))}
         </div>
+
         <div className="flex flex-col gap-space-xs rounded-xl bg-surface-container-lowest p-space-md">
           <div className="flex items-center justify-between gap-2 text-text-primary">
             <span className="flex items-center gap-space-xs font-label-caps text-label-caps uppercase">
               <Icon name="security" className="text-[18px] text-primary" />
-              Steam Guard Mobile 2FA Authentication
+              Steam Guard 2FA Authentication
             </span>
-            <span className="font-label-badge text-[10px] text-primary uppercase">
-              Required
-            </span>
+            <span className="font-label-badge text-[10px] text-primary uppercase">Required</span>
           </div>
-          <p className="text-[12px] text-text-muted">
-            Enter the 5-character alphanumeric token currently active in your
-            Steam Mobile App.
-          </p>
           <div className="flex items-center gap-space-sm">
             <Input
               maxLength={5}
               value={token}
               onChange={(event) => setToken(event.target.value.toUpperCase())}
               placeholder="R7X9K"
-              className="h-auto w-36 rounded-lg border-0 bg-surface-card p-2 text-center font-data-mono-lg tracking-widest text-primary uppercase focus-visible:bg-surface-container-high"
+              className="h-auto w-32 rounded-lg border-0 bg-surface-card p-2 text-center font-data-mono-lg tracking-widest text-primary uppercase focus-visible:bg-surface-container-high"
             />
             <span className="flex items-center gap-space-xs font-data-mono-md text-[11px] text-text-secondary">
               <Icon name="timer" className="text-[16px] text-status-upcoming" />
-              Tokens refresh every 30 seconds
+              Tokens refresh every 30s
             </span>
           </div>
         </div>
-        <div className="flex items-center justify-between gap-space-sm font-data-mono-md text-[11px] text-text-muted">
-          <span>
-            24h Limit: <strong className="text-text-primary">$16,860</strong> /
-            $20,000 USD remaining
-          </span>
-          <span>
-            Network Mining Fee:{" "}
-            <strong className="text-tertiary">$1.00 USDT</strong>
-          </span>
-        </div>
       </div>
+
       <Button
         variant={null}
         size={null}
@@ -169,10 +167,11 @@ export function WalletCashout({
         onClick={() =>
           request(
             rail,
-            Number(amount),
+            numericAmount,
             maxUsd,
             token,
-            isCustomAddress ? customAddress : "TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La"
+            isCustomAddress ? customAddress : "TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La",
+            rail === "usdt" ? network : undefined,
           )
         }
         className="h-auto w-full gap-space-xs rounded-lg border-0 bg-surface-container-high py-space-md font-headline-sm text-[14px] text-text-primary uppercase shadow-md hover:bg-primary hover:text-on-primary disabled:opacity-50"
@@ -183,3 +182,4 @@ export function WalletCashout({
     </section>
   );
 }
+

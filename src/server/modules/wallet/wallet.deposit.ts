@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { ledgerEntries, walletAccounts } from "@/lib/db/schema";
 import { isStripeConfigured } from "@/lib/stripe/client";
 import { mockPaymentsEnabled } from "../checkout/checkout.payment";
-import type { DepositInput, DepositRail } from "./wallet.schema";
+import { CRYPTO_NETWORK_CONFIGS, type DepositInput, type DepositRail } from "./wallet.schema";
 
 type Rail = DepositRail;
 
@@ -51,9 +51,12 @@ export async function deposit(userId: string, input: DepositInput): Promise<Depo
 
     const isCrypto = Boolean(input.txHash);
     const isLiveStripe = input.rail === "cards" && isStripeConfigured();
+    const networkName = input.network ? CRYPTO_NETWORK_CONFIGS[input.network]?.name : null;
 
     const hash = input.txHash ?? (isLiveStripe ? `#STRIPE-${randomInt(1_000_000, 10_000_000)}` : `#MOCK-${randomInt(1_000_000, 10_000_000)}`);
-    const title = isCrypto ? "Web3 Crypto Deposit" : (isLiveStripe ? "Stripe Card Deposit" : `${RAIL[input.rail]} Deposit (simulated)`);
+    const title = isCrypto
+      ? `Web3 Crypto Deposit${networkName ? ` (${networkName})` : ""}`
+      : (isLiveStripe ? "Stripe Card Deposit" : `${RAIL[input.rail]} Deposit (simulated)`);
     const detailLabel = isCrypto
       ? `On-chain verified: ${input.txHash?.slice(0, 16)}...`
       : (isLiveStripe ? "Settled via Stripe 3D Secure" : "Test mode — no payment provider connected, nothing was charged");

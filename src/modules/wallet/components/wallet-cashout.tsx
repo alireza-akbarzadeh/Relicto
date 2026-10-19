@@ -6,9 +6,10 @@ import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { formatMoney } from "@/lib/format";
-import type { CryptoNetwork } from "@/server/modules/wallet/wallet.schema";
+import { DEFAULT_WHITELIST_VAULTS, type CryptoNetwork } from "@/server/modules/wallet/wallet.schema";
 import { useCashout } from "../hooks/use-cashout";
 import type { WalletRail as WalletRailType } from "../types";
+import { WalletCashoutDestination } from "./wallet-cashout-destination";
 import { WalletCashoutNetworkPicker } from "./wallet-cashout-network-picker";
 import { WalletRail } from "./wallet-rail";
 
@@ -27,8 +28,15 @@ export function WalletCashout({
   const [token, setToken] = useState("");
   const [customAddress, setCustomAddress] = useState("");
   const [isCustomAddress, setIsCustomAddress] = useState(false);
+  const [selectedVaultId, setSelectedVaultId] = useState("vault-binance-trc20");
 
   const numericAmount = Number(amount) || 0;
+
+  const getEffectiveDestination = () => {
+    if (isCustomAddress) return customAddress.trim();
+    const vault = DEFAULT_WHITELIST_VAULTS.find((v) => v.id === selectedVaultId && v.rail === rail);
+    return vault?.address ?? DEFAULT_WHITELIST_VAULTS[0].address;
+  };
 
   return (
     <section className="flex h-full flex-col justify-between gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
@@ -55,49 +63,16 @@ export function WalletCashout({
 
         <WalletRail rails={rails} value={rail} onChange={setRail} />
 
-        <div className="flex flex-col gap-space-xs">
-          <div className="flex items-center justify-between">
-            <span className="font-label-caps text-label-caps text-text-secondary uppercase">
-              {rail === "keys" ? "Steam Trade URL / Profile" : "Destination Vault / Address"}
-            </span>
-            <Button
-              variant={null}
-              size={null}
-              onClick={() => setIsCustomAddress(!isCustomAddress)}
-              className="h-auto rounded-none border-0 p-0 font-label-badge text-label-badge text-primary hover:underline"
-            >
-              {isCustomAddress ? "Use Whitelist" : "+ New Address"}
-            </Button>
-          </div>
-          {isCustomAddress ? (
-            <div className="flex items-center gap-space-sm rounded-lg bg-surface-container-lowest p-space-sm">
-              <Icon name="account_balance_wallet" className="text-[20px] text-primary" />
-              <Input
-                value={customAddress}
-                onChange={(e) => setCustomAddress(e.target.value)}
-                placeholder={rail === "keys" ? "https://steamcommunity.com/tradeoffer/new/..." : "Enter wallet address or IBAN..."}
-                className="h-auto flex-1 border-0 bg-transparent p-0 font-data-mono-md text-[12px] text-text-primary focus-visible:ring-0"
-              />
-            </div>
-          ) : (
-            <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-container-lowest p-space-sm">
-              <div className="flex min-w-0 items-center gap-space-sm">
-                <Icon name="account_balance_wallet" className="text-[20px] text-tertiary" />
-                <div className="flex min-w-0 flex-col">
-                  <span className="truncate font-body-sm text-body-sm text-text-primary">
-                    Binance Treasury Vault #1 ({network.toUpperCase()})
-                  </span>
-                  <span className="truncate font-data-mono-md text-[11px] text-text-muted">
-                    TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La
-                  </span>
-                </div>
-              </div>
-              <span className="shrink-0 rounded bg-surface-container-high px-2 py-1 font-label-badge text-[10px] text-status-upcoming uppercase">
-                Verified Whitelist
-              </span>
-            </div>
-          )}
-        </div>
+        <WalletCashoutDestination
+          rail={rail}
+          network={network}
+          isCustomAddress={isCustomAddress}
+          onToggleCustom={() => setIsCustomAddress(!isCustomAddress)}
+          customAddress={customAddress}
+          onCustomAddressChange={setCustomAddress}
+          selectedVaultId={selectedVaultId}
+          onSelectVaultId={setSelectedVaultId}
+        />
 
         <WalletCashoutNetworkPicker
           rail={rail}
@@ -170,7 +145,7 @@ export function WalletCashout({
             numericAmount,
             maxUsd,
             token,
-            isCustomAddress ? customAddress : "TQ7sWk8X19B4gZ9xKLmP2xRa8v4e...99La",
+            getEffectiveDestination(),
             rail === "usdt" ? network : undefined,
           )
         }

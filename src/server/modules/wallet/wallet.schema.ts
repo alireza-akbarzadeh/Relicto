@@ -94,6 +94,70 @@ export function validateCryptoAddress(network: CryptoNetwork, address: string): 
   return { valid: true };
 }
 
+export interface WhitelistVault {
+  id: string;
+  label: string;
+  rail: CashoutRail;
+  network?: CryptoNetwork;
+  address: string;
+  verified: boolean;
+  addedAt: string;
+}
+
+export const DEFAULT_WHITELIST_VAULTS: WhitelistVault[] = [
+  {
+    id: "vault-binance-trc20",
+    label: "Binance Primary (TRC-20)",
+    rail: "usdt",
+    network: "trc20",
+    address: "TQ7sWk8X19B4gZ9xKLmP2xRa8v4eLa99La",
+    verified: true,
+    addedAt: "2026-01-15",
+  },
+  {
+    id: "vault-ledger-arbitrum",
+    label: "Ledger Cold Vault (Arbitrum One)",
+    rail: "usdt",
+    network: "arbitrum",
+    address: "0x71C845175F3e017857046b3cd528653766C26112",
+    verified: true,
+    addedAt: "2026-02-10",
+  },
+  {
+    id: "vault-phantom-solana",
+    label: "Phantom Treasury (Solana)",
+    rail: "usdt",
+    network: "solana",
+    address: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+    verified: true,
+    addedAt: "2026-03-01",
+  },
+  {
+    id: "vault-steam-trade",
+    label: "Steam Trade Bot Escrow URL",
+    rail: "keys",
+    address: "https://steamcommunity.com/tradeoffer/new/?partner=89234120&token=R7X9K4LA",
+    verified: true,
+    addedAt: "2026-01-01",
+  },
+  {
+    id: "vault-sepa-revolut",
+    label: "Revolut Business IBAN (SEPA)",
+    rail: "sepa",
+    address: "LT603250012345678901",
+    verified: true,
+    addedAt: "2026-02-20",
+  },
+];
+
+export function getWhitelistedVaultsForRail(rail: CashoutRail, network?: CryptoNetwork): WhitelistVault[] {
+  return DEFAULT_WHITELIST_VAULTS.filter((v) => {
+    if (v.rail !== rail) return false;
+    if (rail === "usdt" && network) return v.network === network;
+    return true;
+  });
+}
+
 export const cashoutInput = z.object({
   rail: z.enum(CASHOUT_RAILS),
   network: z.enum(CRYPTO_NETWORKS).optional(),
@@ -117,4 +181,5 @@ export const depositInput = z.object({
   txHash: z.string().trim().max(128).optional(),
 });
 export type DepositInput = z.infer<typeof depositInput>;
+
 

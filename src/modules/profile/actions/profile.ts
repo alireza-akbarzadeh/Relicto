@@ -20,6 +20,8 @@ export const updateProfileSchema = z.object({
   alias: z.string().trim().max(40).optional().nullable(),
   role: z.string().trim().max(30).optional().nullable(),
   avatar: z.string().trim().optional().nullable(),
+  banner: z.string().trim().optional().nullable(),
+  highlightVideo: z.string().trim().optional().nullable(),
   tradeUrl: z.string().trim().optional().nullable(),
 });
 
@@ -44,7 +46,7 @@ export async function updateProfileDetails(raw: UpdateProfileInput): Promise<Upd
     };
   }
 
-  const { handle, realName, alias, role, avatar, tradeUrl } = parsed.data;
+  const { handle, realName, alias, role, avatar, banner, highlightVideo, tradeUrl } = parsed.data;
 
   // Validate trade URL format if provided
   if (tradeUrl && tradeUrl.trim().length > 0 && !isValidTradeUrl(tradeUrl.trim())) {
@@ -81,6 +83,8 @@ export async function updateProfileDetails(raw: UpdateProfileInput): Promise<Upd
       role: role || "Trader",
       avatar: avatar || null,
       avatarAlt: avatar ? `${handle} avatar` : null,
+      banner: banner || null,
+      highlightVideo: highlightVideo || null,
       tradeUrl: tradeUrl || null,
       updatedAt: new Date(),
     })

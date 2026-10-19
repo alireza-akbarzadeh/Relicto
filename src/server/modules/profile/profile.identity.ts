@@ -29,6 +29,7 @@ export function toIdentity(profile: Profile): TraderIdentity {
     avatarAlt: profile.avatarAlt ?? `${profile.handle} profile portrait`,
     banner: profile.banner ?? DEFAULT_BANNER,
     bannerAlt: profile.bannerAlt ?? "Neon esports lattice behind the trader's profile",
+    highlightVideo: profile.highlightVideo ?? undefined,
     telemetry: (profile.telemetry ?? []) as TraderIdentity["telemetry"],
     ranks: (profile.ranks ?? []) as TraderIdentity["ranks"],
     trust: {

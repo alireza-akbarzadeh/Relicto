@@ -24,6 +24,7 @@ export type TraderIdentity = {
   avatarAlt: string;
   banner: string;
   bannerAlt: string;
+  highlightVideo?: string;
   telemetry: { label: string; tone?: Tone; pulse?: boolean }[];
   ranks: RankChip[];
   trust: { score: string; trades: string };

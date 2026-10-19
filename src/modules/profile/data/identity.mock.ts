@@ -12,6 +12,7 @@ export const identity: TraderIdentity = {
   avatarAlt: "Portrait of an esports athlete wearing a glowing cybernetic visor",
   banner: "/images/lootora/user-profile-01.jpg",
   bannerAlt: "Neon esports lattice with Dota 2 runes and Counter-Strike smoke trails",
+  highlightVideo: "/media/items/dark-artistry-bracers.webm",
   telemetry: [
     { label: "BOT NODE: EU-CENTRAL-04", pulse: true },
     { label: "STEAM SESSION AUTH: VERIFIED 2048-BIT" },

@@ -85,6 +85,8 @@ export function HeroActions({ identity }: { identity?: TraderIdentity }) {
           alias: identity?.alias ?? "",
           role: identity?.role ?? "Trader",
           avatar: identity?.avatar ?? "",
+          banner: identity?.banner ?? "",
+          highlightVideo: identity?.highlightVideo ?? "",
           tradeUrl: identity?.tradeUrl ?? "",
         }}
       />

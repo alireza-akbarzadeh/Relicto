@@ -5,6 +5,7 @@ import { profileSearchParams } from "../lib/search-params";
 import type { ProfileData, ProfileTab } from "../types";
 import { BidsSection } from "./bids/bids-section";
 import { ListingsSection } from "./listings/listings-section";
+import { HighlightVideoCard } from "./showcase/highlight-video-card";
 import { ShowcaseSection } from "./showcase/showcase-section";
 import { EndorsementsPanel } from "./sidebar/endorsements-panel";
 import { LiquidationCard } from "./sidebar/liquidation-card";
@@ -22,6 +23,7 @@ function Panel({ tab, data }: { tab: ProfileTab; data: ProfileData }) {
   if (tab === "safeguards") return <SafeguardsPanel data={data} />;
   return (
     <>
+      <HighlightVideoCard videoUrl={data.identity.highlightVideo} traderHandle={data.identity.handle} />
       <ShowcaseSection items={data.showcase} />
       <ListingsSection listings={data.listings.slice(0, data.listingsShown)} total={data.listings.length} />
     </>

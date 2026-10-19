@@ -34,6 +34,7 @@ export const profiles = pgTable(
     avatarAlt: text("avatar_alt"),
     banner: text("banner"),
     bannerAlt: text("banner_alt"),
+    highlightVideo: text("highlight_video"),
     tradeUrl: text("trade_url"),
     telemetry: jsonb("telemetry").$type<ProfileTelemetry>(),
     ranks: jsonb("ranks").$type<ProfileRanks>(),

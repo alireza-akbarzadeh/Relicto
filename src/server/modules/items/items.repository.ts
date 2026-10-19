@@ -46,7 +46,7 @@ export async function findPriceHistory(itemId: string, limit = 400) {
   const rows = await db
     .select({ priceCents: pricePoints.priceCents, recordedAt: pricePoints.recordedAt, venue: pricePoints.venue })
     .from(pricePoints)
-    .where(and(eq(pricePoints.itemId, itemId), or(eq(pricePoints.venue, "skinport"), like(pricePoints.id, "pp-sale-%"))))
+    .where(eq(pricePoints.itemId, itemId))
     .orderBy(desc(pricePoints.recordedAt))
     .limit(limit);
 

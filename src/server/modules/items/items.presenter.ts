@@ -2,6 +2,7 @@ import type { ItemBadge, ItemDetail, RarityVariant, RelatedItem } from "@/module
 import { gameMarketPath } from "@/modules/seo/lib/games";
 import type { SellerBook } from "./items.book";
 import { toIntelligence } from "./items.intelligence";
+import { buildCatalogMods, buildCatalogReplay } from "./items-specs.presenter";
 import type { ItemRow, ItemStyleRow, ListingRow, PricePointRow, RelatedRow } from "./items.types";
 
 const usd = (cents: number) => cents / 100;
@@ -132,22 +133,8 @@ export function toItemDetail(
       ],
       note: "Instant payout settles to your wallet immediately.",
     },
-    mods: {
-      eyebrow: "Engine",
-      title: "Item specification",
-      items: [],
-      lore: { quote: "", source: "", verified: "" },
-    },
-    replay: {
-      eyebrow: "",
-      quality: "",
-      title: "",
-      image: item.imageUrl ?? "",
-      imageAlt: item.imageAlt ?? item.name,
-      caption: "",
-      damage: "",
-      alertPrice: money(lowestCents),
-    },
+    mods: buildCatalogMods(item, itemListings, gameLabel),
+    replay: buildCatalogReplay(item, lowestCents),
     related: { eyebrow: gameLabel, title: "More from this catalog", items: related.map(toRelated) },
   };
 }

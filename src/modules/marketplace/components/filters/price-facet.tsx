@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { PRICE_PRESETS } from "../../data/facets.mock";
@@ -29,21 +30,18 @@ export function PriceFacet() {
       </div>
       <div className="mb-2 grid grid-cols-2 gap-2">
         {[
-          { label: "Minimum price", value: String(min), set: (v: string) => ({ ...filters.price, min: toAmount(v, 0), preset: null }) },
-          { label: "Maximum price", value: shownMax, set: (v: string) => ({ ...filters.price, max: toAmount(v || "100000", 100_000), preset: null }) },
+          { label: "Min ($)", value: String(min), set: (v: string) => ({ ...filters.price, min: toAmount(v, 0), preset: null }) },
+          { label: "Max ($)", value: shownMax, set: (v: string) => ({ ...filters.price, max: toAmount(v || "100000", 100_000), preset: null }) },
         ].map((field) => (
-          <div key={field.label} className="flex items-center rounded bg-surface-container-lowest p-1.5">
-            <span className="mr-1 text-[13px] text-text-muted">$</span>
-            <Input
-              type="number"
-              min={0}
-              inputMode="decimal"
-              aria-label={field.label}
-              value={field.value}
-              onChange={(e) => patch({ price: field.set(e.target.value) })}
-              className={cn("h-auto border-0 p-0 shadow-none focus-visible:ring-0", INPUT)}
-            />
-          </div>
+          <PriceInput
+            key={field.label}
+            currencyPrefix="$"
+            currencySuffix=""
+            placeholder={field.label}
+            value={field.value ? Number(field.value) : null}
+            onChange={(val) => patch({ price: field.set(val ? String(val) : "") })}
+            className="h-8 bg-surface-container-lowest text-xs"
+          />
         ))}
       </div>
       <div className="flex flex-wrap gap-1">

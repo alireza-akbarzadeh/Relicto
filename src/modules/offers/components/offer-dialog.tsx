@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/cn";
@@ -63,16 +64,13 @@ export function OfferDialog({
 
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="offer-amount" className="font-label-badge text-[10px] tracking-wider text-text-secondary uppercase">Your bid (USD)</Label>
-          <Input
+          <PriceInput
             id="offer-amount"
-            type="number"
-            inputMode="decimal"
             min={form.minUsd}
-            step="0.01"
-            value={form.amount}
-            onChange={(event) => form.setAmount(event.target.value)}
+            value={Number(form.amount) || 0}
+            onChange={(val) => form.setAmount(val.toString())}
             aria-invalid={!form.valid}
-            className={cn(FIELD, "font-data-mono-lg text-lg font-bold text-text-primary")}
+            className={cn(FIELD, "h-11 font-data-mono-lg text-lg font-bold text-text-primary")}
           />
           <span className={cn("font-data-mono-md text-[11px]", form.valid ? "text-emerald-400" : "text-error")}>{form.hint}</span>
         </div>

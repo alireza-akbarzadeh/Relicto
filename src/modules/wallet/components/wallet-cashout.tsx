@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { formatMoney } from "@/lib/format";
 import { useCashout } from "../hooks/use-cashout";
 import type { WalletRail as WalletRailType } from "../types";
@@ -102,16 +103,12 @@ export function WalletCashout({
               </strong>
             </span>
           </span>
-          <div className="flex items-center rounded-lg bg-surface-container-lowest px-space-md">
-            <span className="font-data-mono-lg text-text-muted">$</span>
-            <Input
-              type="number"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
-              className="h-auto border-0 bg-transparent p-space-sm font-data-mono-lg text-text-primary focus-visible:ring-0"
-            />
-            <span className="font-data-mono-md text-text-secondary">USD</span>
-          </div>
+          <PriceInput
+            value={Number(amount) || 0}
+            onChange={(val) => setAmount(val.toString())}
+            max={maxUsd}
+            className="h-12 bg-surface-container-lowest px-space-md text-base"
+          />
         </label>
         <div className="grid grid-cols-4 gap-space-xs">
           {[0.25, 0.5, 0.75, 1].map((percent) => (

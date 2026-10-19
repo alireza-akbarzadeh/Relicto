@@ -93,18 +93,36 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
         <span className="block px-2 py-2 font-label-caps text-[10px] font-bold uppercase tracking-widest text-text-muted">
           Account Management
         </span>
-        {ACCOUNT_LINKS.map((link) => (
+        {ACCOUNT_LINKS.filter((link) => {
+          if (link.href === "/dashboard") {
+            return user.role?.toLowerCase() === "admin";
+          }
+          return true;
+        }).map((link) => (
           <Link
             key={link.href}
             href={link.href}
             onClick={onClose}
-            className="group flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
+            className={`group flex items-center justify-between rounded-lg px-2.5 py-2.5 text-xs font-medium transition-all hover:bg-white/5 active:scale-[0.98] ${
+              link.href === "/dashboard"
+                ? "bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
+                : "text-text-secondary hover:text-text-primary"
+            }`}
           >
-            <Icon
-              name={link.icon}
-              className="text-[18px] text-text-muted transition-colors duration-150 group-hover:text-amber-400"
-            />
-            <span>{link.label}</span>
+            <div className="flex items-center gap-3">
+              <Icon
+                name={link.icon}
+                className={`text-[18px] transition-colors duration-150 ${
+                  link.href === "/dashboard" ? "text-primary" : "text-text-muted group-hover:text-amber-400"
+                }`}
+              />
+              <span>{link.label}</span>
+            </div>
+            {link.href === "/dashboard" && (
+              <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold uppercase tracking-wider">
+                ADMIN
+              </span>
+            )}
           </Link>
         ))}
       </div>

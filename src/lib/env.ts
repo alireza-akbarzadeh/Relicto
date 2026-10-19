@@ -16,6 +16,13 @@ const serverSchema = z.object({
   VAPID_SUBJECT: z.string().optional(),
   CHECKOUT_MOCK_PAYMENTS: z.string().optional(),
   TRACKER_SIMULATE_VENUES: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
+  GEMENI_API_KEY: z.string().optional(),
+  GEMINI_PROJECT_NAME: z.string().optional(),
+  GEMENI_PROJECT_NAME: z.string().optional(),
+  GEMINI_PROJECT_NUMBER: z.string().optional(),
+  GEMENI_PROJECT_NUMBER: z.string().optional(),
+  GEMINI_MODEL: z.string().optional(),
 });
 
 const clientSchema = z.object({

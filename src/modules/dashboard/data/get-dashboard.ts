@@ -9,6 +9,12 @@ import { buildChartSeries, buildGameDistribution, calculateKpis } from "./dashbo
 import { getAdminListings } from "./get-admin-listings";
 import { getAdminDisputes } from "./get-admin-disputes";
 import { getAdminAuditLogs } from "./get-admin-audit-logs";
+import { getAdminCatalog } from "./get-admin-catalog";
+import { getAdminTournaments } from "./get-admin-tournaments";
+import { getAdminWiki } from "./get-admin-wiki";
+import { getAdminCommunity } from "./get-admin-community";
+import { getAdminPromos } from "./get-admin-promos";
+import { settingsService } from "@/server/modules/settings/settings.service";
 
 export async function getDashboardData(): Promise<DashboardData> {
   const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
@@ -119,10 +125,26 @@ export async function getDashboardData(): Promise<DashboardData> {
     rawOrders.map((r) => ({ gameId: r.gameId, priceCents: r.order.totalCents })),
   );
 
-  const [listingsData, disputesData, auditLogsData] = await Promise.all([
+  const [
+    listingsData,
+    disputesData,
+    auditLogsData,
+    catalogData,
+    tournamentsData,
+    wikiData,
+    communityData,
+    promosData,
+    liveSettings,
+  ] = await Promise.all([
     getAdminListings(),
     getAdminDisputes(),
     getAdminAuditLogs(),
+    getAdminCatalog(),
+    getAdminTournaments(),
+    getAdminWiki(),
+    getAdminCommunity(),
+    getAdminPromos(),
+    settingsService.getSettings(),
   ]);
 
   return {
@@ -140,15 +162,14 @@ export async function getDashboardData(): Promise<DashboardData> {
     transactions: mappedTransactions,
     users: mappedUsers,
     listings: listingsData,
+    catalog: catalogData,
+    tournamentsList: tournamentsData.tournamentsList,
+    matchesList: tournamentsData.matchesList,
+    wikiGuides: wikiData,
+    communityPosts: communityData,
+    promoCodes: promosData,
     disputes: disputesData,
-    settings: {
-      platformFeeBps: 250,
-      vipFeeBps: 150,
-      maxWithdrawalUsd: 10000,
-      autoCancelTimeoutSeconds: 900,
-      maintenanceMode: false,
-      activeAnnouncement: null,
-    },
+    settings: liveSettings,
     system: {
       daemonStatus: "online",
       activeBots: 12,

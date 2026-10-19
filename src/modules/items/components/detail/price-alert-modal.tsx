@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { formatMoney } from "@/lib/format";
 import { createAlertRule } from "@/modules/alerts/actions/rules";
 import type { ItemDetail } from "../../types";
@@ -88,19 +89,12 @@ export function PriceAlertModal({ open, onOpenChange, item }: PriceAlertModalPro
             <label className="font-label-caps text-[11px] font-bold tracking-wider text-text-muted uppercase">
               Trigger Price Target (USD)
             </label>
-            <div className="relative">
-              <span className="absolute top-2.5 left-3 font-data-mono-md text-xs text-text-muted">$</span>
-              <Input
-                type="number"
-                step="0.01"
-                min="0.01"
-                required
-                value={targetUsd}
-                onChange={(e) => setTargetUsd(e.target.value)}
-                placeholder="0.00"
-                className="h-10 border-white/10 bg-surface-container-lowest pl-7 font-data-mono-md text-sm text-text-primary focus-visible:ring-primary"
-              />
-            </div>
+            <PriceInput
+              value={Number(targetUsd) || 0}
+              onChange={(val) => setTargetUsd(val.toString())}
+              placeholder="0.00"
+              className="h-10 border-white/10 bg-surface-container-lowest text-sm"
+            />
             <div className="flex items-center gap-1.5 pt-0.5">
               {[5, 10, 15, 25].map((pct) => (
                 <Button

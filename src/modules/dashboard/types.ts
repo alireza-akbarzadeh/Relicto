@@ -4,6 +4,11 @@ export type DashboardTab =
   | "income"
   | "transactions"
   | "listings"
+  | "catalog"
+  | "tournaments"
+  | "wiki"
+  | "community"
+  | "promotions"
   | "disputes"
   | "users"
   | "monitoring"
@@ -116,6 +121,84 @@ export type DashboardListing = {
   floorCents?: number | null;
 };
 
+export type DashboardCatalogItem = {
+  id: string;
+  slug: string;
+  name: string;
+  gameId: string;
+  rarity?: string | null;
+  slot?: string | null;
+  imageUrl?: string | null;
+  collection?: string | null;
+  minFloat?: number | null;
+  maxFloat?: number | null;
+  activeListingsCount: number;
+  floorPriceCents?: number | null;
+  updatedAt: string;
+};
+
+export type DashboardTournament = {
+  id: string;
+  slug: string;
+  name: string;
+  gameId: string;
+  prizePoolCents: number;
+  status: "upcoming" | "live" | "completed";
+  format?: string | null;
+  entrantCount: number;
+  featured: boolean;
+  startsAt?: string | null;
+};
+
+export type DashboardMatch = {
+  id: string;
+  tournamentId: string;
+  tournamentName: string;
+  teamAName: string;
+  teamBName: string;
+  scoreA: number;
+  scoreB: number;
+  status: "scheduled" | "live" | "completed";
+  round?: string | null;
+  startsAt?: string | null;
+};
+
+export type DashboardWikiGuide = {
+  id: string;
+  slug: string;
+  gameId?: string | null;
+  category: string;
+  title: string;
+  summary: string;
+  kind: "phase" | "seed" | "gem" | "formula";
+  readMinutes?: number | null;
+  updatedAt: string;
+};
+
+export type DashboardCommunityPost = {
+  id: string;
+  authorId: string;
+  authorHandle: string;
+  guildName?: string | null;
+  tag?: string | null;
+  title: string;
+  body: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+};
+
+export type DashboardPromoCode = {
+  id: string;
+  code: string;
+  discountBps: number;
+  gameId: string;
+  maxUses: number;
+  usedCount: number;
+  active: boolean;
+  expiresAt?: string | null;
+};
+
 export type DashboardDispute = {
   id: string;
   orderCode: string;
@@ -130,12 +213,39 @@ export type DashboardDispute = {
 };
 
 export type DashboardSettings = {
+  // Financial & Escrow economics
   platformFeeBps: number;
   vipFeeBps: number;
+  minDepositUsd: number;
+  maxDepositUsd: number;
   maxWithdrawalUsd: number;
   autoCancelTimeoutSeconds: number;
+  tradeUpFeeBps: number;
+  minTrustScoreCashout: number;
+
+  // Game Ecosystem Switches
+  enableCs2: boolean;
+  enableDota2: boolean;
+  enableTf2: boolean;
+  enableRust: boolean;
+
+  // Security, Automation & Emergency
   maintenanceMode: boolean;
+  maintenanceNotice?: string | null;
+  steamDaemonAutoDispatch: boolean;
+  requireManualApprovalAboveUsd: number;
+  restrictRegistrations: boolean;
+
+  // Broadcast & Announcement
   activeAnnouncement?: string | null;
+  announcementActive: boolean;
+  announcementSeverity: "info" | "warning" | "critical" | "success";
+  announcementLink?: string | null;
+
+  // Identity & Support
+  platformName: string;
+  supportEmail: string;
+  discordUrl: string;
 };
 
 export type SystemStatusData = {
@@ -163,6 +273,12 @@ export type DashboardData = {
   transactions: DashboardTransaction[];
   users: DashboardUser[];
   listings: DashboardListing[];
+  catalog: DashboardCatalogItem[];
+  tournamentsList: DashboardTournament[];
+  matchesList: DashboardMatch[];
+  wikiGuides: DashboardWikiGuide[];
+  communityPosts: DashboardCommunityPost[];
+  promoCodes: DashboardPromoCode[];
   disputes: DashboardDispute[];
   settings: DashboardSettings;
   system: SystemStatusData;

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { Ref, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { isMoneyRail, useDeposit } from "../hooks/use-deposit";
@@ -95,36 +96,12 @@ export function WalletDeposit({
         </div>
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
           Deposit Amount (USD)
-          <div className="group flex h-14 items-center rounded-lg border border-transparent bg-surface-container-lowest px-space-md transition-colors focus-within:border-primary/30 focus-within:bg-surface-container-low">
-            <span className="mr-space-sm font-data-mono-xl text-text-muted">
-              $
-            </span>
-
-            <Input
-              type="number"
-              inputMode="decimal"
-              value={amount}
-              ref={inputRef}
-              onChange={(event) => setAmount(event.target.value)}
-              className="
-                  h-full min-w-0 flex-1
-                  border-0 bg-transparent p-0
-                  font-data-mono-xl font-medium
-                  text-text-primary
-                  placeholder:text-text-muted
-                  focus-visible:ring-0
-                  focus-visible:ring-offset-0
-                  [appearance:textfield]
-                  [&::-webkit-inner-spin-button]:appearance-none
-                  [&::-webkit-outer-spin-button]:appearance-none
-                   "
-              placeholder="0.00"
-            />
-
-            <span className="ml-space-sm font-data-mono-md text-text-secondary">
-              USD
-            </span>
-          </div>
+          <PriceInput
+            value={numericAmount}
+            onChange={(val) => setAmount(val.toString())}
+            placeholder="0.00"
+            className="h-14 bg-surface-container-lowest px-space-md text-base"
+          />
         </label>
         <div className="flex flex-wrap items-center gap-space-xs">
           {[50, 100, 250, 500, 1000].map((value) => (

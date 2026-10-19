@@ -6,6 +6,11 @@ export const DASHBOARD_TABS = [
   "income",
   "transactions",
   "listings",
+  "catalog",
+  "tournaments",
+  "wiki",
+  "community",
+  "promotions",
   "disputes",
   "users",
   "monitoring",
@@ -14,7 +19,47 @@ export const DASHBOARD_TABS = [
   "wallet",
 ] as const;
 
-export const dashboardTabParam = parseAsStringLiteral(DASHBOARD_TABS).withDefault("users");
+export const dashboardTabParam = parseAsStringLiteral(DASHBOARD_TABS).withDefault("overview");
+
+export const catalogSearchParams = {
+  cq: parseAsString.withDefault(""),
+  cgame: parseAsString.withDefault("all"),
+  crarity: parseAsString.withDefault("all"),
+  csort: parseAsString.withDefault("name_asc"),
+  cpage: parseAsInteger.withDefault(1),
+  cpageSize: parseAsInteger.withDefault(12),
+};
+
+export const tournamentsSearchParams = {
+  tq: parseAsString.withDefault(""),
+  tgame: parseAsString.withDefault("all"),
+  tstatus: parseAsString.withDefault("all"),
+  tsort: parseAsString.withDefault("newest"),
+  tpage: parseAsInteger.withDefault(1),
+  tpageSize: parseAsInteger.withDefault(10),
+};
+
+export const wikiSearchParams = {
+  wq: parseAsString.withDefault(""),
+  wcat: parseAsString.withDefault("all"),
+  wkind: parseAsString.withDefault("all"),
+  wpage: parseAsInteger.withDefault(1),
+  wpageSize: parseAsInteger.withDefault(10),
+};
+
+export const communitySearchParams = {
+  comq: parseAsString.withDefault(""),
+  comguild: parseAsString.withDefault("all"),
+  compage: parseAsInteger.withDefault(1),
+  compageSize: parseAsInteger.withDefault(10),
+};
+
+export const promosSearchParams = {
+  pq: parseAsString.withDefault(""),
+  pstatus: parseAsString.withDefault("all"),
+  ppage: parseAsInteger.withDefault(1),
+  ppageSize: parseAsInteger.withDefault(10),
+};
 
 export const usersSearchParams = {
   uq: parseAsString.withDefault(""),

@@ -6,6 +6,9 @@ import { getWatchedSlugs } from "@/modules/relicto/data/get-watchlist";
 import { getCartLines } from "@/modules/checkout/data/get-checkout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SearchProvider } from "@/modules/search/state/search-provider";
+import { CopilotDock } from "@/modules/copilot/components/copilot-dock";
+import { BroadcastBanner } from "@/modules/relicto/components/shell/broadcast-banner";
+import { settingsService } from "@/server/modules/settings/settings.service";
 
 /**
  * Relicto app shell: shares the session (user, notifications), the live basket,
@@ -13,14 +16,21 @@ import { SearchProvider } from "@/modules/search/state/search-provider";
  * catalog with an empty basket and watchlist; `(account)` pages require a session.
  */
 export default async function RelictoLayout({ children }: LayoutProps<"/">) {
-  const session = await getSession();
+  const [session, settings] = await Promise.all([
+    getSession(),
+    settingsService.getSettings(),
+  ]);
   const [cart, watched] = session ? await Promise.all([getCartLines(), getWatchedSlugs()]) : [[], []];
   return (
     <SessionProvider user={session?.user ?? null} notifications={session?.notifications ?? []}>
       <CartProvider initialItems={cart}>
         <WatchlistProvider initialSlugs={watched}>
           <TooltipProvider>
-            <SearchProvider>{children}</SearchProvider>
+            <SearchProvider>
+              <BroadcastBanner settings={settings} />
+              {children}
+              <CopilotDock />
+            </SearchProvider>
           </TooltipProvider>
         </WatchlistProvider>
       </CartProvider>

@@ -1,17 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { auditService } from "@/server/modules/audit/audit.service";
+import { settingsService } from "@/server/modules/settings/settings.service";
 import type { DashboardSettings } from "../types";
-
-let currentSettings: DashboardSettings = {
-  platformFeeBps: 250,
-  vipFeeBps: 150,
-  maxWithdrawalUsd: 10000,
-  autoCancelTimeoutSeconds: 900,
-  maintenanceMode: false,
-  activeAnnouncement: null,
-};
 
 export async function updatePlatformSettingsAction(
   updates: Partial<DashboardSettings>
@@ -22,7 +15,7 @@ export async function updatePlatformSettingsAction(
       return { success: false, error: "Unauthorized: Administrator privileges required." };
     }
 
-    currentSettings = { ...currentSettings, ...updates };
+    const newSettings = await settingsService.updateSettings(updates);
 
     void auditService.record({
       adminId: authedUserId ?? "admin_root",
@@ -34,9 +27,12 @@ export async function updatePlatformSettingsAction(
       severity: updates.maintenanceMode !== undefined ? "critical" : "warning",
     });
 
+    revalidatePath("/dashboard");
+    revalidatePath("/marketplace");
+
     return {
       success: true,
-      settings: currentSettings,
+      settings: newSettings,
     };
   } catch (error) {
     console.error("Failed to update platform settings:", error);

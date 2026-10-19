@@ -22,6 +22,11 @@ import { DashboardUsers } from "./dashboard-users";
 import { useQueryState } from "nuqs";
 import { dashboardTabParam } from "../lib/search-params";
 import { DashboardListings } from "./dashboard-listings";
+import { DashboardCatalog } from "./dashboard-catalog";
+import { DashboardTournaments } from "./dashboard-tournaments";
+import { DashboardWiki } from "./dashboard-wiki";
+import { DashboardCommunity } from "./dashboard-community";
+import { DashboardPromos } from "./dashboard-promos";
 import { DashboardDisputes } from "./dashboard-disputes";
 import { DashboardSettingsView } from "./dashboard-settings";
 import { DashboardAudit } from "./dashboard-audit";
@@ -38,6 +43,11 @@ export function DashboardShell({ data }: { data: DashboardData }) {
     income: { title: "Income & Revenue Telemetry", desc: "Platform escrow fee yield and game ecosystem distribution" },
     transactions: { title: "Treasury Ledger", desc: "Audited cryptographic transaction receipts and vault balance after" },
     listings: { title: "Market Listings & Inventory", desc: "Live peer-to-peer inventory, price floors, wear validation, and moderation" },
+    catalog: { title: "Catalog & Weapons Directory", desc: "Canonical weapon models, rarity tiers, CS2 collections, float ranges, and market floor monitoring" },
+    tournaments: { title: "Esports & Tournament Operations", desc: "Manage tournament rosters, match schedules, live broadcast states, and bracket scoring" },
+    wiki: { title: "Wiki Knowledge Base CMS", desc: "Publish authored guides, float formulas, seed tier lists, and economic mechanics" },
+    community: { title: "Community Moderation Feed", desc: "Inspect discussion threads, review reported user comments, and moderate trading feed" },
+    promotions: { title: "Promotional Campaigns & Fee Vouchers", desc: "Create discount codes, configure take rate fee reductions, and monitor redemption caps" },
     disputes: { title: "Escrow Disputes & Arbitration", desc: "Review trade confirmation disputes, inspect evidence, and arbitrate settlements" },
     users: { title: "User Directory & Role Administration", desc: "Manage operator roles, VIP tiers, and emergency vault locks" },
     monitoring: { title: "Steam Daemon & Fleet Health", desc: "Active Sentinel trade bot nodes and database synchronization" },
@@ -125,6 +135,18 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             {tab === "transactions" && <DashboardTransactions transactions={data.transactions} />}
 
             {tab === "listings" && <DashboardListings listings={data.listings} />}
+
+            {tab === "catalog" && <DashboardCatalog catalog={data.catalog} />}
+
+            {tab === "tournaments" && (
+              <DashboardTournaments tournaments={data.tournamentsList} matches={data.matchesList} />
+            )}
+
+            {tab === "wiki" && <DashboardWiki guides={data.wikiGuides} />}
+
+            {tab === "community" && <DashboardCommunity posts={data.communityPosts} />}
+
+            {tab === "promotions" && <DashboardPromos promos={data.promoCodes} />}
 
             {tab === "disputes" && <DashboardDisputes disputes={data.disputes} />}
 

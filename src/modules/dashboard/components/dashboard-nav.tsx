@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
   LayoutDashboard, Receipt, TrendingUp, History, Tag, Scale, Users, Activity,
-  Sliders, PlusCircle, ShieldCheck, ExternalLink,
+  Sliders, PlusCircle, ShieldCheck, ExternalLink, Package, Trophy, BookOpen, MessageSquare, Percent
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -35,6 +35,11 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
 
   const MANAGEMENT_NAV = [
     { tab: "listings" as const, label: "Market Listings", icon: Tag },
+    { tab: "catalog" as const, label: "Catalog & Weapons", icon: Package },
+    { tab: "tournaments" as const, label: "Tournaments & Esports", icon: Trophy },
+    { tab: "wiki" as const, label: "Wiki Codex CMS", icon: BookOpen },
+    { tab: "community" as const, label: "Community Moderation", icon: MessageSquare },
+    { tab: "promotions" as const, label: "Promo Vouchers", icon: Percent },
     { tab: "disputes" as const, label: "Arbitration & Disputes", icon: Scale, badge: kpis.disputesCount > 0 ? kpis.disputesCount : null },
     { tab: "users" as const, label: "User & Role Directory", icon: Users, badge: usersCount },
   ];

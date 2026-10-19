@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { CryptoModal } from "@/modules/checkout/components/crypto-modal";
@@ -99,18 +100,12 @@ export function MobileDepositSheet({ open, onOpenChange, rail, onRailChange }: P
                 <span className="font-label-caps text-label-caps text-text-secondary uppercase">
                   Deposit Amount (USD)
                 </span>
-                <div className="flex h-12 items-center rounded-lg border border-border-subtle/50 bg-surface-container-lowest px-3">
-                  <span className="font-data-mono-md text-text-muted">$</span>
-                  <Input
-                    type="number"
-                    inputMode="decimal"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="h-full border-0 bg-transparent p-0 px-2 font-data-mono-lg text-text-primary focus-visible:ring-0"
-                    placeholder="0.00"
-                  />
-                  <span className="font-data-mono-md text-[12px] text-text-secondary">USD</span>
-                </div>
+                <PriceInput
+                  value={Number(amount) || 0}
+                  onChange={(val) => setAmount(val.toString())}
+                  placeholder="0.00"
+                  className="h-12 bg-surface-container-lowest px-3"
+                />
 
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {[50, 100, 250, 500].map((val) => (

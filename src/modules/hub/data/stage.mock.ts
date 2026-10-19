@@ -1,4 +1,5 @@
 import type { GameId, GameTab, HubPulse, Spotlight } from "../types";
+import { CS2_CHART_WINDOWS, CROSS_CHART_WINDOWS, DOTA_CHART_WINDOWS } from "./spotlight-charts.mock";
 
 export const pulse: HubPulse = {
   event: "TI 2025 QUALIFIERS // PGL COPENHAGEN",
@@ -37,6 +38,8 @@ export const spotlights: Record<GameId, Spotlight> = {
       peakLabel: "ALL-TIME HIGH V2",
       series: ["Market Floor", "Pro Winrate"],
       volume: "VOL: 3,420 TRADES/24H",
+      windows: DOTA_CHART_WINDOWS,
+      points: DOTA_CHART_WINDOWS["7D"],
     },
   },
   cs2: {
@@ -62,6 +65,8 @@ export const spotlights: Record<GameId, Spotlight> = {
       peakLabel: "MAJOR FINALS HIGH",
       series: ["Market Floor", "Pro Pick Rate"],
       volume: "VOL: 1,180 TRADES/24H",
+      windows: CS2_CHART_WINDOWS,
+      points: CS2_CHART_WINDOWS["7D"],
     },
   },
   cross: {
@@ -87,6 +92,8 @@ export const spotlights: Record<GameId, Spotlight> = {
       peakLabel: "SPREAD PEAK",
       series: ["Arcana Index", "Covert Index"],
       volume: "VOL: 5,960 SWAPS/24H",
+      windows: CROSS_CHART_WINDOWS,
+      points: CROSS_CHART_WINDOWS["7D"],
     },
   },
 };

@@ -36,6 +36,23 @@ export type SpotlightMetric = {
   strong?: boolean;
 };
 
+export type SpotlightChartPoint = {
+  day: string;
+  floor: number;
+  metric: number;
+};
+
+export type SpotlightChart = {
+  title: string;
+  window: string;
+  peak: string;
+  peakLabel: string;
+  series: [string, string];
+  volume: string;
+  points?: SpotlightChartPoint[];
+  windows?: Record<string, SpotlightChartPoint[]>;
+};
+
 export type Spotlight = {
   badges: SpotlightBadge[];
   title: { lead: string; highlight: string; tail: string };
@@ -43,7 +60,7 @@ export type Spotlight = {
   metrics: SpotlightMetric[];
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string };
-  chart: { title: string; window: string; peak: string; peakLabel: string; series: [string, string]; volume: string };
+  chart: SpotlightChart;
 };
 
 export type MetaFilter = "all" | "carry" | "mid" | "arcana";

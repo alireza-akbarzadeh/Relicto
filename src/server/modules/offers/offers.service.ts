@@ -3,7 +3,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import type { BuyerBid, IncomingOffer, MyBid } from "@/modules/offers/types";
 import { acceptOffer } from "./offers.accept";
-import { declineOffer, makeOffer, withdrawOffer } from "./offers.commands";
+import { counterOffer, declineOffer, makeOffer, withdrawOffer } from "./offers.commands";
 import { toBuyerBids, toIncomingOffers, toMyBid } from "./offers.presenter";
 import * as repo from "./offers.repository";
 
@@ -27,6 +27,7 @@ export const offerService = {
   make: makeOffer,
   withdraw: withdrawOffer,
   decline: declineOffer,
+  counter: counterOffer,
   accept: acceptOffer,
 
   /**

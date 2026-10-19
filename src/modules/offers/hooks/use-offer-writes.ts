@@ -5,7 +5,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { formatMoney } from "@/lib/format";
 import { useAccountGate } from "@/modules/relicto/hooks/use-account-gate";
-import { acceptOffer, declineOffer, makeOffer, withdrawOffer } from "../actions/offers";
+import { acceptOffer, counterOffer, declineOffer, makeOffer, withdrawOffer } from "../actions/offers";
 
 type Refusal = readonly [title: string, description: string];
 
@@ -88,5 +88,22 @@ export function useOfferWrites() {
       else toast.error(ACCEPT_REFUSED["not-found"][0], { description: ACCEPT_REFUSED["not-found"][1] });
     });
 
-  return { pending, make, withdraw, accept, decline };
+  const counter = (
+    input: { offerId: string; counterUsd: number; note?: string },
+    name: string,
+    onDone?: () => void
+  ) =>
+    run(async () => {
+      const result = await counterOffer(input);
+      if (result.status === "countered") {
+        toast.success(`Counter-offer of ${formatMoney(input.counterUsd)} sent for ${name}`, {
+          description: "The buyer has been notified to review your proposal.",
+        });
+        onDone?.();
+      } else {
+        toast.error("Couldn't send counter-offer", { description: "The offer may have lapsed or been withdrawn." });
+      }
+    });
+
+  return { pending, make, withdraw, accept, decline, counter };
 }

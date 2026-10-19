@@ -129,6 +129,20 @@ export const draft = {
     dedupeKey: `offer:${o.offerId}:closed:${o.buyerId}`,
   }),
 
+  /** Buyer: the seller proposed a counter-offer with a revised price and note. */
+  offerCountered: (o: Bid & { buyerId: string; counterCents: number; slug: string; note?: string | null }): NotificationDraft => ({
+    userId: o.buyerId,
+    kind: "offer_received",
+    icon: "swap_horiz",
+    tone: "info",
+    title: `Counter-offer: ${usd(o.counterCents)} for ${o.item}`,
+    body: o.note
+      ? `Seller counter-proposed ${usd(o.counterCents)}: "${o.note}". Review and adjust your bid.`
+      : `Seller counter-proposed ${usd(o.counterCents)}. Review and adjust your bid.`,
+    href: `/items/${o.slug}`,
+    dedupeKey: `offer:${o.offerId}:counter:${o.counterCents}`,
+  }),
+
   /** Either side: the escrow was cancelled before the trade completed. */
   orderCancelled: (o: Order & { userId: string; role: "buyer" | "seller"; refundCents: number; reason: string }): NotificationDraft => ({
     userId: o.userId,

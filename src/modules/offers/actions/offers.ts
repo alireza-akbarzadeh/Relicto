@@ -5,7 +5,7 @@ import { after } from "next/server";
 import type { z } from "zod";
 import { requireUserId } from "@/modules/relicto/data/get-session";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
-import { makeOfferInput, offerIdInput } from "@/server/modules/offers/offers.schema";
+import { counterOfferInput, makeOfferInput, offerIdInput } from "@/server/modules/offers/offers.schema";
 import { offerService } from "@/server/modules/offers/offers.service";
 
 /**
@@ -45,6 +45,16 @@ export async function acceptOffer(input: z.input<typeof offerIdInput>) {
 export async function declineOffer(input: z.input<typeof offerIdInput>) {
   const result = await offerService.decline(await requireUserId(), offerIdInput.parse(input).offerId);
   if (result.status === "declined") {
+    revalidatePath("/", "layout");
+    after(() => notificationService.deliver(result.notices));
+  }
+  return { status: result.status };
+}
+
+/** Seller: propose a counter-offer with a revised price and note. */
+export async function counterOffer(input: z.input<typeof counterOfferInput>) {
+  const result = await offerService.counter(await requireUserId(), counterOfferInput.parse(input));
+  if (result.status === "countered") {
     revalidatePath("/", "layout");
     after(() => notificationService.deliver(result.notices));
   }

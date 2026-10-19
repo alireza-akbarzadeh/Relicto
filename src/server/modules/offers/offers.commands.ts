@@ -9,7 +9,7 @@ import { checkBid, OFFER_TTL_HOURS, toCents } from "@/modules/offers/lib/bid-rul
 import { draft } from "../notifications/notifications.catalog";
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
-import type { makeOfferInput } from "./offers.schema";
+import type { counterOfferInput, makeOfferInput } from "./offers.schema";
 import { recount, sumCommittedBids } from "./offers.repository";
 
 const HOUR = 60 * 60 * 1000;
@@ -102,5 +102,39 @@ export async function declineOffer(sellerId: string, offerId: string): Promise<D
       }),
     ]);
     return { status: "declined", notices };
+  });
+}
+
+export type CounterResult = { status: "countered"; notices: NotificationRow[] } | { status: "not-found" | "invalid-counter" };
+
+/** The seller proposes a counter-price; the buyer receives a notification to review or revise their bid. */
+export async function counterOffer(sellerId: string, input: z.infer<typeof counterOfferInput>): Promise<CounterResult> {
+  return db.transaction(async (tx): Promise<CounterResult> => {
+    const [row] = await tx
+      .select({ offer: offers, sellerId: listings.sellerId, name: items.name, slug: items.slug, askCents: listings.priceCents })
+      .from(offers)
+      .innerJoin(listings, eq(offers.listingId, listings.id))
+      .innerJoin(items, eq(listings.itemId, items.id))
+      .where(and(eq(offers.id, input.offerId), eq(offers.status, "pending")))
+      .for("update", { of: [offers] });
+    if (!row || row.sellerId !== sellerId) return { status: "not-found" };
+
+    const counterCents = toCents(input.counterUsd);
+    if (counterCents <= 0) return { status: "invalid-counter" };
+
+    const noteText = input.note ? `[Counter $${input.counterUsd}]: ${input.note}` : `[Counter $${input.counterUsd}]`;
+    await tx.update(offers).set({ note: noteText }).where(eq(offers.id, input.offerId));
+
+    const notices = await notificationService.record(tx, [
+      draft.offerCountered({
+        offerId: input.offerId,
+        item: row.name,
+        counterCents,
+        buyerId: row.offer.buyerId,
+        slug: row.slug,
+        note: input.note || null,
+      }),
+    ]);
+    return { status: "countered", notices };
   });
 }

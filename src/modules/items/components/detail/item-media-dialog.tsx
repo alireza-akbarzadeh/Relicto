@@ -32,19 +32,22 @@ export function ItemMediaDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl border border-white/10 bg-surface-card p-0 shadow-2xl overflow-hidden">
-        <DialogHeader className="border-b border-white/10 bg-surface-container-lowest/90 px-5 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="rounded bg-primary/20 px-2 py-0.5 font-label-badge text-[10px] font-bold text-primary uppercase">
+      <DialogContent
+        overlayClassName="bg-black/80 backdrop-blur-md"
+        className="w-[94vw] max-w-4xl sm:max-w-4xl border border-white/15 bg-surface-card p-0 shadow-2xl overflow-hidden rounded-2xl"
+      >
+        <DialogHeader className="border-b border-white/10 bg-surface-container-lowest/90 px-6 py-3.5 pr-14">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="rounded bg-primary/20 px-2.5 py-1 font-label-badge text-xs font-bold text-primary uppercase">
                 {media.game} · {media.hero}
               </span>
-              <DialogTitle className="font-headline-sm text-base font-bold text-text-primary">
+              <DialogTitle className="font-headline-sm text-base md:text-lg font-bold text-text-primary">
                 {media.name} — Visual Showcase
               </DialogTitle>
             </div>
-            <span className="flex items-center gap-1 font-data-mono-md text-[10px] text-emerald-400">
-              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="flex items-center gap-1.5 font-data-mono-md text-xs text-emerald-400">
+              <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
               Sotoon S3 Verified
             </span>
           </div>
@@ -54,7 +57,7 @@ export function ItemMediaDialog({
         </DialogHeader>
 
         {/* Tab Switcher */}
-        <div className="flex items-center justify-between border-b border-white/5 bg-surface-container-lowest px-5 py-2">
+        <div className="flex items-center justify-between border-b border-white/5 bg-surface-container-lowest px-6 py-2.5">
           <div className="flex items-center gap-2">
             <Button
               type="button"
@@ -62,11 +65,13 @@ export function ItemMediaDialog({
               size={null}
               onClick={() => setTab("video")}
               className={cn(
-                "h-7 gap-1.5 rounded px-2.5 font-headline-sm text-xs uppercase transition-all",
-                tab === "video" ? "bg-primary text-on-primary font-bold shadow-md shadow-primary/20" : "text-text-muted hover:text-text-primary",
+                "h-8 gap-2 rounded px-3 font-headline-sm text-xs uppercase transition-all",
+                tab === "video"
+                  ? "bg-primary text-on-primary font-bold shadow-md shadow-primary/20"
+                  : "text-text-muted hover:text-text-primary hover:bg-white/5",
               )}
             >
-              <Video className="size-3.5" />
+              <Video className="size-4" />
               <span>In-Game Video (60fps)</span>
             </Button>
             <Button
@@ -75,11 +80,13 @@ export function ItemMediaDialog({
               size={null}
               onClick={() => setTab("gallery")}
               className={cn(
-                "h-7 gap-1.5 rounded px-2.5 font-headline-sm text-xs uppercase transition-all",
-                tab === "gallery" ? "bg-primary text-on-primary font-bold shadow-md shadow-primary/20" : "text-text-muted hover:text-text-primary",
+                "h-8 gap-2 rounded px-3 font-headline-sm text-xs uppercase transition-all",
+                tab === "gallery"
+                  ? "bg-primary text-on-primary font-bold shadow-md shadow-primary/20"
+                  : "text-text-muted hover:text-text-primary hover:bg-white/5",
               )}
             >
-              <ImageIcon className="size-3.5" />
+              <ImageIcon className="size-4" />
               <span>4K Gallery ({media.gallery.length})</span>
             </Button>
             <Button
@@ -88,30 +95,32 @@ export function ItemMediaDialog({
               size={null}
               onClick={() => setTab("sfx")}
               className={cn(
-                "h-7 gap-1.5 rounded px-2.5 font-headline-sm text-xs uppercase transition-all",
-                tab === "sfx" ? "bg-primary text-on-primary font-bold shadow-md shadow-primary/20" : "text-text-muted hover:text-text-primary",
+                "h-8 gap-2 rounded px-3 font-headline-sm text-xs uppercase transition-all",
+                tab === "sfx"
+                  ? "bg-primary text-on-primary font-bold shadow-md shadow-primary/20"
+                  : "text-text-muted hover:text-text-primary hover:bg-white/5",
               )}
             >
-              <Volume2 className="size-3.5" />
+              <Volume2 className="size-4" />
               <span>SFX & Audio</span>
             </Button>
           </div>
-          <span className="font-data-mono-md text-[11px] text-tertiary">1080P PRO REPLAY</span>
+          <span className="font-data-mono-md text-xs text-tertiary hidden sm:inline">1080P 60FPS REPLAY</span>
         </div>
 
         {/* Content Pane */}
-        <div className="relative bg-black p-4">
+        <div className="relative bg-black/95 p-5">
           {tab === "video" && <ItemMediaVideoPane video={media.video} />}
           {tab === "gallery" && <ItemMediaGalleryPane gallery={media.gallery} />}
           {tab === "sfx" && (
-            <div className="flex flex-col items-center justify-center gap-4 py-8 text-center">
+            <div className="flex flex-col items-center justify-center gap-4 py-10 text-center">
               <div className="flex size-16 items-center justify-center rounded-2xl bg-tertiary/10 text-tertiary shadow-lg shadow-tertiary/20">
                 <Volume2 className="size-8 text-tertiary animate-pulse" />
               </div>
               <div>
                 <h4 className="font-headline-sm text-sm font-bold text-text-primary uppercase">{media.sfx.title}</h4>
                 <p className="mt-1 max-w-md font-body-sm text-xs text-text-muted">{media.sfx.description}</p>
-                <span className="mt-2 inline-block rounded border border-tertiary/30 bg-tertiary/10 px-2.5 py-1 font-data-mono-md text-[11px] text-tertiary">
+                <span className="mt-2.5 inline-block rounded border border-tertiary/30 bg-tertiary/10 px-3 py-1 font-data-mono-md text-xs text-tertiary">
                   Audio Fidelity: {media.sfx.frequency}
                 </span>
               </div>
@@ -128,19 +137,21 @@ export function ItemMediaDialog({
         </div>
 
         {/* Purchase Footer Bar */}
-        <div className="flex items-center justify-between border-t border-white/10 bg-surface-container-lowest/90 px-5 py-3">
-          <div>
-            <span className="font-data-mono-md text-base font-bold text-text-primary">
+        <div className="flex items-center justify-between border-t border-white/10 bg-surface-container-lowest/90 px-6 py-3.5">
+          <div className="flex items-center gap-2.5">
+            <span className="font-data-mono-md text-base md:text-lg font-bold text-text-primary">
               ${item.price.lowestUsd.toFixed(2)} USD
             </span>
-            <span className="ml-2 font-label-badge text-[10px] text-emerald-400">0-day Escrow</span>
+            <span className="rounded bg-emerald-500/10 px-2 py-0.5 font-label-badge text-[11px] font-semibold text-emerald-400">
+              0-day Peer Escrow
+            </span>
           </div>
           <Button
             type="button"
             onClick={handleInstantBuy}
-            className="h-8 gap-1.5 border-0 bg-primary px-4 font-headline-sm text-xs font-bold text-on-primary uppercase shadow-md shadow-primary/30 hover:bg-primary/90"
+            className="h-9 gap-2 border-0 bg-primary px-5 font-headline-sm text-xs font-bold text-on-primary uppercase shadow-lg shadow-primary/30 hover:bg-primary/90 whitespace-nowrap"
           >
-            <ShoppingBag className="size-3.5" />
+            <ShoppingBag className="size-4" />
             <span>Instant Buy — ${item.price.lowestUsd.toFixed(2)}</span>
           </Button>
         </div>

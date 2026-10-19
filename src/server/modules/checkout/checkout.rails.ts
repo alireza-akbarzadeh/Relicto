@@ -8,7 +8,7 @@ import { usd } from "../wallet/wallet.presenter";
 export const PAYMENT_RAILS = (balanceCents: number): PaymentRail[] => [
   {
     id: "relicto",
-    title: "Lootora Vault Balance",
+    title: "Relicto Vault Balance",
     detail: `Avail: ${usd(balanceCents)} USD`,
     note: "Instant 0% fee execution",
     icon: "account_balance_wallet",

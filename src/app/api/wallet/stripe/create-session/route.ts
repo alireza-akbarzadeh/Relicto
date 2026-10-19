@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
               currency: "usd",
               product_data: {
                 name: "Relicto Vault Direct Deposit",
-                description: `Immediate $${amountUsd.toFixed(2)} USD liquidity ingress to Lootora Vault.`,
+                description: `Immediate $${amountUsd.toFixed(2)} USD liquidity ingress to Relicto Vault.`,
               },
               unit_amount: amountCents,
             },

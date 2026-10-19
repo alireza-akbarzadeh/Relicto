@@ -27,8 +27,8 @@ export function WalletView({ data }: { data: WalletData }) {
       const amount = searchParams.get("amount");
       toast.success("Deposit Confirmed via Stripe", {
         description: amount
-          ? `$${amount} USD has been credited to your Lootora Vault.`
-          : "Your deposit has been credited to your Lootora Vault.",
+          ? `$${amount} USD has been credited to your Relicto Vault.`
+          : "Your deposit has been credited to your Relicto Vault.",
       });
     } else if (searchParams.get("stripe_deposit_cancel") === "true") {
       toast.info("Deposit Cancelled", {

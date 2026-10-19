@@ -86,7 +86,7 @@ export const checkout: CheckoutData = {
   paymentRails: [
     {
       id: "relicto",
-      title: "Lootora Vault Balance",
+      title: "Relicto Vault Balance",
       detail: "Avail: $4,289.50 USD",
       note: "Instant 0% fee execution",
       icon: "account_balance_wallet",

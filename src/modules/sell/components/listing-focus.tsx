@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { cn } from "@/lib/cn";
 import { depositFunds } from "@/modules/wallet/actions/treasury";
 import { useListingWrites } from "../hooks/use-listing-writes";
@@ -103,11 +104,12 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
           <label htmlFor="target-price" className="font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">Target Ask Price (USD)</label>
           <span className="rounded border border-status-upcoming/20 bg-status-upcoming/10 px-2 py-0.5 font-data-mono-md text-[11px] text-status-upcoming">Floor (${item.floor.toLocaleString()}) {deltaSign}{deltaVsFloor}%</span>
         </div>
-        <div className="relative flex items-center">
-          <span className="absolute left-3.5 font-data-mono-lg text-base font-bold text-tertiary">$</span>
-          <Input id="target-price" value={price} onChange={(event) => setPrice(event.target.value)} className="h-auto rounded bg-surface-container-lowest py-2 pr-20 pl-8 font-data-mono-lg text-lg text-text-primary" />
-          <span className="absolute right-3 font-label-badge text-[10px] font-bold text-text-muted uppercase">USD Vault</span>
-        </div>
+        <PriceInput
+          id="target-price"
+          value={numPrice}
+          onChange={(val) => setPrice(val.toString())}
+          className="h-11 bg-surface-container-lowest px-3 text-base font-bold text-text-primary"
+        />
         <div className="grid grid-cols-3 gap-1.5">
           {[0.9, 0.99, 1.15].map((multiplier) => (
             <Button key={multiplier} variant={null} size={null} onClick={() => setPrice((item.floor * multiplier).toFixed(2))} className="h-auto rounded bg-surface-container-low px-1 py-1 font-data-mono-md text-[11px] text-text-secondary hover:bg-surface-bright">

@@ -9,7 +9,7 @@ type ErrorProps = {
 };
 
 /** Replaces the default Next.js error UI for the signed-in app shell. */
-export default function LootoraError({ error, reset }: ErrorProps) {
+export default function RelictoError({ error, reset }: ErrorProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);

@@ -25,10 +25,26 @@ function LedgerStatus({ transaction }: { transaction: WalletTransaction }) {
   );
 }
 
+const EXPLORERS: Record<string, (hash: string) => string> = {
+  TronScan: (h) => `https://tronscan.org/#/transaction/${h}`,
+  Arbiscan: (h) => `https://arbiscan.io/tx/${h}`,
+  Basescan: (h) => `https://basescan.org/tx/${h}`,
+  Solscan: (h) => `https://solscan.io/tx/${h}`,
+  PolygonScan: (h) => `https://polygonscan.com/tx/${h}`,
+  Etherscan: (h) => `https://etherscan.io/tx/${h}`,
+};
+
 function handleTransactionAction(transaction: WalletTransaction) {
   const target = transaction.hash !== "—" ? transaction.hash : transaction.id;
-  if (transaction.action === "TronScan" && target.length > 20 && !target.startsWith("#")) {
-    window.open(`https://tronscan.org/#/transaction/${target}`, "_blank", "noopener,noreferrer");
+  const isHash = target.length > 20 && !target.startsWith("#");
+
+  const explorerFn = EXPLORERS[transaction.action];
+  if (explorerFn && isHash) {
+    window.open(explorerFn(target), "_blank", "noopener,noreferrer");
+    return;
+  }
+  if (transaction.action === "Steam Trade") {
+    window.open("https://steamcommunity.com/my/tradeoffers/", "_blank", "noopener,noreferrer");
     return;
   }
   navigator.clipboard

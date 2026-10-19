@@ -49,6 +49,17 @@ function statusFor(entry: Entry): Pick<WalletTransaction, "status" | "statusTone
 export const usd = (cents: number) =>
   `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+function actionFor(entry: Entry): { action: string; actionIcon: IconName } {
+  const combined = `${entry.title ?? ""} ${entry.assetLabel ?? ""}`.toLowerCase();
+  if (combined.includes("arbitrum")) return { action: "Arbiscan", actionIcon: "open_in_new" };
+  if (combined.includes("base")) return { action: "Basescan", actionIcon: "open_in_new" };
+  if (combined.includes("solana")) return { action: "Solscan", actionIcon: "open_in_new" };
+  if (combined.includes("polygon")) return { action: "PolygonScan", actionIcon: "open_in_new" };
+  if (combined.includes("ethereum")) return { action: "Etherscan", actionIcon: "open_in_new" };
+  if (combined.includes("keys") || combined.includes("steam keys")) return { action: "Steam Trade", actionIcon: "open_in_new" };
+  return ACTION[entry.venue] ?? ACTION.internal;
+}
+
 /** Rebuilds one audit-ledger row from the stored money movement. */
 export function toWalletTransaction(entry: Entry): WalletTransaction {
   const credit = entry.direction === "credit";
@@ -65,6 +76,7 @@ export function toWalletTransaction(entry: Entry): WalletTransaction {
     amountTone: credit ? "amber" : "primary",
     kind: entry.kind as WalletTransaction["kind"],
     ...statusFor(entry),
-    ...(ACTION[entry.venue] ?? ACTION.internal),
+    ...actionFor(entry),
   };
 }
+

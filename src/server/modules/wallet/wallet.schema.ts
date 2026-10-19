@@ -94,6 +94,17 @@ export function validateCryptoAddress(network: CryptoNetwork, address: string): 
   return { valid: true };
 }
 
+export function getExplorerTxUrl(network: CryptoNetwork, hash: string): string {
+  switch (network) {
+    case "trc20": return `https://tronscan.org/#/transaction/${hash}`;
+    case "arbitrum": return `https://arbiscan.io/tx/${hash}`;
+    case "base": return `https://basescan.org/tx/${hash}`;
+    case "solana": return `https://solscan.io/tx/${hash}`;
+    case "polygon": return `https://polygonscan.com/tx/${hash}`;
+    case "ethereum": return `https://etherscan.io/tx/${hash}`;
+  }
+}
+
 export interface WhitelistVault {
   id: string;
   label: string;
@@ -105,49 +116,11 @@ export interface WhitelistVault {
 }
 
 export const DEFAULT_WHITELIST_VAULTS: WhitelistVault[] = [
-  {
-    id: "vault-binance-trc20",
-    label: "Binance Primary (TRC-20)",
-    rail: "usdt",
-    network: "trc20",
-    address: "TQ7sWk8X19B4gZ9xKLmP2xRa8v4eLa99La",
-    verified: true,
-    addedAt: "2026-01-15",
-  },
-  {
-    id: "vault-ledger-arbitrum",
-    label: "Ledger Cold Vault (Arbitrum One)",
-    rail: "usdt",
-    network: "arbitrum",
-    address: "0x71C845175F3e017857046b3cd528653766C26112",
-    verified: true,
-    addedAt: "2026-02-10",
-  },
-  {
-    id: "vault-phantom-solana",
-    label: "Phantom Treasury (Solana)",
-    rail: "usdt",
-    network: "solana",
-    address: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
-    verified: true,
-    addedAt: "2026-03-01",
-  },
-  {
-    id: "vault-steam-trade",
-    label: "Steam Trade Bot Escrow URL",
-    rail: "keys",
-    address: "https://steamcommunity.com/tradeoffer/new/?partner=89234120&token=R7X9K4LA",
-    verified: true,
-    addedAt: "2026-01-01",
-  },
-  {
-    id: "vault-sepa-revolut",
-    label: "Revolut Business IBAN (SEPA)",
-    rail: "sepa",
-    address: "LT603250012345678901",
-    verified: true,
-    addedAt: "2026-02-20",
-  },
+  { id: "vault-binance-trc20", label: "Binance Primary (TRC-20)", rail: "usdt", network: "trc20", address: "TQ7sWk8X19B4gZ9xKLmP2xRa8v4eLa99La", verified: true, addedAt: "2026-01-15" },
+  { id: "vault-ledger-arbitrum", label: "Ledger Cold Vault (Arbitrum One)", rail: "usdt", network: "arbitrum", address: "0x71C845175F3e017857046b3cd528653766C26112", verified: true, addedAt: "2026-02-10" },
+  { id: "vault-phantom-solana", label: "Phantom Treasury (Solana)", rail: "usdt", network: "solana", address: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", verified: true, addedAt: "2026-03-01" },
+  { id: "vault-steam-trade", label: "Steam Trade Bot Escrow URL", rail: "keys", address: "https://steamcommunity.com/tradeoffer/new/?partner=89234120&token=R7X9K4LA", verified: true, addedAt: "2026-01-01" },
+  { id: "vault-sepa-revolut", label: "Revolut Business IBAN (SEPA)", rail: "sepa", address: "LT603250012345678901", verified: true, addedAt: "2026-02-20" },
 ];
 
 export function getWhitelistedVaultsForRail(rail: CashoutRail, network?: CryptoNetwork): WhitelistVault[] {

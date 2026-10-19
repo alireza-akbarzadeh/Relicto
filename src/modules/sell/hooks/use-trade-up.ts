@@ -88,6 +88,11 @@ export function useTradeUp(initial: TradeUpContract) {
     persist(next, released.filter((item) => !taken.has(item.id)));
   };
 
+  const clearAll = () => {
+    if (calculating || filled === 0) return;
+    persist(slots.map(() => null), [...(slots.filter(Boolean) as ContractItem[]), ...released]);
+  };
+
   const ignite = () => {
     if (filled < contract.slots) {
       toast.error(`Commit all ${contract.slots} skins first`, { description: `${contract.slots - filled} slots are still empty.` });
@@ -117,6 +122,7 @@ export function useTradeUp(initial: TradeUpContract) {
     result,
     toggleSlot,
     smartFill,
+    clearAll,
     ignite,
     collect: () => setResult(null),
   };

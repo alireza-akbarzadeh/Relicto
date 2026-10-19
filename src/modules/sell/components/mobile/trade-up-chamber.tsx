@@ -73,7 +73,13 @@ export function TradeUpChamber({
               </div>
             </div>
 
-            <SlotDeck slots={tradeUp.slots} fillable={tradeUp.fillable} onToggle={tradeUp.toggleSlot} onSmartFill={tradeUp.smartFill} />
+            <SlotDeck
+              slots={tradeUp.slots}
+              fillable={tradeUp.fillable}
+              onToggle={tradeUp.toggleSlot}
+              onSmartFill={tradeUp.smartFill}
+              onClear={tradeUp.clearAll}
+            />
           </div>
 
           <div className="flex flex-col gap-2 pt-space-xs">
@@ -96,7 +102,7 @@ export function TradeUpChamber({
 
         {/* Right Column: Outcomes Odds Matrix */}
         <div className="flex flex-col gap-space-md lg:col-span-5">
-          <OutcomeOdds outcomes={live.outcomes} seed={live.seed} input={tradeUp.input} />
+          <OutcomeOdds outcomes={live.outcomes} seed={live.seed} input={tradeUp.input} floatAvg={tradeUp.floatAvg} />
         </div>
       </div>
 

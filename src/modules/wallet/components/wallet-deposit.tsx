@@ -1,11 +1,9 @@
 "use client";
 
+import { Ref, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
-import { Ref, useEffect, useState } from "react";
-import { toast } from "sonner";
 import { isMoneyRail, useDeposit } from "../hooks/use-deposit";
 import type { WalletRail as WalletRailType } from "../types";
 import { CryptoModal } from "@/modules/checkout/components/crypto-modal";
@@ -13,41 +11,26 @@ import { StationTitle, TestModeStrip } from "./wallet-station-title";
 import { WalletAction } from "./wallet-action-button";
 import { WalletRail } from "./wallet-rail";
 import { WalletSummary } from "./wallet-summary";
+import { WalletDepositNetworkCard } from "./wallet-deposit-network-card";
 
 export function WalletDeposit({
   rails,
   testMode = false,
-  inputRef,
   activeAction,
 }: {
   rails: WalletRailType[];
   testMode?: boolean;
-  inputRef: Ref<HTMLInputElement>;
+  inputRef?: Ref<HTMLInputElement>;
   activeAction: WalletAction;
 }) {
   const [rail, setRail] = useState("crypto");
   const [amount, setAmount] = useState("250.00");
+  const [cryptoNetwork, setCryptoNetwork] = useState("usdt-trc20");
   const [cryptoOpen, setCryptoOpen] = useState(false);
-  const [dedicatedAddress, setDedicatedAddress] = useState("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
   const { pending, deposit } = useDeposit();
   const numericAmount = Number(amount) || 0;
   const skins = !isMoneyRail(rail);
 
-  useEffect(() => {
-    fetch("/api/crypto/address?network=usdt-trc20")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.depositAddress) {
-          setDedicatedAddress(data.depositAddress);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
-  const copyAddress = async () => {
-    await navigator.clipboard.writeText(dedicatedAddress);
-    toast.success("Deposit address copied", { description: dedicatedAddress });
-  };
   return (
     <section className="flex h-full flex-col justify-between gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
       <div className="flex flex-col gap-space-md">
@@ -58,42 +41,42 @@ export function WalletDeposit({
           badge="PROMO: +2.0% SKINS"
         />
         <WalletRail rails={rails} value={rail} onChange={setRail} />
-        <div className="flex flex-col items-center gap-space-md rounded-xl bg-surface-container-lowest p-space-md md:flex-row">
-          <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-lg bg-text-primary p-2 text-canvas-base">
-            <Icon name="qr_code_2" className="text-[96px]" />
-          </div>
-          <div className="flex w-full flex-1 flex-col gap-space-xs">
-            <div className="flex items-center justify-between gap-space-sm">
-              <span className="font-label-badge text-label-badge text-text-muted">
-                TRC-20 DEPOSIT ADDRESS
-              </span>
-              <span className="font-data-mono-md text-[11px] text-tertiary">
-                1/12 Confirmations
-              </span>
+
+        {rail === "crypto" && (
+          <WalletDepositNetworkCard
+            selectedNetworkId={cryptoNetwork}
+            onNetworkChange={setCryptoNetwork}
+          />
+        )}
+
+        {rail === "cards" && (
+          <div className="flex items-center gap-space-md rounded-xl bg-surface-container-lowest p-space-md">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Icon name="credit_card" className="text-[28px]" />
             </div>
-            <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-card px-space-md py-2">
-              <span className="truncate font-data-mono-md text-body-sm text-text-primary">
-                {dedicatedAddress}
-              </span>
-              <Button
-                variant={null}
-                size="icon-xs"
-                onClick={copyAddress}
-                aria-label="Copy deposit address"
-                className="text-text-muted hover:text-text-primary"
-              >
-                <Icon name="content_copy" className="text-[18px]" />
-              </Button>
-            </div>
-            <div className="flex items-center gap-space-xs text-[11px] text-text-muted">
-              <Icon name="info" className="text-[14px] text-tertiary" />
-              <span>
-                Minimum deposit: $10.00 USDT. Funds settle after 12 block
-                validations.
+            <div className="flex flex-col gap-0.5">
+              <span className="font-headline-sm text-xs font-bold text-text-primary">Instant Card & Apple Pay</span>
+              <span className="font-body-sm text-[11px] text-text-secondary">
+                Protected by Stripe 3D-Secure 2.0. Instant settlement directly to your vault.
               </span>
             </div>
           </div>
-        </div>
+        )}
+
+        {rail === "bank" && (
+          <div className="flex items-center gap-space-md rounded-xl bg-surface-container-lowest p-space-md">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+              <Icon name="account_balance" className="text-[28px]" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-headline-sm text-xs font-bold text-text-primary">SEPA Instant &amp; FedWire ACH</span>
+              <span className="font-body-sm text-[11px] text-text-secondary">
+                Direct bank wire with zero Relicto platform commission. Settles in 15–30 mins.
+              </span>
+            </div>
+          </div>
+        )}
+
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
           Deposit Amount (USD)
           <PriceInput
@@ -116,8 +99,9 @@ export function WalletDeposit({
             </Button>
           ))}
         </div>
-       <WalletSummary activeAction={activeAction} numericAmount={numericAmount} skins={skins} />
+        <WalletSummary activeAction={activeAction} numericAmount={numericAmount} skins={skins} />
       </div>
+
       <div className="flex flex-col gap-space-xs">
         {testMode && <TestModeStrip />}
         <Button

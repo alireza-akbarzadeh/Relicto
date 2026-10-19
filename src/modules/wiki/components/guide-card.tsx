@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { WikiGuide, WikiTone } from "../types";
+import { GuideCodexDialog } from "./guide-codex-dialog";
 
 export const WIKI_TONE: Record<WikiTone, string> = {
   primary: "text-primary",
@@ -15,12 +17,16 @@ export const WIKI_TONE: Record<WikiTone, string> = {
 };
 
 export function GuideCard({ guide, wide }: { guide: WikiGuide; wide: boolean }) {
+  const [openCodex, setOpenCodex] = useState(false);
+
   return (
+    <>
     <article
       className={cn(
-        "group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-card p-space-lg shadow-xl",
+        "group relative flex flex-col justify-between overflow-hidden rounded-xl bg-surface-card p-space-lg shadow-xl cursor-pointer",
         wide ? "lg:col-span-7" : "lg:col-span-5",
       )}
+      onClick={() => setOpenCodex(true)}
     >
       <div
         className={cn(
@@ -125,9 +131,9 @@ export function GuideCard({ guide, wide }: { guide: WikiGuide; wide: boolean }) 
         </span>
         <Button
           type="button"
-          onClick={() => {
-            const el = document.getElementById("articles");
-            if (el) el.scrollIntoView({ behavior: "smooth" });
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenCodex(true);
             toast.info(`Opened research codex: ${guide.title}`);
           }}
           className="inline-flex h-auto cursor-pointer items-center gap-1 rounded bg-surface-container-high px-space-md py-space-xs font-headline-sm text-[12px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest"
@@ -137,5 +143,7 @@ export function GuideCard({ guide, wide }: { guide: WikiGuide; wide: boolean }) 
         </Button>
       </div>
     </article>
+    <GuideCodexDialog guide={guide} open={openCodex} onOpenChange={setOpenCodex} />
+    </>
   );
 }

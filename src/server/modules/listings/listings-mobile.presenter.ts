@@ -36,6 +36,7 @@ function toMobileListing(listing: Listing, saved: Set<string>): MobileListing {
     ...(cs2 ? { float: cs2.float } : {}),
     // CS2 settles through bot escrow; Dota cosmetics trade peer to peer.
     action: listing.game === "cs2" ? "escrow" : "trade",
+    delivery: listing.delivery,
     ...(saved.has(listing.id) ? { saved: true } : {}),
   };
 }

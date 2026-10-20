@@ -1,3 +1,4 @@
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import type { ItemDetail, Offer } from "@/modules/items/types";
 import type { MyBid } from "@/modules/offers/types";
 import { initials } from "../shared/initials";
@@ -13,6 +14,14 @@ function toBookRow({ listing, name, verified, profile }: SellerRow, index: numbe
   const handle = profile?.handle ?? name;
   const trades = profile?.tradeCount ?? 0;
 
+  const delivery = calculateDeliverySla({
+    name: listing.sellerNote ?? name,
+    intel: listing.intel,
+    sellerNote: listing.sellerNote,
+    fulfilment: index === 1 ? "p2p" : "bot",
+    tradeLockDays: index === 2 ? 3 : null,
+  });
+
   return {
     id: listing.id,
     listingId: listing.id,
@@ -26,12 +35,13 @@ function toBookRow({ listing, name, verified, profile }: SellerRow, index: numbe
     style: { label: listing.stattrak ? "StatTrak™" : "Standard", tone: listing.stattrak ? "amber" : "cyan" },
     quality: listing.wear ? listing.wear.toUpperCase() : "Standard",
     gems: listing.intel?.[0] ?? listing.sellerNote ?? (listing.paintSeed ? `Seed #${listing.paintSeed}` : "—"),
-    fulfilment: "bot",
-    fulfilmentNote: listing.botName ?? "Instant bot escrow",
+    fulfilment: delivery.method === "p2p_trade" ? "p2p" : "bot",
+    fulfilmentNote: delivery.etaTime,
     priceUsd: listing.priceCents / 100,
-    priceNote: listing.float !== null ? `Float ${listing.float.toFixed(4)}` : "Verified escrow",
+    priceNote: listing.float !== null ? `Float ${listing.float.toFixed(4)}` : delivery.label,
     allowOffers: listing.allowOffers ?? true,
     minOfferCents: listing.minOfferCents,
+    delivery,
     ...(index === 0 ? { best: true } : {}),
     ...(bid ? { myBid: bid } : {}),
   };

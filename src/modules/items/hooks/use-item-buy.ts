@@ -15,15 +15,16 @@ import type { ItemDetail, Offer } from "../types";
  * with no listing behind it (an authored sample) falls back to the slug, which
  * the server resolves to the cheapest copy from another seller.
  */
-export function useItemBuy(item: ItemDetail) {
+export function useItemBuy(item: ItemDetail | null) {
   const router = useRouter();
   const { has, addItem } = useCart();
   const requireAccount = useAccountGate();
   const [pending, setPending] = useState(false);
-  const floor: Offer | undefined = item.offers[0];
+  const floor: Offer | undefined = item?.offers[0];
 
-  const lineFor = (offer: Offer) =>
-    optimisticLine({
+  const lineFor = (offer: Offer) => {
+    if (!item) return null;
+    return optimisticLine({
       slug: item.slug,
       name: item.name,
       subtitle: [item.eyebrow.hero, item.eyebrow.slot].filter((part) => part && part !== "—").join(" • "),
@@ -34,17 +35,20 @@ export function useItemBuy(item: ItemDetail) {
       priceUsd: offer.priceUsd,
       listingId: offer.listingId,
     });
+  };
 
-  const refFor = (offer: Offer) => offer.listingId ?? item.slug;
-  const inBasket = (offer: Offer) => has(refFor(offer)) || has(item.slug);
+  const refFor = (offer: Offer) => offer.listingId ?? item?.slug ?? "";
+  const inBasket = (offer: Offer) => (item ? has(refFor(offer)) || has(item.slug) : false);
 
   /** Reserve the copy and go straight to settlement. */
   const buyNow = async (offer: Offer | undefined = floor) => {
-    if (!offer) return toast(`No one is selling ${item.name} right now`, { description: "Watch it to hear when a copy is listed." });
+    if (!item || !offer) return toast(item ? `No one is selling ${item.name} right now` : "Item is loading...");
     if (!requireAccount(`buy ${item.name}`)) return;
     if (!inBasket(offer)) {
+      const line = lineFor(offer);
+      if (!line) return;
       setPending(true);
-      const added = await addItem(lineFor(offer), refFor(offer));
+      const added = await addItem(line, refFor(offer));
       setPending(false);
       if (!added) return;
     }
@@ -53,12 +57,14 @@ export function useItemBuy(item: ItemDetail) {
 
   /** Reserve the copy and stay on the page. */
   const addToBasket = (offer: Offer | undefined = floor) => {
-    if (!offer) return toast(`No one is selling ${item.name} right now`);
+    if (!item || !offer) return toast(item ? `No one is selling ${item.name} right now` : "Item is loading...");
     if (!requireAccount(`buy ${item.name}`)) return;
     if (inBasket(offer)) {
       return toast(`${item.name} is already in your basket`, { action: { label: "Checkout", onClick: () => router.push("/checkout") } });
     }
-    void addItem(lineFor(offer), refFor(offer));
+    const line = lineFor(offer);
+    if (!line) return;
+    void addItem(line, refFor(offer));
     toast.success(`${item.name} added to your basket`, {
       description: `${formatMoney(offer.priceUsd)} from ${offer.seller.name}, reserved for escrow checkout.`,
       action: { label: "Checkout", onClick: () => router.push("/checkout") },

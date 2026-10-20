@@ -1,5 +1,8 @@
 import type { IconName } from "@/components/ui/icon";
+import type { DeliverySla } from "@/modules/marketplace/types/delivery";
 import type { MyBid } from "@/modules/offers/types";
+
+export type { DeliverySla };
 
 /** Rarity chips over the viewer and on related cards. */
 export type RarityVariant = "arcana" | "exalted" | "immortal" | "persona" | "helm" | "cache";
@@ -20,7 +23,7 @@ export type ArcanaStyle = {
 
 export type PriceStat = { label: string; value: string; tone: "primary" | "amber" | "cyan" };
 
-export type EscrowBadge = { icon: IconName; tone: "emerald" | "amber" | "cyan"; title: string; note: string };
+export type EscrowBadge = { icon: IconName; tone: "emerald" | "amber" | "cyan" | "pink" | "indigo"; title: string; note: string };
 
 export type SectionLink = { id: string; label: string };
 
@@ -43,6 +46,7 @@ export type Offer = {
   minOfferCents?: number | null;
   /** The viewer's open bid on this copy. */
   myBid?: MyBid;
+  delivery?: DeliverySla;
 };
 
 /** One observed price. `at` is epoch ms; the chart scales both axes from these. */
@@ -120,6 +124,7 @@ export type ItemDetail = {
   offers: Offer[];
   offersNote: string;
   offerStyles: string[];
+  delivery?: DeliverySla;
   intelligence: PriceIntelligence;
   sell: SellConversion;
   mods: { eyebrow: string; title: string; items: EngineMod[]; lore: { quote: string; source: string; verified: string } };

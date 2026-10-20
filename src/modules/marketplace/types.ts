@@ -1,4 +1,7 @@
 import type { IconName } from "@/components/ui/icon";
+import type { DeliveryMethod, DeliverySla, DeliveryTone } from "./types/delivery";
+
+export type { DeliveryMethod, DeliverySla, DeliveryTone };
 
 export type Ecosystem = "dota2" | "cs2" | "tf2";
 export type EcosystemFilter = "all" | Ecosystem;
@@ -47,6 +50,7 @@ export type Listing = {
   safeguards: SafeguardKey[];
   listedAt: number;
   cs2?: Cs2Spec;
+  delivery?: DeliverySla;
 };
 
 export type Mover = {

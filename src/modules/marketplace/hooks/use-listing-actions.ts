@@ -27,6 +27,7 @@ function checkoutItemFromListing(listing: Listing): CheckoutItem {
     price: listing.priceUsd,
     marker: listing.detail.label,
     markerTone: "text-status-upcoming",
+    delivery: listing.delivery,
   };
 }
 

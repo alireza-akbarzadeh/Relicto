@@ -1,4 +1,5 @@
-import { IconName } from "@/components/ui/icon";
+import type { IconName } from "@/components/ui/icon";
+import type { DeliverySla } from "@/modules/marketplace/types/delivery";
 
 export type CheckoutItem = {
   id: string;
@@ -26,6 +27,7 @@ export type CheckoutItem = {
   marker: string;
   markerTone: string;
   icon?: IconName;
+  delivery?: DeliverySla;
 };
 
 export type PaymentRail = {

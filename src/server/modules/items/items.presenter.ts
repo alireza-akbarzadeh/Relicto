@@ -1,4 +1,5 @@
 import type { ItemBadge, ItemDetail, RarityVariant, RelatedItem } from "@/modules/items/types";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import { gameMarketPath } from "@/modules/seo/lib/games";
 import type { SellerBook } from "./items.book";
 import { toIntelligence } from "./items.intelligence";
@@ -57,6 +58,13 @@ export function toItemDetail(
   const low = bandLow ?? lowestCents;
   const high = bandHigh ?? lowestCents;
 
+  const delivery = calculateDeliverySla({
+    name: item.name,
+    slot: item.slot ?? undefined,
+    rarity: item.rarity,
+    badge: item.presentation?.badge,
+  });
+
   return {
     slug: item.slug,
     appId: item.gameId === "cs2" ? "730" : item.gameId === "tf2" ? "440" : "570",
@@ -110,11 +118,18 @@ export function toItemDetail(
       ],
     },
     watchers,
-    escrow: [
-      { icon: "verified", tone: "emerald", title: "0-day hold", note: "Instant peer escrow" },
-      { icon: "bolt", tone: "cyan", title: "~12s dispatch", note: "Automated bot offer" },
-      { icon: "shield_lock", tone: "amber", title: "Multi-sig custody", note: "Funds locked until delivery" },
-    ],
+    delivery,
+    escrow: delivery.friendHoldRequired
+      ? [
+          { icon: "card_giftcard", tone: "pink", title: "31-Day Hold", note: "Steam friend requirement" },
+          { icon: "shield_lock", tone: "amber", title: "31d Escrow Lock", note: "Funds held until delivery" },
+          { icon: "verified", tone: "emerald", title: "Gift Verified", note: "Trusted vendor credentials" },
+        ]
+      : [
+          { icon: "verified", tone: "emerald", title: "0-day hold", note: "Instant peer escrow" },
+          { icon: "bolt", tone: "cyan", title: "~12s dispatch", note: "Automated bot offer" },
+          { icon: "shield_lock", tone: "amber", title: "Multi-sig custody", note: "Funds locked until delivery" },
+        ],
     sections: [
       { id: "offers", label: "Offers" },
       { id: "intelligence", label: "Price Intelligence" },

@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { useListingActions } from "../../hooks/use-listing-actions";
+import { calculateDeliverySla } from "../../lib/delivery-sla";
 import { ACCENT_TEXT, CARD_BLOB, RARITY_BADGE } from "../../lib/tones";
 import type { Listing } from "../../types";
+import { DeliveryBadge } from "../delivery/delivery-badge";
 import { ListingMedia } from "./listing-media";
 import { PriceDelta } from "./price-delta";
 import { WishlistButton } from "./wishlist-button";
@@ -15,11 +18,14 @@ import { WishlistButton } from "./wishlist-button";
 export function ListingCard({
   listing,
   priority,
+  onQuickPick,
 }: {
   listing: Listing;
   priority?: boolean;
+  onQuickPick?: () => void;
 }) {
   const { viewOffers, quickBuy, inBasket } = useListingActions(listing);
+  const delivery = listing.delivery ?? calculateDeliverySla(listing);
 
   return (
     <article
@@ -27,29 +33,23 @@ export function ListingCard({
         "group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl",
         "border border-outline-variant/30 bg-surface-card",
         "shadow-sm transition-all duration-300",
-        "hover:-translate-y-0.5 hover:border-primary/25 hover:bg-surface-container",
-        "hover:shadow-lg",
+        "hover:-translate-y-0.5 hover:border-primary/25 hover:bg-surface-container hover:shadow-lg",
       )}
     >
-      {/* Ambient glow */}
       <div
         className={cn(
           "pointer-events-none absolute -top-16 -right-16 z-0 h-40 w-40 rounded-full",
-          "blur-3xl opacity-50 transition-opacity duration-300",
-          "group-hover:opacity-80",
+          "blur-3xl opacity-50 transition-opacity duration-300 group-hover:opacity-80",
           CARD_BLOB[listing.glow.blob],
         )}
       />
 
-      {/* Top content */}
       <div className="relative z-10 flex flex-1 flex-col p-space-md">
-        {/* Header */}
         <div className="mb-space-sm flex min-h-6 items-center justify-between gap-space-sm">
           <div className="flex min-w-0 items-center gap-1.5">
             <span
               className={cn(
-                "shrink-0 rounded-md px-2 py-1",
-                "font-label-badge text-label-badge font-bold tracking-wider uppercase",
+                "shrink-0 rounded-md px-2 py-1 font-label-badge text-label-badge font-bold tracking-wider uppercase",
                 RARITY_BADGE[listing.badge.style],
               )}
             >
@@ -58,9 +58,7 @@ export function ListingCard({
 
             <span
               className={cn(
-                "min-w-0 truncate rounded-md",
-                "bg-surface-container-lowest px-2 py-1",
-                "font-label-badge text-[10px] tracking-wide uppercase",
+                "min-w-0 truncate rounded-md bg-surface-container-lowest px-2 py-1 font-label-badge text-[10px] tracking-wide uppercase",
                 ACCENT_TEXT[listing.tag.accent],
                 listing.tag.bold && "font-bold",
               )}
@@ -70,99 +68,97 @@ export function ListingCard({
           </div>
 
           <div className="flex shrink-0 items-center gap-0.5 opacity-70 transition-opacity group-hover:opacity-100">
-            <ShareButton
-              title={listing.name}
-              text={listing.subtitle}
-              path={`/items/${listing.id}`}
-            />
+            {onQuickPick && (
+              <Button
+                type="button"
+                variant={null}
+                size={null}
+                onClick={onQuickPick}
+                aria-label={`Quick inspect ${listing.name}`}
+                title="Quick Pick"
+                className="flex h-7 w-7 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-surface-container-highest hover:text-text-primary"
+              >
+                <Icon name="visibility" className="text-[16px]" />
+              </Button>
+            )}
+            <ShareButton title={listing.name} text={listing.subtitle} path={`/items/${listing.id}`} />
             <WishlistButton listing={listing} />
           </div>
         </div>
 
-        {/* Item media */}
         <div className="relative mb-space-md overflow-hidden rounded-xl">
           <ListingMedia listing={listing} priority={priority} />
 
-          {/* Bottom media fade */}
+          {onQuickPick && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-200 group-hover:opacity-100">
+              <Button
+                type="button"
+                variant={null}
+                size={null}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onQuickPick();
+                }}
+                className="flex items-center gap-1.5 rounded-full border border-white/20 bg-surface-container-high/90 px-3 py-1.5 font-label-caps text-xs font-bold text-white shadow-lg backdrop-blur-md transition-transform hover:scale-105"
+              >
+                <Icon name="bolt" className="text-[15px] text-tertiary" />
+                <span>Quick Pick</span>
+              </Button>
+            </div>
+          )}
+
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-surface-card/40 to-transparent" />
         </div>
 
-        {/* Item information */}
         <div className="mb-space-md min-w-0">
           <h4
             className={cn(
-              "truncate",
-              "font-headline-sm text-headline-sm font-bold text-text-primary",
-              "transition-colors duration-200 group-hover:text-primary",
+              "truncate font-headline-sm text-headline-sm font-bold text-text-primary transition-colors duration-200 group-hover:text-primary",
             )}
           >
-            {/* A real link, so crawlers (and middle-click) reach the item page, not just the Offers button. */}
             <Link href={`/items/${listing.id}`}>{listing.name}</Link>
           </h4>
 
           <div className="mt-1 flex min-w-0 items-center gap-1.5 font-body-sm text-body-sm text-text-muted">
             <span className="truncate">{listing.subtitle}</span>
-
             <span className="shrink-0 text-text-muted/50">•</span>
-
-            <span
-              className={cn(
-                "shrink-0",
-                ACCENT_TEXT[listing.detail.accent],
-              )}
-            >
+            <span className={cn("shrink-0", ACCENT_TEXT[listing.detail.accent])}>
               {listing.detail.label}
             </span>
           </div>
         </div>
 
-        {/* Price panel */}
-        <div
-          className={cn(
-            "mt-auto rounded-xl p-space-sm",
-            "border border-outline-variant/20",
-            "bg-surface-container-lowest/70",
-          )}
-        >
+        <div className="mt-auto rounded-xl p-space-sm border border-outline-variant/20 bg-surface-container-lowest/70">
           <div className="flex items-end justify-between gap-space-sm">
             <div className="min-w-0">
               <span className="mb-0.5 block font-label-badge text-[9px] font-semibold tracking-widest text-text-muted uppercase">
                 Current Price
               </span>
-
               <span className="block truncate font-headline-md text-headline-md font-bold text-tertiary">
                 {formatMoney(listing.priceUsd)}
               </span>
             </div>
 
-            <PriceDelta
-              percent={listing.change.percent}
-              window={listing.change.window}
-            />
+            <PriceDelta percent={listing.change.percent} window={listing.change.window} />
           </div>
 
-          <div className="mt-space-xs flex items-center justify-between border-t border-outline-variant/15 pt-space-xs font-data-mono-md text-[10px] text-text-muted">
-            <span>{listing.meta[0]}</span>
-            <span>{listing.meta[1]}</span>
+          <div className="mt-space-xs flex items-center justify-between border-t border-outline-variant/15 pt-space-xs font-data-mono-md text-[10px]">
+            <DeliveryBadge sla={delivery} variant="pill" />
+            <span className="text-text-muted truncate max-w-[120px] text-right">{listing.meta[0]}</span>
           </div>
         </div>
       </div>
 
-      {/* Actions */}
       <div className="relative z-10 grid grid-cols-[1fr_1.15fr] gap-2 border-t border-outline-variant/20 bg-surface-container-low/40 p-space-md">
         <Button
           type="button"
           variant={null}
           size={null}
-          onClick={viewOffers}
-          className={cn(
-            "flex min-w-0 items-center justify-center gap-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-high px-space-sm py-2.5 font-headline-sm text-[12px] font-bold text-text-primary uppercase transition-all duration-200 hover:border-outline-variant/50 hover:bg-surface-bright",
-          )}
+          onClick={onQuickPick ?? viewOffers}
+          className="flex min-w-0 items-center justify-center gap-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-high px-space-sm py-2.5 font-headline-sm text-[12px] font-bold text-text-primary uppercase transition-all duration-200 hover:border-outline-variant/50 hover:bg-surface-bright"
         >
           <span>Offers</span>
-          <span className="font-data-mono-md text-[11px] text-text-secondary">
-            {listing.offers}
-          </span>
+          <span className="font-data-mono-md text-[11px] text-text-secondary">{listing.offers}</span>
         </Button>
 
         <Button
@@ -183,4 +179,3 @@ export function ListingCard({
     </article>
   );
 }
-

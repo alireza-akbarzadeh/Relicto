@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
+import { DeliveryBadge } from "@/modules/marketplace/components/delivery/delivery-badge";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import type { CheckoutItem } from "@/modules/checkout/types";
 
 /** One reserved copy in the basket. */
@@ -19,6 +21,12 @@ export function CartLine({
 }) {
   /** The line links to its item; `slug` is present on server rows, `id` on optimistic ones. */
   const href = `/items/${item.slug ?? item.id}`;
+  const delivery =
+    item.delivery ??
+    calculateDeliverySla({
+      name: item.name,
+      subtitle: item.detail,
+    });
 
   return (
     <div className="group relative flex flex-col gap-2.5 rounded-xl border border-border-subtle bg-surface-container-low p-3 transition-colors hover:border-border-highlight hover:bg-surface-container-high">
@@ -80,9 +88,7 @@ export function CartLine({
                 #{item.paintSeed}
               </span>
             )}
-            <span className="rounded border border-border-subtle bg-surface-container-lowest px-1.5 py-0.5 font-data-mono-md text-[10px] font-bold text-status-success">
-              0-Hold
-            </span>
+            <DeliveryBadge sla={delivery} variant="pill" />
           </div>
         </div>
       </div>

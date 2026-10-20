@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQueryStates } from "nuqs";
 import { itemSearchParams } from "../../lib/search-params";
 import { Button } from "@/components/ui/button";
@@ -12,18 +13,31 @@ import { useItemBuy } from "../../hooks/use-item-buy";
 import type { ItemDetail, Offer } from "../../types";
 import { OfferRow } from "./offer-row";
 
-const COLUMNS = ["Seller Authority", "Variant & Inscribed Gems", "Fulfillment Mode", "Listing Price", "Quick Checkout"];
+const COLUMNS = ["Seller Authority", "Variant & Inscribed Gems", "Fulfillment & Delivery Time", "Listing Price", "Quick Checkout"];
 
-type OffersSectionProps = { item: ItemDetail };
+type OffersSectionProps = { item: ItemDetail; compact?: boolean };
 
 /** The live seller book with the style filter and escrow toggles; every row trades a real copy. */
-export function OffersSection({ item }: OffersSectionProps) {
+export function OffersSection({ item, compact = false }: OffersSectionProps) {
   const { offers, offersNote: note, offerStyles: styles } = item;
   const { buyNow, addToBasket } = useItemBuy(item);
-  const [{ offers: style, bot: botOnly, verified: verifiedOnly }, setQuery] = useQueryStates(
+
+  const [localStyle, setLocalStyle] = useState("ALL");
+  const [localBotOnly, setLocalBotOnly] = useState(false);
+  const [localVerifiedOnly, setLocalVerifiedOnly] = useState(false);
+
+  const [{ offers: queryStyle, bot: queryBotOnly, verified: queryVerifiedOnly }, setQuery] = useQueryStates(
     { offers: itemSearchParams.offers, bot: itemSearchParams.bot, verified: itemSearchParams.verified },
     { history: "replace", clearOnDefault: true },
   );
+
+  const style = compact ? localStyle : queryStyle;
+  const botOnly = compact ? localBotOnly : queryBotOnly;
+  const verifiedOnly = compact ? localVerifiedOnly : queryVerifiedOnly;
+
+  const setStyle = (val: string) => (compact ? setLocalStyle(val) : void setQuery({ offers: val }));
+  const setBotOnly = (val: boolean) => (compact ? setLocalBotOnly(val) : void setQuery({ bot: val }));
+  const setVerifiedOnly = (val: boolean) => (compact ? setLocalVerifiedOnly(val) : void setQuery({ verified: val }));
 
   /** "Verified" means a verified badge or a 99%+ positive rating. */
   const trusted = (offer: Offer) => offer.seller.verified || Number.parseFloat(offer.seller.rating) >= 99;
@@ -36,55 +50,55 @@ export function OffersSection({ item }: OffersSectionProps) {
   });
 
   return (
-    <section id="offers" className="flex w-full scroll-mt-40 flex-col gap-4">
-      <div className="flex flex-col justify-between gap-3 pb-1 md:flex-row md:items-end">
-        <div>
-          <div className="flex items-center gap-2">
-            <Icon name="storefront" className="text-[24px] text-tertiary" />
-            <h2 className="font-headline-lg text-2xl font-bold tracking-tight text-text-primary">Active Market Listings</h2>
+    <section id="offers" className={cn("flex w-full scroll-mt-40 flex-col gap-4", compact && "gap-3")}>
+      {!compact && (
+        <div className="flex flex-col justify-between gap-3 pb-1 md:flex-row md:items-end">
+          <div>
+            <div className="flex items-center gap-2">
+              <Icon name="storefront" className="text-[24px] text-tertiary" />
+              <h2 className="font-headline-lg text-2xl font-bold tracking-tight text-text-primary">Active Market Listings</h2>
+            </div>
+            <p className="mt-1 font-body-md text-sm text-text-muted">Verified Steam peer inventory and automated zero-wait escrow dispatch nodes.</p>
           </div>
-          <p className="mt-1 font-body-md text-sm text-text-muted">Verified Steam peer inventory and automated zero-wait escrow dispatch nodes.</p>
+          <div className="flex items-center gap-2">
+            <span className="rounded border border-border-subtle bg-surface-container px-2.5 py-1 font-label-badge text-xs text-text-secondary">{note}</span>
+            <LinkButton
+              href="/marketplace"
+              className="h-auto gap-1 rounded border border-border-subtle bg-surface-container px-3 py-1.5 text-xs font-medium text-text-secondary transition-all hover:bg-surface-container-high hover:text-text-primary"
+            >
+              <Icon name="tune" className="text-[16px]" />
+              <span>Browse All Offers</span>
+            </LinkButton>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="rounded border border-border-subtle bg-surface-container px-2.5 py-1 font-label-badge text-xs text-text-secondary">{note}</span>
-          <LinkButton
-            href="/marketplace"
-            className="h-auto gap-1 rounded border border-border-subtle bg-surface-container px-3 py-1.5 text-xs font-medium text-text-secondary transition-all hover:bg-surface-container-high hover:text-text-primary"
-          >
-            <Icon name="tune" className="text-[16px]" />
-            <span>Browse All Offers</span>
-          </LinkButton>
-        </div>
-      </div>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border-subtle bg-surface-card p-3 shadow-sm">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 font-label-badge text-xs text-text-muted uppercase">Style:</span>
-          {styles.map((option) => (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="mr-1 font-label-badge text-[10px] tracking-wider text-text-muted uppercase">STYLE FILTER:</span>
+          {["ALL", ...styles].map((label) => (
             <Button
-              key={option}
+              key={label}
               variant={null}
               size={null}
-              onClick={() => void setQuery({ offers: option })}
-              aria-pressed={style === option}
+              onClick={() => setStyle(label)}
+              aria-pressed={style === label}
               className={cn(
-                "h-auto rounded border-0 px-2.5 py-1 font-data-mono-md text-xs transition-colors",
-                style === option
-                  ? "border border-border-tactical bg-surface-container-high font-bold text-tertiary"
-                  : "font-normal text-text-muted hover:bg-surface-container hover:text-text-primary",
+                "h-auto rounded border-0 px-2.5 py-1 font-label-caps text-xs transition-colors",
+                style === label ? "bg-surface-container-high font-bold text-tertiary" : "text-text-muted hover:text-text-primary",
               )}
             >
-              {option}
+              {label}
             </Button>
           ))}
         </div>
         <div className="flex items-center gap-4">
           <Label className="flex cursor-pointer items-center gap-2 text-xs font-normal text-text-secondary select-none">
-            <Checkbox checked={botOnly} onCheckedChange={(next) => void setQuery({ bot: next === true })} />
-            <span>Instant Bot Trade Escrow Only</span>
+            <Checkbox checked={botOnly} onCheckedChange={(next) => setBotOnly(next === true)} />
+            <span>Instant Bot Escrow Only</span>
           </Label>
           <Label className="hidden cursor-pointer items-center gap-2 text-xs font-normal text-text-secondary select-none sm:flex">
-            <Checkbox checked={verifiedOnly} onCheckedChange={(next) => void setQuery({ verified: next === true })} />
+            <Checkbox checked={verifiedOnly} onCheckedChange={(next) => setVerifiedOnly(next === true)} />
             <span>Verified Traders (99%+)</span>
           </Label>
         </div>
@@ -121,10 +135,10 @@ export function OffersSection({ item }: OffersSectionProps) {
           Showing {visible.length} of {offers.length} {offers.length === 1 ? "copy" : "copies"} on the market
         </span>
         <LinkButton
-          href={`/marketplace?q=${encodeURIComponent(item.name)}`}
+          href={`/items/${item.slug}#offers`}
           className="inline-flex h-auto gap-1 rounded-none border-0 p-0 font-label-caps text-xs font-bold text-tertiary transition-colors hover:text-text-primary"
         >
-          <span>BROWSE SIMILAR LISTINGS</span>
+          <span>BROWSE IN FULL ITEM VIEW</span>
           <Icon name="arrow_forward" className="text-[16px]" />
         </LinkButton>
       </div>

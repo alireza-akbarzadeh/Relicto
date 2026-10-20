@@ -9,7 +9,8 @@ import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import { formatDelta, formatMoney } from "@/lib/format";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useMobileListingAction } from "../../hooks/use-mobile-listing-action";
-
+import { DeliveryBadge } from "../delivery/delivery-badge";
+import { calculateDeliverySla } from "../../lib/delivery-sla";
 import { changeTone } from "../../lib/mobile-filters";
 import type { ListingAction, ListingTagTone, MobileListing } from "../../mobile.types";
 
@@ -29,18 +30,45 @@ const ACTION: Record<ListingAction, { label: string; icon: "flash_on" | "swap_ho
 };
 
 /** Two-column market card: tag, bookmark, render, price delta and one action. */
-export function MobileListingCard({ listing }: { listing: MobileListing }) {
+export function MobileListingCard({
+  listing,
+  onQuickPick,
+}: {
+  listing: MobileListing;
+  onQuickPick?: () => void;
+}) {
   const { isWatched, toggle } = useWatchlist();
   const act = useMobileListingAction(listing);
   const saved = isWatched(listing.slug);
   const action = ACTION[listing.action];
   const href = `/items/${listing.slug}`;
+  const delivery =
+    listing.delivery ??
+    calculateDeliverySla({
+      name: listing.name,
+      subtitle: listing.subtitle,
+      slot: listing.chip,
+      badge: { label: listing.tag },
+    });
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl bg-surface-container p-2.5 shadow-xs">
       <div className="mb-1 flex w-full items-center justify-between">
-        <span className={cn("rounded px-1.5 py-0.5 font-label-badge text-[10px] uppercase", TAG[listing.tagTone])}>{listing.tag}</span>
+        <span className={cn("rounded px-1.5 py-0.5 font-label-badge text-[10px] uppercase", TAG[listing.tagTone])}>
+          {listing.tag}
+        </span>
         <div className="flex items-center gap-1">
+          {onQuickPick && (
+            <Button
+              variant={null}
+              size={null}
+              aria-label={`Quick inspect ${listing.name}`}
+              onClick={onQuickPick}
+              className="flex h-6 w-6 items-center justify-center rounded border-0 text-text-muted transition-colors hover:text-text-primary"
+            >
+              <Icon name="bolt" className="text-[15px] text-tertiary" />
+            </Button>
+          )}
           <ShareButton title={listing.name} path={href} className="h-6 w-6 p-0" />
           <Button
             variant={null}
@@ -55,9 +83,10 @@ export function MobileListingCard({ listing }: { listing: MobileListing }) {
         </div>
       </div>
 
-
-      <Link href={href} className="relative my-1 flex h-28 w-full items-center justify-center overflow-hidden rounded-lg bg-surface-container-lowest">
-        <Image src={listing.image} alt={listing.imageAlt} width={320} height={224} sizes="50vw" className="h-full w-full object-contain p-2" />
+      <div className="relative my-1 flex h-28 w-full items-center justify-center overflow-hidden rounded-lg bg-surface-container-lowest">
+        <Link href={href} className="flex h-full w-full items-center justify-center">
+          <Image src={listing.image} alt={listing.imageAlt} width={320} height={224} sizes="50vw" className="h-full w-full object-contain p-2" />
+        </Link>
         <span
           className={cn(
             "absolute bottom-1 left-1.5 rounded bg-surface-deep/90 px-1 font-data-mono-md text-[10px]",
@@ -66,7 +95,18 @@ export function MobileListingCard({ listing }: { listing: MobileListing }) {
         >
           {listing.chip}
         </span>
-      </Link>
+        {onQuickPick && (
+          <Button
+            variant={null}
+            size={null}
+            onClick={onQuickPick}
+            className="absolute bottom-1 right-1.5 flex items-center gap-1 rounded bg-surface-deep/90 px-1.5 py-0.5 font-label-caps text-[9px] font-bold text-tertiary transition-transform active:scale-95"
+          >
+            <Icon name="bolt" className="text-[12px]" />
+            <span>Quick</span>
+          </Button>
+        )}
+      </div>
 
       <Link href={href} className="mt-1 flex min-w-0 flex-col">
         <span className="truncate font-headline-sm text-headline-sm text-text-primary">{listing.name}</span>
@@ -78,10 +118,15 @@ export function MobileListingCard({ listing }: { listing: MobileListing }) {
         <span className={cn("font-data-mono-md text-[11px] font-bold", changeTone(listing.changePct))}>{formatDelta(listing.changePct)}</span>
       </div>
 
+      <div className="mt-1 flex items-center justify-between font-data-mono-md text-[10px]">
+        <DeliveryBadge sla={delivery} variant="pill" />
+        <span className="text-text-muted truncate max-w-[80px] text-right">{delivery.method === "gift_cache" ? "31d Hold" : delivery.etaTime}</span>
+      </div>
+
       <Button
         variant={null}
         size={null}
-        onClick={act}
+        onClick={listing.action === "inspect" && onQuickPick ? onQuickPick : act}
         className={cn(
           "mt-2 h-8 w-full gap-1 rounded-lg border-0 font-label-caps text-label-caps font-bold uppercase transition-all active:scale-[0.98]",
           listing.featured

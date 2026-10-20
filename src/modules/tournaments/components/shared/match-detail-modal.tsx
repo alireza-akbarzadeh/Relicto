@@ -3,14 +3,10 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Dot } from "@/components/ui/dot";
 import { Icon } from "@/components/ui/icon";
+import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import { cn } from "@/lib/cn";
 import { submitPrediction } from "../../actions/predictions";
 import { DOT_TONE, TEXT_TONE } from "../../lib/tones";
@@ -52,6 +48,12 @@ export function MatchDetailModal({
       }
     });
   };
+
+  const tabs = [
+    { value: "overview" as const, content: <span className="flex items-center gap-1.5"><Icon name="military_tech" className="text-[14px]" />Overview & Picks</span> },
+    { value: "intel" as const, content: <span className="flex items-center gap-1.5"><Icon name="sensors" className="text-[14px]" />Live Telemetry</span> },
+    { value: "chat" as const, content: <span className="flex items-center gap-1.5"><Icon name="chat" className="text-[14px]" />Spectator Chat</span> },
+  ];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -106,31 +108,15 @@ export function MatchDetailModal({
           </div>
         </div>
 
-        {/* Tab switchers */}
-        <div className="flex items-center gap-1 rounded-lg bg-surface-container-lowest p-1 border border-white/5">
-          {(
-            [
-              { id: "overview", label: "Overview & Picks", icon: "military_tech" as const },
-              { id: "intel", label: "Live Telemetry", icon: "sensors" as const },
-              { id: "chat", label: "Spectator Chat", icon: "chat" as const },
-            ] as const
-          ).map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md font-label-caps text-xs transition-colors",
-                activeTab === tab.id
-                  ? "bg-surface-container-high text-primary font-bold shadow-xs"
-                  : "text-text-muted hover:text-text-primary",
-              )}
-            >
-              <Icon name={tab.icon} className="text-[14px]" />
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {/* Tab switchers using SegmentedTabs */}
+        <SegmentedTabs
+          tabs={tabs}
+          value={activeTab}
+          onChange={setActiveTab}
+          label="Match Details Navigation"
+          listClassName="grid grid-cols-3 rounded-lg bg-surface-container-lowest p-1 border border-white/5"
+          tabClassName="py-1.5 font-label-caps text-xs transition-colors data-active:bg-surface-container-high data-active:text-primary data-active:font-bold"
+        />
 
         {/* Tab 1: Overview & Victory Prediction */}
         {activeTab === "overview" && (

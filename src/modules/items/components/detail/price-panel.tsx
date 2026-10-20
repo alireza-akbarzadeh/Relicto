@@ -8,6 +8,8 @@ import { formatMoney } from "@/lib/format";
 import { ESCROW_TONE, STAT_TONE } from "../../lib/tones";
 import type { ItemDetail } from "../../types";
 import { useItemBuy } from "../../hooks/use-item-buy";
+import { DeliveryBadge } from "@/modules/marketplace/components/delivery/delivery-badge";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import { PriceAlertModal } from "./price-alert-modal";
@@ -21,6 +23,14 @@ export function PricePanel({ item }: { item: ItemDetail }) {
   const watched = isWatched(item.slug);
   const { floor, pending, buyNow, addToBasket } = useItemBuy(item);
   const [alertOpen, setAlertOpen] = useState(false);
+  const delivery =
+    floor?.delivery ??
+    item.delivery ??
+    calculateDeliverySla({
+      name: item.name,
+      slot: item.eyebrow.slot,
+      rarity: item.badges[0]?.variant,
+    });
   return (
     <div className="flex flex-col justify-between gap-4 lg:col-span-6">
       <div>
@@ -67,6 +77,8 @@ export function PricePanel({ item }: { item: ItemDetail }) {
               </div>
             ))}
           </div>
+
+          <DeliveryBadge sla={delivery} variant="callout" />
 
           <div className="flex flex-col items-stretch gap-2.5 pt-1 sm:flex-row">
             {/* Quotes the copy it will actually reserve — the cheapest one the viewer can buy. */}
@@ -135,8 +147,10 @@ export function PricePanel({ item }: { item: ItemDetail }) {
         ))}
       </div>
 
-      <button
+      <Button
         type="button"
+        variant={null}
+        size={null}
         onClick={() => {
           window.dispatchEvent(
             new CustomEvent("relicto:open-copilot-query", {
@@ -154,7 +168,7 @@ export function PricePanel({ item }: { item: ItemDetail }) {
         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 group-hover:bg-rose-500 group-hover:text-white transition-all">
           Audit Item ⚡
         </span>
-      </button>
+      </Button>
 
       <PriceAlertModal
         open={alertOpen}

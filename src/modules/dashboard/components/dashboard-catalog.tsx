@@ -39,11 +39,7 @@ export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] 
   const filteredAndSorted = React.useMemo(() => {
     const q = filters.search.trim().toLowerCase();
     const result = catalog.filter((item) => {
-      const matchSearch =
-        !q ||
-        item.name.toLowerCase().includes(q) ||
-        item.slug.toLowerCase().includes(q) ||
-        (item.collection && item.collection.toLowerCase().includes(q));
+      const matchSearch = !q || item.name.toLowerCase().includes(q) || item.slug.toLowerCase().includes(q) || (item.collection && item.collection.toLowerCase().includes(q));
       const matchGame = filters.game === "all" || item.gameId.toLowerCase() === filters.game.toLowerCase();
       const matchRarity = filters.rarity === "all" || (item.rarity && item.rarity.toLowerCase() === filters.rarity.toLowerCase());
       return matchSearch && matchGame && matchRarity;
@@ -85,10 +81,10 @@ export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] 
               setSelectedItem(null);
               setSheetOpen(true);
             }}
-            className="gap-1.5 font-semibold text-xs shadow-sm self-start sm:self-auto"
+            className="gap-1.5 text-xs font-semibold shrink-0"
           >
             <Plus className="size-3.5" />
-            Add Catalog Asset
+            Add Weapon Asset
           </Button>
         </div>
 
@@ -100,7 +96,7 @@ export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] 
         />
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-4 pt-0">
         {filteredAndSorted.length === 0 ? (
           <div className="py-12 text-center text-xs text-text-muted font-mono border border-dashed border-border-subtle rounded-lg">
             <ShieldAlert className="size-6 text-text-muted mx-auto mb-2 opacity-50" />
@@ -125,14 +121,7 @@ export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] 
                     <td className="py-3">
                       <div className="flex items-center gap-2.5">
                         {item.imageUrl ? (
-                          <Image
-                            src={item.imageUrl}
-                            alt={item.name}
-                            width={32}
-                            height={32}
-                            unoptimized
-                            className="size-8 rounded object-cover border border-border-subtle bg-surface-container"
-                          />
+                          <Image src={item.imageUrl} alt={item.name} width={32} height={32} unoptimized className="size-8 rounded object-cover border border-border-subtle bg-surface-container" />
                         ) : (
                           <div className="size-8 rounded bg-surface-container border border-border-subtle flex items-center justify-center font-bold text-text-muted text-[10px]">
                             {item.name.slice(0, 2)}
@@ -140,16 +129,12 @@ export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] 
                         )}
                         <div className="flex flex-col">
                           <span className="font-semibold text-text-primary leading-tight">{item.name}</span>
-                          <span className="text-[10px] text-text-muted font-mono mt-0.5">
-                            {item.collection ?? item.slug}
-                          </span>
+                          <span className="text-[10px] text-text-muted font-mono mt-0.5">{item.collection ?? item.slug}</span>
                         </div>
                       </div>
                     </td>
                     <td className="py-3">
-                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-surface-container border border-border-subtle">
-                        {item.gameId}
-                      </span>
+                      <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-surface-container border border-border-subtle">{item.gameId}</span>
                     </td>
                     <td className="py-3 font-mono text-text-secondary">{item.slot ?? "Weapon"}</td>
                     <td className="py-3 font-mono text-text-secondary">
@@ -159,19 +144,9 @@ export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] 
                         <span className="text-text-muted">0 offers</span>
                       )}
                     </td>
-                    <td className="py-3 text-right font-mono font-semibold text-amber-400">
-                      {formatUsd(item.floorPriceCents)}
-                    </td>
+                    <td className="py-3 text-right font-mono font-semibold text-amber-400">{formatUsd(item.floorPriceCents)}</td>
                     <td className="py-3 text-right">
-                      <Button
-                        size="xs"
-                        variant="ghost"
-                        onClick={() => {
-                          setSelectedItem(item);
-                          setSheetOpen(true);
-                        }}
-                        className="gap-1 font-mono text-xs"
-                      >
+                      <Button size="xs" variant="ghost" onClick={() => { setSelectedItem(item); setSheetOpen(true); }} className="gap-1 font-mono text-xs">
                         <Edit2 className="size-3" />
                         Edit
                       </Button>

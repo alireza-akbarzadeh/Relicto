@@ -1,3 +1,5 @@
+import type { DeliverySla } from "@/modules/marketplace/types/delivery";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import type { CheckoutItem } from "../types";
 
 /** Dota cosmetics have no exterior, so the wear chip carries the grade instead. */
@@ -27,6 +29,7 @@ export type OptimisticLineInput = {
   wear?: string;
   floatValue?: number;
   paintSeed?: number;
+  delivery?: DeliverySla;
 };
 
 /**
@@ -64,5 +67,12 @@ export function optimisticLine(input: OptimisticLineInput): CheckoutItem {
     ...(input.paintSeed !== undefined ? { paintSeed: input.paintSeed } : {}),
     marker: input.wear && input.floatValue !== undefined ? `${input.wear} ${input.floatValue}` : "",
     markerTone: "",
+    delivery:
+      input.delivery ??
+      calculateDeliverySla({
+        name: input.name,
+        subtitle: input.subtitle,
+        rarity: input.rarityLabel,
+      }),
   };
 }

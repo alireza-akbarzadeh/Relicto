@@ -24,6 +24,7 @@ function toCheckoutItem(listing: MobileListing): CheckoutItem {
     price: listing.priceUsd,
     marker: listing.chip,
     markerTone: "text-status-upcoming",
+    delivery: listing.delivery,
   };
 }
 

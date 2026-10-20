@@ -23,6 +23,8 @@ export const ESCROW_TONE: Record<EscrowBadge["tone"], string> = {
   emerald: "text-emerald-400",
   amber: "text-tertiary",
   cyan: "text-status-upcoming",
+  pink: "text-rose-400",
+  indigo: "text-secondary",
 };
 
 export const MOD_TONE: Record<EngineMod["tone"], string> = {

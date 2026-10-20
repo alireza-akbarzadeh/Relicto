@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/ui/icon";
+import type { DeliverySla } from "./types/delivery";
 
 /** Data contracts of the mobile marketplace (Stitch: "Lootora Mobile — Marketplace Trading Hub"). */
 
@@ -45,6 +46,7 @@ export type MobileListing = {
   /** Hot listing: filled action button. */
   featured?: boolean;
   saved?: boolean;
+  delivery?: DeliverySla;
 };
 
 export type MetaSpike = { kicker: string; surge: string; headline: string; cta: string; href: string };

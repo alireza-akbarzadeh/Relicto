@@ -27,9 +27,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
 
   const signOut = async () => {
     await authClient.signOut();
-    toast.success("Signed out", {
-      description: "Your session was closed on this device.",
-    });
+    toast.success("Signed out", { description: "Your session was closed on this device." });
     router.push("/sign-in");
     router.refresh();
   };
@@ -43,10 +41,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
             <span className="flex h-11 w-11 overflow-hidden rounded-xl ring-1 ring-white/10 border border-white/5">
               <AvatarImage user={user} size={44} />
             </span>
-            <span
-              className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-menu-panel bg-status-live"
-              title="Online"
-            />
+            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-menu-panel bg-status-live" title="Online" />
           </div>
 
           <div className="flex flex-col min-w-0">
@@ -79,10 +74,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
             onClick={onClose}
             className="group flex items-center gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400 border border-amber-500/20 transition-all hover:bg-amber-400 hover:text-black active:scale-95"
           >
-            <Icon
-              name="add"
-              className="text-[12px] transition-transform duration-200 group-hover:rotate-90"
-            />
+            <Icon name="add" className="text-[12px] transition-transform duration-200 group-hover:rotate-90" />
             <span>Top-Up</span>
           </Link>
         </div>
@@ -93,12 +85,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
         <span className="block px-2 py-2 font-label-caps text-[10px] font-bold uppercase tracking-widest text-text-muted">
           Account Management
         </span>
-        {ACCOUNT_LINKS.filter((link) => {
-          if (link.href === "/dashboard") {
-            return user.role?.toLowerCase() === "admin";
-          }
-          return true;
-        }).map((link) => (
+        {ACCOUNT_LINKS.filter((link) => (link.href === "/dashboard" ? user.role?.toLowerCase() === "admin" : true)).map((link) => (
           <Link
             key={link.href}
             href={link.href}
@@ -132,16 +119,10 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
           type="button"
           variant={null}
           size={null}
-          onClick={() => {
-            toggle();
-            onClose?.();
-          }}
+          onClick={() => { toggle(); onClose?.(); }}
           className="group flex w-full items-center gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2.5 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
         >
-          <Icon
-            name={theme === "light" ? "dark_mode" : "light_mode"}
-            className="text-[18px] text-text-muted group-hover:text-amber-400"
-          />
+          <Icon name={theme === "light" ? "dark_mode" : "light_mode"} className="text-[18px] text-text-muted group-hover:text-amber-400" />
           <span>{theme === "light" ? "Dark mode" : "Light mode"}</span>
         </Button>
       </div>
@@ -154,16 +135,10 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
           type="button"
           variant={null}
           size={null}
-          onClick={() => {
-            signOut();
-            onClose?.();
-          }}
+          onClick={() => { signOut(); onClose?.(); }}
           className="group flex w-full items-center gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2.5 text-xs font-semibold text-status-offline transition-all hover:bg-status-offline/10 hover:text-status-offline active:scale-[0.98]"
         >
-          <Icon
-            name="logout"
-            className="text-[18px] text-status-offline transition-transform duration-200 group-hover:-translate-x-0.5"
-          />
+          <Icon name="logout" className="text-[18px] text-status-offline transition-transform duration-200 group-hover:-translate-x-0.5" />
           <span>Sign Out</span>
         </Button>
       </div>

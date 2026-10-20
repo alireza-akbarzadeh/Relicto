@@ -2,28 +2,53 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
+import { DeliveryBadge } from "@/modules/marketplace/components/delivery/delivery-badge";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import { SELLER_TONE } from "../../lib/tones";
 import type { Offer } from "../../types";
 import { OfferActions } from "./offer-actions";
 
-type OfferRowProps = { offer: Offer; itemName: string; onBuy: (offer: Offer) => void; onAdd: (offer: Offer) => void };
+type OfferRowProps = {
+  offer: Offer;
+  itemName: string;
+  onBuy: (offer: Offer) => void;
+  onAdd: (offer: Offer) => void;
+};
 
 /** One seller's copy: authority, variant, fulfilment mode, price and the trade actions. */
 export function OfferRow({ offer, itemName, onBuy, onAdd }: OfferRowProps) {
-  const bot = offer.fulfilment === "bot";
+  const delivery =
+    offer.delivery ??
+    calculateDeliverySla({
+      name: itemName,
+      fulfilment: offer.fulfilment,
+      sellerNote: offer.fulfilmentNote,
+      intel: [offer.gems],
+    });
+
   return (
     <tr className="transition-colors hover:bg-surface-container-high/40">
       <td className="px-4 py-3.5">
         <div className="flex items-center gap-2.5">
-          <div className={cn("flex h-9 w-9 items-center justify-center rounded-full font-data-mono-md text-xs font-bold", SELLER_TONE[offer.seller.tone])}>
+          <div
+            className={cn(
+              "flex h-9 w-9 items-center justify-center rounded-full font-data-mono-md text-xs font-bold",
+              SELLER_TONE[offer.seller.tone]
+            )}
+          >
             {offer.seller.initials}
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
-              <Link href={`/traders/${offer.seller.name}`} className="font-headline-sm text-sm font-bold text-text-primary hover:text-primary transition-colors">
+              <Link
+                href={`/traders/${offer.seller.name}`}
+                className="font-headline-sm text-sm font-bold text-text-primary hover:text-primary transition-colors"
+              >
                 {offer.seller.name}
               </Link>
-              {offer.seller.verified && <Icon name="verified" label="Verified merchant" className="text-[16px] text-tertiary" />}
+              {offer.seller.verified && (
+                <Icon name="verified" label="Verified merchant" className="text-[16px] text-tertiary" />
+              )}
             </div>
             <span className="font-data-mono-md text-[10px] text-emerald-400">{offer.seller.rating}</span>
           </div>
@@ -35,29 +60,39 @@ export function OfferRow({ offer, itemName, onBuy, onAdd }: OfferRowProps) {
             <span
               className={cn(
                 "rounded px-2 py-0.5 font-label-badge text-[10px] font-bold",
-                offer.style.tone === "amber" ? "bg-surface-container-highest text-tertiary" : "bg-surface-container text-status-upcoming",
+                offer.style.tone === "amber"
+                  ? "bg-surface-container-highest text-tertiary"
+                  : "bg-surface-container text-status-upcoming"
               )}
             >
               {offer.style.label}
             </span>
-            <span className="rounded bg-surface-container px-1.5 py-0.5 font-label-badge text-[10px] text-text-secondary">{offer.quality}</span>
+            <span className="rounded bg-surface-container px-1.5 py-0.5 font-label-badge text-[10px] text-text-secondary">
+              {offer.quality}
+            </span>
           </div>
           <span className="font-data-mono-md text-[10px] text-text-muted">{offer.gems}</span>
         </div>
       </td>
       <td className="px-4 py-3.5">
-        <div className={cn("flex items-center gap-2", bot ? "text-emerald-400" : "text-status-upcoming")}>
-          <Icon name={bot ? "bolt" : "swap_horiz"} className="text-[18px]" />
-          <div className="flex flex-col">
-            <span className="font-label-caps text-xs font-bold">{bot ? "Instant Bot Escrow" : "P2P Steam Trade"}</span>
-            <span className="font-data-mono-md text-[10px] text-text-muted">{offer.fulfilmentNote}</span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-1.5">
+            <DeliveryBadge sla={delivery} variant="pill" />
+            <span className="font-label-caps text-xs font-bold text-text-primary">
+              {delivery.label}
+            </span>
           </div>
+          <span className="font-data-mono-md text-[10px] text-text-muted line-clamp-1">
+            {delivery.description}
+          </span>
         </div>
       </td>
       <td className="px-4 py-3.5">
         <div className="flex flex-col">
           <div className="flex items-baseline gap-1">
-            <span className="font-data-mono-lg text-lg font-bold text-text-primary">{formatMoney(offer.priceUsd)}</span>
+            <span className="font-data-mono-lg text-lg font-bold text-text-primary">
+              {formatMoney(offer.priceUsd)}
+            </span>
             {offer.best && (
               <span className="rounded border border-emerald-500/30 bg-emerald-950/70 px-1 font-label-badge text-[9px] font-bold text-emerald-400">
                 BEST OFFER

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useQueryStates } from "nuqs";
 import { itemSearchParams } from "../../lib/search-params";
 import { Button } from "@/components/ui/button";
@@ -8,40 +8,75 @@ import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { withinRange } from "../../lib/chart-range";
 import { STAT_TONE } from "../../lib/tones";
-import type { PriceIntelligence } from "../../types";
+import type { ChartMode, ChartRange, PriceIntelligence } from "../../types";
 import { PricePlot } from "./price-plot";
 
 const PILL = "h-auto rounded border-0 px-2 py-1 font-data-mono-md text-xs transition-colors";
 
+type PriceChartProps = {
+  data: PriceIntelligence;
+  compact?: boolean;
+};
+
 /** Historical price telemetry with patch annotations and range switches. */
-export function PriceChart({ data }: { data: PriceIntelligence }) {
-  const [{ range, chart: mode }, setQuery] = useQueryStates(
+export function PriceChart({ data, compact = false }: PriceChartProps) {
+  const [localRange, setLocalRange] = useState<ChartRange>(data.activeRange);
+  const [localMode, setLocalMode] = useState<ChartMode>(data.activeMode);
+
+  const [{ range: queryRange, chart: queryMode }, setQuery] = useQueryStates(
     { range: itemSearchParams.range, chart: itemSearchParams.chart },
     { history: "replace", clearOnDefault: true },
   );
+
+  const range = compact ? localRange : (queryRange ?? data.activeRange);
+  const mode = compact ? localMode : (queryMode ?? data.activeMode);
+
+  const setRange = (val: ChartRange) => {
+    if (compact) setLocalRange(val);
+    else void setQuery({ range: val });
+  };
+
+  const setMode = (val: ChartMode) => {
+    if (compact) setLocalMode(val);
+    else void setQuery({ chart: val });
+  };
 
   /* The range pills used to be inert; they now pick the slice the chart draws. */
   const series = useMemo(() => withinRange(data.points, range ?? data.activeRange), [data.points, data.activeRange, range]);
 
   return (
-    <section id="intelligence" className="flex w-full scroll-mt-40 flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 shadow-xl">
+    <section
+      id="intelligence"
+      className={cn(
+        "flex w-full scroll-mt-40 flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card shadow-xl",
+        compact ? "p-4 gap-3 shadow-md border-white/5" : "p-6",
+      )}
+    >
       <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
         <div>
           <div className="flex items-center gap-2">
             <Icon name="query_stats" className="text-[24px] text-status-upcoming" />
-            <h2 className="font-headline-lg text-2xl font-bold tracking-tight text-text-primary">Financial Price Intelligence</h2>
-            <span className="rounded bg-surface-container-highest px-2 py-0.5 font-label-badge text-[10px] font-bold text-tertiary">BETA ENGINE</span>
+            <h2 className={cn("font-headline-lg font-bold tracking-tight text-text-primary", compact ? "text-lg" : "text-2xl")}>
+              Financial Price Intelligence
+            </h2>
+            <span className="rounded bg-surface-container-highest px-2 py-0.5 font-label-badge text-[10px] font-bold text-tertiary">
+              BETA ENGINE
+            </span>
           </div>
-          <p className="mt-1 font-body-md text-sm text-text-muted">Historical transaction telemetry mapped alongside Valve gameplay patches and meta shifts.</p>
+          {!compact && (
+            <p className="mt-1 font-body-md text-sm text-text-muted">
+              Historical transaction telemetry mapped alongside Valve gameplay patches and meta shifts.
+            </p>
+          )}
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1 rounded border border-border-subtle bg-surface-container-lowest p-1">
             {data.ranges.map((option) => (
               <Button
                 key={option}
                 variant={null}
                 size={null}
-                onClick={() => void setQuery({ range: option })}
+                onClick={() => setRange(option)}
                 aria-pressed={range === option}
                 className={cn(
                   PILL,
@@ -58,7 +93,7 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
                 key={option}
                 variant={null}
                 size={null}
-                onClick={() => void setQuery({ chart: option })}
+                onClick={() => setMode(option)}
                 aria-pressed={mode === option}
                 className={cn(
                   PILL,
@@ -73,8 +108,7 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
         </div>
       </div>
 
-      <div className="relative flex h-72 w-full flex-col overflow-hidden rounded-lg border border-border-subtle bg-surface-container-lowest p-4 sm:h-80">
-        {/* A line needs two observations; with fewer, say what exists instead of drawing an empty frame. */}
+      <div className={cn("relative flex w-full flex-col overflow-hidden rounded-lg border border-border-subtle bg-surface-container-lowest p-4", compact ? "h-60 sm:h-64" : "h-72 sm:h-80")}>
         {series.length >= 2 ? (
           <PricePlot points={series} annotations={data.annotations} mode={mode ?? data.activeMode} />
         ) : (
@@ -87,7 +121,7 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
       </div>
       {data.source && <span className="-mt-2 font-body-sm text-[11px] text-text-muted">Source: {data.source}</span>}
 
-      {data.annotations.length > 0 && (
+      {data.annotations.length > 0 && !compact && (
         <div className="flex flex-wrap items-start gap-2">
           {data.annotations.map((note) => (
             <div
@@ -112,19 +146,19 @@ export function PriceChart({ data }: { data: PriceIntelligence }) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3 pt-1 lg:grid-cols-4">
+      <div className={cn("grid grid-cols-2 gap-2.5 pt-1", compact ? "sm:grid-cols-4" : "lg:grid-cols-4")}>
         {data.stats.map((stat) => (
-          <div key={stat.label} className="flex flex-col rounded border border-border-subtle bg-surface-container-lowest p-3">
+          <div key={stat.label} className="flex flex-col rounded border border-border-subtle bg-surface-container-lowest p-2.5">
             <span className="font-label-badge text-[10px] text-text-muted uppercase">{stat.label}</span>
             <div className="mt-1 flex items-center gap-1.5">
-              <span className={cn("font-data-mono-md text-lg font-bold", STAT_TONE[stat.tone])}>{stat.value}</span>
+              <span className={cn("font-data-mono-md text-base font-bold", STAT_TONE[stat.tone])}>{stat.value}</span>
               {stat.badge && (
-                <span className="rounded border border-emerald-500/30 bg-emerald-950/80 px-1.5 font-label-badge text-[9px] font-bold text-emerald-400">
+                <span className="rounded border border-emerald-500/30 bg-emerald-950/80 px-1 font-label-badge text-[8px] font-bold text-emerald-400">
                   {stat.badge}
                 </span>
               )}
             </div>
-            <span className="mt-0.5 font-body-sm text-[10px] text-text-muted">{stat.note}</span>
+            <span className="mt-0.5 font-body-sm text-[10px] text-text-muted truncate">{stat.note}</span>
           </div>
         ))}
       </div>

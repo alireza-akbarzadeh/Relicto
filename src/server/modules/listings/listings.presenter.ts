@@ -1,4 +1,5 @@
 import type { ItemPresentation } from "@/lib/db/schema";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import type { Accent, BlobTone, Ecosystem, Listing, MediaBadge, RarityKey, ShadowTone, WearKey } from "@/modules/marketplace/types";
 
 /** Grades that exist as `RarityKey` in the UI; CS2 grades render as `null`. */
@@ -34,6 +35,13 @@ export type ListingRow = {
  */
 export function toListingView(row: ListingRow): Listing {
   const p = row.item.presentation;
+  const delivery = calculateDeliverySla({
+    name: row.item.name,
+    slot: row.item.slot ?? undefined,
+    rarity: row.item.rarity,
+    subtitle: p?.subtitle ?? row.heroName ?? undefined,
+    badge: p?.badge,
+  });
 
   return {
     id: row.item.slug,
@@ -57,6 +65,7 @@ export function toListingView(row: ListingRow): Listing {
     offers: row.offerCount,
     safeguards: (p?.safeguards ?? []) as Listing["safeguards"],
     listedAt: row.listedAt.getTime(),
+    delivery,
     ...(row.wear
       ? {
           cs2: {

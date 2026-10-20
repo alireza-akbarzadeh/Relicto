@@ -32,6 +32,7 @@ export const ICON_NAMES = [
   "bolt",
   "bomb",
   "cancel",
+  "card_giftcard",
   "casino",
   "cell_tower",
   "chat",

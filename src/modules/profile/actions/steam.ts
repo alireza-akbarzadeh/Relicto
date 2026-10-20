@@ -34,7 +34,7 @@ export async function saveSteamTradeUrl(tradeUrl: string): Promise<SaveSteamTrad
 }
 
 export type ManualSyncResult =
-  | { success: true; message: string; count: number }
+  | { success: true; message: string; count: number; portfolioUsd?: number }
   | { success: false; error: string };
 
 export async function triggerManualSteamSync(): Promise<ManualSyncResult> {
@@ -44,10 +44,14 @@ export async function triggerManualSteamSync(): Promise<ManualSyncResult> {
   if (result.status === "ok") {
     revalidatePath("/profile");
     revalidatePath("/sell");
+    revalidatePath("/orders");
+    const portfolioUsd = (result.totalValuationCents ?? 0) / 100;
+    const valueText = portfolioUsd > 0 ? ` (Est. Value: $${portfolioUsd.toFixed(2)})` : "";
     return {
       success: true,
-      message: `Synced ${result.itemCount} items from Steam.`,
+      message: `Synced ${result.itemCount} items from Steam${valueText}.`,
       count: result.itemCount,
+      portfolioUsd,
     };
   }
 

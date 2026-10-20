@@ -1,6 +1,8 @@
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { LedgerHeader } from "@/modules/relicto/components/shell/ledger-header";
 import type { OrderTracking } from "../types";
+import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
+import { CacheFriendshipTrackerCard } from "./tracking/cache-friendship-tracker-card";
 import { EscrowSandboxPanel } from "./tracking/escrow-sandbox-panel";
 import { EscrowSteps } from "./tracking/escrow-steps";
 import { FulfilmentPanel } from "./tracking/fulfilment-panel";
@@ -13,6 +15,13 @@ import { VendorCard } from "./tracking/vendor-card";
 
 /** Stitch: "Relicto — Live Order Tracking & Escrow Protocol". */
 export function TrackingView({ order }: { order: OrderTracking }) {
+  const sla = calculateDeliverySla({
+    name: order.item.name,
+    slot: order.item.slot,
+    collection: order.item.game,
+    intel: order.item.specs?.map((s) => `${s.label}: ${s.value}`),
+  });
+
   return (
     <div className="min-h-screen bg-surface-container-lowest font-body-md text-body-md text-on-surface antialiased">
       <LedgerHeader />
@@ -20,6 +29,13 @@ export function TrackingView({ order }: { order: OrderTracking }) {
         <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-space-lg px-gutter-desktop py-space-lg">
           <EscrowSandboxPanel code={order.code} stage={order.fulfilment?.stage} statusText={order.status} />
           <StatusBanner order={order} />
+          {sla.friendHoldRequired && (
+            <CacheFriendshipTrackerCard
+              itemName={order.item.name}
+              sellerHandle={order.vendor.handle}
+              canSimulate={order.fulfilment?.canSimulate ?? true}
+            />
+          )}
           <EscrowSteps steps={order.steps} />
           <div className="grid grid-cols-1 items-start gap-space-lg lg:grid-cols-12">
             <div className="flex flex-col gap-space-lg lg:col-span-8">

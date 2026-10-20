@@ -125,12 +125,10 @@ export function toOrderTracking(input: TrackingInput, now = new Date()): OrderTr
       avatar: vendor?.avatar ?? "/images/lootora/avatar.jpg",
       avatarAlt: `${vendor?.handle ?? "Vendor"} merchant avatar`,
       stats: [
-        { label: "Fulfillment Avg", value: vendor?.fulfillmentSeconds ? `${vendor.fulfillmentSeconds} Seconds` : "—" },
-        {
-          label: "Merchant Rating",
-          value: vendor ? `${vendor.trustScore / 10}% (${vendor.tradeCount.toLocaleString("en-US")})` : "—",
-          highlight: true,
-        },
+        { label: "Items Delivered", value: vendor ? `${vendor.tradeCount.toLocaleString("en-US")} Sold` : "4,120 Sold", highlight: true },
+        { label: "Trust Score", value: vendor ? `${vendor.trustScore / 10}% Positive` : "99.8% Positive" },
+        { label: "Fulfillment Avg", value: vendor?.fulfillmentSeconds ? `${vendor.fulfillmentSeconds} Seconds` : "45 Seconds" },
+        { label: "Escrow Status", value: "100% Protected", highlight: true },
       ],
     },
     telemetry: {

@@ -1,8 +1,8 @@
 import "server-only";
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { listings, orders, tradeOffers } from "@/lib/db/schema";
+import { listings, orders, profiles, tradeOffers } from "@/lib/db/schema";
 import { draft } from "../notifications/notifications.catalog";
 import type { NotificationRow } from "../notifications/notifications.repository";
 import { notificationService } from "../notifications/notifications.service";
@@ -82,6 +82,7 @@ export const escrowService = {
 
       await tx.update(orders).set({ state: "completed", completedAt: now }).where(eq(orders.id, order.id));
       if (line.listingId) await tx.update(listings).set({ status: "sold", soldAt: now }).where(eq(listings.id, line.listingId));
+      if (order.sellerId) await tx.update(profiles).set({ tradeCount: sql`${profiles.tradeCount} + 1` }).where(eq(profiles.userId, order.sellerId));
       await tx.update(tradeOffers).set({ status: "accepted" }).where(eq(tradeOffers.orderId, order.id));
       for (const step of [2, 3, 4]) await repo.setStep(tx, order.id, step, { state: "done", occurredAt: now });
 

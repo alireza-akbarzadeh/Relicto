@@ -35,6 +35,7 @@ export function toIdentity(profile: Profile): TraderIdentity {
     trust: {
       score: `${profile.trustScore / 10}% TRUST SCORE`,
       trades: `(${profile.tradeCount.toLocaleString("en-US")} TRADES)`,
+      delivered: `${profile.tradeCount.toLocaleString("en-US")} DELIVERED`,
     },
     tradeUrl: profile.tradeUrl ?? "",
     tronAddress: profile.tronAddress ?? "",

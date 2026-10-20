@@ -16,13 +16,8 @@ type Row = Omit<typeof inventoryItems.$inferInsert, "userId">;
 type Status = (typeof inventorySyncs.$inferSelect)["status"];
 
 const CHUNK = 200;
-const excluded = (column: { name: string }) =>
-  sql.raw(`excluded."${column.name}"`);
+const excluded = (column: { name: string }) => sql.raw(`excluded."${column.name}"`);
 
-/**
- * What a re-sync refreshes on a copy it already has. The listing link and the
- * studio's ordering belong to Relicto, so they survive.
- */
 const REFRESH = {
   itemId: excluded(inventoryItems.itemId),
   name: excluded(inventoryItems.name),
@@ -38,7 +33,6 @@ const REFRESH = {
   updatedAt: sql`now()`,
 };
 
-/** The SteamID64 a trader signed in with, or null for accounts without Steam. */
 export async function findSteamId(userId: string) {
   const [row] = await db
     .select({ steamId: account.accountId })
@@ -57,7 +51,6 @@ export async function findSync(userId: string) {
   return row ?? null;
 }
 
-/** Catalog items by game + exact name, with Relicto's live floor for each. */
 export async function matchCatalog(gameId: string, names: string[]) {
   if (names.length === 0) return new Map<string, CatalogMatch>();
   const rows = await db
@@ -67,29 +60,12 @@ export async function matchCatalog(gameId: string, names: string[]) {
       floorCents: min(listings.priceCents),
     })
     .from(items)
-    .leftJoin(
-      listings,
-      and(eq(listings.itemId, items.id), eq(listings.status, "active")),
-    )
+    .leftJoin(listings, and(eq(listings.itemId, items.id), eq(listings.status, "active")))
     .where(and(eq(items.gameId, gameId), inArray(items.name, names)))
     .groupBy(items.id);
-  return new Map(
-    rows.map((row) => [
-      row.name,
-      { itemId: row.itemId, floorCents: row.floorCents },
-    ]),
-  );
+  return new Map(rows.map((row) => [row.name, { itemId: row.itemId, floorCents: row.floorCents }]));
 }
 
-/**
- * Makes the trader's synced rows match what Steam returned, in one
- * transaction. Only games Steam answered for (`games`) are pruned, and only
- * synced rows: seeded and trade-up-forged rows are never touched.
- *
- * A copy that left the Steam inventory can't be sold here any more: an active
- * listing of it is cancelled with it. One mid-escrow (reserved) is left alone —
- * the trade bot is moving it — and goes once the order settles.
- */
 export async function applySync(
   userId: string,
   steamId: string,
@@ -98,7 +74,6 @@ export async function applySync(
   status: Status,
 ) {
   return db.transaction(async (tx) => {
-    // Bulk, in chunks: row-by-row over a remote database takes seconds per hundred.
     for (let at = 0; at < rows.length; at += CHUNK) {
       await tx
         .insert(inventoryItems)
@@ -120,12 +95,7 @@ export async function applySync(
           })
           .from(inventoryItems)
           .leftJoin(listings, eq(inventoryItems.listingId, listings.id))
-          .where(
-            and(
-              eq(inventoryItems.userId, userId),
-              inArray(inventoryItems.gameId, games),
-            ),
-          )
+          .where(and(eq(inventoryItems.userId, userId), inArray(inventoryItems.gameId, games)))
       : [];
     const gone = owned.filter(
       (row) =>
@@ -138,35 +108,32 @@ export async function applySync(
     const cancel = gone.flatMap((row) =>
       row.listingId && row.listingStatus === "active" ? [row.listingId] : [],
     );
-    if (cancel.length)
-      await tx
-        .update(listings)
-        .set({ status: "cancelled" })
-        .where(inArray(listings.id, cancel));
-    if (gone.length)
-      await tx.delete(inventoryItems).where(
-        inArray(
-          inventoryItems.id,
-          gone.map((row) => row.id),
-        ),
-      );
+    if (cancel.length) {
+      await tx.update(listings).set({ status: "cancelled" }).where(inArray(listings.id, cancel));
+    }
+    if (gone.length) {
+      await tx.delete(inventoryItems).where(inArray(inventoryItems.id, gone.map((r) => r.id)));
+    }
 
     const counts = await tx
       .select({
         gameId: inventoryItems.gameId,
         units: sql<number>`count(*)::int`,
+        valuationCents: sql<number>`coalesce(sum(coalesce(${inventoryItems.floorCents}, ${inventoryItems.priceCents}, 0)), 0)::int`,
       })
       .from(inventoryItems)
       .where(eq(inventoryItems.userId, userId))
       .groupBy(inventoryItems.gameId);
-    const byGame = Object.fromEntries(
-      counts.map((row) => [row.gameId, row.units]),
-    );
+
+    const byGame = Object.fromEntries(counts.map((row) => [row.gameId, row.units]));
+    const totalValuation = counts.reduce((sum, row) => sum + (row.valuationCents ?? 0), 0);
+
     await tx
       .update(profiles)
       .set({
         inventoryCounts: byGame,
         inventoryCount: counts.reduce((total, row) => total + row.units, 0),
+        portfolioCents: totalValuation,
       })
       .where(eq(profiles.userId, userId));
 
@@ -181,16 +148,12 @@ export async function applySync(
       .insert(inventorySyncs)
       .values(sync)
       .onConflictDoUpdate({ target: inventorySyncs.userId, set: sync });
-    return { removed: gone.length, cancelled: cancel.length };
+
+    return { removed: gone.length, cancelled: cancel.length, totalValuationCents: totalValuation };
   });
 }
 
-/** A failed pull still records the attempt, so the studio can say why and the throttle holds. */
-export async function recordAttempt(
-  userId: string,
-  steamId: string,
-  status: Status,
-) {
+export async function recordAttempt(userId: string, steamId: string, status: Status) {
   const sync = { userId, steamId, status, syncedAt: new Date() };
   await db
     .insert(inventorySyncs)

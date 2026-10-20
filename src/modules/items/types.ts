@@ -29,9 +29,21 @@ export type SectionLink = { id: string; label: string };
 
 export type OfferFulfilment = "bot" | "p2p";
 
+export type SellerTrustInfo = {
+  initials: string;
+  name: string;
+  rating: string;
+  tone: "emerald" | "indigo" | "amber" | "neutral";
+  verified: boolean;
+  tradesCount?: number;
+  itemsDelivered?: number;
+  trustScore?: number;
+  tier?: string;
+};
+
 export type Offer = {
   id: string;
-  seller: { initials: string; name: string; rating: string; tone: "emerald" | "indigo" | "amber" | "neutral"; verified: boolean };
+  seller: SellerTrustInfo;
   style: { label: string; tone: "amber" | "cyan" };
   quality: string;
   gems: string;

@@ -30,7 +30,7 @@ function trust(profile: Profile, activity: Activity): TrustStat[] {
     {
       label: "Trust Score", value: `${(profile.trustScore / 10).toFixed(1)}%`, tone: "plain",
       suffix: { text: reputation(rating).badge, chip: true },
-      note: `${plural(profile.tradeCount, "Completed Trade")}`, noteTone: "secondary", truncate: true,
+      note: `${plural(profile.tradeCount, "Item Sold & Delivered")}`, noteTone: "secondary", truncate: true,
     },
     {
       label: "Feedback Rating", value: rating.toFixed(1), tone: "amber", rating,

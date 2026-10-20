@@ -158,8 +158,10 @@ export const tracking: OrderTracking = {
     avatar: "/images/lootora/live-order-02.jpg",
     avatarAlt: "KuroSkins merchant avatar with a neon visor and tactical hood",
     stats: [
+      { label: "Items Delivered", value: "4,120 Sold", highlight: true },
+      { label: "Trust Score", value: "99.8% Positive" },
       { label: "Fulfillment Avg", value: "45 Seconds" },
-      { label: "Merchant Rating", value: "99.8% (4,120)", highlight: true },
+      { label: "Escrow Status", value: "100% Protected", highlight: true },
     ],
   },
   telemetry: { node: "WS://ESCROW-NODE-04.LIVE", buffer: "BUFFER: 5/5 EVT", lines: telemetry },

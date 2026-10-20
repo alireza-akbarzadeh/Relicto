@@ -7,6 +7,7 @@ import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import { SELLER_TONE } from "../../lib/tones";
 import type { Offer } from "../../types";
 import { OfferActions } from "./offer-actions";
+import { VendorTrustBadge } from "./vendor-trust-badge";
 
 type OfferRowProps = {
   offer: Offer;
@@ -38,8 +39,8 @@ export function OfferRow({ offer, itemName, onBuy, onAdd }: OfferRowProps) {
           >
             {offer.seller.initials}
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1.5">
               <Link
                 href={`/traders/${offer.seller.name}`}
                 className="font-headline-sm text-sm font-bold text-text-primary hover:text-primary transition-colors"
@@ -50,7 +51,7 @@ export function OfferRow({ offer, itemName, onBuy, onAdd }: OfferRowProps) {
                 <Icon name="verified" label="Verified merchant" className="text-[16px] text-tertiary" />
               )}
             </div>
-            <span className="font-data-mono-md text-[10px] text-emerald-400">{offer.seller.rating}</span>
+            <VendorTrustBadge seller={offer.seller} />
           </div>
         </div>
       </td>

@@ -6,19 +6,11 @@ import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 import { requireUserId } from "@/modules/relicto/data/get-session";
 
+import { isValidTronAddress } from "@/lib/tron/tron-address";
+
 export type SaveTronAddressResult =
   | { success: true; tronAddress: string }
   | { success: false; error: string };
-
-/**
- * Validates a TRON (TRC-20) base58 address.
- * Starts with 'T' and consists of 34 alphanumeric characters excluding 0, O, I, l.
- */
-export function isValidTronAddress(address: string): boolean {
-  if (!address || typeof address !== "string") return false;
-  const trimmed = address.trim();
-  return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(trimmed);
-}
 
 export async function saveTronAddress(tronAddress: string): Promise<SaveTronAddressResult> {
   const userId = await requireUserId();

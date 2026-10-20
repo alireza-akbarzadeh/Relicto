@@ -48,6 +48,12 @@ export function IdentityBlock({ identity }: { identity: TraderIdentity }) {
           <span className="font-bold text-text-primary">{identity.trust.score}</span>
           <span className="text-text-muted">{identity.trust.trades}</span>
         </div>
+        {identity.trust.delivered && (
+          <div className={cn(CHIP, "bg-emerald-950/40 text-emerald-300 border border-emerald-500/30")}>
+            <Icon name="check_circle" className="text-[14px] text-emerald-400" />
+            <span className="font-bold">{identity.trust.delivered}</span>
+          </div>
+        )}
       </div>
     </div>
   );

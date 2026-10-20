@@ -85,6 +85,25 @@ export function WalletCashoutDestination({
               placeholder={getPlaceholder()}
               className="h-auto flex-1 border-0 bg-transparent p-0 font-data-mono-md text-[12px] text-text-primary focus-visible:ring-0"
             />
+            {network === "trc20" && (
+              <Button
+                type="button"
+                variant={null}
+                size={null}
+                onClick={() => {
+                  const tronWeb = (window as unknown as { tronWeb?: { defaultAddress?: { base58?: string } } }).tronWeb;
+                  if (tronWeb?.defaultAddress?.base58) {
+                    onCustomAddressChange(tronWeb.defaultAddress.base58);
+                    toast.success("TronLink Wallet Imported", { description: tronWeb.defaultAddress.base58 });
+                  } else {
+                    toast.info("Please install or unlock TronLink Chrome extension");
+                  }
+                }}
+                className="shrink-0 px-2 py-1 rounded bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-mono text-[10px] font-bold border border-rose-500/40 cursor-pointer"
+              >
+                TronLink ⚡
+              </Button>
+            )}
             {validation && (
               <span
                 className={`font-label-badge text-[10px] ${validation.valid ? "text-status-live" : "text-status-offline"}`}

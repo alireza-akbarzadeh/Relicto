@@ -3,6 +3,7 @@ import { cn } from "@/lib/cn";
 import { IntelMobileHeader } from "@/modules/relicto/components/mobile/mobile-headers";
 import { MobileTabBar } from "@/modules/relicto/components/mobile/mobile-tab-bar";
 import type { TrackingMobile as TrackingMobileData } from "../../mobile.types";
+import { CacheFriendshipTrackerCard } from "../tracking/cache-friendship-tracker-card";
 import { EscrowSequence } from "./escrow-sequence";
 import { EscrowSandboxPanel } from "../tracking/escrow-sandbox-panel";
 import { OrderHashCard } from "./order-hash-card";
@@ -16,6 +17,9 @@ const TONE = { cyan: "bg-status-upcoming", amber: "text-tertiary", indigo: "text
 export function TrackingMobile({ order }: { order: TrackingMobileData }) {
   const active = order.steps.findIndex((step) => step.state === "active");
   const stage = `STEP ${active + 1} OF ${order.steps.length}`;
+  const isCache = /collector'?s\s*cache|cache|giftable|monarch|gothic/i.test(
+    `${order.item.name} ${order.item.finish}`
+  );
 
   return (
     <div className="stitch-heavy-grotesk stitch-medium-mono stitch-lite-geist flex min-h-screen flex-col bg-surface font-body-md text-body-md text-on-surface">
@@ -23,6 +27,13 @@ export function TrackingMobile({ order }: { order: TrackingMobileData }) {
       <main className="relative flex w-full flex-col bg-surface pt-16 pb-20">
         <div className="flex w-full flex-col gap-space-md px-space-md py-space-sm text-on-surface">
           <EscrowSandboxPanel code={order.code} stage={order.steps.find((s) => s.state === "active")?.id} />
+          {isCache && (
+            <CacheFriendshipTrackerCard
+              itemName={order.item.name}
+              sellerHandle={order.seller.name}
+              canSimulate={true}
+            />
+          )}
           <OrderHashCard order={order} stage={stage} />
           <OrderItemCard item={order.item} seller={order.seller} />
           <EscrowSequence steps={order.steps} stage={stage} offerUrl={order.tradeOfferUrl} />

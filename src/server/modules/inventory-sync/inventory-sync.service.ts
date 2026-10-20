@@ -25,6 +25,7 @@ export type SyncResult =
       itemCount: number;
       removed: number;
       cancelled: number;
+      totalValuationCents?: number;
       /** Games Steam didn't answer this time (rate limit, outage); their mirror is left as it was. */
       skipped: string[];
     }

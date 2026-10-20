@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
-import { saveTronAddress, isValidTronAddress } from "../../actions/tron";
+import { isValidTronAddress } from "@/lib/tron/tron-address";
+import { saveTronAddress } from "../../actions/tron";
 
 type Props = {
   initialTronAddress?: string;

@@ -27,7 +27,7 @@ export type TraderIdentity = {
   highlightVideo?: string;
   telemetry: { label: string; tone?: Tone; pulse?: boolean }[];
   ranks: RankChip[];
-  trust: { score: string; trades: string };
+  trust: { score: string; trades: string; delivered?: string };
   tradeUrl: string;
   tronAddress?: string;
   handshake: string;

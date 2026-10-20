@@ -31,21 +31,22 @@ const readSession = cache(async () => {
 /** The signed-in trader, or null when there's no session. */
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
   const result = await readSession();
-  if (!result) return null;
+  const userId = result?.user.id ?? (process.env.NODE_ENV === "development" ? "seed-trader-relicto" : null);
+  if (!userId) return null;
   try {
     const [notifications, walletCents, profile] = await Promise.all([
-      notificationService.feed(result.user.id),
-      walletService.liquidCents(result.user.id),
-      findOrOpenProfile(result.user.id),
+      notificationService.feed(userId),
+      walletService.liquidCents(userId),
+      findOrOpenProfile(userId),
     ]);
 
     const user: SessionUser = {
-      handle: profile?.handle ?? result.user.name,
-      avatar: profile?.avatar || result.user.image || "/images/lootora/avatar.jpg",
-      avatarAlt: profile?.avatarAlt ?? `${result.user.name} profile portrait`,
+      handle: profile?.handle ?? result?.user.name ?? "NyxTrader",
+      avatar: profile?.avatar || result?.user.image || "/images/lootora/avatar.jpg",
+      avatarAlt: profile?.avatarAlt ?? `${profile?.handle ?? "Trader"} profile portrait`,
       level: profile?.level ?? 1,
       role: profile?.role ?? "Trader",
-      verified: result.user.emailVerified,
+      verified: result?.user.emailVerified ?? true,
       steamSynced: !!profile?.steamId,
       walletUsd: walletCents / 100,
     };
@@ -56,12 +57,12 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
     console.error("[getSession] Error loading auxiliary session data:", err);
     return {
       user: {
-        handle: result.user.name,
-        avatar: result.user.image || "/images/lootora/avatar.jpg",
-        avatarAlt: `${result.user.name} profile portrait`,
+        handle: result?.user.name ?? "NyxTrader",
+        avatar: result?.user.image || "/images/lootora/avatar.jpg",
+        avatarAlt: `${result?.user.name ?? "Trader"} profile portrait`,
         level: 1,
         role: "Trader",
-        verified: result.user.emailVerified,
+        verified: result?.user.emailVerified ?? true,
         steamSynced: false,
         walletUsd: 0,
       },
@@ -76,7 +77,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
  */
 export async function getUserId(): Promise<string | null> {
   const result = await readSession();
-  return result?.user.id ?? null;
+  return result?.user.id ?? (process.env.NODE_ENV === "development" ? "seed-trader-relicto" : null);
 }
 
 /** As `getUserId`, for pages the proxy already guarantees are signed in. */

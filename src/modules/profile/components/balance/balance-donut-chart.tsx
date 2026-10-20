@@ -20,7 +20,7 @@ const COLOR_MAP: Record<string, { stroke: string; glow: string; text: string }> 
 export function BalanceDonutChart({ segments, totalUsd, currency }: DonutProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const radius = 62;
+  const radius = 72;
   const circumference = 2 * Math.PI * radius;
 
   const renderedSegments = useMemo(() => {
@@ -41,18 +41,18 @@ export function BalanceDonutChart({ segments, totalUsd, currency }: DonutProps) 
   const activeAmount = activeSegment ? formatByCurrency(activeSegment.usd, currency) : formatByCurrency(totalUsd, currency);
 
   return (
-    <div className="flex flex-col items-center gap-space-sm sm:flex-row sm:justify-around">
+    <div className="flex flex-col items-center gap-space-md sm:flex-row sm:justify-around py-space-sm">
       {/* SVG Donut Circle */}
-      <div className="relative flex h-48 w-48 shrink-0 items-center justify-center">
-        <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90">
+      <div className="relative flex h-60 w-60 sm:h-68 sm:w-68 shrink-0 items-center justify-center">
+        <svg viewBox="0 0 180 180" className="h-full w-full -rotate-90">
           {/* Background Track */}
           <circle
-            cx="80"
-            cy="80"
+            cx="90"
+            cy="90"
             r={radius}
             fill="none"
             stroke="rgba(255, 255, 255, 0.05)"
-            strokeWidth="14"
+            strokeWidth="16"
           />
 
           {/* Segment Arcs */}
@@ -62,19 +62,19 @@ export function BalanceDonutChart({ segments, totalUsd, currency }: DonutProps) 
             return (
               <circle
                 key={seg.id}
-                cx="80"
-                cy="80"
+                cx="90"
+                cy="90"
                 r={radius}
                 fill="none"
                 stroke={seg.colors.stroke}
-                strokeWidth={isHovered ? 18 : 14}
+                strokeWidth={isHovered ? 20 : 16}
                 strokeDasharray={seg.strokeDasharray}
                 strokeDashoffset={seg.strokeDashoffset}
                 strokeLinecap="round"
                 className="cursor-pointer transition-all duration-300"
                 style={{
-                  filter: isHovered ? `drop-shadow(0 0 8px ${seg.colors.glow})` : undefined,
-                  opacity: hoveredId && !isHovered ? 0.4 : 1,
+                  filter: isHovered ? `drop-shadow(0 0 10px ${seg.colors.glow})` : undefined,
+                  opacity: hoveredId && !isHovered ? 0.35 : 1,
                 }}
                 onMouseEnter={() => setHoveredId(seg.id)}
                 onMouseLeave={() => setHoveredId(null)}

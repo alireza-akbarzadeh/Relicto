@@ -13,9 +13,13 @@ import { bootstrapTrader } from "@/server/modules/profile/profile.bootstrap";
  * deployment (including previews), so only local dev falls through to
  * localhost. A mismatch here rejects sign-in with `INVALID_ORIGIN`.
  */
+const vercelOrigin = process.env.VERCEL_URL
+  ? (process.env.VERCEL_URL.startsWith("http") ? process.env.VERCEL_URL : `https://${process.env.VERCEL_URL}`).replace(/\/$/, "")
+  : null;
+
 const baseURL =
   process.env.BETTER_AUTH_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  (vercelOrigin ?? "http://localhost:3000");
 
 export const auth = betterAuth({
   baseURL,
@@ -23,7 +27,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     baseURL,
     "http://localhost:3000",
-    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+    ...(vercelOrigin ? [vercelOrigin] : []),
   ],
   secret: process.env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {

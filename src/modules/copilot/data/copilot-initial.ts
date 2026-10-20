@@ -5,7 +5,7 @@ export const INITIAL_COPILOT_MESSAGES: CopilotMessage[] = [
     id: "init-welcome",
     role: "assistant",
     content:
-      "Sentinel AI Online. Trade Protection System activated.\n\nI monitor Valve Steam 7-day trade holds, inspect Steam Web API key hijacking threats, verify wear floats, and assist with Relicto escrow transactions. How can I assist your trade today?",
+      "Hello! I'm Ali, your Sentinel AI Copilot and trade guardian.\n\nI monitor Valve Steam 7-day trade holds, explain Dota 2 Collector's Cache 31-day gift rules, audit Steam Web API key hijacking threats, and safeguard your escrow trades. Ask me anything or click a quick prompt below!",
     timestamp: "NOW",
     diagnostic: {
       tradeId: "#94821",

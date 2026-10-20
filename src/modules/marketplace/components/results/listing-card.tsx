@@ -84,12 +84,7 @@ export function ListingCard({
               </Button>
             )}
             <SteamMarketButton
-              target={{
-                name: listing.name,
-                gameId: listing.game,
-                wear: listing.cs2?.wear,
-                stattrak: listing.cs2?.stattrak,
-              }}
+              target={{ name: listing.name, gameId: listing.game, wear: listing.cs2?.wear, stattrak: listing.cs2?.stattrak }}
               variant="icon"
             />
             <ShareButton title={listing.name} text={listing.subtitle} path={`/items/${listing.id}`} />
@@ -106,10 +101,7 @@ export function ListingCard({
                 type="button"
                 variant={null}
                 size={null}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onQuickPick();
-                }}
+                onClick={(e) => { e.stopPropagation(); onQuickPick(); }}
                 className="flex items-center gap-1.5 rounded-full border border-white/20 bg-surface-container-high/90 px-3 py-1.5 font-label-caps text-xs font-bold text-white shadow-lg backdrop-blur-md transition-transform hover:scale-105"
               >
                 <Icon name="bolt" className="text-[15px] text-tertiary" />
@@ -142,9 +134,17 @@ export function ListingCard({
         <div className="mt-auto rounded-xl p-space-sm border border-outline-variant/20 bg-surface-container-lowest/70">
           <div className="flex items-end justify-between gap-space-sm">
             <div className="min-w-0">
-              <span className="mb-0.5 block font-label-badge text-[9px] font-semibold tracking-widest text-text-muted uppercase">
-                Current Price
-              </span>
+              <div className="mb-0.5 flex items-center gap-1.5">
+                <span className="font-label-badge text-[9px] font-semibold tracking-widest text-text-muted uppercase">
+                  Price
+                </span>
+                <span
+                  title={`Steam benchmark: ~$${(listing.priceUsd * 1.15).toFixed(2)} (15% Valve Fee)`}
+                  className="rounded border border-emerald-500/30 bg-emerald-950/70 px-1 py-0.2 font-data-mono-md text-[8.5px] font-bold text-emerald-400"
+                >
+                  -13% vs Steam
+                </span>
+              </div>
               <span className="block truncate font-headline-md text-headline-md font-bold text-tertiary">
                 {formatMoney(listing.priceUsd)}
               </span>

@@ -39,7 +39,7 @@ export function calculateDeliverySla(target: DeliveryTarget): DeliverySla {
 
   // 1. Collector's Cache sets, prestige bundles, and giftable-only items (31-day friend hold)
   const isCacheOrGift =
-    /\b(collector'?s\s*cache|cache\s*bundle|giftable|gift\s*once|gift\s*delivery|31[\s-]*day|cache\s*set)\b/i.test(
+    /\b(collector'?s\s*cache|cache\s*bundle|giftable|gift\s*once|gift\s*delivery|31[\s-]*day|cache\s*set|monarch\s+of\s+the\s+sapphire\s+glen|gothic\s+whisper)\b/i.test(
       corpus
     ) ||
     (corpus.includes("cache") && (corpus.includes("bundle") || corpus.includes("set"))) ||

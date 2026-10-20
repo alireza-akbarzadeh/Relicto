@@ -123,7 +123,15 @@ export function MobileListingCard({
       </Link>
 
       <div className="mt-2 flex items-baseline justify-between pt-1.5">
-        <span className="font-data-mono-lg text-data-mono-lg text-text-primary">{formatMoney(listing.priceUsd)}</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="font-data-mono-lg text-data-mono-lg text-text-primary">{formatMoney(listing.priceUsd)}</span>
+          <span
+            title={`Steam benchmark: ~$${(listing.priceUsd * 1.15).toFixed(2)}`}
+            className="rounded border border-emerald-500/25 bg-emerald-950/60 px-1 py-0.2 font-data-mono-md text-[8px] font-bold text-emerald-400"
+          >
+            -13% vs Steam
+          </span>
+        </div>
         <span className={cn("font-data-mono-md text-[11px] font-bold", changeTone(listing.changePct))}>{formatDelta(listing.changePct)}</span>
       </div>
 

@@ -124,6 +124,15 @@ export function resolveArtwork(item: CatalogSeedItem): string {
       return "/images/lootora/items/dark-artistry-cape.jpg";
     }
 
+    // Windranger (including Monarch of the Sapphire Glen)
+    if (item.hero === "Windranger" || slug.includes("windranger") || slug.includes("sapphire") || slug.includes("monarch")) {
+      return "/images/lootora/sell-items-03.jpg";
+    }
+
+    // Faceless Void & Lina
+    if (item.hero === "Faceless Void" || slug.includes("aeons")) return "/images/lootora/item-detail-05.jpg";
+    if (item.hero === "Lina" || slug.includes("wyrmwrought")) return "/images/lootora/item-detail-02.jpg";
+
     // By Equipment Slot
     if (item.slot === "Head") return "/images/lootora/items/codicil-veiled.jpg";
     if (item.slot === "Armor") return "/images/lootora/item-mobile-04.jpg";

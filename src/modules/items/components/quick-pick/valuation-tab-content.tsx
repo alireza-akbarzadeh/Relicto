@@ -42,11 +42,10 @@ export function ValuationTabContent({
     });
 
   const handleCopilotAudit = () => {
-    window.dispatchEvent(
-      new CustomEvent("relicto:open-copilot-query", {
-        detail: `Audit asset: ${name} (${formatMoney(priceUsd)} USD). What are the Valve 7-day cooldown rules and float wear parameters?`,
-      })
-    );
+    const detail = delivery.friendHoldRequired
+      ? `Ali, how does the 31-day Steam friend hold work for ${name}? Explain how buyer funds are protected in escrow.`
+      : `Audit asset: ${name} (${formatMoney(priceUsd)} USD). What are the Valve 7-day cooldown rules and float wear parameters?`;
+    window.dispatchEvent(new CustomEvent("relicto:open-copilot-query", { detail }));
   };
 
   return (
@@ -161,13 +160,13 @@ export function ValuationTabContent({
         >
           <span className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-rose-500 animate-pulse" />
-            <span className="font-bold text-white">Ask Sentinel AI:</span>
+            <span className="font-bold text-white">Ask Ali:</span>
             <span className="text-slate-300 truncate text-[11px]">
-              Audit float, 7-day hold &amp; escrow
+              {delivery.friendHoldRequired ? "Explain 31-day friend gift & escrow" : "Audit float, 7-day hold & escrow"}
             </span>
           </span>
           <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 group-hover:bg-rose-500 group-hover:text-white transition-all">
-            Audit ⚡
+            {delivery.friendHoldRequired ? "Guide 🎁" : "Audit ⚡"}
           </span>
         </Button>
       </div>

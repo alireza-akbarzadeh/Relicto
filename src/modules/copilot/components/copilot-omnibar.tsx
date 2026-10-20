@@ -23,6 +23,8 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
   const handleCommandClick = (cmd: string) => {
     if (cmd === "/escrow") {
       onSendMessage("Audit active trade escrow and verify Sentinel tradebot status.");
+    } else if (cmd === "/cache-guide") {
+      onSendMessage("Ali, how do Collector's Cache gift trades and the 31-day Steam friend hold work? I'm buying for the first time.");
     } else if (cmd === "/float-check") {
       onSendMessage("What are the CS2 wear float ranges and how does float wear transfer work in trade-ups?");
     } else if (cmd === "/api-key-audit") {
@@ -79,7 +81,7 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
             value={input}
             disabled={disabled}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask anything (e.g. 'Can I sell item I bought?', paste trade URL, or /cmd)..."
+            placeholder="Ask Ali anything (e.g. 'How does Collector's Cache gift trade work?', trade URL, or /cmd)..."
             className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-xs focus:outline-none font-sans"
           />
         </div>

@@ -80,7 +80,7 @@ export const KNOWN_ITEM_COLLECTIONS: Record<string, string> = {
   "★ Butterfly Knife | Fade": "The Breakout Collection",
   "AWP | Dragon Lore": "The Cobblestone Collection",
   "AK-47 | Fire Serpent": "The Bravo Collection",
-  "M4A1-S | Printstream": "The Operation Broken Fang Collection",
+  "M4A1-S | Blue Phosphor": "The Control Collection",
 };
 
 export type DynamicOutcome = CollectionWeapon & {

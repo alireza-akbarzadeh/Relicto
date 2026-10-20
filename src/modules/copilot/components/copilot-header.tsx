@@ -51,7 +51,7 @@ export function CopilotHeader({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-display font-bold text-sm text-white tracking-wide flex items-center gap-1.5">
-                SENTINEL AI <span className="text-rose-400 font-mono text-[10px] px-1.5 py-0.2 rounded bg-rose-500/15 border border-rose-500/30">COPILOT</span>
+                SENTINEL AI <span className="text-rose-400 font-mono text-[10px] px-1.5 py-0.2 rounded bg-rose-500/15 border border-rose-500/30">&quot;ALI&quot;</span>
               </h1>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold border border-emerald-500/30 flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -59,7 +59,7 @@ export function CopilotHeader({
               </span>
             </div>
             <p className="text-[11px] font-mono text-slate-400 flex items-center gap-2 mt-0.5">
-              <span>Escrow Guardian v4.8</span>
+              <span>Ali • Escrow Guardian v4.8</span>
               <span className="text-slate-600">•</span>
               <span className="text-cyan-400 font-medium">Valve Dev Gateway</span>
             </p>

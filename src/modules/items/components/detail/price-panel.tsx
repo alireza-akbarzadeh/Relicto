@@ -159,21 +159,22 @@ export function PricePanel({ item }: { item: ItemDetail }) {
         variant={null}
         size={null}
         onClick={() => {
-          window.dispatchEvent(
-            new CustomEvent("relicto:open-copilot-query", {
-              detail: `Audit asset: ${item.name} ($${price.lowestUsd} USD). What are the Valve 7-day cooldown rules and float wear parameters?`,
-            })
-          );
+          const detail = delivery.friendHoldRequired
+            ? `Ali, how does the 31-day Steam friend trade work for ${item.name}? Explain how buyer funds are protected in escrow.`
+            : `Audit asset: ${item.name} ($${price.lowestUsd} USD). What are the Valve 7-day cooldown rules and float wear parameters?`;
+          window.dispatchEvent(new CustomEvent("relicto:open-copilot-query", { detail }));
         }}
         className="flex items-center justify-between w-full p-2.5 rounded-lg border border-rose-500/30 bg-rose-950/20 hover:bg-rose-950/40 text-rose-300 font-mono text-xs transition-colors group cursor-pointer"
       >
         <span className="flex items-center gap-2">
           <span className="size-2 rounded-full bg-rose-500 animate-pulse" />
-          <span className="font-bold text-white">Ask Sentinel AI:</span>
-          <span className="text-slate-300 truncate">Audit float, 7-day hold &amp; escrow</span>
+          <span className="font-bold text-white">Ask Ali:</span>
+          <span className="text-slate-300 truncate">
+            {delivery.friendHoldRequired ? "Explain 31-day friend gift & escrow" : "Audit float, 7-day hold & escrow"}
+          </span>
         </span>
         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 group-hover:bg-rose-500 group-hover:text-white transition-all">
-          Audit Item ⚡
+          {delivery.friendHoldRequired ? "Guide 🎁" : "Audit ⚡"}
         </span>
       </Button>
 

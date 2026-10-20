@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { SENTINEL_SYSTEM_INSTRUCTION } from "@/modules/copilot/data/copilot-knowledge";
 import { resolveSentinelLocalKnowledge } from "@/modules/copilot/data/copilot-resolver";
+import {
+  checkAiRateLimit,
+  getCachedAiResponse,
+  setCachedAiResponse,
+} from "@/modules/copilot/lib/copilot-rate-limit";
 import type { TradeDiagnostic } from "@/modules/copilot/types";
 
 export const runtime = "nodejs";
@@ -30,12 +35,56 @@ export async function POST(req: NextRequest) {
     const { message, history = [], modelOverride } = body;
     userMessage = typeof message === "string" ? message : "";
 
-    if (!userMessage) {
+    if (!userMessage.trim()) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.GEMENI_API_KEY || "";
+    // 1. Check TTL cache first (0 Gemini API cost!)
+    const cached = getCachedAiResponse(userMessage);
+    if (cached) {
+      return NextResponse.json({
+        success: true,
+        reply: cached.reply,
+        diagnostic: cached.diagnostic,
+        modelUsed: cached.modelUsed,
+        latencyMs: Date.now() - startTime,
+        fromCache: true,
+      });
+    }
 
+    // 2. Client IP Rate Limiting Check
+    const clientIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
+    const rate = checkAiRateLimit(clientIp);
+    if (!rate.allowed) {
+      const fallback = resolveSentinelLocalKnowledge(userMessage);
+      return NextResponse.json(
+        {
+          success: true,
+          rateLimited: true,
+          reply: `⚠️ Rate limit: ${rate.reason}\n\n${fallback.reply}`,
+          diagnostic: fallback.diagnostic,
+          modelUsed: `${fallback.modelUsed} (Throttled)`,
+          retryAfter: rate.retryAfterSeconds,
+          latencyMs: Date.now() - startTime,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rate.retryAfterSeconds),
+            "X-RateLimit-Limit": "6",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(rate.resetSeconds),
+          },
+        }
+      );
+    }
+
+    // 3. Make Gemini API Call
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GEMENI_API_KEY || "";
     let model = modelOverride || process.env.GEMINI_MODEL || "gemini-3.8-flash";
     if (model.includes("2.5") || model.includes("2.0") || model.includes("1.5")) {
       model = "gemini-3.8-flash";
@@ -50,7 +99,7 @@ export async function POST(req: NextRequest) {
 
     contents.push({
       role: "user",
-      parts: [{ text: message }],
+      parts: [{ text: userMessage }],
     });
 
     const timeoutPromise = new Promise<never>((_, reject) =>
@@ -71,17 +120,28 @@ export async function POST(req: NextRequest) {
     const rawText = response.text || "Diagnostic analysis complete. No threats detected.";
     const { cleanText, diagnostic } = parseDiagnosticBlock(rawText);
 
-    return NextResponse.json({
-      success: true,
-      reply: cleanText,
-      diagnostic,
-      modelUsed: model,
-      latencyMs,
-    });
+    // Save in cache to eliminate repeat API costs
+    setCachedAiResponse(userMessage, cleanText, model, diagnostic);
+
+    return NextResponse.json(
+      {
+        success: true,
+        reply: cleanText,
+        diagnostic,
+        modelUsed: model,
+        latencyMs,
+      },
+      {
+        headers: {
+          "X-RateLimit-Limit": "6",
+          "X-RateLimit-Remaining": String(rate.remaining),
+          "X-RateLimit-Reset": String(rate.resetSeconds),
+        },
+      }
+    );
   } catch (error: unknown) {
     console.warn("[Copilot API Route] Fallback to local codex:", error instanceof Error ? error.message : error);
     const latencyMs = Date.now() - startTime;
-
     const resolved = resolveSentinelLocalKnowledge(userMessage);
 
     return NextResponse.json({

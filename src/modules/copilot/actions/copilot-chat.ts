@@ -1,8 +1,14 @@
 "use server";
 
+import { headers } from "next/headers";
 import { GoogleGenAI } from "@google/genai";
 import { SENTINEL_SYSTEM_INSTRUCTION } from "../data/copilot-knowledge";
 import { resolveSentinelLocalKnowledge } from "../data/copilot-resolver";
+import {
+  checkAiRateLimit,
+  getCachedAiResponse,
+  setCachedAiResponse,
+} from "../lib/copilot-rate-limit";
 import type { TradeDiagnostic } from "../types";
 
 export interface SendChatMessageInput {
@@ -38,8 +44,41 @@ export async function sendChatMessageAction(
   input: SendChatMessageInput
 ): Promise<SendChatMessageOutput> {
   const startTime = Date.now();
-  const apiKey = process.env.GEMINI_API_KEY || process.env.GEMENI_API_KEY || "";
 
+  // 1. Check response cache first to eliminate duplicate API costs
+  const cached = getCachedAiResponse(input.message);
+  if (cached) {
+    return {
+      success: true,
+      reply: cached.reply,
+      diagnostic: cached.diagnostic as TradeDiagnostic | undefined,
+      modelUsed: cached.modelUsed,
+      latencyMs: Date.now() - startTime,
+    };
+  }
+
+  // 2. Client rate limit check
+  try {
+    const h = await headers();
+    const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "127.0.0.1";
+    const rate = checkAiRateLimit(ip);
+
+    if (!rate.allowed) {
+      const fallback = resolveSentinelLocalKnowledge(input.message);
+      return {
+        success: true,
+        reply: `⚠️ Rate limit: ${rate.reason}\n\n${fallback.reply}`,
+        diagnostic: fallback.diagnostic,
+        modelUsed: `${fallback.modelUsed} (Throttled)`,
+        latencyMs: Date.now() - startTime,
+        error: rate.reason,
+      };
+    }
+  } catch {
+    // If headers cannot be read, proceed to call
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GEMENI_API_KEY || "";
   let model = input.modelOverride || process.env.GEMINI_MODEL || "gemini-3.8-flash";
   if (model.includes("2.5") || model.includes("2.0") || model.includes("1.5")) {
     model = "gemini-3.8-flash";
@@ -75,6 +114,9 @@ export async function sendChatMessageAction(
     const latencyMs = Date.now() - startTime;
     const rawText = response.text || "Diagnostic analysis complete. No threats detected.";
     const { cleanText, diagnostic } = parseDiagnosticBlock(rawText);
+
+    // Save in cache
+    setCachedAiResponse(input.message, cleanText, model, diagnostic);
 
     return {
       success: true,

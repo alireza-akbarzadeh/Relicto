@@ -12,12 +12,20 @@ interface CopilotOmnibarProps {
 
 export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps) {
   const [input, setInput] = React.useState("");
+  const [cooldown, setCooldown] = React.useState(0);
+
+  React.useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || disabled) return;
+    if (!input.trim() || disabled || cooldown > 0) return;
     onSendMessage(input.trim());
     setInput("");
+    setCooldown(3);
   };
 
   const handleCommandClick = (cmd: string) => {
@@ -123,10 +131,11 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
 
           <button
             type="submit"
-            disabled={disabled || !input.trim()}
-            className="bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white p-2 rounded-lg transition-all shadow-md shadow-rose-950/40 active:scale-95 flex items-center justify-center cursor-pointer"
+            disabled={disabled || !input.trim() || cooldown > 0}
+            title={cooldown > 0 ? `Rate limit cooldown (${cooldown}s)` : "Send message"}
+            className="bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white min-w-[34px] h-[34px] rounded-lg transition-all shadow-md shadow-rose-950/40 active:scale-95 flex items-center justify-center cursor-pointer font-mono text-[11px] font-bold"
           >
-            <Send className="size-3.5" />
+            {cooldown > 0 ? `${cooldown}s` : <Send className="size-3.5" />}
           </button>
         </div>
       </form>

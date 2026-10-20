@@ -54,7 +54,10 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: text, history, modelOverride: model }),
         });
-        if (fetchRes.ok) result = await fetchRes.json();
+        if (fetchRes.ok || fetchRes.status === 429) {
+          result = await fetchRes.json();
+          if (fetchRes.status === 429) toast.warning("Rate limit active: cooling down");
+        }
       } catch {
         // Fallback to Tier 2
       }

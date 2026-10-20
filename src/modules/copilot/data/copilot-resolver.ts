@@ -60,6 +60,35 @@ How can I assist your trade or portfolio today?`,
     };
   }
 
+  // 3. Vendor Trust Score & Items Sold / Delivered
+  if (
+    q.includes("vendor") ||
+    q.includes("seller") ||
+    q.includes("trust") ||
+    q.includes("score") ||
+    q.includes("sold") ||
+    q.includes("delivered") ||
+    q.includes("reputation") ||
+    q.includes("distinguish")
+  ) {
+    return {
+      modelUsed: "Ali • Vendor Reputation & Trust Codex",
+      reply: `VENDOR TRUST & DELIVERY SCORE SYSTEM:
+
+1. HOW TO DISTINGUISH REPUTABLE SELLERS:
+   • Items Sold & Delivered Badge: Shows the lifetime count of successfully completed escrow deliveries (e.g. "4,120 Sold & Delivered").
+   • Trust Score Percentage: Calculated from buyer feedback ratings (e.g. 99.8% positive satisfaction).
+   • Merchant Tiers:
+     - Tier-1 Elite Merchant: 1,000+ items delivered with pristine escrow track record.
+     - Verified Merchant: 100–999 items delivered with continuous positive ratings.
+     - Active Trader: 10–99 items delivered.
+     - New Seller: Under 10 deliveries; protected by full buyer escrow hold.
+
+2. BUYER ESCROW GUARANTEE:
+   Regardless of seller volume or tier, your funds are 100% held in Relicto Escrow. The vendor receives $0 until you inspect and confirm delivery in your Steam inventory!`,
+    };
+  }
+
   // 3. Steam 7-day trade hold & resale restrictions
   if (q.includes("sell") || q.includes("buy") || q.includes("7-day") || q.includes("7 day") || q.includes("hold") || q.includes("cooldown") || q.includes("later") || q.includes("lock")) {
     return {
@@ -101,22 +130,10 @@ ANTI-PHISHING PROTOCOL:
   }
 
   // 5. Doppler Phases vs Rare Gems
-  if (q.includes("doppler") || q.includes("phase") || q.includes("gem") || q.includes("ruby") || q.includes("sapphire") || q.includes("emerald") || q.includes("black pearl")) {
+  if (q.includes("doppler") || q.includes("phase") || q.includes("gem") || q.includes("ruby") || q.includes("sapphire") || q.includes("emerald")) {
     return {
       modelUsed: "Sentinel Float & Pattern Index",
-      reply: `CS2 DOPPLER PATTERN MATRIX:
-
-Standard Phases:
-• Phase 1: Deep midnight blue and dark purple smokey undertones.
-• Phase 2 ("Pink Galaxy"): Vibrant pink and magenta dominance.
-• Phase 3: Dark sapphire blue, teal, and olive smoke mix.
-• Phase 4: Bright electric cyan and vibrant blue hues.
-
-Ultra-Rare Gems:
-• Ruby: 100% solid crimson red blade.
-• Sapphire: 100% solid deep electric cobalt blue.
-• Black Pearl: Deep obsidian, smoky violet, and charcoal tones.
-• Emerald: Pure vivid neon green on Gamma Dopplers.`,
+      reply: `CS2 DOPPLER PATTERN MATRIX:\n• P1 (Midnight/purple) | P2 (Pink galaxy) | P3 (Teal/dark blue) | P4 (Electric cyan)\n• Ultra-Rare Gems: Ruby (100% crimson), Sapphire (100% deep blue), Black Pearl (obsidian), Emerald (pure neon green).`,
     };
   }
 

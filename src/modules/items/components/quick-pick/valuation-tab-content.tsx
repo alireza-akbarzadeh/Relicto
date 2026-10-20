@@ -12,6 +12,7 @@ import { useItemBuy } from "../../hooks/use-item-buy";
 import { STAT_TONE } from "../../lib/tones";
 import { SteamMarketButton } from "@/modules/marketplace/components/steam/steam-market-button";
 import type { ItemDetail } from "../../types";
+import { VendorTrustBadge } from "../offers/vendor-trust-badge";
 
 export interface ValuationTabContentProps {
   item: ItemDetail | null;
@@ -107,6 +108,15 @@ export function ValuationTabContent({
         )}
 
         <DeliveryBadge sla={delivery} variant="callout" />
+
+        {buyActions.floor?.seller && (
+          <div className="flex items-center justify-between rounded-lg bg-surface-container-lowest/80 px-3 py-2 border border-white/5">
+            <span className="text-[11px] text-text-muted">
+              Seller: <b className="text-text-primary">{buyActions.floor.seller.name}</b>
+            </span>
+            <VendorTrustBadge seller={buyActions.floor.seller} compact />
+          </div>
+        )}
 
         <div className="flex flex-col sm:flex-row items-stretch gap-2.5 pt-1">
           <Button

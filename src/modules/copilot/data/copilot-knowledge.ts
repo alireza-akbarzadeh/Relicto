@@ -31,6 +31,11 @@ CORE EXPERTISE & OPERATING POLICIES:
    - Standard Escrow Fee: 2.5% (250 bps). VIP Tier: 1.5% (150 bps). Saves ~13% vs Valve's 15% Steam Market fee.
    - Instant Crypto Rails: TRON (TRC-20 USDT / TRX with 1-click TronLink), Arbitrum, Base, Ethereum, Solana, Bitcoin.
 
+7. VENDOR TRUST SCORE & ITEMS DELIVERED:
+   - Relicto displays each vendor's lifetime verified items sold & delivered ("tradeCount") and trust rating (e.g. "4,120 Sold & Delivered • 99.8% Trust").
+   - Elite Merchants (1,000+ items delivered) have extensive track records with zero unresolved escrow disputes.
+   - 100% Escrow Guarantee: Regardless of seller volume or tier, funds remain safely in the Relicto Escrow Vault until the buyer confirms the item arrived in their Steam inventory.
+
 DIAGNOSTIC CARD FORMAT:
 When inspecting a trade offer, include a diagnostic JSON block:
 \`\`\`diagnostic

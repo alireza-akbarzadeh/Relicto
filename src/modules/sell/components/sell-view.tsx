@@ -3,6 +3,7 @@
 import { useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryStates } from "nuqs";
+import { Icon } from "@/components/ui/icon";
 import { OffersInbox } from "@/modules/offers/components/offers-inbox";
 import type { IncomingOffer } from "@/modules/offers/types";
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
@@ -111,7 +112,21 @@ export function SellView({
             />
           </div>
           <div ref={focusRef} className="scroll-mt-24 lg:col-span-5">
-            {focus ? <ListingFocus key={focus.id} item={focus} /> : null}
+            {focus ? (
+              <ListingFocus key={focus.id} item={focus} />
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/10 bg-surface-card/40 p-8 text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-surface-container-highest text-text-muted">
+                  <Icon name="touch_app" className="text-[24px]" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-headline-sm text-sm font-semibold text-text-primary uppercase">No Item Focused</span>
+                  <span className="max-w-xs font-body-sm text-xs text-text-secondary">
+                    Select any item from your backpack to configure floor pricing, instant bot liquidation, and counter-offers.
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

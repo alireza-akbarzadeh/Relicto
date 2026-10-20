@@ -4,6 +4,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { inventoryItems, items, listings } from "@/lib/db/schema";
 import type { z } from "zod";
+import { ensureCatalogItemId } from "./sell-catalog";
 import type { bulkListInput, listItemInput, updateListingSettingsInput } from "./sell.schema";
 
 type Wear = (typeof listings.$inferInsert)["wear"];
@@ -27,13 +28,13 @@ export async function listItem(userId: string, input: z.infer<typeof listItemInp
       .for("update");
     if (!row) return { status: "not-found" };
     if (row.listingId) return { status: "already-listed" };
-    if (!row.itemId) return { status: "not-in-catalog" };
 
+    const itemId = await ensureCatalogItemId(tx, row);
     const float = Number(row.floatLabel);
     const [listing] = await tx
       .insert(listings)
       .values({
-        itemId: row.itemId,
+        itemId,
         sellerId: userId,
         priceCents: Math.round(input.priceUsd * 100),
         status: "active",
@@ -88,11 +89,12 @@ export async function bulkList(
       )
       .for("update");
 
-    const validRows = rows.filter((r) => !r.listingId && r.itemId);
+    const validRows = rows.filter((r) => !r.listingId);
     if (validRows.length === 0) return { status: "empty" };
 
     let count = 0;
     for (const row of validRows) {
+      const itemId = await ensureCatalogItemId(tx, row);
       const float = Number(row.floatLabel);
       const baseCents = row.floorCents > 0 ? row.floorCents : row.priceCents;
       const adjustedCents = Math.round(baseCents * (1 + input.discountPercent / 100));
@@ -101,7 +103,7 @@ export async function bulkList(
       const [listing] = await tx
         .insert(listings)
         .values({
-          itemId: row.itemId!,
+          itemId,
           sellerId: userId,
           priceCents,
           status: "active",

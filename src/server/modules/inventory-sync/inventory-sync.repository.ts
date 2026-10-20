@@ -39,7 +39,14 @@ export async function findSteamId(userId: string) {
     .from(account)
     .where(and(eq(account.userId, userId), eq(account.providerId, "steam")))
     .limit(1);
-  return row?.steamId ?? null;
+  if (row?.steamId) return row.steamId;
+
+  const [prof] = await db
+    .select({ steamId: profiles.steamId })
+    .from(profiles)
+    .where(eq(profiles.userId, userId))
+    .limit(1);
+  return prof?.steamId ?? null;
 }
 
 export async function findSync(userId: string) {

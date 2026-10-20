@@ -60,11 +60,16 @@ function marker(name: string) {
   return null;
 }
 
-/** Catalog names drop the StatTrak™ prefix; try the exact name first, then without it. */
-export const catalogNames = (name: string) => [
-  name,
-  name.replace(/^StatTrak™\s+/, ""),
-];
+/** Catalog names drop ★, StatTrak™, Souvenir, and wear suffixes; try variants. */
+export const catalogNames = (name: string) => {
+  const withoutStar = name.replace(/^★\s*/, "").trim();
+  const withoutST = withoutStar.replace(/^(StatTrak™|Souvenir)\s*/, "").trim();
+  const withoutWear = withoutST.replace(
+    /\s*\((Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)$/i,
+    "",
+  ).trim();
+  return Array.from(new Set([name, withoutStar, withoutST, withoutWear].filter(Boolean)));
+};
 
 export type CatalogMatch = { itemId: string; floorCents: number | null };
 

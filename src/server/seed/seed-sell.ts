@@ -78,6 +78,23 @@ export async function linkInventoryItems(db: Db, traderId: string) {
       .set({ itemId: item?.id ?? null })
       .where(eq(schema.inventoryItems.id, `inv-${traderId}-${id}`));
   }
+
+  const unlinked = await db
+    .select({ id: schema.inventoryItems.id, name: schema.inventoryItems.name })
+    .from(schema.inventoryItems)
+    .where(eq(schema.inventoryItems.userId, traderId));
+
+  for (const row of unlinked) {
+    const clean = row.name
+      .replace(/^★\s*/, "")
+      .replace(/^(StatTrak™|Souvenir)\s*/, "")
+      .replace(/\s*\((Factory New|Minimal Wear|Field-Tested|Well-Worn|Battle-Scarred)\)$/i, "")
+      .trim();
+    const [match] = await db.select({ id: schema.items.id }).from(schema.items).where(eq(schema.items.name, clean)).limit(1);
+    if (match) {
+      await db.update(schema.inventoryItems).set({ itemId: match.id }).where(eq(schema.inventoryItems.id, row.id));
+    }
+  }
 }
 
 export async function seedSell(db: Db, traderId: string, vendorId: string) {

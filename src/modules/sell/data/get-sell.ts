@@ -38,7 +38,7 @@ export async function getSell(): Promise<SellData> {
   try {
     const steam = await steamMirror(userId);
     const studio = await sellService.studio(userId);
-    return steam.linked || studio.inventory.length > 0 ? { ...studio, steam } : sell;
+    return { ...studio, steam };
   } catch (err) {
     rethrowNextSignals(err);
     console.error("[getSell] Fallback to mock:", err);

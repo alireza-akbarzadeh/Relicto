@@ -96,11 +96,12 @@ function InventoryRow({
   const deltaTone = TEXT[item.deltaTone];
   return (
     <article
+      onClick={() => onCheckedChange(!checked)}
       className={cn(
-        "relative rounded-lg border p-3 shadow-sm transition-all",
+        "group relative cursor-pointer select-none rounded-lg border p-3 shadow-sm transition-all",
         checked
-          ? "border-primary/50 bg-surface-card"
-          : "border-white/[0.06] bg-surface-card/60 hover:bg-surface-card",
+          ? "border-primary/60 bg-surface-card ring-1 ring-primary/40 shadow-[0_0_15px_rgba(244,63,94,0.15)]"
+          : "border-white/[0.06] bg-surface-card/60 hover:border-white/20 hover:bg-surface-card",
       )}
     >
       {checked && (
@@ -108,12 +109,14 @@ function InventoryRow({
       )}
       <div className="flex flex-col items-start justify-between gap-space-sm sm:flex-row sm:items-center">
         <div className="flex min-w-0 items-center gap-space-sm">
-          <Checkbox
-            checked={checked}
-            onCheckedChange={(value) => onCheckedChange(value === true)}
-            aria-label={`Select ${item.name}`}
-            className="data-checked:border-primary data-checked:bg-primary"
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              checked={checked}
+              onCheckedChange={(value) => onCheckedChange(value === true)}
+              aria-label={`Select ${item.name}`}
+              className="data-checked:border-primary data-checked:bg-primary"
+            />
+          </div>
           <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded border border-white/[0.08] bg-surface-container-lowest">
             <Image
               src={item.image}

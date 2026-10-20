@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { BalanceSegment } from "../../types";
 import { formatByCurrency, type CurrencyMode } from "./currency-utils";
 
@@ -22,7 +22,20 @@ export function BalanceDonutChart({ segments, totalUsd, currency }: DonutProps) 
 
   const radius = 62;
   const circumference = 2 * Math.PI * radius;
-  let accumulatedOffset = 0;
+
+  const renderedSegments = useMemo(() => {
+    return segments.map((seg, idx) => {
+      const priorPct = segments.slice(0, idx).reduce((sum, s) => sum + s.pct, 0);
+      const strokeDashoffset = -((priorPct / 100) * circumference);
+      const strokeDasharray = `${(seg.pct / 100) * circumference} ${circumference}`;
+      return {
+        ...seg,
+        strokeDasharray,
+        strokeDashoffset,
+        colors: COLOR_MAP[seg.tone] ?? COLOR_MAP.amber,
+      };
+    });
+  }, [segments, circumference]);
 
   const activeSegment = segments.find((s) => s.id === hoveredId) ?? segments[0];
   const activeAmount = activeSegment ? formatByCurrency(activeSegment.usd, currency) : formatByCurrency(totalUsd, currency);
@@ -43,11 +56,7 @@ export function BalanceDonutChart({ segments, totalUsd, currency }: DonutProps) 
           />
 
           {/* Segment Arcs */}
-          {segments.map((seg) => {
-            const colors = COLOR_MAP[seg.tone] ?? COLOR_MAP.amber;
-            const strokeDasharray = `${(seg.pct / 100) * circumference} ${circumference}`;
-            const strokeDashoffset = -accumulatedOffset;
-            accumulatedOffset += (seg.pct / 100) * circumference;
+          {renderedSegments.map((seg) => {
             const isHovered = hoveredId === seg.id;
 
             return (
@@ -57,14 +66,14 @@ export function BalanceDonutChart({ segments, totalUsd, currency }: DonutProps) 
                 cy="80"
                 r={radius}
                 fill="none"
-                stroke={colors.stroke}
+                stroke={seg.colors.stroke}
                 strokeWidth={isHovered ? 18 : 14}
-                strokeDasharray={strokeDasharray}
-                strokeDashoffset={strokeDashoffset}
+                strokeDasharray={seg.strokeDasharray}
+                strokeDashoffset={seg.strokeDashoffset}
                 strokeLinecap="round"
                 className="cursor-pointer transition-all duration-300"
                 style={{
-                  filter: isHovered ? `drop-shadow(0 0 8px ${colors.glow})` : undefined,
+                  filter: isHovered ? `drop-shadow(0 0 8px ${seg.colors.glow})` : undefined,
                   opacity: hoveredId && !isHovered ? 0.4 : 1,
                 }}
                 onMouseEnter={() => setHoveredId(seg.id)}

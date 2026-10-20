@@ -7,6 +7,7 @@ import { ledgerEntries } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { deposit, type DepositResult } from "../wallet/wallet.deposit";
 import { notificationService } from "../notifications/notifications.service";
+import { verifyTronTransactionOnChain } from "./tron-verifier";
 
 const MASTER_VAULT_SEED = process.env.CRYPTO_VAULT_SEED || "relicto-institutional-cold-vault-2026";
 
@@ -121,11 +122,23 @@ export async function verifyAndSettleCryptoDeposit(
     return { status: "already_claimed" };
   }
 
-  // 2. Derive required confirmations
+  // 2. On-chain validation for TRON network
+  if (network.type === "tron") {
+    const onChain = await verifyTronTransactionOnChain({
+      txid: input.txHash,
+      expectedAmountUsd: input.amountUsd,
+      allowSimulation: process.env.NODE_ENV !== "production",
+    });
+    if (!onChain.success) {
+      return { status: onChain.error === "already_claimed" ? "already_claimed" : "failed" };
+    }
+  }
+
+  // 3. Derive required confirmations
   const confirmations =
     network.type === "tron" ? 12 : network.type === "bitcoin" ? 3 : network.type === "evm" ? 15 : 32;
 
-  // 3. Deposit into vault and write audit ledger
+  // 4. Deposit into vault and write audit ledger
   const result: DepositResult = await deposit(userId, {
     rail: "crypto",
     amountUsd: input.amountUsd,

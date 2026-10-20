@@ -14,6 +14,7 @@ import { DeliveryBadge } from "../delivery/delivery-badge";
 import { ListingMedia } from "./listing-media";
 import { PriceDelta } from "./price-delta";
 import { WishlistButton } from "./wishlist-button";
+import { SteamMarketButton } from "../steam/steam-market-button";
 
 export function ListingCard({
   listing,
@@ -46,19 +47,20 @@ export function ListingCard({
 
       <div className="relative z-10 flex flex-1 flex-col p-space-md">
         <div className="mb-space-sm flex min-h-6 items-center justify-between gap-space-sm">
-          <div className="flex min-w-0 items-center gap-1.5">
+          <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
             <span
               className={cn(
-                "shrink-0 rounded-md px-2 py-1 font-label-badge text-label-badge font-bold tracking-wider uppercase",
+                "min-w-0 truncate rounded-md px-2 py-1 font-label-badge text-label-badge font-bold tracking-wider uppercase",
                 RARITY_BADGE[listing.badge.style],
               )}
+              title={listing.badge.label}
             >
               {listing.badge.label}
             </span>
 
             <span
               className={cn(
-                "min-w-0 truncate rounded-md bg-surface-container-lowest px-2 py-1 font-label-badge text-[10px] tracking-wide uppercase",
+                "shrink-0 rounded-md bg-surface-container-lowest px-2 py-1 font-label-badge text-[10px] tracking-wide uppercase",
                 ACCENT_TEXT[listing.tag.accent],
                 listing.tag.bold && "font-bold",
               )}
@@ -81,6 +83,15 @@ export function ListingCard({
                 <Icon name="visibility" className="text-[16px]" />
               </Button>
             )}
+            <SteamMarketButton
+              target={{
+                name: listing.name,
+                gameId: listing.game,
+                wear: listing.cs2?.wear,
+                stattrak: listing.cs2?.stattrak,
+              }}
+              variant="icon"
+            />
             <ShareButton title={listing.name} text={listing.subtitle} path={`/items/${listing.id}`} />
             <WishlistButton listing={listing} />
           </div>

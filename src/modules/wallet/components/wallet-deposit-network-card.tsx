@@ -15,7 +15,7 @@ export function WalletDepositNetworkCard({
   selectedNetworkId,
   onNetworkChange,
 }: WalletDepositNetworkCardProps) {
-  const [address, setAddress] = useState("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+  const [address, setAddress] = useState("TYDzsYUEpvnYmQk4zGP9sWWcTEd3YiAtW6");
   const [confirmations, setConfirmations] = useState(12);
   const [badge, setBadge] = useState("12 Block Finality");
   const [loading, setLoading] = useState(false);

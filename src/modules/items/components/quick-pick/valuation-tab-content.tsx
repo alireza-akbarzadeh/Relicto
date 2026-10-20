@@ -10,6 +10,7 @@ import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
 import { useItemBuy } from "../../hooks/use-item-buy";
 import { STAT_TONE } from "../../lib/tones";
+import { SteamMarketButton } from "@/modules/marketplace/components/steam/steam-market-button";
 import type { ItemDetail } from "../../types";
 
 export interface ValuationTabContentProps {
@@ -129,6 +130,12 @@ export function ValuationTabContent({
             <Icon name="add_shopping_cart" className="text-[18px]" />
             <span>Add</span>
           </Button>
+
+          <SteamMarketButton
+            target={{ name, gameId: item?.eyebrow.game, appId: item?.appId }}
+            relictoPriceUsd={priceUsd}
+            variant="compact"
+          />
 
           {item && (
             <Button

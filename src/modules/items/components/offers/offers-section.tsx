@@ -11,6 +11,7 @@ import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { useItemBuy } from "../../hooks/use-item-buy";
 import type { ItemDetail, Offer } from "../../types";
+import { SteamMarketButton } from "@/modules/marketplace/components/steam/steam-market-button";
 import { OfferRow } from "./offer-row";
 
 const COLUMNS = ["Seller Authority", "Variant & Inscribed Gems", "Fulfillment & Delivery Time", "Listing Price", "Quick Checkout"];
@@ -103,6 +104,12 @@ export function OffersSection({ item, compact = false }: OffersSectionProps) {
           </Label>
         </div>
       </div>
+
+      <SteamMarketButton
+        target={{ name: item.name, gameId: item.eyebrow.game, appId: item.appId }}
+        relictoPriceUsd={item.price.lowestUsd}
+        variant="banner"
+      />
 
       <div className="w-full overflow-x-auto rounded-lg border border-border-subtle bg-surface-card shadow-xl">
         <table className="w-full border-collapse text-left">

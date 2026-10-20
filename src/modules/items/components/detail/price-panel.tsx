@@ -12,6 +12,7 @@ import { DeliveryBadge } from "@/modules/marketplace/components/delivery/deliver
 import { calculateDeliverySla } from "@/modules/marketplace/lib/delivery-sla";
 import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useWatchlist } from "@/modules/relicto/state/watchlist-provider";
+import { SteamMarketButton } from "@/modules/marketplace/components/steam/steam-market-button";
 import { PriceAlertModal } from "./price-alert-modal";
 
 const ACTION = "h-auto rounded-lg border-border-subtle bg-surface-container py-3 font-headline-sm text-sm transition-all hover:bg-surface-container-high";
@@ -132,6 +133,12 @@ export function PricePanel({ item }: { item: ItemDetail }) {
               className={cn(ACTION, "px-3.5 text-text-secondary hover:text-tertiary")}
             />
           </div>
+
+          <SteamMarketButton
+            target={{ name: item.name, gameId: item.eyebrow.game, appId: item.appId }}
+            relictoPriceUsd={floor?.priceUsd ?? price.lowestUsd}
+            variant="button"
+          />
         </div>
       </div>
 

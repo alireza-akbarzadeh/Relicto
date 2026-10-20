@@ -11,6 +11,7 @@ import { ShareButton } from "@/modules/relicto/components/share-button";
 import { useMobileListingAction } from "../../hooks/use-mobile-listing-action";
 import { DeliveryBadge } from "../delivery/delivery-badge";
 import { calculateDeliverySla } from "../../lib/delivery-sla";
+import { SteamMarketButton } from "../steam/steam-market-button";
 import { changeTone } from "../../lib/mobile-filters";
 import type { ListingAction, ListingTagTone, MobileListing } from "../../mobile.types";
 
@@ -53,11 +54,14 @@ export function MobileListingCard({
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl bg-surface-container p-2.5 shadow-xs">
-      <div className="mb-1 flex w-full items-center justify-between">
-        <span className={cn("rounded px-1.5 py-0.5 font-label-badge text-[10px] uppercase", TAG[listing.tagTone])}>
+      <div className="mb-1 flex w-full items-center justify-between gap-1.5">
+        <span
+          className={cn("min-w-0 truncate rounded px-1.5 py-0.5 font-label-badge text-[10px] uppercase", TAG[listing.tagTone])}
+          title={listing.tag}
+        >
           {listing.tag}
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center gap-1">
           {onQuickPick && (
             <Button
               variant={null}
@@ -69,6 +73,11 @@ export function MobileListingCard({
               <Icon name="bolt" className="text-[15px] text-tertiary" />
             </Button>
           )}
+          <SteamMarketButton
+            target={{ name: listing.name, gameId: listing.game }}
+            variant="icon"
+            className="h-6 w-6 border-0 bg-transparent"
+          />
           <ShareButton title={listing.name} path={href} className="h-6 w-6 p-0" />
           <Button
             variant={null}

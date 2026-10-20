@@ -15,6 +15,17 @@ export type CryptoNetwork = {
 
 export const CRYPTO_NETWORKS: CryptoNetwork[] = [
   {
+    id: "usdt-trc20",
+    name: "Tron (TRC-20)",
+    asset: "usdt",
+    symbol: "USDT",
+    usdRate: 1.0,
+    decimals: 6,
+    depositAddress: "TYDzsYUEpvnYmQk4zGP9sWWcTEd3YiAtW6",
+    type: "tron",
+    badge: "1-Click TronLink · 3s Finality",
+  },
+  {
     id: "usdt-arb",
     name: "Arbitrum One",
     asset: "usdt",
@@ -68,17 +79,6 @@ export const CRYPTO_NETWORKS: CryptoNetwork[] = [
     depositAddress: "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
     type: "bitcoin",
     badge: "Deep Cold Storage",
-  },
-  {
-    id: "usdt-trc20",
-    name: "Tron (TRC-20)",
-    asset: "usdt",
-    symbol: "USDT",
-    usdRate: 1.0,
-    decimals: 6,
-    depositAddress: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
-    type: "tron",
-    badge: "12 Block Finality",
   },
 ];
 

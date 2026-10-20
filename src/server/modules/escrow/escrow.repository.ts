@@ -87,7 +87,7 @@ export async function findOverdueCodes(executor: Executor, now: Date, userId?: s
       and(
         eq(orders.state, "escrow"),
         isNotNull(orders.autoCancelSeconds),
-        lt(sql`${orders.placedAt} + make_interval(secs => ${orders.autoCancelSeconds})`, now),
+        sql`${orders.placedAt} + (${orders.autoCancelSeconds} * interval '1 second') < ${now.toISOString()}::timestamp`,
         notExists(
           executor
             .select({ id: tradeOffers.id })

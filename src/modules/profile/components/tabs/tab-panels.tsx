@@ -3,6 +3,7 @@ import { SectionTitle } from "../shared/section-title";
 import { EndorsementsPanel, ReviewCard } from "../sidebar/endorsements-panel";
 import { StatusList } from "../sidebar/status-list";
 import { SteamSettingsCard } from "./steam-settings-card";
+import { TronSettingsCard } from "./tron-settings-card";
 
 /** Endorsement bars plus every buyer review. */
 export function ReviewsPanel({ data }: { data: ProfileData }) {
@@ -23,15 +24,18 @@ export function ReviewsPanel({ data }: { data: ProfileData }) {
   );
 }
 
-/** Steam links, API scopes and webhook endpoints. */
+/** Steam links, API scopes, TRON Web3 routing, and webhook endpoints. */
 export function LinkedPanel({ data }: { data: ProfileData }) {
   return (
     <div className="flex flex-col gap-space-md">
-      <SectionTitle tone="cyan" title="Linked Steam & API" subtitle="Connections this trader account authenticates and dispatches trades with." />
+      <SectionTitle tone="cyan" title="Linked Steam & Web3 Rails" subtitle="Connections this trader account authenticates, deposits, and dispatches trades with." />
       <SteamSettingsCard
         initialTradeUrl={data.identity.tradeUrl}
         steamId={data.identity.steamId}
         openId={data.identity.openId}
+      />
+      <TronSettingsCard
+        initialTronAddress={data.identity.tronAddress}
       />
       <div className="rounded-xl bg-surface-card p-space-lg">
         <StatusList rows={data.linked} />

@@ -46,6 +46,7 @@ export async function seedProfile(db: Db, traderId: string, ownHandle?: string) 
     banner: identity.banner,
     bannerAlt: identity.bannerAlt,
     tradeUrl: identity.tradeUrl,
+    tronAddress: identity.tronAddress,
     telemetry: identity.telemetry,
     ranks: identity.ranks,
     handshakeLabel: identity.handshake,

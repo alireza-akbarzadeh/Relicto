@@ -29,6 +29,7 @@ export type TraderIdentity = {
   ranks: RankChip[];
   trust: { score: string; trades: string };
   tradeUrl: string;
+  tronAddress?: string;
   handshake: string;
 };
 

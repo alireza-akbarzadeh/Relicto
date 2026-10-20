@@ -36,6 +36,7 @@ export const profiles = pgTable(
     bannerAlt: text("banner_alt"),
     highlightVideo: text("highlight_video"),
     tradeUrl: text("trade_url"),
+    tronAddress: text("tron_address"),
     telemetry: jsonb("telemetry").$type<ProfileTelemetry>(),
     ranks: jsonb("ranks").$type<ProfileRanks>(),
     /** Round-trip time to the trade bot ("12ms Handshake"). */

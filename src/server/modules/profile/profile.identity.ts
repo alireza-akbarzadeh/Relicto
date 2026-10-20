@@ -37,6 +37,7 @@ export function toIdentity(profile: Profile): TraderIdentity {
       trades: `(${profile.tradeCount.toLocaleString("en-US")} TRADES)`,
     },
     tradeUrl: profile.tradeUrl ?? "",
+    tronAddress: profile.tronAddress ?? "",
     handshake: profile.handshakeLabel ?? "No bot handshake yet",
   };
 }

@@ -25,6 +25,7 @@ export const identity: TraderIdentity = {
   ],
   trust: { score: "99.8% TRUST SCORE", trades: "(1,482 TRADES)" },
   tradeUrl: "https://steamcommunity.com/tradeoffer/new/?partner=122046892&token=V8xQ9KzP",
+  tronAddress: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
   handshake: "12ms Handshake",
 };
 

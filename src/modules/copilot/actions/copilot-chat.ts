@@ -83,8 +83,8 @@ export async function sendChatMessageAction(
       modelUsed: model,
       latencyMs,
     };
-  } catch (error: any) {
-    console.warn("[sendChatMessageAction] Fallback to local codex:", error?.message || error);
+  } catch (error: unknown) {
+    console.warn("[sendChatMessageAction] Fallback to local codex:", error instanceof Error ? error.message : error);
     const latencyMs = Date.now() - startTime;
     const resolved = resolveSentinelLocalKnowledge(input.message);
 

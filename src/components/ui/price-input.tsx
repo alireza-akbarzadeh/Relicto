@@ -43,12 +43,13 @@ export function PriceInput({
   const [displayValue, setDisplayValue] = React.useState<string>(() => formatValue(value));
   const [isFocused, setIsFocused] = React.useState(false);
 
-  // Sync internal display when external value changes and not actively typing
-  React.useEffect(() => {
+  const [prevValue, setPrevValue] = React.useState(value);
+  if (value !== prevValue) {
+    setPrevValue(value);
     if (!isFocused) {
       setDisplayValue(formatValue(value));
     }
-  }, [value, isFocused, formatValue]);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;

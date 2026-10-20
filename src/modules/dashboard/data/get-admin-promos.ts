@@ -35,7 +35,7 @@ export const SEED_PROMO_CODES: DashboardPromoCode[] = [
   },
 ];
 
-let runtimePromos: DashboardPromoCode[] = [...SEED_PROMO_CODES];
+const runtimePromos: DashboardPromoCode[] = [...SEED_PROMO_CODES];
 
 export async function getAdminPromos(): Promise<DashboardPromoCode[]> {
   return [...runtimePromos];

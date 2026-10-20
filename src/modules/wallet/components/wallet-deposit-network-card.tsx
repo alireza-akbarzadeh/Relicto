@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { CRYPTO_NETWORKS, type CryptoNetwork } from "@/lib/crypto/networks";
+import { CRYPTO_NETWORKS } from "@/lib/crypto/networks";
 
 type WalletDepositNetworkCardProps = {
   selectedNetworkId: string;
@@ -21,10 +21,11 @@ export function WalletDepositNetworkCard({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
     fetch(`/api/crypto/address?network=${selectedNetworkId}`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
+        if (!active) return;
         if (data?.depositAddress) {
           setAddress(data.depositAddress);
           setConfirmations(data.confirmationsRequired ?? 12);
@@ -32,7 +33,13 @@ export function WalletDepositNetworkCard({
         }
       })
       .catch(() => {})
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [selectedNetworkId]);
 
   const copyAddress = async () => {
@@ -59,7 +66,10 @@ export function WalletDepositNetworkCard({
               <button
                 key={n.id}
                 type="button"
-                onClick={() => onNetworkChange(n.id)}
+                onClick={() => {
+                  setLoading(true);
+                  onNetworkChange(n.id);
+                }}
                 className={`flex flex-col items-center justify-center rounded-lg border px-2 py-1.5 text-center transition-all ${
                   active
                     ? "border-primary bg-primary/20 text-text-primary shadow-xs"

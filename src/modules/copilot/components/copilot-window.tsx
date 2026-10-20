@@ -13,7 +13,7 @@ import { resolveSentinelLocalKnowledge } from "../data/copilot-resolver";
 import { INITIAL_COPILOT_MESSAGES } from "../data/copilot-initial";
 import { playSentinelChime } from "../utils/copilot-sound";
 import { sendPushNotification, requestPushPermission } from "../utils/copilot-notify";
-import type { CopilotMessage, CopilotMode } from "../types";
+import type { CopilotMessage, CopilotMode, TradeDiagnostic } from "../types";
 
 interface CopilotWindowProps {
   onClose?: () => void;
@@ -45,7 +45,7 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
 
     try {
       const history = messages.slice(-6).map((m) => ({ role: m.role, content: m.content }));
-      let result: { reply: string; diagnostic?: any; latencyMs?: number; modelUsed?: string } | null = null;
+      let result: { reply: string; diagnostic?: TradeDiagnostic; latencyMs?: number; modelUsed?: string } | null = null;
 
       // Tier 1: Dedicated Node.js API Route with 8.5s timeout
       try {
@@ -64,19 +64,21 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
         result = await sendChatMessageAction({ message: text, history, modelOverride: model });
       }
 
-      const botMsg: CopilotMessage = {
-        id: `bot-${Date.now()}`,
-        role: "assistant",
-        content: result.reply,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        diagnostic: result.diagnostic,
-      };
+      if (result) {
+        const botMsg: CopilotMessage = {
+          id: `bot-${Date.now()}`,
+          role: "assistant",
+          content: result.reply,
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          diagnostic: result.diagnostic,
+        };
 
-      setMessages((prev) => [...prev, botMsg]);
-      setLatencyMs(result.latencyMs || 15);
+        setMessages((prev) => [...prev, botMsg]);
+        setLatencyMs(result.latencyMs || 15);
 
-      if (soundEnabled) playSentinelChime();
-      if (pushEnabled) sendPushNotification({ body: result.reply });
+        if (soundEnabled) playSentinelChime();
+        if (pushEnabled) sendPushNotification({ body: result.reply });
+      }
     } catch {
       // Tier 3: Zero-latency client-side deterministic resolver
       const offline = resolveSentinelLocalKnowledge(text);
@@ -96,11 +98,16 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
     }
   };
 
+  const sendRef = React.useRef(handleSendMessage);
+  React.useEffect(() => {
+    sendRef.current = handleSendMessage;
+  });
+
   React.useEffect(() => {
     const handleQuery = (e: Event) => {
       const customEvent = e as CustomEvent<string>;
       if (customEvent.detail) {
-        handleSendMessage(customEvent.detail);
+        sendRef.current(customEvent.detail);
       }
     };
     window.addEventListener("relicto:open-copilot-query", handleQuery);

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Save, CheckCircle2 } from "lucide-react";
+import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { DashboardSettings } from "../types";

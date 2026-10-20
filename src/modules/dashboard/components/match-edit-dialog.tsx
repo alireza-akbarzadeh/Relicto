@@ -12,9 +12,16 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { toast } from "sonner";
 import { updateMatchScoreAction } from "../actions/admin-tournaments";
 import type { DashboardMatch } from "../types";
+
+const MATCH_STATUS_OPTIONS = [
+  { value: "scheduled", label: "Scheduled / Upcoming" },
+  { value: "live", label: "🔴 Live in Progress" },
+  { value: "completed", label: "Concluded / Final" },
+] as const;
 
 interface MatchEditDialogProps {
   open: boolean;
@@ -29,13 +36,17 @@ export function MatchEditDialog({ open, onOpenChange, match, onSuccess }: MatchE
   const [status, setStatus] = React.useState<"scheduled" | "live" | "completed">("scheduled");
   const [saving, setSaving] = React.useState(false);
 
-  React.useEffect(() => {
+  const [prevMatch, setPrevMatch] = React.useState(match);
+  const [prevOpen, setPrevOpen] = React.useState(open);
+  if (match !== prevMatch || open !== prevOpen) {
+    setPrevMatch(match);
+    setPrevOpen(open);
     if (match) {
       setScoreA(match.scoreA);
       setScoreB(match.scoreB);
       setStatus(match.status);
     }
-  }, [match, open]);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,15 +117,13 @@ export function MatchEditDialog({ open, onOpenChange, match, onSuccess }: MatchE
 
           <div className="space-y-1">
             <label className="text-[11px] font-mono text-text-secondary">Match Status</label>
-            <select
+            <Select
               value={status}
-              onChange={(e) => setStatus(e.target.value as "scheduled" | "live" | "completed")}
-              className="w-full h-8 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary"
-            >
-              <option value="scheduled">Scheduled / Upcoming</option>
-              <option value="live">🔴 Live in Progress</option>
-              <option value="completed">Concluded / Final</option>
-            </select>
+              onValueChange={(val) => setStatus(val as "scheduled" | "live" | "completed")}
+              options={MATCH_STATUS_OPTIONS}
+              label="Match Status"
+              triggerClassName="w-full h-8 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary"
+            />
           </div>
 
           <DialogFooter className="pt-2">

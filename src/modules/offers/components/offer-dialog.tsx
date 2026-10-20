@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";

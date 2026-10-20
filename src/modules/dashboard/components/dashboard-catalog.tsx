@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { Package, Plus, Edit2, ShieldAlert } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,8 +12,7 @@ import { CatalogItemSheet } from "./catalog-item-sheet";
 import { GridPagination } from "./grid-pagination";
 import { catalogSearchParams } from "../lib/search-params";
 
-export function DashboardCatalog({ catalog: initialCatalog }: { catalog: DashboardCatalogItem[] }) {
-  const [catalog, setCatalog] = React.useState(initialCatalog);
+export function DashboardCatalog({ catalog }: { catalog: DashboardCatalogItem[] }) {
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState<DashboardCatalogItem | null>(null);
 
@@ -125,9 +125,12 @@ export function DashboardCatalog({ catalog: initialCatalog }: { catalog: Dashboa
                     <td className="py-3">
                       <div className="flex items-center gap-2.5">
                         {item.imageUrl ? (
-                          <img
+                          <Image
                             src={item.imageUrl}
                             alt={item.name}
+                            width={32}
+                            height={32}
+                            unoptimized
                             className="size-8 rounded object-cover border border-border-subtle bg-surface-container"
                           />
                         ) : (

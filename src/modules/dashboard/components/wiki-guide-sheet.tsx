@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { createWikiGuideAction, updateWikiGuideAction } from "../actions/admin-wiki";
 import type { DashboardWikiGuide } from "../types";
@@ -33,7 +34,11 @@ export function WikiGuideSheet({ open, onOpenChange, guide, onSuccess }: WikiGui
   const [summary, setSummary] = React.useState(guide?.summary ?? "");
   const [readMinutes, setReadMinutes] = React.useState(guide?.readMinutes ?? 5);
 
-  React.useEffect(() => {
+  const [prevGuide, setPrevGuide] = React.useState(guide);
+  const [prevOpen, setPrevOpen] = React.useState(open);
+  if (guide !== prevGuide || open !== prevOpen) {
+    setPrevGuide(guide);
+    setPrevOpen(open);
     if (guide) {
       setTitle(guide.title);
       setSlug(guide.slug);
@@ -47,7 +52,7 @@ export function WikiGuideSheet({ open, onOpenChange, guide, onSuccess }: WikiGui
       setSummary("");
       setReadMinutes(5);
     }
-  }, [guide, open]);
+  }
 
   const handleTitleChange = (val: string) => {
     setTitle(val);
@@ -161,12 +166,12 @@ export function WikiGuideSheet({ open, onOpenChange, guide, onSuccess }: WikiGui
 
           <div className="space-y-1">
             <label className="text-[11px] font-mono text-text-secondary">Summary Abstract</label>
-            <textarea
+            <Textarea
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               rows={3}
               placeholder="Concise overview of what traders learn in this article..."
-              className="w-full rounded-md border border-border-subtle bg-surface-container p-2 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full text-xs bg-surface-container border-border-subtle"
             />
           </div>
 

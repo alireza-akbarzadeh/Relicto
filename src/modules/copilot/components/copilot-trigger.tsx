@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Bot, MessageSquareText, Sparkles, X } from "lucide-react";
+import { Bot, Sparkles, X } from "lucide-react";
 
 interface CopilotTriggerProps {
   open: boolean;

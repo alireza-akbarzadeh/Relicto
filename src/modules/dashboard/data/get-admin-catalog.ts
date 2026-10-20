@@ -1,6 +1,6 @@
 import "server-only";
 
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { asc, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { items, listings } from "@/lib/db/schema";
 import type { DashboardCatalogItem } from "../types";

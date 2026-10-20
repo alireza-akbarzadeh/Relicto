@@ -1,14 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { PRICE_PRESETS } from "../../data/facets.mock";
 import { useMarketplace } from "../../state/marketplace-provider";
-
-const INPUT = "w-full bg-transparent font-data-mono-md text-data-mono-md text-text-primary focus:outline-hidden placeholder:text-gray-400";
 
 function toAmount(raw: string, fallback: number) {
   const value = Number(raw);

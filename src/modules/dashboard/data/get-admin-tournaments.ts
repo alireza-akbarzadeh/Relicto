@@ -1,6 +1,6 @@
 import "server-only";
 
-import { asc, desc, eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { db } from "@/lib/db";
 import { matches, teams, tournaments } from "@/lib/db/schema";

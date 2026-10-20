@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import {
   getWhitelistedVaultsForRail,
   validateCryptoAddress,
@@ -101,9 +102,22 @@ export function WalletCashoutDestination({
           <div className="flex min-w-0 items-center gap-space-sm">
             <Icon name="account_balance_wallet" className="text-[20px] text-tertiary" />
             <div className="flex min-w-0 flex-col">
-              <span className="truncate font-body-sm text-body-sm text-text-primary">
-                {activeVault.label}
-              </span>
+              {vaults.length > 1 ? (
+                <Select
+                  value={activeVault.id}
+                  onValueChange={onSelectVaultId}
+                  options={vaults.map((v) => ({
+                    value: v.id,
+                    label: `${v.label} (${v.address.slice(0, 6)}...${v.address.slice(-4)})`,
+                  }))}
+                  label="Whitelisted Vault"
+                  triggerClassName="text-left font-body-sm text-body-sm text-text-primary border-0 bg-transparent p-0"
+                />
+              ) : (
+                <span className="truncate font-body-sm text-body-sm text-text-primary">
+                  {activeVault.label}
+                </span>
+              )}
               <span className="truncate font-data-mono-md text-[11px] text-text-muted">
                 {activeVault.address}
               </span>

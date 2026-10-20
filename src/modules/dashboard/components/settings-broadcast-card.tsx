@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Radio, Globe, MessageSquare } from "lucide-react";
+import { Radio, Globe } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

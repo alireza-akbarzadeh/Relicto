@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Save, Package } from "lucide-react";
+import { Save, Package } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,9 +12,16 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { toast } from "sonner";
 import { createCatalogItemAction, updateCatalogItemAction } from "../actions/admin-catalog";
 import type { DashboardCatalogItem } from "../types";
+
+const GAME_OPTIONS = [
+  { value: "cs2", label: "Counter-Strike 2" },
+  { value: "dota2", label: "Dota 2" },
+  { value: "tf2", label: "Team Fortress 2" },
+] as const;
 
 interface CatalogItemSheetProps {
   open: boolean;
@@ -23,12 +30,7 @@ interface CatalogItemSheetProps {
   onSuccess: () => void;
 }
 
-export function CatalogItemSheet({
-  open,
-  onOpenChange,
-  item,
-  onSuccess,
-}: CatalogItemSheetProps) {
+export function CatalogItemSheet({ open, onOpenChange, item, onSuccess }: CatalogItemSheetProps) {
   const isEditing = Boolean(item);
   const [saving, setSaving] = React.useState(false);
 
@@ -39,7 +41,11 @@ export function CatalogItemSheet({
   const [collection, setCollection] = React.useState(item?.collection ?? "");
   const [imageUrl, setImageUrl] = React.useState(item?.imageUrl ?? "");
 
-  React.useEffect(() => {
+  const [prevItem, setPrevItem] = React.useState(item);
+  const [prevOpen, setPrevOpen] = React.useState(open);
+  if (item !== prevItem || open !== prevOpen) {
+    setPrevItem(item);
+    setPrevOpen(open);
     if (item) {
       setName(item.name);
       setSlug(item.slug);
@@ -55,7 +61,7 @@ export function CatalogItemSheet({
       setCollection("");
       setImageUrl("");
     }
-  }, [item, open]);
+  }
 
   const handleNameChange = (val: string) => {
     setName(val);
@@ -70,16 +76,10 @@ export function CatalogItemSheet({
       toast.error("Item name and slug are required.");
       return;
     }
-
     setSaving(true);
     try {
       if (isEditing && item) {
-        const res = await updateCatalogItemAction(item.id, {
-          name,
-          slot,
-          collection,
-          imageUrl,
-        });
+        const res = await updateCatalogItemAction(item.id, { name, slot, collection, imageUrl });
         if (res.success) {
           toast.success("Catalog item updated.");
           onOpenChange(false);
@@ -88,14 +88,7 @@ export function CatalogItemSheet({
           toast.error(res.error ?? "Failed to update item.");
         }
       } else {
-        const res = await createCatalogItemAction({
-          name,
-          slug,
-          gameId,
-          slot,
-          collection,
-          imageUrl,
-        });
+        const res = await createCatalogItemAction({ name, slug, gameId, slot, collection, imageUrl });
         if (res.success) {
           toast.success("New catalog item created.");
           onOpenChange(false);
@@ -122,7 +115,7 @@ export function CatalogItemSheet({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5 py-2">
+        <form onSubmit={handleSubmit} className="space-y-3 py-2">
           <div className="space-y-1">
             <label className="text-[11px] font-mono text-text-secondary">Item Name</label>
             <Input
@@ -144,19 +137,15 @@ export function CatalogItemSheet({
                 className="h-8 text-xs font-mono bg-surface-container border-border-subtle disabled:opacity-50"
               />
             </div>
-
             <div className="space-y-1">
               <label className="text-[11px] font-mono text-text-secondary">Ecosystem Game</label>
-              <select
+              <Select
                 value={gameId}
-                disabled={isEditing}
-                onChange={(e) => setGameId(e.target.value)}
-                className="w-full h-8 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary disabled:opacity-50"
-              >
-                <option value="cs2">Counter-Strike 2</option>
-                <option value="dota2">Dota 2</option>
-                <option value="tf2">Team Fortress 2</option>
-              </select>
+                onValueChange={(val) => setGameId(val)}
+                options={GAME_OPTIONS}
+                label="Ecosystem Game"
+                triggerClassName="w-full h-8 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary"
+              />
             </div>
           </div>
 
@@ -170,7 +159,6 @@ export function CatalogItemSheet({
                 className="h-8 text-xs bg-surface-container border-border-subtle"
               />
             </div>
-
             <div className="space-y-1">
               <label className="text-[11px] font-mono text-text-secondary">Weapon Collection</label>
               <Input
@@ -193,13 +181,7 @@ export function CatalogItemSheet({
           </div>
 
           <DialogFooter className="pt-2">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => onOpenChange(false)}
-              className="text-xs font-mono"
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={() => onOpenChange(false)} className="text-xs font-mono">
               Cancel
             </Button>
             <Button type="submit" size="sm" disabled={saving} className="gap-1.5 text-xs font-semibold">

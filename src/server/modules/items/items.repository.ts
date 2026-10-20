@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, asc, desc, eq, like, min, ne, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, min, ne, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { heroes, itemStyles, items, listings, pricePoints, profiles, user } from "@/lib/db/schema";
 

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Icon, type IconName } from "@/components/ui/icon";
-import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";

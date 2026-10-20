@@ -78,8 +78,8 @@ export async function POST(req: NextRequest) {
       modelUsed: model,
       latencyMs,
     });
-  } catch (error: any) {
-    console.warn("[Copilot API Route] Fallback to local codex:", error?.message || error);
+  } catch (error: unknown) {
+    console.warn("[Copilot API Route] Fallback to local codex:", error instanceof Error ? error.message : error);
     const latencyMs = Date.now() - startTime;
 
     const resolved = resolveSentinelLocalKnowledge(userMessage);

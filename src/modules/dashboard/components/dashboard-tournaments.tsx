@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Trophy, Plus, Edit2, Play, CheckCircle2 } from "lucide-react";
+import { Trophy, Plus, Edit2, Play } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { DashboardMatch, DashboardTournament } from "../types";

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Icon } from "@/components/ui/icon";
 import { useSearchPalette } from "../hooks/use-search-palette";
 import { EntityResults } from "./entity-results";
@@ -22,6 +23,30 @@ export function PaletteBody({
   const palette = useSearchPalette(initialQuery, close);
   const { criteria, update, results, items, active } = palette;
   const typed = criteria.q.trim().length > 0;
+  const listboxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = listboxRef.current;
+    if (!container) return;
+
+    if (active === 0) {
+      container.scrollTop = 0;
+      return;
+    }
+
+    const activeEl = container.querySelector<HTMLElement>(`[data-search-index="${active}"]`);
+    if (!activeEl) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const elRect = activeEl.getBoundingClientRect();
+    const PADDING = 12;
+
+    if (elRect.top < containerRect.top + PADDING) {
+      container.scrollTop -= Math.ceil(containerRect.top + PADDING - elRect.top);
+    } else if (elRect.bottom > containerRect.bottom - PADDING) {
+      container.scrollTop += Math.ceil(elRect.bottom - (containerRect.bottom - PADDING));
+    }
+  }, [active]);
 
   return (
     <>
@@ -42,9 +67,10 @@ export function PaletteBody({
       </div>
 
       <div
+        ref={listboxRef}
         role="listbox"
         aria-label="Search results"
-        className="min-h-0 flex-1 space-y-space-md overflow-y-auto px-space-md py-space-md md:px-space-lg"
+        className="min-h-0 flex-1 space-y-space-md overflow-y-auto scroll-py-3 px-space-md py-space-md md:px-space-lg"
       >
         {!typed && (
           <RecentSearches
@@ -78,6 +104,7 @@ export function PaletteBody({
             <ItemResult
               key={item.slug}
               item={item}
+              index={index}
               active={index === active}
               onHover={() => palette.setActive(index)}
               onOpen={() => palette.openItem(item)}

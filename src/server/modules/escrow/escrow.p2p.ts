@@ -20,11 +20,16 @@ export type P2PResult =
   | { status: "applied"; notices: NotificationRow[] }
   | { status: "not-found" | "unchanged" | "not-sent" | "test-mode-off" };
 
-/** "https://steamcommunity.com/tradeoffer/6012345678/" or a bare id → the offer id. */
+/** "https://steamcommunity.com/tradeoffer/6012345678/", bare id, or gift reference "GIFT-..." → offer or gift id. */
 export function parseOfferRef(ref: string) {
   const trimmed = ref.trim();
+  if (!trimmed) return null;
+  const giftMatch = trimmed.match(/^(?:GIFT|DOTA-GIFT)[-_A-Za-z0-9]+/i);
+  if (giftMatch) {
+    return { id: giftMatch[0].toUpperCase(), url: null, isGift: true };
+  }
   const id = trimmed.match(/tradeoffer\/(\d{6,})/)?.[1] ?? (/^\d{6,}$/.test(trimmed) ? trimmed : null);
-  return id ? { id, url: `https://steamcommunity.com/tradeoffer/${id}/` } : null;
+  return id ? { id, url: `https://steamcommunity.com/tradeoffer/${id}/`, isGift: false } : null;
 }
 
 /** The seller sent the trade offer. The buyer is told to accept it in Steam. */
@@ -35,22 +40,29 @@ export async function markDispatched(code: string, sellerId: string, offerId: st
     const { order, line } = locked;
     if (order.state !== "escrow" || (await repo.hasDispatchedOffer(tx, order.id))) return { status: "unchanged" };
 
+    const isGift = offerId.startsWith("GIFT") || offerId.startsWith("DOTA-GIFT");
     const row = {
       id: `${order.id}-offer`,
       orderId: order.id,
       steamOfferId: offerId,
       botName: null,
-      offerUrl: `https://steamcommunity.com/tradeoffer/${offerId}/`,
+      offerUrl: isGift ? null : `https://steamcommunity.com/tradeoffer/${offerId}/`,
       status: "sent" as const,
     };
     await tx.insert(tradeOffers).values(row).onConflictDoUpdate({ target: tradeOffers.id, set: row });
 
     const now = new Date();
-    await repo.setStep(tx, order.id, 2, { state: "done", occurredAt: now, body: "The seller sent the Steam trade offer." });
+    await repo.setStep(tx, order.id, 2, {
+      state: "done",
+      occurredAt: now,
+      body: isGift ? "Vendor dispatched the in-game gift wrap in Dota 2." : "The seller sent the Steam trade offer.",
+    });
     await repo.setStep(tx, order.id, 3, {
       state: "active",
       occurredAt: now,
-      body: `Steam trade offer #${offerId} is waiting in your Steam account. Accept it, then confirm receipt here.`,
+      body: isGift
+        ? `In-game gift confirmed (Ref #${offerId}). Launch Dota 2 client to claim your Collector's Cache gift, then confirm receipt below.`
+        : `Steam trade offer #${offerId} is waiting in your Steam account. Accept it, then confirm receipt here.`,
     });
 
     return {
@@ -81,7 +93,11 @@ export async function simulateDispatch(code: string, buyerId: string): Promise<P
   if (!mockPaymentsEnabled()) return { status: "test-mode-off" };
   const row = await repo.lockOrder(db, code);
   if (!row || row.order.buyerId !== buyerId || !row.order.sellerId) return { status: "not-found" };
-  return markDispatched(code, row.order.sellerId, String(randomInt(1_000_000_000, 9_999_999_999)));
+  const isCache = Boolean(
+    row.line.nameSnapshot && /\b(collector'?s\s*cache|cache\s*bundle|monarch\s+of\s+the\s+sapphire\s+glen|gothic\s+whisper)\b/i.test(row.line.nameSnapshot),
+  );
+  const ref = isCache ? `GIFT-${randomInt(100_000, 999_999)}` : String(randomInt(1_000_000_000, 9_999_999_999));
+  return markDispatched(code, row.order.sellerId, ref);
 }
 
 /** Test mode is a property of the environment, surfaced so the tracker can offer the simulator. */

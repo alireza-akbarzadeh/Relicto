@@ -3,6 +3,7 @@ import type { ProfileData } from "../types";
 import { ProfileHero } from "./hero/profile-hero";
 import { ProfileBoard } from "./profile-board";
 import { StatStrip } from "./stats/stat-strip";
+import { TraderBalanceChart } from "./balance/trader-balance-chart";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 
 /** Stitch: "Relicto — User Profile & Trader Identity". */
@@ -14,6 +15,7 @@ export function ProfileView({ data }: { data: ProfileData }) {
         <div className="flex w-full flex-col">
           <ProfileHero identity={data.identity} />
           <StatStrip stats={data.stats} />
+          <TraderBalanceChart balance={data.balance} />
           <ProfileBoard data={data} />
         </div>
       </div>

@@ -9,6 +9,11 @@ import { identity, stats } from "./identity.mock";
 import { listings, showcase } from "./inventory.mock";
 import { endorsements, lastHandshake, linked, reviews, safeguards, security } from "./reputation.mock";
 
+import { samplePurchases } from "./purchases.mock";
+import { wallet } from "@/modules/wallet/data/wallet.mock";
+import { findUserBalanceSummary, SAMPLE_USER_BALANCE } from "@/server/modules/profile/profile.balance";
+import { findUserPurchasedItems, findUserTransactions } from "@/server/modules/profile/profile.purchases";
+
 /** Shown until the signed-in trader has a profile row of their own. */
 const SAMPLE: ProfileData = {
   identity,
@@ -19,6 +24,9 @@ const SAMPLE: ProfileData = {
   /** The sample profile has no watched items; the tab shows its empty state. */
   watchlist: [],
   bids: [],
+  purchases: samplePurchases,
+  transactions: wallet.transactions,
+  balance: SAMPLE_USER_BALANCE,
   security,
   lastHandshake,
   endorsements,
@@ -33,18 +41,21 @@ const SAMPLE: ProfileData = {
  * Trader profile for the signed-in account, from Postgres. Falls back to the
  * sample profile so the screen never renders empty.
  *
- * The watchlist and bids are always the caller's own.
+ * The watchlist, bids, purchases, transactions and balance are always the caller's own.
  */
 export async function getProfile(): Promise<ProfileData> {
   const userId = await requireUserId();
   try {
-    const [profile, watchlist, bids] = await Promise.all([
+    const [profile, watchlist, bids, purchases, transactions, balance] = await Promise.all([
       profileService.detail(userId),
       watchlistService.watched(userId),
       offerService.outgoing(userId),
+      findUserPurchasedItems(userId),
+      findUserTransactions(userId),
+      findUserBalanceSummary(userId),
     ]);
 
-    return { ...(profile ?? SAMPLE), watchlist, bids };
+    return { ...(profile ?? SAMPLE), watchlist, bids, purchases, transactions, balance };
   } catch (err) {
     rethrowNextSignals(err);
     console.error("[getProfile] Fallback to mock:", err);

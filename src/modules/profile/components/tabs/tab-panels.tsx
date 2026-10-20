@@ -20,6 +20,11 @@ export function ReviewsPanel({ data }: { data: ProfileData }) {
           <ReviewCard key={review.id} review={review} />
         ))}
       </div>
+      {data.reviews.length === 0 && (
+        <div className="rounded-xl border border-white/5 bg-surface-card p-6 text-center text-text-muted text-xs">
+          No trade reviews recorded yet. Completed trades are automatically verified and eligible for buyer ratings.
+        </div>
+      )}
     </div>
   );
 }

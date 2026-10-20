@@ -58,7 +58,7 @@ export async function hasOrders() {
 export async function findParty(userId: string | null) {
   if (!userId) return null;
   const [row] = await db
-    .select({ name: user.name, handle: profiles.handle, tradeUrl: profiles.tradeUrl })
+    .select({ name: user.name, handle: profiles.handle, tradeUrl: profiles.tradeUrl, steamId: profiles.steamId })
     .from(user)
     .leftJoin(profiles, eq(profiles.userId, user.id))
     .where(eq(user.id, userId))

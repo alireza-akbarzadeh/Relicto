@@ -5,10 +5,14 @@ import { IntelMobileHeader } from "@/modules/relicto/components/mobile/mobile-he
 import { MobileTabBar } from "@/modules/relicto/components/mobile/mobile-tab-bar";
 import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import type { BuyerBid } from "@/modules/offers/types";
+import type { WalletTransaction } from "@/modules/wallet/types";
 import { profileSearchParams } from "../../lib/search-params";
 import type { ProfileMobile as ProfileMobileData } from "../../mobile.types";
-import type { WatchedItem } from "../../types";
+import type { BoughtItem, UserBalanceSummary, WatchedItem } from "../../types";
+import { TraderBalanceChart } from "../balance/trader-balance-chart";
 import { BidsSection } from "../bids/bids-section";
+import { PurchasesSection } from "../purchases/purchases-section";
+import { TransactionsTable } from "../transactions/transactions-table";
 import { WatchlistSection } from "../watchlist/watchlist-section";
 import { AccountControls } from "./account-controls";
 import { IdentityCard } from "./identity-card";
@@ -22,11 +26,22 @@ type ProfileMobileProps = {
   profile: ProfileMobileData;
   watchlist?: WatchedItem[];
   bids?: BuyerBid[];
+  purchases?: BoughtItem[];
+  transactions?: WalletTransaction[];
+  balance?: UserBalanceSummary;
   isPublic?: boolean;
 };
 
-/** Mobile trader profile with live showcase, watchlist and bids tabs. */
-export function ProfileMobile({ profile, watchlist = [], bids = [], isPublic = false }: ProfileMobileProps) {
+/** Mobile trader profile with live showcase, purchases, transactions, watchlist and bids tabs. */
+export function ProfileMobile({
+  profile,
+  watchlist = [],
+  bids = [],
+  purchases = [],
+  transactions = [],
+  balance,
+  isPublic = false,
+}: ProfileMobileProps) {
   const [tab, setTab] = useQueryState(
     "tab",
     profileSearchParams.tab.withOptions({ history: "replace", clearOnDefault: true }),
@@ -34,6 +49,8 @@ export function ProfileMobile({ profile, watchlist = [], bids = [], isPublic = f
 
   const tabs = [
     { value: "showcase" as const, content: `Showcase (${profile.showcase.total})` },
+    ...(!isPublic || purchases.length > 0 ? [{ value: "purchases" as const, content: `Purchases (${purchases.length})` }] : []),
+    ...(!isPublic || transactions.length > 0 ? [{ value: "transactions" as const, content: `Ledger (${transactions.length})` }] : []),
     ...(!isPublic || watchlist.length > 0 ? [{ value: "watchlist" as const, content: `Watchlist (${watchlist.length})` }] : []),
     ...(!isPublic && bids.length > 0 ? [{ value: "bids" as const, content: `Bids (${bids.length})` }] : []),
   ];
@@ -46,18 +63,23 @@ export function ProfileMobile({ profile, watchlist = [], bids = [], isPublic = f
           <IdentityCard profile={profile} />
           <TrustMatrix stats={profile.trust} />
           {!isPublic && <VaultBalance escrow={profile.escrow} />}
+          {!isPublic && balance && <TraderBalanceChart balance={balance} />}
           <SecurityCard security={profile.security} />
 
           <SegmentedTabs
             label="Mobile profile sections"
-            value={tab === "watchlist" || tab === "bids" ? tab : "showcase"}
+            value={tab}
             onChange={(next) => void setTab(next)}
             tabs={tabs}
             listClassName="w-full justify-start gap-space-xs overflow-x-auto rounded-xl bg-surface-card p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            tabClassName="shrink-0 flex-1 rounded-lg border-0 py-2 font-headline-sm text-[12px] font-semibold tracking-wider text-on-surface-variant uppercase transition-colors hover:bg-surface-container-high hover:text-text-primary data-active:bg-primary-container data-active:font-bold data-active:text-on-primary-container group-data-[variant=default]/tabs-list:data-active:shadow-[0_0_12px_rgba(244,63,94,0.3)]"
+            tabClassName="shrink-0 flex-none rounded-lg border-0 px-3 py-2 font-headline-sm text-[12px] font-semibold tracking-wider text-on-surface-variant uppercase transition-colors hover:bg-surface-container-high hover:text-text-primary data-active:bg-primary-container data-active:font-bold data-active:text-on-primary-container group-data-[variant=default]/tabs-list:data-active:shadow-[0_0_12px_rgba(244,63,94,0.3)]"
           />
 
-          {tab === "watchlist" ? (
+          {tab === "purchases" ? (
+            <PurchasesSection purchases={purchases} />
+          ) : tab === "transactions" ? (
+            <TransactionsTable transactions={transactions} />
+          ) : tab === "watchlist" ? (
             <WatchlistSection items={watchlist} />
           ) : tab === "bids" ? (
             <BidsSection bids={bids} />

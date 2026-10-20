@@ -86,8 +86,14 @@ export type Fulfilment = {
   secondsLeft: number | null;
   /** The buyer's Steam trade URL — shown to the seller, who sends the offer to it. */
   buyerTradeUrl: string | null;
+  /** Direct link to the buyer's Steam profile (essential for 30-day friend verification & in-game gifts). */
+  buyerSteamProfileUrl?: string | null;
+  /** Whether the traded item is a Collector's Cache in-game gift requiring Dota 2 client gift wrapping. */
+  isCacheGift?: boolean;
   /** The sent offer, for the buyer to open in Steam. */
   offerUrl: string | null;
+  /** Sent offer ID or in-game gift reference. */
+  steamOfferId?: string | null;
   /** Test mode: the buyer may play the seller's part. */
   canSimulate: boolean;
   /** A Relicto bot is handling this trade, so the bot panel applies instead. */

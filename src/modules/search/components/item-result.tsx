@@ -16,6 +16,7 @@ const GAME = {
 type ItemResultProps = {
   item: SearchItem;
   active: boolean;
+  index?: number;
   onHover: () => void;
   onOpen: () => void;
   onBasket: () => void;
@@ -25,6 +26,7 @@ type ItemResultProps = {
 export function ItemResult({
   item,
   active,
+  index,
   onHover,
   onOpen,
   onBasket,
@@ -35,6 +37,7 @@ export function ItemResult({
     <div
       role="option"
       aria-selected={active}
+      data-search-index={index}
       onMouseEnter={onHover}
       onClick={onOpen}
       className={cn(

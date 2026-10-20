@@ -8,6 +8,7 @@ import { useEscrowActions } from "../../hooks/use-escrow-actions";
 import { useFulfilment } from "../../hooks/use-fulfilment";
 import type { Fulfilment } from "../../types";
 import { CancelOrderButton } from "./cancel-order-button";
+import { ReviewVendorCard } from "./review-vendor-card";
 
 const PRIMARY = "h-auto gap-space-sm rounded-lg border-0 bg-primary-container px-space-lg py-space-md font-headline-sm text-[14px] font-bold tracking-wider text-on-primary-container uppercase shadow-[0_0_24px_rgba(244,63,94,0.35)] transition-all hover:opacity-95 disabled:opacity-50";
 const SECONDARY = "h-auto gap-space-xs rounded-lg border-0 bg-surface-container-high px-space-md py-space-md font-label-caps text-label-caps font-bold text-text-primary uppercase transition-colors hover:bg-surface-container-highest";
@@ -90,6 +91,10 @@ export function FulfilmentActions({ code, fulfilment }: { code: string; fulfilme
         <span>View your sent offer</span>
       </LinkButton>
     );
+  }
+
+  if (role === "buyer" && stage === "completed") {
+    return <ReviewVendorCard code={code} vendorHandle={fulfilment.counterparty} />;
   }
 
   return null;

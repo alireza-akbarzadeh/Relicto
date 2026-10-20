@@ -5,10 +5,15 @@ import { Meter } from "../shared/meter";
 
 export function ReviewCard({ review }: { review: Review }) {
   return (
-    <div className="flex flex-col gap-1 rounded-lg bg-surface-container-low p-space-sm">
+    <div className="flex flex-col gap-1.5 rounded-lg bg-surface-container-low p-space-sm border border-white/5">
       <div className="flex items-center justify-between">
-        <span className="font-label-badge text-label-badge font-bold text-text-primary">{review.author}</span>
-        <span className="font-label-badge text-[10px] text-text-muted">{review.age}</span>
+        <div className="flex items-center gap-1.5">
+          <span className="font-label-badge text-label-badge font-bold text-text-primary">{review.author}</span>
+          <span className="rounded bg-emerald-500/15 px-1.5 py-0.2 font-data-mono-md text-[9px] font-bold text-emerald-400 border border-emerald-500/25">
+            Verified Buyer
+          </span>
+        </div>
+        <span className="font-data-mono-md text-[10px] text-text-muted">{review.age}</span>
       </div>
       <p className="font-body-sm text-body-sm text-text-secondary italic">&quot;{review.quote}&quot;</p>
     </div>

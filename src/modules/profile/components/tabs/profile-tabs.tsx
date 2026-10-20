@@ -7,6 +7,8 @@ type ProfileTabsProps = {
   value: ProfileTab;
   onChange: (tab: ProfileTab) => void;
   inventoryCount: number;
+  purchasesCount?: number;
+  transactionsCount?: number;
   listingCount: number;
   watchlistCount: number;
   bidsCount?: number;
@@ -14,9 +16,21 @@ type ProfileTabsProps = {
 };
 
 /** Tab strip that switches the left column of the profile. */
-export function ProfileTabs({ value, onChange, inventoryCount, listingCount, watchlistCount, bidsCount = 0, reviewCount }: ProfileTabsProps) {
+export function ProfileTabs({
+  value,
+  onChange,
+  inventoryCount,
+  purchasesCount = 0,
+  transactionsCount = 0,
+  listingCount,
+  watchlistCount,
+  bidsCount = 0,
+  reviewCount,
+}: ProfileTabsProps) {
   const tabs = [
     { value: "showcase" as const, content: `Inventory Showcase (${inventoryCount})` },
+    { value: "purchases" as const, content: `My Purchases (${purchasesCount})` },
+    { value: "transactions" as const, content: `Transactions (${transactionsCount})` },
     { value: "listings" as const, content: `Active Listings (${listingCount})` },
     { value: "watchlist" as const, content: `Watchlist (${watchlistCount})` },
     { value: "bids" as const, content: `My Bids (${bidsCount})` },

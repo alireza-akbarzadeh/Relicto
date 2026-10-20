@@ -3,14 +3,26 @@
 import { useState, useTransition, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { updateProfileDetails } from "../../actions/profile";
 import { ProfileMediaUpload } from "./profile-media-upload";
 
-const ROLE_OPTIONS = ["Trader", "Arbitrageur", "Collector", "Market Maker", "Sentinel Auditor"].map((r) => ({
+const ROLE_OPTIONS = [
+  "Trader",
+  "Arbitrageur",
+  "Collector",
+  "Market Maker",
+  "Sentinel Auditor",
+].map((r) => ({
   value: r,
   label: r,
 }));
@@ -30,13 +42,21 @@ export interface ProfileEditModalProps {
   };
 }
 
-export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEditModalProps) {
+export function ProfileEditModal({
+  open,
+  onOpenChange,
+  initialData,
+}: ProfileEditModalProps) {
   const [handle, setHandle] = useState(initialData.handle || "");
   const [realName, setRealName] = useState(initialData.realName || "");
   const [alias, setAlias] = useState(initialData.alias || "");
   const [role, setRole] = useState(initialData.role || "Trader");
-  const [avatar, setAvatar] = useState(initialData.avatar || "/images/lootora/avatar.jpg");
-  const [highlightVideo, setHighlightVideo] = useState(initialData.highlightVideo || "");
+  const [avatar, setAvatar] = useState(
+    initialData.avatar || "/images/lootora/avatar.jpg",
+  );
+  const [highlightVideo, setHighlightVideo] = useState(
+    initialData.highlightVideo || "",
+  );
   const [tradeUrl, setTradeUrl] = useState(initialData.tradeUrl || "");
   const [pending, startTransition] = useTransition();
 
@@ -65,7 +85,9 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
           });
           onOpenChange(false);
         } else {
-          toast.error("Failed to update profile", { description: result.error });
+          toast.error("Failed to update profile", {
+            description: result.error,
+          });
         }
       } catch {
         toast.error("Communication error", {
@@ -77,7 +99,7 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md border border-white/10 bg-surface-card p-6 shadow-2xl">
+      <DialogContent className="max-w-lg! border border-white/10 bg-surface-card p-6 shadow-2xl">
         <DialogHeader className="gap-1 pb-1">
           <div className="flex items-center gap-2 text-primary">
             <Icon name="tune" className="text-[20px]" />
@@ -86,7 +108,8 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
             </DialogTitle>
           </div>
           <DialogDescription className="font-body-sm text-xs text-text-secondary">
-            Manage your Sotoon S3 avatars, video clips, gamertag alias, and Steam Trade escrow coordinates.
+            Manage your Sotoon S3 avatars, video clips, gamertag alias, and
+            Steam Trade escrow coordinates.
           </DialogDescription>
         </DialogHeader>
 
@@ -100,9 +123,13 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
-              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">Handle</label>
+              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">
+                Handle
+              </label>
               <div className="relative">
-                <span className="absolute top-2.5 left-2.5 font-data-mono-md text-xs text-text-muted">@</span>
+                <span className="absolute top-2.5 left-2.5 font-data-mono-md text-xs text-text-muted">
+                  @
+                </span>
                 <Input
                   required
                   value={handle}
@@ -113,7 +140,9 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">Alias</label>
+              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">
+                Alias
+              </label>
               <Input
                 value={alias}
                 onChange={(e) => setAlias(e.target.value)}
@@ -125,7 +154,9 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
 
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
-              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">Real Name</label>
+              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">
+                Real Name
+              </label>
               <Input
                 value={realName}
                 onChange={(e) => setRealName(e.target.value)}
@@ -134,7 +165,9 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">Role Badge</label>
+              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">
+                Role Badge
+              </label>
               <Select
                 value={role}
                 onValueChange={setRole}
@@ -147,7 +180,9 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
 
           <div className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
-              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">Steam Trade URL</label>
+              <label className="font-label-caps text-[11px] font-bold text-text-muted uppercase">
+                Steam Trade URL
+              </label>
               <a
                 href="https://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
                 target="_blank"
@@ -180,7 +215,10 @@ export function ProfileEditModal({ open, onOpenChange, initialData }: ProfileEdi
               disabled={pending}
               className="h-8 gap-1.5 border-0 bg-primary px-4 font-headline-sm text-xs font-bold text-on-primary uppercase shadow-lg shadow-primary/20 hover:bg-primary/90"
             >
-              <Icon name={pending ? "progress_activity" : "check"} className={`text-[16px] ${pending ? "animate-spin" : ""}`} />
+              <Icon
+                name={pending ? "progress_activity" : "check"}
+                className={`text-[16px] ${pending ? "animate-spin" : ""}`}
+              />
               <span>{pending ? "Saving..." : "Save Identity"}</span>
             </Button>
           </div>

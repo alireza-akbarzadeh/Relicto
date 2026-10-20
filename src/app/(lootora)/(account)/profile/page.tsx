@@ -15,7 +15,14 @@ export default async function ProfilePage() {
   return (
     <>
       <div className="md:hidden">
-        <ProfileMobile profile={mobile} watchlist={data.watchlist} bids={data.bids} />
+        <ProfileMobile
+          profile={mobile}
+          watchlist={data.watchlist}
+          bids={data.bids}
+          purchases={data.purchases}
+          transactions={data.transactions}
+          balance={data.balance}
+        />
       </div>
 
       <div className="hidden md:block">

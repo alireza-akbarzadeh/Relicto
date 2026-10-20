@@ -85,10 +85,43 @@ export type StatusRow = {
 export type Endorsement = { label: string; value: string; pct: number; tone: Tone };
 
 import type { BuyerBid } from "@/modules/offers/types";
+import type { WalletTransaction } from "@/modules/wallet/types";
 
 export type Review = { id: string; author: string; age: string; quote: string };
 
-export type ProfileTab = "showcase" | "listings" | "watchlist" | "bids" | "reviews" | "linked" | "safeguards";
+export type ProfileTab =
+  | "showcase"
+  | "purchases"
+  | "transactions"
+  | "listings"
+  | "watchlist"
+  | "bids"
+  | "reviews"
+  | "linked"
+  | "safeguards";
+
+/** An item purchased by the trader via marketplace or escrow checkout. */
+export type BoughtItem = {
+  id: string;
+  orderCode: string;
+  name: string;
+  detail: string;
+  image: string;
+  imageAlt: string;
+  game: string;
+  priceUsd: number;
+  sellerHandle: string;
+  placedAt: string;
+  state: "escrow" | "completed" | "disputed" | "cancelled";
+  stateLabel: string;
+  trackingUrl: string;
+  attributes?: {
+    wear?: string | null;
+    float?: number | null;
+    paintSeed?: number | null;
+    styleNote?: string | null;
+  };
+};
 
 /**
  * One item on the trader's watchlist. Private to them — this is buying intent,
@@ -112,6 +145,27 @@ export type WatchedItem = {
   watchedAgo: string;
 };
 
+export type BalanceSegment = {
+  id: string;
+  label: string;
+  usd: number;
+  pct: number;
+  tone: Tone;
+};
+
+export type BalancePoint = {
+  day: string;
+  usd: number;
+};
+
+export type UserBalanceSummary = {
+  totalUsd: number;
+  change24hUsd: number;
+  change24hPct: number;
+  segments: BalanceSegment[];
+  trend: BalancePoint[];
+};
+
 export type ProfileData = {
   identity: TraderIdentity;
   stats: ProfileStat[];
@@ -121,6 +175,9 @@ export type ProfileData = {
   listingsShown: number;
   watchlist: WatchedItem[];
   bids?: BuyerBid[];
+  purchases?: BoughtItem[];
+  transactions?: WalletTransaction[];
+  balance?: UserBalanceSummary;
   security: StatusRow[];
   lastHandshake: string;
   endorsements: Endorsement[];

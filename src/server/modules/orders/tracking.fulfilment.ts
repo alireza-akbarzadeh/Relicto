@@ -32,13 +32,30 @@ export function toFulfilment(
       ? Math.max(0, Math.round((order.placedAt.getTime() + order.autoCancelSeconds * 1000 - now.getTime()) / 1000))
       : null;
 
+  const itemName = input.line?.nameSnapshot ?? "";
+  const isCacheGift = Boolean(
+    input.rarity === "cache" ||
+      /\b(collector'?s\s*cache|cache\s*bundle|giftable|monarch\s+of\s+the\s+sapphire\s+glen|gothic\s+whisper)\b/i.test(itemName),
+  );
+
+  const buyerSteamId = parties.buyer?.steamId;
+  const buyerSteamProfileUrl =
+    buyerSteamId
+      ? `https://steamcommunity.com/profiles/${buyerSteamId}`
+      : parties.buyer?.handle
+        ? `https://steamcommunity.com/id/${parties.buyer.handle}`
+        : null;
+
   return {
     role,
     stage,
     counterparty: role === "seller" ? nameOf(parties.buyer, "the buyer") : nameOf(parties.seller, order.counterpartyName ?? "the seller"),
     secondsLeft,
     buyerTradeUrl: role === "seller" ? (parties.buyer?.tradeUrl ?? null) : null,
+    buyerSteamProfileUrl: role === "seller" ? buyerSteamProfileUrl : null,
+    isCacheGift,
     offerUrl: sent ? (offer?.offerUrl ?? null) : null,
+    steamOfferId: sent ? (offer?.steamOfferId ?? null) : null,
     canSimulate: testMode && role === "buyer" && stage === "awaiting-offer",
     bot: Boolean(offer?.botName),
   };

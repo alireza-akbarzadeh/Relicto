@@ -21,22 +21,31 @@ const steamMirror = cache(async (userId: string): Promise<SteamSync> => {
   const before = await inventorySyncService.status(userId);
   if (!before.linked) return before;
   if (before.status === null) {
-    await inventorySyncService.sync(userId);
+    await inventorySyncService.sync(userId).catch(() => null);
     return inventorySyncService.status(userId);
   }
-  after(() => inventorySyncService.refreshIfStale(userId));
+  try {
+    after(() => inventorySyncService.refreshIfStale(userId));
+  } catch {
+    // Outside Next.js request context
+  }
   return before;
 });
 
 /**
  * Seller studio for the signed-in trader, from Postgres. A Steam trader always
- * sees their own studio, even an empty one; only accounts without Steam fall
- * back to the sample studio until they have inventory.
+ * sees their own studio, even an empty one.
  */
 export async function getSell(): Promise<SellData> {
   const userId = await requireUserId();
+  let steam: SteamSync = { linked: false, status: null, synced: null, itemCount: 0 };
   try {
-    const steam = await steamMirror(userId);
+    steam = await steamMirror(userId);
+  } catch (err) {
+    console.error("[getSell] Steam mirror failed:", err);
+  }
+
+  try {
     const studio = await sellService.studio(userId);
     return { ...studio, steam };
   } catch (err) {

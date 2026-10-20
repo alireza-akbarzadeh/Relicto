@@ -15,12 +15,11 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { SteamIcon } from "@/components/ui/steam-icon";
-import { cn } from "@/lib/cn";
-import { linkSteamAccountAction, seedTestInventoryAction, syncSteamInventory } from "../actions/inventory";
+import { linkSteamAccountAction, seedTestInventoryAction } from "../actions/inventory";
 import type { SteamSync } from "../types";
 
 export function SteamConnectModal({
-  steam,
+  steam: _steam,
   trigger,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
@@ -123,11 +122,11 @@ export function SteamConnectModal({
                 className="h-9 border-white/10 bg-surface-container-low font-data-mono-md text-xs text-text-primary placeholder:text-text-muted"
               />
               <Button
-                variant="primary"
+                variant="default"
                 size="sm"
                 disabled={pending}
                 onClick={handleLink}
-                className="h-9 shrink-0 px-3 font-headline-sm text-xs font-bold uppercase"
+                className="h-9 shrink-0 bg-primary px-3 font-headline-sm text-xs font-bold uppercase text-white hover:bg-primary/90"
               >
                 {pending ? <Icon name="sync" className="animate-spin text-sm" /> : "Link"}
               </Button>

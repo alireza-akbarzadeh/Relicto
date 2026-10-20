@@ -66,11 +66,11 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
             steam={steam}
             trigger={
               <Button
-                variant="primary"
+                variant="default"
                 size="sm"
-                className="h-auto gap-2 rounded-lg px-4 py-2 font-headline-sm text-xs font-bold tracking-wider uppercase shadow-md"
+                className="h-auto gap-2 rounded-lg bg-primary px-4 py-2 font-headline-sm text-xs font-bold tracking-wider text-white uppercase shadow-md hover:bg-primary/90"
               >
-                <Icon name="link" className="text-[16px]" />
+                <Icon name="sports_esports" className="text-[16px]" />
                 <span>Link Steam Account</span>
               </Button>
             }
@@ -102,7 +102,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border-subtle bg-surface-container-lowest px-space-md py-space-lg text-center">
       <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-surface-card text-text-muted">
-        <Icon name={privateInventory ? "lock" : rateLimited ? "hourglass_empty" : "inventory_2"} className="text-[26px]" />
+        <Icon name={privateInventory ? "lock" : rateLimited ? "timer" : "inventory_2"} className="text-[26px]" />
       </div>
       <div className="flex flex-col gap-1">
         <span className="font-headline-sm text-sm font-semibold text-text-primary">

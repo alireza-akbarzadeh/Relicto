@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -9,6 +10,8 @@ import type { SentinelBot, TradeToken } from "../../types";
 import { CancelOrderButton } from "./cancel-order-button";
 
 function BotHeader({ bot }: { bot: SentinelBot }) {
+  const t = useTranslations("orderTracking");
+
   return (
     <div className="flex flex-col items-start justify-between gap-space-md rounded-lg bg-surface-container-lowest/50 p-space-md pb-space-md sm:flex-row sm:items-center">
       <div className="flex items-center gap-space-md">
@@ -36,25 +39,27 @@ function BotHeader({ bot }: { bot: SentinelBot }) {
       </div>
       <div className="flex items-center gap-space-xs font-label-badge text-label-badge text-text-muted uppercase">
         <Icon name="fingerprint" className="text-[16px] text-tertiary-fixed-dim" />
-        <span>Offer ID: #{bot.offerId}</span>
+        <span>{t("botOfferId", { id: bot.offerId })}</span>
       </div>
     </div>
   );
 }
 
 function TokenWarning({ token }: { token: TradeToken }) {
+  const t = useTranslations("orderTracking");
+
   return (
     <div className="flex flex-col gap-space-xs rounded-lg border border-primary/20 bg-primary/5 p-space-md">
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-1 font-label-caps text-label-caps font-bold tracking-wider text-primary uppercase">
           <Icon name="security" className="text-[16px]" />
-          Steam Security Check
+          {t("steamSecurityCheck")}
         </span>
         <span className="font-label-badge text-[10px] text-text-muted">{token.latency}</span>
       </div>
       <div className="flex flex-col gap-space-xs sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <span className="font-headline-sm text-headline-sm font-semibold text-text-primary">Verify Escrow Token: </span>
+          <span className="font-headline-sm text-headline-sm font-semibold text-text-primary">{t("verifyEscrowToken")}</span>
           <span className="font-data-mono-md text-data-mono-md font-bold tracking-wider text-primary">{token.code}</span>
         </div>
         <span className="font-body-sm text-[12px] text-text-secondary">{token.hint}</span>
@@ -66,6 +71,8 @@ function TokenWarning({ token }: { token: TradeToken }) {
 
 /** The primary action card: open the Steam offer, re-send, instructions and cancel. */
 export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBot; token: TradeToken }) {
+  const t = useTranslations("orderTracking");
+
   return (
     <div className="flex flex-col gap-space-md rounded-xl bg-surface-card p-space-lg shadow-xl">
       <BotHeader bot={bot} />
@@ -78,7 +85,7 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
           className="w-full gap-space-sm rounded-lg border-0 bg-primary-container px-space-lg py-space-md font-headline-sm text-headline-sm font-bold tracking-wider text-on-primary-container uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] transition-all hover:opacity-95 sm:flex-1"
         >
           <Icon name="sports_esports" className="text-[24px]" />
-          <span>Open Steam Trade Offer</span>
+          <span>{t("openSteamTradeOffer")}</span>
           <Icon name="open_in_new" className="text-[18px]" />
         </LinkButton>
         <Button
@@ -86,18 +93,18 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
           variant={null}
           size={null}
           onClick={() => {
-            toast.success("Trade offer re-dispatched", {
-              description: `Sentinel Bot #${bot.offerId} queued a fresh offer to your Trade URL within 30 seconds.`,
+            toast.success(t("reDispatchedToast"), {
+              description: t("reDispatchedDesc", { id: bot.offerId }),
             });
           }}
           className="inline-flex h-auto w-full cursor-pointer items-center justify-center gap-space-xs rounded-lg border-0 bg-surface-container px-space-lg py-space-md font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-container-high focus-visible:outline-hidden sm:w-auto"
         >
           <Icon name="refresh" className="text-[18px]" />
-          <span>Re-Send Offer</span>
+          <span>{t("reSendOffer")}</span>
         </Button>
       </div>
       <div className="flex flex-col gap-space-sm rounded-lg bg-surface-container-low/60 p-space-md">
-        <span className="font-label-caps text-label-caps font-semibold tracking-wider text-text-muted uppercase">How to confirm in 30 seconds:</span>
+        <span className="font-label-caps text-label-caps font-semibold tracking-wider text-text-muted uppercase">{t("howToConfirm")}</span>
         <div className="grid grid-cols-1 gap-space-md font-body-sm text-[13px] text-text-secondary sm:grid-cols-3">
           {token.instructions.map((item) => (
             <div key={item.step} className="flex items-start gap-space-xs">
@@ -115,7 +122,7 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
         <div className="flex items-center gap-space-sm">
           <span className="h-2 w-2 animate-pulse rounded-full bg-status-upcoming" />
           <span>
-            Steam Web API Gateway latency: <span className="font-data-mono-md text-text-primary">{token.latency}</span>
+            {t("apiLatency")} <span className="font-data-mono-md text-text-primary">{token.latency}</span>
           </span>
         </div>
         <div className="flex items-center gap-space-md">
@@ -124,7 +131,7 @@ export function TradePanel({ code, bot, token }: { code: string; bot: SentinelBo
             className="inline-flex cursor-pointer items-center gap-1 font-label-caps text-label-caps text-text-muted uppercase transition-colors hover:text-text-primary"
           >
             <Icon name="help_center" className="text-[16px]" />
-            <span>Need Assistance?</span>
+            <span>{t("needAssistance")}</span>
           </Link>
           <CancelOrderButton code={code} />
         </div>

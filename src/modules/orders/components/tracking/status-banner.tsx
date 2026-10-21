@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { CountdownText } from "@/components/countdown-text";
 import { Button } from "@/components/ui/button";
@@ -8,14 +9,16 @@ import type { OrderTracking } from "../../types";
 
 /** Breadcrumb, protocol title, live status pill and the auto-cancel timer. */
 export function StatusBanner({ order }: { order: OrderTracking }) {
+  const t = useTranslations("orderTracking");
+
   return (
     <div className="relative flex flex-col justify-between gap-space-md overflow-hidden rounded-xl bg-surface-deep p-space-lg shadow-xl lg:flex-row lg:items-center">
       <div className="pointer-events-none absolute -top-16 -right-16 h-80 w-80 rounded-full bg-status-upcoming/5 blur-3xl" />
       <div className="z-10 flex flex-col gap-space-xs">
         <div className="flex items-center gap-space-xs font-label-caps text-label-caps text-text-muted">
-          <span className="cursor-pointer transition-colors hover:text-primary">Orders &amp; Escrow</span>
+          <span className="cursor-pointer transition-colors hover:text-primary">{t("breadcrumbEscrow")}</span>
           <span className="text-text-muted">/</span>
-          <span className="text-on-surface">Active Trade</span>
+          <span className="text-on-surface">{t("breadcrumbActive")}</span>
           <span className="text-text-muted">/</span>
           <span className="font-data-mono-md text-tertiary-fixed-dim">{order.code}</span>
         </div>
@@ -36,7 +39,7 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
             <div className="flex flex-col">
               <span className="flex items-center gap-1 font-label-badge text-label-badge font-bold tracking-wider text-status-live uppercase">
                 <Icon name="timer" className="text-[14px]" />
-                Auto-Cancel In
+                {t("autoCancelIn")}
               </span>
               <CountdownText
                 seconds={order.autoCancelSeconds}
@@ -48,9 +51,9 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
             <div className="flex flex-col">
               <span className="flex items-center gap-1 font-label-badge text-label-badge font-bold tracking-wider text-status-upcoming uppercase">
                 <Icon name="shield" className="text-[14px]" />
-                Escrow
+                {t("escrowBadge")}
               </span>
-              <span className="font-data-mono-md text-data-mono-md font-bold text-text-primary">Held until settled</span>
+              <span className="font-data-mono-md text-data-mono-md font-bold text-text-primary">{t("heldUntilSettled")}</span>
             </div>
           )}
         </div>
@@ -60,12 +63,12 @@ export function StatusBanner({ order }: { order: OrderTracking }) {
           size={null}
           onClick={() => {
             navigator.clipboard.writeText(order.code);
-            toast.success("Escrow proof hash copied", { description: order.code });
+            toast.success(t("proofHashCopied"), { description: order.code });
           }}
           className="inline-flex cursor-pointer items-center gap-space-xs rounded-lg border-0 bg-surface-variant px-space-md py-space-sm font-label-caps text-label-caps text-text-primary uppercase transition-colors hover:bg-surface-bright focus-visible:outline-hidden"
         >
           <Icon name="receipt_long" className="text-[18px]" />
-          <span>Proof Hash</span>
+          <span>{t("proofHash")}</span>
         </Button>
       </div>
     </div>

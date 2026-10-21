@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -14,6 +15,7 @@ export function RecipientGate({
 }: {
   recipient?: CheckoutRecipient;
 }) {
+  const t = useTranslations("checkout");
   const handle = recipient?.handle ?? "S1mple_CS";
   const initials = handle.slice(0, 2).toUpperCase();
   const level = recipient?.level ?? 94;
@@ -31,20 +33,20 @@ export function RecipientGate({
 
   const handleSave = () => {
     if (!valid) {
-      toast.error("Invalid Steam Trade URL", {
-        description: "Check for partner ID and token in the URL.",
+      toast.error(t("invalidTradeUrl"), {
+        description: t("invalidTradeUrlDesc"),
       });
       return;
     }
     startSaving(async () => {
       const res = await saveSteamTradeUrl(tradeUrl);
       if (res.success) {
-        toast.success("Steam Destination Updated", {
-          description: "Trade offers will be dispatched to your new Steam trade URL.",
+        toast.success(t("destinationUpdated"), {
+          description: t("destinationUpdatedDesc"),
         });
         setEditing(false);
       } else {
-        toast.error("Failed to update", { description: res.error });
+        toast.error(t("updateFailed"), { description: res.error });
       }
     });
   };
@@ -58,14 +60,14 @@ export function RecipientGate({
           </div>
           <div>
             <h2 className="font-headline-sm text-sm font-bold text-text-primary">
-              Verified Steam Trade Destination
+              {t("destinationTitle")}
             </h2>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1.5 rounded-full bg-status-upcoming/10 px-2.5 py-0.5 font-data-mono-md text-[11px] font-semibold text-status-upcoming">
             <span className="h-1.5 w-1.5 rounded-full bg-status-upcoming" />
-            Ready for Instant Bot Push
+            {t("readyForPush")}
           </span>
           <Button
             type="button"
@@ -74,7 +76,7 @@ export function RecipientGate({
             onClick={() => setEditing((prev) => !prev)}
             className="h-auto rounded-lg px-2.5 py-1 text-xs text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary"
           >
-            {editing ? "Cancel" : "Change"}
+            {editing ? t("cancelBtn") : t("changeBtn")}
           </Button>
         </div>
       </div>
@@ -113,7 +115,7 @@ export function RecipientGate({
             <Input
               value={tradeUrl}
               onChange={(e) => setTradeUrl(e.target.value)}
-              placeholder="https://steamcommunity.com/tradeoffer/new/?partner=...&token=..."
+              placeholder={t("tradeUrlPlaceholder")}
               className="h-9 rounded-lg border-white/10 bg-surface-container-lowest font-data-mono-md text-xs text-text-primary"
             />
             <Button
@@ -123,7 +125,7 @@ export function RecipientGate({
               onClick={handleSave}
               className="h-9 shrink-0 rounded-lg bg-status-upcoming/20 px-3 text-xs font-bold text-status-upcoming hover:bg-status-upcoming/30"
             >
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? t("savingBtn") : t("saveBtn")}
             </Button>
           </div>
         ) : (
@@ -135,7 +137,7 @@ export function RecipientGate({
               </span>
             </div>
             <span className="ml-2 shrink-0 rounded bg-status-upcoming/15 px-2 py-0.5 font-data-mono-md text-[10px] font-medium text-status-upcoming">
-              12ms Verified
+              {t("verifiedSpeed", { ms: 12 })}
             </span>
           </div>
         )}
@@ -147,15 +149,15 @@ export function RecipientGate({
             name="phonelink_ring"
             className="text-[14px] text-status-upcoming"
           />
-          Mobile 2FA Active (&gt;120d)
+          {t("mobile2fa")}
         </span>
         <span className="flex items-center gap-1.5 rounded-lg border border-white/5 bg-surface-container-low px-2.5 py-1 text-text-muted">
-          <Icon name="bolt" className="text-[14px] text-status-upcoming" />0
-          Days Trade Hold
+          <Icon name="bolt" className="text-[14px] text-status-upcoming" />
+          {t("noHold")}
         </span>
         <span className="flex items-center gap-1.5 rounded-lg border border-white/5 bg-surface-container-low px-2.5 py-1 text-text-muted">
           <Icon name="shield" className="text-[14px] text-status-upcoming" />
-          Anti-Hijack Whitelist Match
+          {t("antiHijack")}
         </span>
       </div>
     </section>

@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -6,13 +9,15 @@ import type { Vendor } from "../../types";
 
 /** Verified merchant behind the listing. */
 export function VendorCard({ vendor }: { vendor: Vendor }) {
+  const t = useTranslations("orderTracking");
+
   return (
     <div className="flex flex-col gap-space-md rounded-xl bg-surface-card p-space-lg shadow-lg">
       <div className="flex items-center justify-between">
-        <span className="font-label-caps text-label-caps font-semibold tracking-wider text-text-muted uppercase">Vendor Identity</span>
+        <span className="font-label-caps text-label-caps font-semibold tracking-wider text-text-muted uppercase">{t("vendorIdentity")}</span>
         <span className="flex items-center gap-1 rounded bg-status-upcoming/15 px-space-xs py-0.5 font-label-badge text-[10px] font-bold tracking-wider text-status-upcoming uppercase">
           <Icon name="verified" className="text-[12px]" />
-          Verified Merchant
+          {t("verifiedMerchant")}
         </span>
       </div>
       <div className="flex items-center gap-space-md">
@@ -43,7 +48,7 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
         className="h-auto w-full gap-space-xs rounded-lg border-0 bg-surface-container py-space-sm font-label-caps text-label-caps text-text-secondary uppercase transition-colors hover:bg-surface-container-high hover:text-text-primary"
       >
         <Icon name="storefront" className="text-[16px]" />
-        <span>View Vendor Storefront</span>
+        <span>{t("viewStorefront")}</span>
       </LinkButton>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { setWatched } from "@/modules/relicto/actions/watchlist";
 import { Button } from "@/components/ui/button";
@@ -11,20 +12,22 @@ import { formatMoney } from "@/lib/format";
 import type { CheckoutItem } from "../types";
 
 export function CheckoutItems({ items, onRemove }: { items: CheckoutItem[]; onRemove: (id: string) => void }) {
+  const t = useTranslations("checkout");
+
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-col justify-between gap-1 px-1 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2.5">
           <h2 className="font-headline-sm text-sm font-bold text-text-primary">
-            Items to Deliver
+            {t("itemsToDeliver")}
           </h2>
           <span className="rounded-full bg-surface-container-high px-2.5 py-0.5 font-data-mono-md text-xs font-semibold text-text-secondary">
-            {items.length} {items.length === 1 ? "Item" : "Items"}
+            {items.length === 1 ? t("itemCount_one", { count: 1 }) : t("itemCount_other", { count: items.length })}
           </span>
         </div>
         <div className="flex items-center gap-1.5 font-data-mono-md text-xs text-text-muted">
           <Icon name="timer" className="text-[14px] text-tertiary" />
-          <span>Cart Hold:</span>
+          <span>{t("cartHold")}</span>
           <span className="font-semibold text-tertiary">14:38</span>
         </div>
       </div>
@@ -33,14 +36,14 @@ export function CheckoutItems({ items, onRemove }: { items: CheckoutItem[]; onRe
         <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/8 bg-surface-card p-10 text-center">
           <Icon name="add_shopping_cart" className="text-[32px] text-text-muted" />
           <div className="flex flex-col gap-1">
-            <span className="font-headline-sm text-sm font-bold text-text-primary">Your cart is empty</span>
-            <span className="text-xs text-text-muted">Add items from the marketplace to initiate escrow dispatch.</span>
+            <span className="font-headline-sm text-sm font-bold text-text-primary">{t("emptyCart")}</span>
+            <span className="text-xs text-text-muted">{t("emptyCartDesc")}</span>
           </div>
           <Link
             href="/marketplace"
             className="mt-2 rounded-xl bg-primary px-4 py-2 font-headline-sm text-xs font-bold text-white hover:bg-primary/90"
           >
-            Browse Marketplace
+            {t("browseMarketplace")}
           </Link>
         </div>
       ) : (
@@ -55,6 +58,8 @@ export function CheckoutItems({ items, onRemove }: { items: CheckoutItem[]; onRe
 }
 
 function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () => void }) {
+  const t = useTranslations("checkout");
+
   return (
     <article className="flex flex-col justify-between gap-4 rounded-2xl border border-white/8 bg-surface-card p-4 transition-all hover:border-white/15 sm:flex-row sm:items-center">
       <div className="flex min-w-0 items-center gap-3.5">
@@ -82,7 +87,7 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
             </span>
           )}
           <div className="flex items-center gap-2 pt-0.5 font-data-mono-md text-[11px] text-text-muted">
-            <span className="text-status-upcoming">● Ready for Push</span>
+            <span className="text-status-upcoming">{t("statusReady")}</span>
             <span>·</span>
             <span>{item.bot}</span>
           </div>
@@ -96,7 +101,7 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
           </span>
           {item.marketPrice && item.marketPrice > item.price && (
             <span className="font-data-mono-md text-[11px] text-status-upcoming">
-              Save {Math.round(((item.marketPrice - item.price) / item.marketPrice) * 100)}% vs Steam
+              {t("saveVsSteam", { pct: Math.round(((item.marketPrice - item.price) / item.marketPrice) * 100) })}
             </span>
           )}
         </div>
@@ -108,10 +113,10 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
             size={null}
             onClick={() => {
               setWatched({ slug: item.id, watched: true })
-                .then(() => toast.success(`Saved ${item.name} to watchlist`))
-                .catch(() => toast.info(`Wishlisted ${item.name}`));
+                .then(() => toast.success(t("savedWishlist", { item: item.name })))
+                .catch(() => toast.info(t("wishlisted", { item: item.name })));
             }}
-            aria-label={`Save ${item.name} to wishlist`}
+            aria-label={t("ariaWishlist", { name: item.name })}
             className="inline-flex cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent p-1.5 text-text-muted transition-colors hover:bg-surface-container-high hover:text-text-primary focus-visible:outline-hidden"
           >
             <Icon name="favorite" className="text-[16px]" />
@@ -121,7 +126,7 @@ function CheckoutItemRow({ item, onRemove }: { item: CheckoutItem; onRemove: () 
             variant={null}
             size={null}
             onClick={onRemove}
-            aria-label={`Remove ${item.name}`}
+            aria-label={t("ariaRemove", { name: item.name })}
             className="inline-flex cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent p-1.5 text-text-muted transition-colors hover:bg-error-container/20 hover:text-error focus-visible:outline-hidden"
           >
             <Icon name="close" className="text-[16px]" />

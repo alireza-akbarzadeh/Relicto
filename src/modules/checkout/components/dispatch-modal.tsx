@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -12,6 +15,7 @@ export function DispatchModal({
   onClose: () => void;
   onMonitor: () => void;
 }) {
+  const t = useTranslations("checkout");
   const totalSentinels = items.length || 3;
 
   return (
@@ -20,7 +24,7 @@ export function DispatchModal({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="h-3 w-3 animate-ping rounded-full bg-status-live" />
-            <span className="font-headline-sm text-headline-sm text-text-primary uppercase">Dispatching Escrow Fleet</span>
+            <span className="font-headline-sm text-headline-sm text-text-primary uppercase">{t("dispatchFleetTitle")}</span>
           </div>
           <Button
             variant={null}
@@ -34,8 +38,8 @@ export function DispatchModal({
         </div>
         <div className="flex flex-col gap-3 rounded-lg bg-surface-container-lowest p-4">
           <div className="flex items-center justify-between font-data-mono-md text-body-sm">
-            <span className="text-text-secondary">Bot Dispatch Pipeline:</span>
-            <span className="font-bold text-status-upcoming">{totalSentinels} of {totalSentinels} Sentinels Assigned</span>
+            <span className="text-text-secondary">{t("dispatchPipeline")}</span>
+            <span className="font-bold text-status-upcoming">{t("sentinelsAssigned", { count: totalSentinels, total: totalSentinels })}</span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded bg-surface-container-high">
             <div className="h-full w-2/3 rounded bg-primary-container" />
@@ -76,9 +80,9 @@ export function DispatchModal({
         <div className="flex items-center gap-3 rounded-lg bg-surface-container-low p-3">
           <Icon name="phonelink_ring" className="text-[24px] text-tertiary" />
           <div className="flex flex-col">
-            <span className="font-body-sm text-body-sm font-bold text-text-primary">Action Required: Steam Mobile 2FA</span>
+            <span className="font-body-sm text-body-sm font-bold text-text-primary">{t("actionRequired2fa")}</span>
             <span className="font-body-sm text-body-sm text-text-secondary">
-              Open Steam Mobile App &gt; Confirmations &gt; Accept verified bot offers.
+              {t("mobile2faInstruction")}
             </span>
           </div>
         </div>
@@ -86,7 +90,7 @@ export function DispatchModal({
           onClick={onMonitor}
           className="h-auto self-end rounded bg-primary-container px-4 py-2 font-headline-sm text-body-sm font-bold text-on-primary-container uppercase"
         >
-          I Understand, Monitor Trades
+          {t("monitorTradesBtn")}
         </Button>
       </div>
     </div>

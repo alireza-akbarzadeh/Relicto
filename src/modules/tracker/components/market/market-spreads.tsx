@@ -1,13 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import { signedMoney, signedPct } from "../../lib/terminal-format";
 import type { MarketQuote, VenueQuote } from "../../market.types";
-
-const COLUMNS = ["Tracked Artifact / Attributes", "Relicto Floor", "Steam Comn. (Net)", "Secondary Exchange", "Net Spread / Margin", "Est. Flip Yield", "Action"];
 
 /** A venue price, marked when it's test-mode drift rather than an observation. */
 function Venue({ quote, usd, className }: { quote: VenueQuote; usd: number | null; className?: string }) {
@@ -26,25 +25,37 @@ function Venue({ quote, usd, className }: { quote: VenueQuote; usd: number | nul
  * observation (or test-mode drift). Rows reorder as the market moves.
  */
 export function MarketSpreads({ rows, simulated }: { rows: MarketQuote[]; simulated: boolean }) {
+  const t = useTranslations("tracker");
+
+  const columns = [
+    t("colTracked"),
+    t("colRelictoFloor"),
+    t("colSteamNet"),
+    t("colSecondary"),
+    t("colNetSpread"),
+    t("colYield"),
+    t("colAction"),
+  ];
+
   return (
     <section className="flex flex-col gap-space-md rounded-xl border border-white/8 bg-surface-card p-space-md shadow-xl">
       <div className="flex items-center justify-between gap-space-md">
         <div>
-          <h2 className="font-headline-md text-headline-md text-text-primary">Cross-Market Arbitrage Telemetry</h2>
+          <h2 className="font-headline-md text-headline-md text-text-primary">{t("crossArbitrageTitle")}</h2>
           <p className="font-body-sm text-body-sm text-text-secondary">
-            Relicto&apos;s live floor against Steam (net of its 15% fee) and the secondary market.
-            {simulated && " SIM venue prices drift in test mode until those feeds stream."}
+            {t("crossArbitrageDesc")}
+            {simulated && ` ${t("simDriftTitle")}`}
           </p>
         </div>
         <span className="shrink-0 font-label-badge text-[10px] text-text-muted uppercase">
-          Updates: <b className="text-tertiary">{simulated ? "Live · 2s" : "On change"}</b>
+          {t("updates")} <b className="text-tertiary">{simulated ? t("updateLive") : t("updateChange")}</b>
         </span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-225 text-left">
           <thead className="font-label-caps text-[10px] text-text-muted uppercase">
             <tr>
-              {COLUMNS.map((label) => (
+              {columns.map((label) => (
                 <th key={label} className="px-2 py-2">
                   {label}
                 </th>
@@ -54,8 +65,8 @@ export function MarketSpreads({ rows, simulated }: { rows: MarketQuote[]; simula
           <tbody>
             {rows.length === 0 && (
               <tr>
-                <td colSpan={COLUMNS.length} className="px-2 py-6 text-center font-body-sm text-body-sm text-text-muted">
-                  No priced items in this market yet.
+                <td colSpan={columns.length} className="px-2 py-6 text-center font-body-sm text-body-sm text-text-muted">
+                  {t("noPricedItems")}
                 </td>
               </tr>
             )}
@@ -64,7 +75,7 @@ export function MarketSpreads({ rows, simulated }: { rows: MarketQuote[]; simula
                 <td className="px-2 py-3">
                   <span className="font-headline-sm text-[13px] font-bold text-text-primary">{row.name}</span>
                   <span className="block font-data-mono-md text-[10px] text-text-muted">
-                    {row.detail} · {row.listings} listed · {row.bids} bids
+                    {row.detail} · {row.listings} {t("listed")} · {row.bids} {t("bids")}
                   </span>
                 </td>
                 <td className="px-2 py-3 font-data-mono-md text-tertiary tabular-nums">{formatMoney(row.floorUsd)}</td>
@@ -86,7 +97,7 @@ export function MarketSpreads({ rows, simulated }: { rows: MarketQuote[]; simula
                     className="h-auto gap-1 rounded bg-primary-container px-2 py-1 font-label-caps text-[10px] font-bold text-on-primary-container uppercase"
                   >
                     <Icon name="bolt" className="text-[13px]" />
-                    Buy Floor
+                    {t("buyFloor")}
                   </LinkButton>
                 </td>
               </tr>

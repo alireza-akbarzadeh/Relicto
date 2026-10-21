@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Icon } from "@/components/ui/icon";
@@ -23,6 +24,7 @@ export function SettlementPanel({
   onDispatch: (choice: DispatchChoice) => void;
   pending?: boolean;
 }) {
+  const t = useTranslations("checkout");
   const { promo, setPromo } = useCart();
   const [payment, setPayment] = useState("relicto");
   const [agreed, setAgreed] = useState(true);
@@ -42,11 +44,11 @@ export function SettlementPanel({
   };
 
   const getCtaLabel = () => {
-    if (pending) return "Dispatching...";
-    if (payment === "card") return `Pay with Card / Stripe (${formatMoney(total)})`;
-    if (payment === "crypto") return `Open Web3 Pay (${formatMoney(total)})`;
-    if (payment === "steam") return `Authorize Steam Split (${formatMoney(total)})`;
-    return `Authorize & Dispatch (${formatMoney(total)})`;
+    if (pending) return t("ctaDispatching");
+    if (payment === "card") return t("ctaCard", { total: formatMoney(total) });
+    if (payment === "crypto") return t("ctaCrypto", { total: formatMoney(total) });
+    if (payment === "steam") return t("ctaSteam", { total: formatMoney(total) });
+    return t("ctaAuthorize", { total: formatMoney(total) });
   };
 
   return (
@@ -54,11 +56,11 @@ export function SettlementPanel({
       <aside className="sticky top-24 flex flex-col gap-4 rounded-2xl border border-white/8 bg-surface-card p-5 shadow-xl sm:p-6">
         <div className="flex items-center justify-between border-b border-white/6 pb-3">
           <h2 className="font-headline-sm text-sm font-bold text-text-primary">
-            Payment Method
+            {t("paymentMethod")}
           </h2>
           <span className="flex items-center gap-1 font-data-mono-md text-[11px] text-text-muted">
             <Icon name="lock" className="text-[13px] text-status-upcoming" />
-            256-bit SSL
+            {t("sslSecured")}
           </span>
         </div>
 
@@ -73,7 +75,7 @@ export function SettlementPanel({
           <div className="flex items-center gap-2.5">
             <Icon name="account_balance_wallet" className="text-[17px] text-text-muted shrink-0" />
             <div className="flex flex-col">
-              <span className="text-[11px] text-text-muted">Vault Balance</span>
+              <span className="text-[11px] text-text-muted">{t("vaultBalance")}</span>
               <span className="font-data-mono-md text-xs font-semibold text-text-primary">
                 {data.walletAfter}
               </span>
@@ -99,14 +101,14 @@ export function SettlementPanel({
             onClick={() => setPromo((active) => !active)}
             className="h-auto border-0 p-0 text-xs font-medium text-text-muted transition-colors hover:text-text-primary"
           >
-            {promo ? "Remove" : "Apply"}
+            {promo ? t("promoRemove") : t("promoApply")}
           </Button>
         </div>
 
         {/* Order Summary Lines */}
         <div className="flex flex-col gap-2 rounded-xl border border-white/6 bg-surface-container-lowest/60 p-4">
           <div className="flex justify-between text-xs text-text-secondary">
-            <span>Subtotal ({data.items.length} {data.items.length === 1 ? "item" : "items"})</span>
+            <span>{t("subtotalLabel", { count: data.items.length, items: data.items.length === 1 ? t("itemsWord_one") : t("itemsWord_other") })}</span>
             <span className="font-data-mono-md font-semibold text-text-primary">
               {formatMoney(q.subtotalCents / 100)}
             </span>
@@ -115,7 +117,7 @@ export function SettlementPanel({
             <div className="flex justify-between text-xs text-tertiary">
               <span className="flex items-center gap-1">
                 <Icon name="stars" className="text-[13px]" />
-                Bundle Rebate
+                {t("bundleRebate")}
               </span>
               <span className="font-data-mono-md font-semibold">-{formatMoney(combo)}</span>
             </div>
@@ -124,22 +126,22 @@ export function SettlementPanel({
             <div className="flex justify-between text-xs text-status-upcoming">
               <span className="flex items-center gap-1">
                 <Icon name="confirmation_number" className="text-[13px]" />
-                Tournament Code
+                {t("tournamentCode")}
               </span>
               <span className="font-data-mono-md font-semibold">-{formatMoney(promoOff)}</span>
             </div>
           )}
           <div className="flex justify-between text-xs text-text-muted">
-            <span>Escrow Underwriting</span>
-            <span className="font-data-mono-md text-status-upcoming">Free</span>
+            <span>{t("escrowUnderwriting")}</span>
+            <span className="font-data-mono-md text-status-upcoming">{t("free")}</span>
           </div>
 
           <div className="my-1 border-t border-white/6" />
 
           <div className="flex items-baseline justify-between pt-1">
             <div className="flex flex-col">
-              <span className="font-headline-sm text-xs font-bold text-text-primary">Total Payable</span>
-              <span className="text-[11px] text-text-muted">Instant escrow dispatch</span>
+              <span className="font-headline-sm text-xs font-bold text-text-primary">{t("totalPayable")}</span>
+              <span className="text-[11px] text-text-muted">{t("instantDispatch")}</span>
             </div>
             <span className="font-data-mono-lg text-2xl font-bold tracking-tight text-text-primary">
               {formatMoney(total)}
@@ -151,7 +153,7 @@ export function SettlementPanel({
         <label className="flex items-start gap-2.5 cursor-pointer pt-1">
           <Checkbox checked={agreed} onCheckedChange={(val) => setAgreed(!!val)} className="mt-0.5" />
           <span className="text-xs leading-relaxed text-text-muted">
-            I verify my Steam Trade URL is operational and authorize the escrow debit. Offers not sent within 12h are 100% refunded.
+            {t("termsConsent")}
           </span>
         </label>
 
@@ -167,17 +169,17 @@ export function SettlementPanel({
 
         <div className="flex items-center justify-center gap-1.5 text-center font-data-mono-md text-[11px] text-text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-status-upcoming" />
-          <span>Automated bot dispatch in &lt;30s · Zero loss guarantee</span>
+          <span>{t("botDispatchFooter")}</span>
         </div>
 
         {/* Support Strip */}
         <div className="flex items-center justify-between rounded-xl border border-white/6 bg-surface-container-lowest px-3.5 py-2 text-xs text-text-secondary">
           <div className="flex items-center gap-2">
             <Icon name="support_agent" className="text-[16px] text-secondary" />
-            <span>Need Trade Help?</span>
+            <span>{t("needHelp")}</span>
           </div>
           <span className="font-medium text-text-primary hover:underline cursor-pointer">
-            24/7 Live Concierge
+            {t("liveConcierge")}
           </span>
         </div>
       </aside>

@@ -1,13 +1,18 @@
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
 import type { OrderSummary, TrackedItem } from "../../types";
 
 function Summary({ summary }: { summary: OrderSummary }) {
+  const t = useTranslations("orderTracking");
+
   return (
     <div className="flex flex-col gap-space-xs">
-      <span className="font-label-caps text-label-caps tracking-wider text-text-muted uppercase">Transaction Summary</span>
+      <span className="font-label-caps text-label-caps tracking-wider text-text-muted uppercase">{t("txSummary")}</span>
       {summary.lines.map((line) => (
         <div key={line.label} className="flex items-center justify-between font-body-sm text-body-sm text-text-secondary">
           <span className="flex items-center gap-1">
@@ -24,7 +29,7 @@ function Summary({ summary }: { summary: OrderSummary }) {
       <div className="my-space-xs h-px w-full bg-surface-variant" />
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <span className="font-headline-sm text-headline-sm font-bold text-text-primary">Total Paid</span>
+          <span className="font-headline-sm text-headline-sm font-bold text-text-primary">{t("totalPaid")}</span>
           <span className="font-label-badge text-label-badge text-text-muted uppercase">{summary.totalNote}</span>
         </div>
         <div className="font-data-mono-lg text-headline-lg font-bold text-tertiary-fixed-dim">{formatMoney(summary.totalUsd)}</div>

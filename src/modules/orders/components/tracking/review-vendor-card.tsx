@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -12,18 +13,19 @@ type ReviewVendorCardProps = {
   vendorHandle: string;
 };
 
-const QUICK_TAGS = [
-  "⚡ Fast Dispatch",
-  "🛡️ Trusted Merchant",
-  "🎁 Legit Cache Gift",
-  "🤝 Great Communication",
-  "🎯 Item as Described",
-];
-
 export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) {
+  const t = useTranslations("orderTracking");
+  const quickTags = [
+    t("tagFastDispatch"),
+    t("tagTrustedMerchant"),
+    t("tagLegitCache"),
+    t("tagGreatComm"),
+    t("tagAsDescribed"),
+  ];
+
   const [rating, setRating] = useState(5);
   const [quote, setQuote] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>(["⚡ Fast Dispatch"]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([quickTags[0]]);
   const [submitted, setSubmitted] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -45,13 +47,13 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
         });
 
         if (res.success) {
-          toast.success("Vendor Review Published!", { description: res.message });
+          toast.success(t("reviewPublishedToast"), { description: res.message });
           setSubmitted(true);
         } else {
-          toast.error("Review Failed", { description: res.error });
+          toast.error(t("reviewFailedToast"), { description: res.error });
         }
       } catch (err) {
-        toast.error("Error submitting review", {
+        toast.error(t("reviewErrorToast"), {
           description: err instanceof Error ? err.message : "Internal error",
         });
       }
@@ -63,10 +65,10 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
       <div className="flex flex-col gap-2 rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-space-md text-emerald-300 shadow-md">
         <div className="flex items-center gap-2 font-headline-sm text-sm font-bold">
           <Icon name="check_circle" className="text-[18px] text-emerald-400" />
-          <span>Feedback Recorded for @{vendorHandle}</span>
+          <span>{t("feedbackRecorded", { vendor: vendorHandle })}</span>
         </div>
         <p className="font-body-sm text-xs text-text-secondary">
-          Your verified trade review has been posted to the merchant&apos;s public storefront and reputation index.
+          {t("feedbackRecordedDesc")}
         </p>
       </div>
     );
@@ -81,10 +83,10 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
           </div>
           <div className="flex flex-col">
             <span className="font-headline-sm text-xs font-bold text-text-primary">
-              Rate Vendor Delivery &amp; Service
+              {t("rateVendorTitle")}
             </span>
             <span className="text-[10px] text-text-muted">
-              Help community traders evaluate @{vendorHandle}
+              {t("rateVendorDesc", { vendor: vendorHandle })}
             </span>
           </div>
         </div>
@@ -113,7 +115,7 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
 
       {/* Quick Tag Pills */}
       <div className="flex flex-wrap items-center gap-1.5">
-        {QUICK_TAGS.map((tag) => {
+        {quickTags.map((tag) => {
           const active = selectedTags.includes(tag);
           return (
             <Button
@@ -141,7 +143,7 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
           type="text"
           value={quote}
           onChange={(e) => setQuote(e.target.value)}
-          placeholder={`Write a quick review for @${vendorHandle} (optional)...`}
+          placeholder={t("reviewPlaceholder", { vendor: vendorHandle })}
           className="h-10 w-full rounded-lg border border-white/10 bg-surface-card px-3 font-body-sm text-xs text-text-primary placeholder:text-text-muted/60 focus:border-amber-400/50 focus:outline-hidden"
         />
       </div>
@@ -155,7 +157,7 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
           className="h-8 gap-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 px-4 font-headline-sm text-xs font-bold text-black shadow-md hover:brightness-110"
         >
           <Icon name="star" className="text-[14px]" />
-          <span>{isPending ? "Submitting..." : `Submit ${rating}-Star Review`}</span>
+          <span>{isPending ? t("submittingReview") : t("submitReview", { rating })}</span>
         </Button>
       </div>
     </div>

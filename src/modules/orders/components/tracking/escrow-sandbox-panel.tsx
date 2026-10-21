@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -17,6 +18,7 @@ type EscrowSandboxPanelProps = {
 };
 
 export function EscrowSandboxPanel({ code, stage, statusText }: EscrowSandboxPanelProps) {
+  const t = useTranslations("orderTracking");
   const [isPending, startTransition] = useTransition();
 
   const handleBotOffer = () => {
@@ -89,15 +91,15 @@ export function EscrowSandboxPanel({ code, stage, statusText }: EscrowSandboxPan
           </div>
           <div className="flex flex-col">
             <span className="font-headline-sm text-xs font-bold text-text-primary uppercase tracking-wider">
-              Escrow Lifecycle Sandbox
+              {t("sandboxTitle")}
             </span>
             <span className="text-[10px] text-text-muted">
-              Live protocol simulation for order <b className="text-text-secondary">{code}</b>
+              {t("sandboxDesc")} <b className="text-text-secondary">{code}</b>
             </span>
           </div>
         </div>
         <span className="rounded bg-primary/15 px-2 py-0.5 font-data-mono-md text-[10px] font-bold text-primary uppercase">
-          Dev / Demo Rail
+          {t("devRail")}
         </span>
       </div>
 
@@ -111,7 +113,7 @@ export function EscrowSandboxPanel({ code, stage, statusText }: EscrowSandboxPan
             className="flex items-center gap-1.5 bg-primary text-on-primary hover:bg-primary/90 text-xs font-semibold"
           >
             <Icon name="cell_tower" className="text-[14px]" />
-            Simulate Bot Dispatch
+            {t("simulateBotDispatch")}
           </Button>
         )}
 
@@ -125,7 +127,7 @@ export function EscrowSandboxPanel({ code, stage, statusText }: EscrowSandboxPan
               className="flex items-center gap-1.5 bg-status-live text-canvas-base hover:bg-status-live/90 text-xs font-semibold"
             >
               <Icon name="check_circle" className="text-[14px]" />
-              Simulate Buyer Accept & Deliver
+              {t("simulateDeliver")}
             </Button>
 
             <Button
@@ -137,7 +139,7 @@ export function EscrowSandboxPanel({ code, stage, statusText }: EscrowSandboxPan
               className="flex items-center gap-1.5 border-white/10 text-xs text-text-muted hover:text-text-primary"
             >
               <Icon name="cancel" className="text-[14px]" />
-              Simulate Timeout / Cancel
+              {t("simulateCancel")}
             </Button>
           </>
         )}
@@ -145,14 +147,14 @@ export function EscrowSandboxPanel({ code, stage, statusText }: EscrowSandboxPan
         {isCompleted && (
           <div className="flex items-center gap-2 rounded bg-status-live/10 px-3 py-1.5 text-xs font-semibold text-status-live border border-status-live/20">
             <Icon name="check_circle" className="text-[16px]" />
-            Order Settled & Delivered — Payout Transferred
+            {t("settledBadge")}
           </div>
         )}
 
         {isCancelled && (
           <div className="flex items-center gap-2 rounded bg-status-danger/10 px-3 py-1.5 text-xs font-semibold text-status-danger border border-status-danger/20">
             <Icon name="cancel" className="text-[16px]" />
-            Order Cancelled — Buyer Vault Refunded
+            {t("cancelledBadge")}
           </div>
         )}
       </div>

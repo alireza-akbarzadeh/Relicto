@@ -1,8 +1,13 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import { COMBO_DISCOUNT_CENTS, COMBO_THRESHOLD } from "../lib/pricing";
 
 export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: number; itemCount: number }) {
+  const t = useTranslations("checkout");
+
   if (comboDiscount > 0) {
     return (
       <section className="relative overflow-hidden rounded-2xl border border-tertiary/30 bg-surface-card p-4 shadow-sm">
@@ -14,19 +19,19 @@ export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: numbe
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-headline-sm text-xs font-bold text-tertiary">
-                  Multi-Item Bundle Activated
+                  {t("bundleActivated")}
                 </span>
                 <span className="rounded bg-tertiary-container/40 px-1.5 py-0.5 font-data-mono-md text-[10px] text-tertiary">
-                  {itemCount} Items
+                  {t("bundleItems", { count: itemCount })}
                 </span>
               </div>
               <span className="font-body-sm text-xs text-text-secondary">
-                -${formatMoney(comboDiscount)} instant escrow rebate applied to this order.
+                {t("bundleDesc", { amount: formatMoney(comboDiscount) })}
               </span>
             </div>
           </div>
           <div className="rounded-xl border border-white/6 bg-surface-container-lowest px-3 py-1.5 text-right sm:self-center">
-            <span className="block font-data-mono-md text-[10px] text-text-muted">Rebate Applied</span>
+            <span className="block font-data-mono-md text-[10px] text-text-muted">{t("rebateApplied")}</span>
             <span className="font-data-mono-md text-sm font-bold text-tertiary">
               -${formatMoney(comboDiscount)}
             </span>
@@ -46,10 +51,10 @@ export function ComboBanner({ comboDiscount, itemCount }: { comboDiscount: numbe
         </div>
         <div className="flex flex-col">
           <span className="font-headline-sm text-xs font-bold text-text-primary">
-            Unlock {rebateAmount} Escrow Rebate
+            {t("unlockRebateTitle", { amount: rebateAmount })}
           </span>
           <span className="font-body-sm text-xs text-text-muted">
-            Add {needed} more {needed === 1 ? "item" : "items"} to activate bundle savings on this order.
+            {t("unlockRebateDesc", { needed, items: needed === 1 ? t("itemsWord_one") : t("itemsWord_other") })}
           </span>
         </div>
       </section>

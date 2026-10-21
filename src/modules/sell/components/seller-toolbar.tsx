@@ -1,14 +1,12 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
 import { cn } from "@/lib/cn";
 import type { SellGame } from "../types";
-
-const SORT_OPTIONS: readonly SelectOption<string>[] = [
-  { value: "highest", label: "Sort: Highest Value" },
-  { value: "lowest", label: "Sort: Lowest Value" },
-];
 
 const GAME_LABELS: Record<SellGame, string> = {
   cs2: "CS2",
@@ -51,6 +49,13 @@ export function SellerToolbar({
   holdCount,
   gameCounts,
 }: SellerToolbarProps) {
+  const t = useTranslations("sellerToolbar");
+
+  const sortOptions: readonly SelectOption<string>[] = [
+    { value: "highest", label: t("sortHighest") },
+    { value: "lowest", label: t("sortLowest") },
+  ];
+
   return (
     <div className="flex flex-col gap-space-sm">
       <div className="flex flex-wrap items-center justify-between gap-space-sm">
@@ -78,7 +83,7 @@ export function SellerToolbar({
                       : "bg-tertiary",
                 )}
               />
-              {GAME_LABELS[value]} ({gameCounts[value] ?? 0} Items)
+              {GAME_LABELS[value]} {t("itemsCount", { count: gameCounts[value] ?? 0 })}
             </Button>
           ))}
         </div>
@@ -94,7 +99,7 @@ export function SellerToolbar({
                 : "border-white/6 bg-surface-container-highest/60 text-text-muted",
             )}
           >
-            ● Tradable Now ({tradableCount})
+            {t("tradableNow", { count: tradableCount })}
           </Button>
           <Button
             variant={null}
@@ -107,7 +112,7 @@ export function SellerToolbar({
                 : "border-white/6 bg-surface-container-highest/60 text-text-muted",
             )}
           >
-            Trade Hold ({holdCount})
+            {t("tradeHold", { count: holdCount })}
           </Button>
           <Button
             variant={null}
@@ -115,14 +120,14 @@ export function SellerToolbar({
             disabled
             className="h-auto rounded border border-white/4 px-2.5 py-1 font-data-mono-md text-xs text-text-muted"
           >
-            Non-Tradable (0)
+            {t("nonTradable", { count: 0 })}
           </Button>
           <a
             href="#trade-up"
             className="flex h-auto items-center gap-1 rounded border border-primary/30 bg-primary/10 px-2.5 py-1 font-headline-sm text-xs font-semibold text-primary uppercase transition-colors hover:bg-primary/20"
           >
             <Icon name="whatshot" className="text-[14px]" />
-            Trade-Up Forge
+            {t("tradeUpForge")}
           </a>
         </div>
       </div>
@@ -133,8 +138,8 @@ export function SellerToolbar({
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search inventory by skin, wear, float, sticker craft, pattern seed..."
-            aria-label="Search seller inventory"
+            placeholder={t("searchPlaceholder")}
+            aria-label={t("searchAria")}
             className="h-auto border-0 bg-transparent p-0 text-xs text-text-primary focus-visible:ring-0"
           />
         </div>
@@ -147,7 +152,7 @@ export function SellerToolbar({
             className="h-auto gap-1 rounded border border-white/6 bg-surface-container px-3 py-1.5 font-label-caps text-xs text-tertiary uppercase hover:bg-surface-bright disabled:opacity-50"
           >
             <Icon name="flash_on" className="text-[15px]" />
-            Auto-Price Floor (-1%)
+            {t("autoPriceFloor")}
           </Button>
           <Button
             variant={null}
@@ -155,13 +160,13 @@ export function SellerToolbar({
             onClick={onSelectAll}
             className="h-auto rounded border border-white/6 bg-surface-container px-3 py-1.5 font-label-caps text-xs text-text-secondary uppercase hover:bg-surface-bright"
           >
-            Select All Tradable ({selected.length})
+            {t("selectAll", { count: selected.length })}
           </Button>
           <Select
             label="Sort inventory"
             value={sort}
             onValueChange={setSort}
-            options={SORT_OPTIONS}
+            options={sortOptions}
             triggerClassName="rounded border border-white/6 bg-surface-container px-3 py-1.5 font-label-caps text-xs text-text-secondary uppercase"
             iconClassName="absolute top-2 right-2 text-[14px] text-text-muted"
           />
@@ -173,7 +178,7 @@ export function SellerToolbar({
             className="h-auto gap-1.5 rounded bg-primary px-3.5 py-1.5 font-headline-sm text-xs font-bold tracking-wide text-white uppercase shadow-md hover:bg-primary/90 disabled:opacity-50"
           >
             <Icon name="receipt_long" className="text-[15px]" />
-            Bulk List Selected ({selected.length})
+            {t("bulkList", { count: selected.length })}
           </Button>
         </div>
       </div>

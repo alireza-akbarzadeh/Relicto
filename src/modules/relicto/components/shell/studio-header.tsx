@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { LanguageToggle } from "@/components/language-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -15,6 +17,18 @@ import { WalletChip } from "./wallet-chip";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
 
 export function StudioHeader() {
+  const t = useTranslations("nav");
+
+  const navLabels: Record<string, string> = {
+    marketplace: t("marketplace"),
+    wiki: t("wiki"),
+    tracker: t("priceTracker"),
+    inventory: t("inventory"),
+    sell: t("sellItems"),
+    wallet: t("walletIncome"),
+    community: t("community"),
+  };
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-surface-overlay shadow-[0_4px_24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
       <div className="flex h-16 sm:h-20 w-full items-center justify-between gap-2 md:gap-space-md px-4 md:px-margin-desktop">
@@ -40,7 +54,7 @@ export function StudioHeader() {
               <SheetContent className="bg-surface-card border-t border-white/10 p-4">
                 <div className="flex flex-col gap-4">
                   <span className="font-label-caps text-[10px] font-bold uppercase tracking-widest text-text-muted">
-                    Studio Navigation
+                    {t("studioNav")}
                   </span>
 
                   <nav className="flex flex-col gap-1">
@@ -56,7 +70,7 @@ export function StudioHeader() {
                             className="text-[18px] text-text-muted"
                           />
                         )}
-                        <span>{item.label}</span>
+                        <span>{navLabels[item.id] ?? item.label}</span>
                       </Link>
                     ))}
                   </nav>
@@ -65,7 +79,11 @@ export function StudioHeader() {
 
                   {/* Mobile Quick Actions */}
                   <div className="flex items-center justify-between px-1">
-                    <span className="text-xs text-text-muted">Appearance</span>
+                    <span className="text-xs text-text-muted">{t("language")}</span>
+                    <LanguageToggle />
+                  </div>
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-xs text-text-muted">{t("appearance")}</span>
                     <ThemeToggle className="bg-surface-container-low p-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface" />
                   </div>
                 </div>
@@ -87,6 +105,7 @@ export function StudioHeader() {
             <StudioHeaderSearch />
           </div>
 
+          <LanguageToggle className="hidden sm:inline-flex" />
           <WalletChip />
 
           <div className="hidden sm:flex items-center gap-2">

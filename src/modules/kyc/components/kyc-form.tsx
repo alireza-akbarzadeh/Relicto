@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -17,6 +18,8 @@ export function KycForm({
   initialTradeUrl?: string;
   initialRealName?: string;
 }) {
+  const t = useTranslations("kyc");
+  const tCommon = useTranslations("common");
   const [fullName, setFullName] = useState(initialRealName);
   const [nationalId, setNationalId] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -28,7 +31,7 @@ export function KycForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim() || !nationalId.trim() || !phoneNumber.trim()) {
-      toast.error("لطفاً تمامی فیلدهای الزامی را تکمیل کنید.");
+      toast.error(t("requiredError"));
       return;
     }
 
@@ -57,12 +60,8 @@ export function KycForm({
           <Icon name="verified_user" className="text-[36px]" />
         </div>
         <div className="flex flex-col gap-1.5">
-          <span className="font-headline-lg text-lg font-bold text-text-primary uppercase">
-            احراز هویت با موفقیت تایید شد!
-          </span>
-          <span className="max-w-md font-body-sm text-xs leading-relaxed text-text-secondary">
-            حساب کاربری شما به سطح معامله‌گر تایید شده ارتقا یافت. اکنون می‌توانید آیتم‌های خود را در استودیو فروش قرار داده و تسویه آنی دریافت کنید.
-          </span>
+          <span className="font-headline-lg text-lg font-bold text-text-primary uppercase">{t("successTitle")}</span>
+          <span className="max-w-md font-body-sm text-xs leading-relaxed text-text-secondary">{t("successDesc")}</span>
         </div>
         <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
@@ -70,13 +69,13 @@ export function KycForm({
             className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-5 font-headline-sm text-xs font-bold text-white uppercase shadow-md transition hover:bg-primary/90"
           >
             <Icon name="storefront" className="text-[16px]" />
-            <span>ورود به استودیو فروش و لیست آیتم‌ها</span>
+            <span>{t("enterStudio")}</span>
           </Link>
           <Link
             href="/profile"
             className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-white/10 bg-surface-container-lowest px-4 font-headline-sm text-xs font-bold text-text-primary uppercase hover:bg-surface-container"
           >
-            <span>مشاهده پروفایل</span>
+            <span>{tCommon("viewProfile")}</span>
           </Link>
         </div>
       </div>
@@ -88,11 +87,11 @@ export function KycForm({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="full-name" className="font-label-caps text-[11px] font-bold text-text-secondary uppercase">
-            نام و نام خانوادگی کامل (مطابق کارت شناسایی) *
+            {t("fullNameLabel")}
           </label>
           <Input
             id="full-name"
-            placeholder="مثال: علیرضا اکبرزاده"
+            placeholder={t("fullNamePlaceholder")}
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             required
@@ -102,11 +101,11 @@ export function KycForm({
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="national-id" className="font-label-caps text-[11px] font-bold text-text-secondary uppercase">
-            کد ملی / شماره گذرنامه *
+            {t("nationalIdLabel")}
           </label>
           <Input
             id="national-id"
-            placeholder="۱۰ رقم کد ملی یا شماره پاسپورت"
+            placeholder={t("nationalIdPlaceholder")}
             value={nationalId}
             onChange={(e) => setNationalId(e.target.value)}
             required
@@ -118,11 +117,11 @@ export function KycForm({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="phone-number" className="font-label-caps text-[11px] font-bold text-text-secondary uppercase">
-            شماره موبایل فعال (جهت اطلاع‌رسانی ترید) *
+            {t("phoneLabel")}
           </label>
           <Input
             id="phone-number"
-            placeholder="۰۹۱۲..."
+            placeholder={t("phonePlaceholder")}
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             required
@@ -132,11 +131,11 @@ export function KycForm({
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="payout-address" className="font-label-caps text-[11px] font-bold text-text-secondary uppercase">
-            آدرس تتر TRC-20 یا شبا جهت تسویه (اختیاری)
+            {t("payoutLabel")}
           </label>
           <Input
             id="payout-address"
-            placeholder="T... یا IR..."
+            placeholder={t("payoutPlaceholder")}
             value={payoutAddress}
             onChange={(e) => setPayoutAddress(e.target.value)}
             className="h-10 border-white/10 bg-surface-container-lowest font-data-mono-md text-xs text-text-primary placeholder:text-text-muted"
@@ -147,7 +146,7 @@ export function KycForm({
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between">
           <label htmlFor="trade-url-input" className="font-label-caps text-[11px] font-bold text-text-secondary uppercase">
-            لینک ترید استیم (Steam Trade URL)
+            {t("tradeUrlLabel")}
           </label>
           <a
             href="https://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url"
@@ -155,25 +154,25 @@ export function KycForm({
             rel="noreferrer"
             className="inline-flex items-center gap-1 font-headline-sm text-[11px] text-tertiary hover:underline"
           >
-            <span>دریافت لینک از استیم</span>
+            <span>{t("getTradeUrl")}</span>
             <Icon name="open_in_new" className="text-[11px]" />
           </a>
         </div>
         <Input
           id="trade-url-input"
-          placeholder="https://steamcommunity.com/tradeoffer/new/?partner=...&token=..."
+          placeholder={t("tradeUrlPlaceholder")}
           value={tradeUrl}
           onChange={(e) => setTradeUrl(e.target.value)}
           className="h-10 border-white/10 bg-surface-container-lowest font-data-mono-md text-xs text-text-primary placeholder:text-text-muted"
         />
         <span className="font-body-sm text-[11px] text-text-muted">
-          برای اتصال شناسه {initialHandle ? `@${initialHandle}` : "کاربری"} به شبکه ترید خودکار Sentinel Bots.
+          {initialHandle ? `@${initialHandle} - ` : ""}{t("tradeUrlHelp")}
         </span>
       </div>
 
       <div className="mt-2 flex items-center justify-between border-t border-white/[0.08] pt-4">
         <Link href="/sell" className="font-headline-sm text-xs font-semibold text-text-muted hover:text-text-primary">
-          انصراف و بازگشت
+          {tCommon("cancel")}
         </Link>
         <Button
           type="submit"
@@ -183,7 +182,7 @@ export function KycForm({
           className="h-10 gap-2 rounded-lg bg-primary px-6 font-headline-sm text-xs font-bold text-white uppercase shadow-lg hover:bg-primary/90"
         >
           {pending ? <Icon name="sync" className="animate-spin text-[16px]" /> : <Icon name="verified" className="text-[16px]" />}
-          <span>{pending ? "در حال ثبت احراز هویت..." : "تایید و ارسال احراز هویت"}</span>
+          <span>{pending ? t("submitting") : t("submitBtn")}</span>
         </Button>
       </div>
     </form>

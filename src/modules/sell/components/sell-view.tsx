@@ -2,6 +2,7 @@
 
 import { useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 import { Icon } from "@/components/ui/icon";
 import { OffersInbox } from "@/modules/offers/components/offers-inbox";
@@ -30,6 +31,9 @@ export function SellView({
   offers: IncomingOffer[];
   contract: SellMobile["contract"];
 }) {
+  const t = useTranslations("sellView");
+  const tFocus = useTranslations("listingFocus");
+
   /* Inventory game, search, trade filter, sort and picks are all URL state. */
   const [{ game, q: query, filter, sort, picks: selected }, setParams] = useQueryStates(
     sellSearchParams,
@@ -123,9 +127,9 @@ export function SellView({
                   <Icon name="touch_app" className="text-[24px]" />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="font-headline-sm text-sm font-semibold text-text-primary uppercase">No Item Focused</span>
+                  <span className="font-headline-sm text-sm font-semibold text-text-primary uppercase">{tFocus("noItemTitle")}</span>
                   <span className="max-w-xs font-body-sm text-xs text-text-secondary">
-                    Select any item from your backpack to configure floor pricing, instant bot liquidation, and counter-offers.
+                    {tFocus("noItemDesc")}
                   </span>
                 </div>
               </div>
@@ -141,17 +145,17 @@ export function SellView({
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-space-sm">
               <span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-label-badge text-[10px] font-bold tracking-widest text-primary uppercase">
-                Trade-Up Forge
+                {t("tradeUpBadge")}
               </span>
               <span className="rounded bg-surface-container-highest px-2 py-0.5 font-data-mono-md text-[10px] text-secondary">
-                10-SLOT PRO CONVERTER
+                {t("tradeUpCore")}
               </span>
             </div>
             <h2 className="font-headline-xl text-xl font-bold tracking-tight text-text-primary uppercase lg:text-2xl">
-              Contract Chamber & Float Forge
+              {t("tradeUpTitle")}
             </h2>
             <p className="max-w-3xl font-body-md text-xs leading-relaxed text-text-secondary sm:text-sm">
-              Commit ten weapons of identical grade to forge higher-tier classified or covert outcomes. Calculated mathematically with real-time float simulation and instant escrow liquidation.
+              {t("tradeUpDesc")}
             </p>
           </div>
 

@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { SellerToolbar, type SellerToolbarProps } from "./seller-toolbar";
 
@@ -5,6 +8,8 @@ export type SellerHeroProps = SellerToolbarProps;
 
 export function SellerHero(props: SellerHeroProps) {
   const { tradableCount } = props;
+  const t = useTranslations("sellerHero");
+
   return (
     <section className="border-b border-white/6 bg-surface-deep px-margin-desktop py-space-lg">
       <div className="mx-auto flex max-w-7xl flex-col gap-space-md">
@@ -12,25 +17,24 @@ export function SellerHero(props: SellerHeroProps) {
           <div className="flex max-w-3xl flex-col gap-1.5">
             <div className="flex items-center gap-space-sm">
               <span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-label-badge text-[10px] font-bold tracking-widest text-primary uppercase">
-                Trading Terminal
+                {t("terminalBadge")}
               </span>
               <span className="rounded bg-surface-container-highest px-2 py-0.5 font-data-mono-md text-[10px] text-secondary">
-                V4.8 TACTICAL CORE
+                {t("tacticalCore")}
               </span>
             </div>
             <h1 className="font-headline-xl text-2xl font-bold tracking-tight text-text-primary uppercase lg:text-3xl">
-              Seller Studio{" "}
-              <span className="font-normal text-primary">[PRO LIQUIDITY ENGINE]</span>
+              {t("title")}{" "}
+              <span className="font-normal text-primary">{t("titleBadge")}</span>
             </h1>
             <p className="font-body-md text-xs leading-relaxed text-text-secondary sm:text-sm">
-              Direct P2P escrow listing engine with instant bot cashout liquidity, automated float
-              rank benchmarking, and real-time Steam Community market floor indexing. Zero skin custody lock.
+              {t("description")}
             </p>
           </div>
           <div className="grid grid-cols-3 gap-3 rounded-lg border border-white/8 bg-surface-card px-4 py-3 shadow-lg">
-            <Stat label="Pro Fee Rate" value="2.0%" note="VIP 4" tone="text-primary" />
-            <Stat label="Tradable Units" value={String(tradableCount)} tone="text-tertiary" />
-            <Stat label="Avg Liquidation" value="4.2 min" tone="text-text-primary" />
+            <Stat label={t("feeRate")} value="2.0%" note={t("vipTier")} tone="text-primary" />
+            <Stat label={t("tradableUnits")} value={String(tradableCount)} tone="text-tertiary" />
+            <Stat label={t("avgLiquidation")} value={t("avgLiquidationVal")} tone="text-text-primary" />
           </div>
         </div>
 

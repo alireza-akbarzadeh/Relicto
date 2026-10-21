@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -13,6 +14,7 @@ import { SteamTutorialModal } from "./steam-tutorial-modal";
 
 /** What the inventory rail says when there's nothing in it to list — and why. */
 export function InventoryEmpty({ steam }: { steam: SteamSync }) {
+  const t = useTranslations("inventoryEmpty");
   const notLinked = !steam.linked;
   const privateInventory = steam.status === "private";
   const rateLimited = steam.status === "rate-limited";
@@ -56,10 +58,10 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-headline-sm text-sm font-semibold text-text-primary">
-            No Steam Account Linked Yet
+            {t("unlinkedTitle")}
           </span>
           <span className="max-w-sm font-body-sm text-xs text-text-secondary">
-            Connect your Steam account to import and liquidate your CS2, Dota 2, and TF2 inventory with zero bot latency.
+            {t("unlinkedDesc")}
           </span>
         </div>
         <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
@@ -72,7 +74,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
                 className="h-auto gap-2 rounded-lg bg-primary px-4 py-2 font-headline-sm text-xs font-bold tracking-wider text-white uppercase shadow-md hover:bg-primary/90"
               >
                 <Icon name="sports_esports" className="text-[16px]" />
-                <span>Link Steam Account</span>
+                <span>{t("linkBtn")}</span>
               </Button>
             }
           />
@@ -83,7 +85,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
             className="h-auto gap-2 rounded-lg border-white/10 px-4 py-2 font-headline-sm text-xs font-bold tracking-wider uppercase hover:border-white/20"
           >
             <SteamIcon className="h-4 w-4" />
-            <span>OpenID Sign-In</span>
+            <span>{t("openIdBtn")}</span>
           </LinkButton>
           <SteamTutorialModal />
           <LinkButton
@@ -93,7 +95,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
             className="h-auto gap-1.5 rounded-lg bg-primary px-3 py-2 font-headline-sm text-xs font-bold tracking-wider text-white uppercase shadow-md hover:bg-primary/90"
           >
             <Icon name="verified_user" className="text-[15px]" />
-            <span>شروع احراز هویت</span>
+            <span>{t("startKyc")}</span>
           </LinkButton>
           <Button
             variant="secondary"
@@ -103,7 +105,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
             className="h-auto gap-1.5 rounded-lg border-tertiary/40 bg-tertiary/20 px-3 py-2 font-headline-sm text-xs font-bold tracking-wider text-tertiary uppercase hover:bg-tertiary/30"
           >
             <Icon name="flash_on" className="text-[16px]" />
-            <span>Load Demo Backpack</span>
+            <span>{t("demoBtn")}</span>
           </Button>
         </div>
       </div>
@@ -118,17 +120,17 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
       <div className="flex flex-col gap-1">
         <span className="font-headline-sm text-sm font-semibold text-text-primary">
           {privateInventory
-            ? "اینونتوری استیم شما خصوصی (Private) است"
+            ? t("privateTitle")
             : rateLimited
-              ? "Steam rate limit active"
-              : "Nothing here to list for this game"}
+              ? t("rateLimitTitle")
+              : t("emptyTitle")}
         </span>
         <span className="max-w-sm font-body-sm text-xs text-text-secondary">
           {privateInventory
-            ? "برای نمایش و قیمت‌گذاری آیتم‌ها، در تنظیمات حریم خصوصی استیم گزینه Inventory را روی Public قرار دهید."
+            ? t("privateDesc")
             : rateLimited
-              ? "Valve is rate-limiting inventory pulls right now. You can retry shortly or test with demo items."
-              : "Only marketable items appear. You can sync again or load demo items for immediate testing."}
+              ? t("rateLimitDesc")
+              : t("emptyDesc")}
         </span>
       </div>
       <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
@@ -141,7 +143,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
           className="h-auto gap-1.5 rounded-lg border-white/10 px-3 py-2 font-headline-sm text-xs font-bold tracking-wider uppercase hover:border-white/20"
         >
           <Icon name="sync" className="text-[15px]" />
-          <span>Sync Now</span>
+          <span>{t("syncNow")}</span>
         </Button>
         <LinkButton
           href="/user/kyc"
@@ -150,7 +152,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
           className="h-auto gap-1.5 rounded-lg bg-primary px-3 py-2 font-headline-sm text-xs font-bold tracking-wider text-white uppercase shadow-md hover:bg-primary/90"
         >
           <Icon name="verified_user" className="text-[15px]" />
-          <span>شروع احراز هویت</span>
+          <span>{t("startKyc")}</span>
         </LinkButton>
         <Button
           variant="secondary"
@@ -160,7 +162,7 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
           className="h-auto gap-1.5 rounded-lg border-tertiary/40 bg-tertiary/20 px-3 py-2 font-headline-sm text-xs font-bold tracking-wider text-tertiary uppercase hover:bg-tertiary/30"
         >
           <Icon name="flash_on" className="text-[15px]" />
-          <span>Load Demo Items</span>
+          <span>{t("demoItems")}</span>
         </Button>
       </div>
     </div>

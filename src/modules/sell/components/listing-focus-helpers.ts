@@ -25,25 +25,32 @@ export function getActionDetails(
   pending: boolean,
   proceeds: number,
   numPrice: number,
+  t?: (key: any, values?: any) => string,
 ): { icon: IconName; label: string; notice: string } {
   if (mode === "Instant Bot") {
     return {
       icon: "bolt",
-      label: liquidating ? "Liquidating to Vault..." : `Instant Liquidate to Vault ($${proceeds.toFixed(2)})`,
-      notice: "Instant Automated Steam Bot Settlement",
+      label: liquidating
+        ? (t ? t("actionLiquidating") : "Liquidating to Vault...")
+        : (t ? t("actionInstant", { price: proceeds.toFixed(2) }) : `Instant Liquidate to Vault ($${proceeds.toFixed(2)})`),
+      notice: t ? t("botNotice") : "Instant Automated Steam Bot Settlement",
     };
   }
   if (mode === "24H Auction") {
     return {
       icon: "timer",
-      label: pending ? "Launching Auction..." : `Launch 24H Auction ($${numPrice.toFixed(2)})`,
-      notice: "Encrypted Steam P2P Escrow Bot Verification System",
+      label: pending
+        ? (t ? t("actionLaunchingAuction") : "Launching Auction...")
+        : (t ? t("actionAuction", { price: numPrice.toFixed(2) }) : `Launch 24H Auction ($${numPrice.toFixed(2)})`),
+      notice: t ? t("escrowNotice") : "Encrypted Steam P2P Escrow Bot Verification System",
     };
   }
   return {
     icon: "lock",
-    label: pending ? "Listing on Relicto..." : `List Item on Relicto ($${numPrice.toFixed(2)})`,
-    notice: "Encrypted Steam P2P Escrow Bot Verification System",
+    label: pending
+      ? (t ? t("actionListing") : "Listing on Relicto...")
+      : (t ? t("actionList", { price: numPrice.toFixed(2) }) : `List Item on Relicto ($${numPrice.toFixed(2)})`),
+    notice: t ? t("escrowNotice") : "Encrypted Steam P2P Escrow Bot Verification System",
   };
 }
 

@@ -2,59 +2,50 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { SteamIcon } from "@/components/ui/steam-icon";
 
-const STEPS = [
-  {
-    num: "1",
-    title: "وارد پروفایل استیم شوید",
-    englishTitle: "View My Profile",
-    desc: "در کلاینت استیم یا وب‌سایت Steam Community روی نام کاربری خود بزنید و گزینه View my profile را انتخاب کنید.",
-    actionLabel: "پروفایل استیم ↗",
-    actionHref: "https://steamcommunity.com/my",
-    icon: "account_circle",
-  },
-  {
-    num: "2",
-    title: "تنظیمات حریم خصوصی را باز کنید",
-    englishTitle: "Edit Profile › Privacy Settings",
-    desc: "گزینه Edit Profile را زده و از منوی کناری وارد Privacy Settings شوید تا دسترسی‌ها قابل ویرایش شوند.",
-    actionLabel: "تنظیمات حریم خصوصی استیم ↗",
-    actionHref: "https://steamcommunity.com/my/edit/settings",
-    icon: "security",
-  },
-  {
-    num: "3",
-    title: "Inventory را روی Public بگذارید",
-    englishTitle: "Set Inventory to Public",
-    desc: "در بخش My Profile روبه‌روی فیلد Inventory گزینه Public را انتخاب کنید تا آیتم‌های CS2 و Dota 2 توسط رلیکتو خوانده شوند.",
-    actionLabel: "تغییر به Public ↗",
-    actionHref: "https://steamcommunity.com/my/edit/settings",
-    icon: "lock_open",
-  },
-  {
-    num: "4",
-    title: "لینک Trade URL را کپی و ثبت کنید",
-    englishTitle: "Copy Steam Trade URL",
-    desc: "از منوی Trade Offers وارد Who can send me Trade Offers شوید، لینک Trade URL را کپی و در تنظیمات پروفایل رلیکتو ذخیره کنید.",
-    actionLabel: "دریافت Trade URL ↗",
-    actionHref: "https://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url",
-    icon: "swap_horiz",
-  },
-];
-
 export function SteamTutorialModal({ trigger }: { trigger?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("tutorialModal");
+
+  const steps = [
+    {
+      num: t("step1Num"),
+      title: t("step1Title"),
+      englishTitle: t("step1English"),
+      desc: t("step1Desc"),
+      actionLabel: t("step1Action"),
+      actionHref: "https://steamcommunity.com/my",
+    },
+    {
+      num: t("step2Num"),
+      title: t("step2Title"),
+      englishTitle: t("step2English"),
+      desc: t("step2Desc"),
+      actionLabel: t("step2Action"),
+      actionHref: "https://steamcommunity.com/my/edit/settings",
+    },
+    {
+      num: t("step3Num"),
+      title: t("step3Title"),
+      englishTitle: t("step3English"),
+      desc: t("step3Desc"),
+      actionLabel: t("step3Action"),
+      actionHref: "https://steamcommunity.com/my/edit/settings",
+    },
+    {
+      num: t("step4Num"),
+      title: t("step4Title"),
+      englishTitle: t("step4English"),
+      desc: t("step4Desc"),
+      actionLabel: t("step4Action"),
+      actionHref: "https://steamcommunity.com/my/tradeoffers/privacy#trade_offer_access_url",
+    },
+  ];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -69,13 +60,13 @@ export function SteamTutorialModal({ trigger }: { trigger?: React.ReactNode }) {
               className="h-auto gap-1.5 rounded-lg border-white/10 bg-surface-container-lowest px-3 py-1.5 font-headline-sm text-xs font-bold text-text-primary uppercase hover:border-white/20 hover:bg-surface-container"
             >
               <Icon name="menu_book" className="text-[15px] text-tertiary" />
-              <span>آموزش عمومی کردن Inventory</span>
+              <span>{t("title")}</span>
             </Button>
           }
         />
       )}
 
-      <DialogContent className="max-w-xl border-white/10 bg-surface-card p-6 text-text-primary shadow-2xl">
+      <DialogContent className="max-w-xl! border-white/10 bg-surface-card p-6 text-text-primary shadow-2xl">
         <DialogHeader className="gap-1.5">
           <div className="flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-tertiary/20 text-tertiary">
@@ -83,20 +74,20 @@ export function SteamTutorialModal({ trigger }: { trigger?: React.ReactNode }) {
             </div>
             <div className="flex flex-col">
               <DialogTitle className="font-headline-md text-base font-bold text-text-primary uppercase">
-                راهنمای عمومی کردن Inventory و فعال‌سازی فروش
+                {t("title")}
               </DialogTitle>
               <span className="font-data-mono-md text-[10px] text-text-muted">
-                STEAM PRIVACY & SELLER ONBOARDING PROTOCOL
+                {t("badge")}
               </span>
             </div>
           </div>
           <DialogDescription className="font-body-sm text-xs text-text-secondary">
-            برای نمایش آیتم‌ها در استودیو، دریافت پیشنهادات ترید آنی و تسویه ارزی، دسترسی اینونتوری استیم شما باید روی Public باشد.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-3 flex flex-col gap-3">
-          {STEPS.map((step) => (
+          {steps.map((step) => (
             <div
               key={step.num}
               className="flex items-start gap-3 rounded-lg border border-white/[0.06] bg-surface-container-lowest p-3 transition-colors hover:border-white/15"
@@ -134,10 +125,10 @@ export function SteamTutorialModal({ trigger }: { trigger?: React.ReactNode }) {
           <div className="mt-2 flex flex-col gap-2 rounded-lg border border-primary/30 bg-primary/10 p-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col">
               <span className="font-headline-sm text-xs font-bold text-primary uppercase">
-                مرحله پایانی: شروع احراز هویت
+                {t("finalStepTitle")}
               </span>
               <span className="font-body-sm text-[11px] text-text-secondary">
-                احراز هویت فروشنده برای تسویه آنی، سقف‌های نامحدود و نشان معامله‌گر مطمئن.
+                {t("finalStepDesc")}
               </span>
             </div>
             <Link
@@ -146,7 +137,7 @@ export function SteamTutorialModal({ trigger }: { trigger?: React.ReactNode }) {
               className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 font-headline-sm text-xs font-bold text-white uppercase shadow-md transition hover:bg-primary/90"
             >
               <Icon name="verified_user" className="text-[14px]" />
-              <span>شروع احراز هویت</span>
+              <span>{t("finalStepAction")}</span>
             </Link>
           </div>
         </div>

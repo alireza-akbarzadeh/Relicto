@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -10,6 +13,8 @@ export type ActiveListingsProps = {
 };
 
 export function ActiveListings({ data, onRefresh }: ActiveListingsProps) {
+  const t = useTranslations("activeListings");
+
   return (
     <section className="w-full border-t border-white/6 px-margin-desktop py-space-lg">
       <div className="mx-auto flex max-w-7xl flex-col gap-space-sm">
@@ -17,10 +22,10 @@ export function ActiveListings({ data, onRefresh }: ActiveListingsProps) {
           <div className="flex items-center gap-space-sm">
             <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
             <h2 className="font-headline-md text-base font-bold tracking-wide text-text-primary uppercase">
-              Active Live Marketplace Listings
+              {t("title")}
             </h2>
             <span className="rounded bg-primary/20 px-2 py-0.5 font-data-mono-md text-[10px] text-primary">
-              {data.activeListings.length} On Sale
+              {t("onSaleCount", { count: data.activeListings.length })}
             </span>
           </div>
           <Button
@@ -30,19 +35,19 @@ export function ActiveListings({ data, onRefresh }: ActiveListingsProps) {
             className="h-auto gap-1 rounded bg-surface-container-high px-2 py-1.5 font-label-caps text-[10px] text-text-primary uppercase hover:bg-surface-bright"
           >
             <Icon name="refresh" className="text-[14px]" />
-            Refresh Live Index
+            {t("refreshBtn")}
           </Button>
         </div>
         <div className="overflow-x-auto rounded-lg border border-white/8 bg-surface-card">
           <table className="w-full min-w-225 border-collapse text-left font-body-sm">
             <thead className="bg-surface-container-lowest font-label-caps text-[10px] text-text-muted uppercase">
               <tr>
-                <th className="px-3 py-2">Asset &amp; Wear Intel</th>
-                <th className="px-3 py-2">Listed Price</th>
-                <th className="px-3 py-2">Market Floor Delta</th>
-                <th className="px-3 py-2">Buyer Telemetry</th>
-                <th className="px-3 py-2">Age</th>
-                <th className="px-3 py-2 text-right">Actions</th>
+                <th className="px-3 py-2">{t("colIntel")}</th>
+                <th className="px-3 py-2">{t("colPrice")}</th>
+                <th className="px-3 py-2">{t("colFloorDelta")}</th>
+                <th className="px-3 py-2">{t("colBuyerTelemetry")}</th>
+                <th className="px-3 py-2">{t("colAge")}</th>
+                <th className="px-3 py-2 text-right">{t("colActions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -67,7 +72,7 @@ export function ActiveListings({ data, onRefresh }: ActiveListingsProps) {
                           {listing.name}
                         </span>
                         <span className="font-data-mono-md text-[10px] text-text-muted">
-                          Float / craft intel verified
+                          {t("intelVerified")}
                         </span>
                       </div>
                     </div>
@@ -91,7 +96,7 @@ export function ActiveListings({ data, onRefresh }: ActiveListingsProps) {
                         name={listing.name}
                         className="h-auto rounded border-0 bg-primary/20 px-2 py-1 font-label-caps text-[10px] text-primary uppercase"
                       >
-                        Delist
+                        {t("delist")}
                       </DelistButton>
                     </div>
                   </td>

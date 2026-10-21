@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,6 +16,7 @@ import type { InventoryItem } from "../types";
 import { MODES, type LiquidityMode, getWearBadge, formatToken, getActionDetails } from "./listing-focus-helpers";
 
 export function ListingFocus({ item }: { item: InventoryItem }) {
+  const t = useTranslations("listingFocus");
   const [mode, setMode] = useState<LiquidityMode>(MODES[0]);
   const [price, setPrice] = useState(item.price.toFixed(2));
   const [note, setNote] = useState(item.rank ? `Float ${item.float} · ${item.rank}` : `Float ${item.float}`);
@@ -30,12 +32,18 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
   const deltaVsFloor = item.floor > 0 ? (((numPrice - item.floor) / item.floor) * 100).toFixed(1) : "0.0";
   const deltaSign = Number(deltaVsFloor) >= 0 ? "+" : "";
   const [allowOffers, setAllowOffers] = useState(true);
-  const action = getActionDetails(mode, liquidating, pending, proceeds, numPrice);
+  const action = getActionDetails(mode, liquidating, pending, proceeds, numPrice, t);
+
+  const modeLabels: Record<LiquidityMode, string> = {
+    "Market P2P": t("modeMarketP2P"),
+    "Instant Bot": t("modeInstantBot"),
+    "24H Auction": t("mode24HAuction"),
+  };
 
   const handleAction = () => {
     if (mode === "Instant Bot") {
       if (proceeds <= 0) {
-        toast.error("Valuation must be greater than $0");
+        toast.error(t("errorValuation"));
         return;
       }
       startLiquidating(async () => {
@@ -46,14 +54,14 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
             txHash: `BOT-LIQUIDATE-${item.id}`,
           });
           if (result.status === "credited") {
-            toast.success(`Liquidated ${item.name} for $${proceeds.toFixed(2)}`, {
-              description: "Instant bot liquidity credited to your Relicto USD Vault.",
+            toast.success(t("successLiquidate", { name: item.name, price: proceeds.toFixed(2) }), {
+              description: t("successLiquidateDesc"),
             });
           } else {
-            toast.error("Liquidation paused", { description: "Vault is locked or rail is unavailable." });
+            toast.error("Liquidation paused", { description: t("errorVaultLocked") });
           }
         } catch {
-          toast.error("Liquidation dispatch failed", { description: "Check your connection and try again." });
+          toast.error(t("errorLiquidationFailed"), { description: t("errorLiquidationFailedDesc") });
         }
       });
       return;
@@ -72,7 +80,7 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-space-sm">
           <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-          <h2 className="font-headline-md text-base font-bold tracking-wide text-text-primary uppercase">Listing Focus</h2>
+          <h2 className="font-headline-md text-base font-bold tracking-wide text-text-primary uppercase">{t("title")}</h2>
         </div>
         <span className="rounded border border-white/[0.06] bg-surface-container-lowest px-2 py-0.5 font-data-mono-md text-[11px] text-text-muted">{token}</span>
       </div>
@@ -87,21 +95,23 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
           <div className="flex items-center gap-1.5 font-data-mono-md text-xs text-text-secondary">
             <span className="text-status-upcoming">Float: {item.float}</span>
             <span className="text-white/20">·</span>
-            <span className="text-tertiary">{item.rank || "Verified Pattern"}</span>
+            <span className="text-tertiary">{item.rank || t("verifiedPattern")}</span>
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label className="font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">Listing Liquidity Mode</label>
+        <label className="font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">{t("liquidityMode")}</label>
         <div className="grid grid-cols-3 gap-1 rounded-lg border border-white/[0.06] bg-surface-container-lowest p-1">
           {MODES.map((option) => (
-            <Button key={option} variant={null} size={null} onClick={() => setMode(option)} className={cn("h-auto rounded py-1.5 font-headline-sm text-xs uppercase", mode === option ? "bg-primary font-bold text-white" : "text-text-muted hover:text-text-primary")}>{option}</Button>
+            <Button key={option} variant={null} size={null} onClick={() => setMode(option)} className={cn("h-auto rounded py-1.5 font-headline-sm text-xs uppercase", mode === option ? "bg-primary font-bold text-white" : "text-text-muted hover:text-text-primary")}>
+              {modeLabels[option]}
+            </Button>
           ))}
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between gap-2">
-          <label htmlFor="target-price" className="font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">Target Ask Price (USD)</label>
+          <label htmlFor="target-price" className="font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">{t("listingPrice")}</label>
           <span className="rounded border border-status-upcoming/20 bg-status-upcoming/10 px-2 py-0.5 font-data-mono-md text-[11px] text-status-upcoming">Floor (${item.floor.toLocaleString()}) {deltaSign}{deltaVsFloor}%</span>
         </div>
         <PriceInput
@@ -131,14 +141,14 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
             <span className="font-semibold text-text-primary">${numPrice.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-text-secondary">
-            <span>{mode === "Instant Bot" ? "Liquidity Bot Spread (2.0%):" : "Relicto Platform Fee (2.0%):"}</span>
+            <span>{mode === "Instant Bot" ? "Liquidity Bot Spread (2.0%):" : t("platformFee")}</span>
             <span className="font-semibold text-primary">-${fee.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-text-secondary"><span>Steam Bot Relay:</span><span className="font-semibold text-status-upcoming">$0.00 (Free)</span></div>
           <div className="my-1 h-px bg-white/[0.06]" />
           <div className="flex items-center justify-between text-sm">
             <span className="font-semibold text-text-primary">
-              {mode === "Instant Bot" ? "Immediate Vault Credit:" : "Net Trader Proceeds:"}
+              {mode === "Instant Bot" ? "Immediate Vault Credit:" : t("netPayout")}
             </span>
             <span className="font-data-mono-lg text-base font-bold text-tertiary">${proceeds.toFixed(2)} USD</span>
           </div>
@@ -153,14 +163,14 @@ export function ListingFocus({ item }: { item: InventoryItem }) {
         <label className="flex cursor-pointer items-center justify-between rounded border border-white/[0.06] bg-surface-container-lowest px-3 py-2">
           <span className="flex items-center gap-2 font-body-md text-xs text-text-primary">
             <Checkbox checked={allowOffers} onCheckedChange={(val) => setAllowOffers(Boolean(val))} />
-            Allow Counter-Offers (Min: ${counterMin})
+            {t("allowOffers")} ({t("minOffer")} ${counterMin})
           </span>
           <Icon name="tune" className="text-[15px] text-tertiary" />
         </label>
       </div>
       <label htmlFor="buyer-note" className="flex flex-col gap-1.5 font-label-caps text-[11px] font-semibold tracking-wider text-text-muted uppercase">
-        Trader Buyer Note / Craft Intel
-        <Input id="buyer-note" value={note} onChange={(event) => setNote(event.target.value)} className="h-auto rounded bg-surface-container-lowest px-3 py-1.5 font-data-mono-md text-xs text-text-secondary" />
+        {t("listingNote")}
+        <Input id="buyer-note" value={note} onChange={(event) => setNote(event.target.value)} placeholder={t("notePlaceholder")} className="h-auto rounded bg-surface-container-lowest px-3 py-1.5 font-data-mono-md text-xs text-text-secondary" />
       </label>
       <div className="flex flex-col gap-2 pt-1">
         <Button

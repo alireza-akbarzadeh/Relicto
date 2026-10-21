@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/cn";
@@ -39,6 +40,7 @@ export function InventoryList({
   readyToList: number;
   steam: SteamSync;
 }) {
+  const t = useTranslations("inventoryList");
   // The sample studio quotes the design's figure; a Steam trader's is the sum of what they hold.
   const backpackUsd = steam.linked
     ? items.reduce((total, item) => total + item.price, 0)
@@ -48,10 +50,10 @@ export function InventoryList({
       <div className="flex flex-col justify-between gap-space-xs sm:flex-row sm:items-center">
         <div className="flex items-center gap-space-sm">
           <h2 className="font-headline-md text-base font-bold tracking-wide text-text-primary uppercase">
-            Backpack Inventory
+            {t("title")}
           </h2>
           <span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-data-mono-md text-[10px] font-semibold text-primary">
-            {readyToList} Ready To List
+            {t("readyToList", { count: readyToList })}
           </span>
         </div>
         <SteamSyncStatus steam={steam} />
@@ -69,11 +71,11 @@ export function InventoryList({
       </div>
       <div className="flex flex-col items-center justify-between gap-space-sm rounded-lg border border-white/[0.06] bg-surface-container-lowest px-space-md py-2.5 text-xs sm:flex-row">
         <span className="font-data-mono-md text-text-secondary">
-          Showing {items.length} of {totalInventory} tradable items
+          {t("showingCount", { count: items.length, total: totalInventory })}
         </span>
         <div className="flex items-center gap-space-sm">
           <span className="font-label-badge text-[11px] text-text-muted uppercase">
-            Backpack Est. Value:
+            {t("estValue")}
           </span>
           <span className="font-data-mono-lg text-sm font-bold text-tertiary">
             {formatMoney(backpackUsd)} USD

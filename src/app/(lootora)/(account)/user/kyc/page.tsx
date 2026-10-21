@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { requireUserId } from "@/modules/relicto/data/get-session";
 import { findOrOpenProfile } from "@/server/modules/profile/profile.repository";
 import { KycView } from "@/modules/kyc/components/kyc-view";
 
-export const metadata: Metadata = {
-  title: "احراز هویت فروشنده | Relicto KYC",
-  description: "تکمیل احراز هویت جهت فروش بدون کارمزد اضافه، تسویه آنی و دریافت نشان معامله‌گر تایید شده.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  return {
+    title: t("kycTitle"),
+    description: t("kycDesc"),
+  };
+}
 
 export default async function UserKycPage() {
   const userId = await requireUserId();

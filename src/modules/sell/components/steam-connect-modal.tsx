@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -22,6 +23,7 @@ export function SteamConnectModal({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
+  const t = useTranslations("steamModal");
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
@@ -32,30 +34,30 @@ export function SteamConnectModal({
 
   const handleLink = () => {
     if (!inputVal.trim()) {
-      toast.error("Please enter a SteamID64 or Trade URL");
+      toast.error(t("errorEmptyInput"));
       return;
     }
     startTransition(async () => {
       try {
         const res = await linkSteamAccountAction(inputVal.trim());
         if (!res.ok) {
-          toast.error(res.error ?? "Failed to link Steam account");
+          toast.error(res.error ?? t("errorLinkFailed"));
           return;
         }
         if (res.sync?.status === "ok") {
-          toast.success(`Connected! Synced ${res.sync.itemCount} items from Steam.`);
+          toast.success(t("successSynced", { count: res.sync.itemCount }));
         } else if (res.sync?.status === "private") {
-          toast.warning("Steam linked, but your Steam inventory is Private.", {
-            description: "Set inventory to Public in Steam Privacy Settings to view items.",
+          toast.warning(t("warningPrivate"), {
+            description: t("warningPrivateDesc"),
           });
         } else if (res.sync?.status === "rate-limited") {
-          toast.info("Steam linked! Valve is rate-limiting sync; retry in a minute.");
+          toast.info(t("infoRateLimited"));
         } else {
-          toast.success("Steam account connected successfully.");
+          toast.success(t("successConnected"));
         }
         setOpen(false);
       } catch {
-        toast.error("Failed to connect Steam account. Try again.");
+        toast.error(t("errorGeneric"));
       }
     });
   };
@@ -65,13 +67,16 @@ export function SteamConnectModal({
       try {
         const res = await seedTestInventoryAction();
         if (res.ok) {
-          toast.success("Test backpack loaded!", {
-            description: `Loaded ${res.count} tradable skins valued at $${res.totalValueUsd.toLocaleString()}.`,
+          toast.success(t("successDemo"), {
+            description: t("successDemoDesc", {
+              count: res.count,
+              value: res.totalValueUsd.toLocaleString(),
+            }),
           });
           setOpen(false);
         }
       } catch {
-        toast.error("Could not load test items.");
+        toast.error(t("errorDemo"));
       }
     });
   };
@@ -93,11 +98,11 @@ export function SteamConnectModal({
               <SteamIcon className="h-5 w-5" />
             </div>
             <DialogTitle className="font-headline-md text-base font-bold uppercase">
-              Steam Inventory Sync
+              {t("title")}
             </DialogTitle>
           </div>
           <DialogDescription className="font-body-sm text-xs text-text-secondary">
-            Connect your Steam account to import tradable CS2, Dota 2, and TF2 skins with live market floor pricing.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -106,22 +111,22 @@ export function SteamConnectModal({
             <div className="flex items-center justify-between rounded-lg border border-status-live/30 bg-status-live/10 px-3 py-2 text-xs">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-status-live animate-pulse" />
-                <span className="font-semibold text-text-primary">Steam Account Linked</span>
+                <span className="font-semibold text-text-primary">{t("accountLinked")}</span>
               </div>
               <span className="font-data-mono-md text-[11px] text-text-muted">
-                {steam.itemCount} items · {steam.synced ?? "Synced"}
+                {steam.itemCount} {t("syncedText", { status: steam.synced ?? "Synced" })}
               </span>
             </div>
           )}
 
           <div className="flex flex-col gap-2 rounded-lg border border-white/[0.08] bg-surface-container-lowest p-3">
             <label htmlFor="steam-id-input" className="font-label-caps text-[10px] font-bold tracking-wider text-text-muted uppercase">
-              Enter SteamID64 or Steam Trade URL
+              {t("inputLabel")}
             </label>
             <div className="flex gap-2">
               <Input
                 id="steam-id-input"
-                placeholder="76561198... or https://steamcommunity.com/..."
+                placeholder={t("inputPlaceholder")}
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 className="h-9 border-white/10 bg-surface-container-low font-data-mono-md text-xs text-text-primary placeholder:text-text-muted"
@@ -133,14 +138,14 @@ export function SteamConnectModal({
                 onClick={handleLink}
                 className="h-9 shrink-0 bg-primary px-3 font-headline-sm text-xs font-bold uppercase text-white hover:bg-primary/90"
               >
-                {pending ? <Icon name="sync" className="animate-spin text-sm" /> : "Link"}
+                {pending ? <Icon name="sync" className="animate-spin text-sm" /> : t("linkBtn")}
               </Button>
             </div>
           </div>
 
           <div className="relative flex items-center justify-center">
             <div className="w-full border-t border-white/[0.06]" />
-            <span className="absolute bg-surface-card px-2 font-label-badge text-[10px] text-text-muted uppercase">OR</span>
+            <span className="absolute bg-surface-card px-2 font-label-badge text-[10px] text-text-muted uppercase">{t("or")}</span>
           </div>
 
           <Link
@@ -148,14 +153,14 @@ export function SteamConnectModal({
             className="flex h-10 items-center justify-center gap-2 rounded-lg border border-white/10 bg-surface-container-low font-headline-sm text-xs font-bold text-text-primary uppercase transition hover:border-white/20 hover:bg-surface-container-high"
           >
             <SteamIcon className="h-4 w-4" />
-            <span>Connect Via Steam OpenID</span>
+            <span>{t("openIdBtn")}</span>
           </Link>
 
           <div className="rounded-lg border border-tertiary/20 bg-tertiary/5 p-3">
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="font-headline-sm text-xs font-bold text-tertiary uppercase">Quick Test Backpack</span>
-                <span className="font-body-sm text-[11px] text-text-secondary">Load 12 sample CS2 & Dota 2 skins to test selling immediately.</span>
+                <span className="font-headline-sm text-xs font-bold text-tertiary uppercase">{t("quickDemoTitle")}</span>
+                <span className="font-body-sm text-[11px] text-text-secondary">{t("quickDemoDesc")}</span>
               </div>
               <Button
                 variant="secondary"
@@ -164,7 +169,7 @@ export function SteamConnectModal({
                 onClick={handleLoadTest}
                 className="h-8 shrink-0 border-tertiary/40 bg-tertiary/20 font-headline-sm text-[11px] font-bold text-tertiary uppercase hover:bg-tertiary/30"
               >
-                Load Demo
+                {t("quickDemoBtn")}
               </Button>
             </div>
           </div>
@@ -176,7 +181,7 @@ export function SteamConnectModal({
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-tertiary hover:underline"
             >
-              <span>آموزش عمومی‌سازی استیم</span>
+              <span>{t("steamPrivacyGuide")}</span>
               <Icon name="open_in_new" className="text-[11px]" />
             </a>
             <Link
@@ -185,7 +190,7 @@ export function SteamConnectModal({
               className="inline-flex items-center gap-1 font-bold text-primary hover:underline"
             >
               <Icon name="verified_user" className="text-[12px]" />
-              <span>شروع احراز هویت</span>
+              <span>{t("startKyc")}</span>
             </Link>
           </div>
         </div>

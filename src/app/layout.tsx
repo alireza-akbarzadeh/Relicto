@@ -31,19 +31,27 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+
 /** Geist + Geist Mono for the whole app (see lib/fonts.ts); `font-sans` makes Geist the default face. */
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning className={cn(fontVariables, "font-sans")}>
+    <html
+      lang={locale}
+      dir={locale === "fa" ? "rtl" : "ltr"}
+      data-theme="dark"
+      suppressHydrationWarning
+      className={cn(fontVariables, "font-sans")}
+    >
       <body className="min-h-screen bg-canvas-base antialiased">
-        {/*
-          Applies the saved light/dark choice before first paint (see lib/theme.ts).
-          `beforeInteractive` injects it into the server HTML; a raw <script> in
-          the tree trips React's "script tag while rendering" error on the client.
-        */}
-        {/* <Script id="relicto-theme" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /> */}
-        <NuqsAdapter>{children}</NuqsAdapter>
-        <Toaster />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <NuqsAdapter>{children}</NuqsAdapter>
+          <Toaster />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { cn } from "@/lib/cn";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { SteamIcon } from "@/components/ui/steam-icon";
+import { cn } from "@/lib/cn";
 import type { SteamSync } from "../types";
 import { SteamTutorialModal } from "./steam-tutorial-modal";
 
@@ -16,6 +17,7 @@ export function SellerGuideBanner({
   tradeUrl?: string | null;
   className?: string;
 }) {
+  const t = useTranslations("sellerGuide");
   const isLinked = steam?.linked ?? false;
   const isPrivate = steam?.status === "private";
   const hasTradeUrl = Boolean(tradeUrl && tradeUrl.includes("token="));
@@ -27,17 +29,17 @@ export function SellerGuideBanner({
           <div className="flex flex-col gap-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded border border-tertiary/40 bg-tertiary/15 px-2 py-0.5 font-label-badge text-[10px] font-bold tracking-widest text-tertiary uppercase">
-                از Inventory تا بازار، فقط ۴ قدم
+                {t("stepsBadge")}
               </span>
               <span className="font-data-mono-md text-[10px] text-text-muted">
-                SELLER PRE-FLIGHT CHECKLIST
+                {t("kicker")}
               </span>
             </div>
             <h2 className="font-headline-md text-base font-bold text-text-primary uppercase sm:text-lg">
-              آموزش و پیش‌نیازهای فروش آیتم و تسویه آنی
+              {t("title")}
             </h2>
             <p className="max-w-2xl font-body-sm text-xs leading-relaxed text-text-secondary">
-              آیتم‌های CS2 یا Dota 2 خود را با قیمت دلاری در رلیکتو بفروشید؛ برای ارسال و دریافت بدون مشکل پیشنهاد ترید، پیش‌نیازهای زیر را تکمیل کنید:
+              {t("description")}
             </p>
           </div>
 
@@ -48,7 +50,7 @@ export function SellerGuideBanner({
               className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-3.5 font-headline-sm text-xs font-bold text-white uppercase shadow-md transition-all hover:bg-primary/90 hover:shadow-primary/20"
             >
               <Icon name="verified_user" className="text-[15px]" />
-              <span>شروع احراز هویت</span>
+              <span>{t("kycButton")}</span>
             </Link>
           </div>
         </div>
@@ -62,16 +64,16 @@ export function SellerGuideBanner({
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-xs font-bold text-text-primary">
-                  ۱. عمومی‌سازی Inventory
+                  {t("step1Title")}
                 </span>
                 <span className="mt-0.5 font-body-sm text-[11px] text-text-secondary">
-                  تنظیم اینونتوری روی Public جهت خواندن آیتم‌ها
+                  {t("step1Desc")}
                 </span>
               </div>
             </div>
             <div className="mt-2.5 flex items-center justify-between border-t border-white/[0.04] pt-2 text-[10px]">
               <span className={isPrivate ? "font-bold text-error" : isLinked ? "font-bold text-status-live" : "text-text-muted"}>
-                {isPrivate ? "⚠️ اینونتوری خصوصی است" : isLinked ? "✓ متصل و فعال" : "در انتظار اتصال"}
+                {isPrivate ? t("step1StatusPrivate") : isLinked ? t("step1StatusOk") : t("step1StatusUnlinked")}
               </span>
               <a
                 href="https://steamcommunity.com/my/edit/settings"
@@ -79,7 +81,7 @@ export function SellerGuideBanner({
                 rel="noreferrer"
                 className="inline-flex items-center gap-0.5 font-medium text-tertiary hover:underline"
               >
-                <span>تنظیمات استیم</span>
+                <span>{t("step1Action")}</span>
                 <Icon name="open_in_new" className="text-[11px]" />
               </a>
             </div>
@@ -93,19 +95,19 @@ export function SellerGuideBanner({
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-xs font-bold text-text-primary">
-                  ۲. ثبت Trade URL معتبر
+                  {t("step2Title")}
                 </span>
                 <span className="mt-0.5 font-body-sm text-[11px] text-text-secondary">
-                  لینک دریافت خودکار آفر از ربات‌های نگهبان
+                  {t("step2Desc")}
                 </span>
               </div>
             </div>
             <div className="mt-2.5 flex items-center justify-between border-t border-white/[0.04] pt-2 text-[10px]">
               <span className={hasTradeUrl ? "font-bold text-status-live" : "text-text-muted"}>
-                {hasTradeUrl ? "✓ لینک ذخیره شده" : "ثبت در پروفایل"}
+                {hasTradeUrl ? t("step2StatusOk") : t("step2StatusMissing")}
               </span>
               <Link href="/profile" className="inline-flex items-center gap-0.5 font-medium text-secondary hover:underline">
-                <span>ویرایش لینک</span>
+                <span>{t("step2Action")}</span>
                 <Icon name="arrow_forward" className="text-[11px]" />
               </Link>
             </div>
@@ -119,17 +121,17 @@ export function SellerGuideBanner({
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-xs font-bold text-text-primary">
-                  ۳. استیم گارد موبایل
+                  {t("step3Title")}
                 </span>
                 <span className="mt-0.5 font-body-sm text-[11px] text-text-secondary">
-                  فعال حداقل ۱۵ روز جهت لغو Trade Hold
+                  {t("step3Desc")}
                 </span>
               </div>
             </div>
             <div className="mt-2.5 flex items-center justify-between border-t border-white/[0.04] pt-2 text-[10px]">
-              <span className="font-bold text-status-live">✓ تایید ۲۴ساعته</span>
+              <span className="font-bold text-status-live">{t("step3Status")}</span>
               <Link href="/verify" className="font-medium text-status-upcoming hover:underline">
-                بررسی امنیت
+                {t("step3Action")}
               </Link>
             </div>
           </div>
@@ -142,20 +144,20 @@ export function SellerGuideBanner({
               </div>
               <div className="flex flex-col">
                 <span className="font-headline-sm text-xs font-bold text-text-primary">
-                  ۴. احراز هویت (KYC)
+                  {t("step4Title")}
                 </span>
                 <span className="mt-0.5 font-body-sm text-[11px] text-text-secondary">
-                  تسویه آنی و دریافت نشان فروشنده معتبر
+                  {t("step4Desc")}
                 </span>
               </div>
             </div>
             <div className="mt-2.5 flex items-center justify-between border-t border-white/[0.04] pt-2 text-[10px]">
-              <span className="font-bold text-primary">احراز هویت سریع</span>
+              <span className="font-bold text-primary">{t("step4Status")}</span>
               <Link
                 href="/user/kyc"
                 className="inline-flex items-center gap-0.5 font-bold text-primary hover:underline"
               >
-                <span>شروع احراز هویت</span>
+                <span>{t("step4Action")}</span>
                 <Icon name="arrow_forward" className="text-[11px]" />
               </Link>
             </div>

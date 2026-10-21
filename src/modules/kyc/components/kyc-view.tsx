@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { KycForm } from "./kyc-form";
 
@@ -12,23 +13,25 @@ export function KycView({
   tradeUrl?: string;
   realName?: string;
 }) {
+  const t = useTranslations("kyc");
+
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-margin-desktop py-space-xl">
       {/* Header banner */}
       <div className="flex flex-col gap-2 rounded-xl border border-white/10 bg-surface-card p-6 shadow-xl backdrop-blur-md">
         <div className="flex items-center gap-2">
           <span className="rounded border border-primary/30 bg-primary/20 px-2 py-0.5 font-label-badge text-[10px] font-bold tracking-widest text-primary uppercase">
-            شناسه امنیتی معامله‌گر
+            {t("badge")}
           </span>
           <span className="font-data-mono-md text-[10px] text-text-muted">
-            AML & ESCROW COMPLIANCE // LEVEL 2
+            {t("compliance")}
           </span>
         </div>
         <h1 className="font-headline-xl text-2xl font-bold tracking-tight text-text-primary uppercase sm:text-3xl">
-          احراز هویت فروشندگان رلیکتو (KYC)
+          {t("title")}
         </h1>
         <p className="max-w-2xl font-body-md text-xs leading-relaxed text-text-secondary sm:text-sm">
-          تایید هویت برای جلوگیری از کلاهبرداری‌های ترید، فعال‌سازی تسویه بدون معطلی به کیف پول‌های تتری و بانکی، و اعطای نشان معامله‌گر معتبر در مارکت‌پلیس.
+          {t("description")}
         </p>
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -37,8 +40,8 @@ export function KycView({
               <Icon name="bolt" className="text-[18px]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-headline-sm text-xs font-bold text-text-primary">تسویه آنی</span>
-              <span className="font-data-mono-md text-[10px] text-text-muted">بدون مسدودی و کارمزد اضافه</span>
+              <span className="font-headline-sm text-xs font-bold text-text-primary">{t("instantPayout")}</span>
+              <span className="font-data-mono-md text-[10px] text-text-muted">{t("instantPayoutDesc")}</span>
             </div>
           </div>
 
@@ -47,8 +50,8 @@ export function KycView({
               <Icon name="verified_user" className="text-[18px]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-headline-sm text-xs font-bold text-text-primary">نشان فروشنده تایید شده</span>
-              <span className="font-data-mono-md text-[10px] text-text-muted">اعتمادسازی ۹۹.۹٪ در لیست‌ها</span>
+              <span className="font-headline-sm text-xs font-bold text-text-primary">{t("verifiedBadge")}</span>
+              <span className="font-data-mono-md text-[10px] text-text-muted">{t("verifiedBadgeDesc")}</span>
             </div>
           </div>
 
@@ -57,8 +60,8 @@ export function KycView({
               <Icon name="shield_locked" className="text-[18px]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-headline-sm text-xs font-bold text-text-primary">حفاظت اسکورو بات</span>
-              <span className="font-data-mono-md text-[10px] text-text-muted">ضمانت انتقال امن دارایی</span>
+              <span className="font-headline-sm text-xs font-bold text-text-primary">{t("botProtection")}</span>
+              <span className="font-data-mono-md text-[10px] text-text-muted">{t("botProtectionDesc")}</span>
             </div>
           </div>
         </div>
@@ -72,11 +75,11 @@ export function KycView({
               <Icon name="badge" className="text-[18px]" />
             </div>
             <h2 className="font-headline-md text-base font-bold text-text-primary uppercase">
-              فرم تکمیل اطلاعات هویتی و تسویه
+              {t("formTitle")}
             </h2>
           </div>
           <span className="font-data-mono-md text-xs text-text-muted">
-            حساب: <span className="font-semibold text-text-primary">{handle ? `@${handle}` : "کاربر"}</span>
+            {t("accountLabel")} <span className="font-semibold text-text-primary">{handle ? `@${handle}` : "User"}</span>
           </span>
         </div>
 

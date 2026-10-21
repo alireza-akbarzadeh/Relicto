@@ -1,6 +1,7 @@
 "use client";
 
 import type { KeyboardEvent } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -28,9 +29,14 @@ type FilterBarProps = {
   onQuery: (query: string) => void;
 };
 
-function exportOrdersCsv(rows: LedgerRow[], game: string, range: string) {
+function exportOrdersCsv(
+  rows: LedgerRow[],
+  game: string,
+  range: string,
+  messages: { empty: string; success: string; successDesc: string },
+) {
   if (rows.length === 0) {
-    toast.error("No orders to export in current filter");
+    toast.error(messages.empty);
     return;
   }
   const headers = ["Order Code", "Date", "Game", "Item Name", "Item Detail", "Flow", "Counterparty", "Settlement", "Status"];
@@ -56,26 +62,28 @@ function exportOrdersCsv(rows: LedgerRow[], game: string, range: string) {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
-  toast.success("Order ledger exported", { description: `Downloaded ${rows.length} records as CSV.` });
+  toast.success(messages.success, { description: messages.successDesc });
 }
 
 /** Search, game and range pickers, export, and the status tab row. */
 export function FilterBar({ counts, rows, tab, onTab, game, onGame, range, onRange, query, onQuery }: FilterBarProps) {
+  const t = useTranslations("orders");
+
   const tabs = [
-    { value: "all" as const, content: `All Orders (${counts.all})` },
-    { value: "purchases" as const, content: `Purchases (${counts.purchases})` },
-    { value: "sales" as const, content: `Sales & Liquidations (${counts.sales})` },
+    { value: "all" as const, content: t("tabAll", { count: counts.all }) },
+    { value: "purchases" as const, content: t("tabPurchases", { count: counts.purchases }) },
+    { value: "sales" as const, content: t("tabSales", { count: counts.sales }) },
     {
       value: "escrow" as const,
       className: "gap-space-xs text-status-upcoming",
       content: (
         <>
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-status-upcoming" />
-          <span>Active Escrow ({counts.escrow})</span>
+          <span>{t("tabEscrow", { count: counts.escrow })}</span>
         </>
       ),
     },
-    { value: "disputed" as const, className: "text-text-muted", content: `Disputed / Cancelled (${counts.disputed})` },
+    { value: "disputed" as const, className: "text-text-muted", content: t("tabDisputed", { count: counts.disputed }) },
   ];
 
   const clearOnEscape = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -92,11 +100,11 @@ export function FilterBar({ counts, rows, tab, onTab, game, onGame, range, onRan
               value={query}
               onChange={(event) => onQuery(event.target.value)}
               onKeyDown={clearOnEscape}
-              placeholder="Search by Order ID, Item name, Hero, or Counterparty..."
-              aria-label="Search transactions"
+              placeholder={t("searchPlaceholder")}
+              aria-label={t("searchAria")}
               className="h-auto rounded-none border-0 bg-transparent p-0 font-body-sm text-body-sm text-text-primary placeholder:text-text-muted focus-visible:ring-0 md:text-body-sm"
             />
-            <span className="ml-2 rounded bg-surface-container-high px-space-xs py-0.5 font-data-mono-md text-[10px] font-bold text-text-muted">ESC to clear</span>
+            <span className="ml-2 rounded bg-surface-container-high px-space-xs py-0.5 font-data-mono-md text-[10px] font-bold text-text-muted">{t("escClear")}</span>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-space-sm">
@@ -120,11 +128,17 @@ export function FilterBar({ counts, rows, tab, onTab, game, onGame, range, onRan
             type="button"
             variant={null}
             size={null}
-            onClick={() => exportOrdersCsv(rows, game, range)}
+            onClick={() =>
+              exportOrdersCsv(rows, game, range, {
+                empty: t("exportEmpty"),
+                success: t("exportSuccess"),
+                successDesc: t("exportSuccessDesc", { count: rows.length }),
+              })
+            }
             className="inline-flex cursor-pointer items-center gap-space-xs rounded-lg border-0 bg-surface-container px-space-md py-space-sm font-label-caps text-label-caps font-bold text-text-primary uppercase shadow-xs transition-colors hover:bg-surface-container-high focus-visible:outline-hidden"
           >
             <Icon name="download" className="text-[18px]" />
-            <span>Export CSV</span>
+            <span>{t("exportCsv")}</span>
           </Button>
         </div>
       </div>
@@ -138,7 +152,7 @@ export function FilterBar({ counts, rows, tab, onTab, game, onGame, range, onRan
           tabClassName={TAB}
         />
         <div className="hidden items-center gap-space-xs font-label-badge text-label-badge text-text-muted md:flex">
-          <span>STEAM API V2 COMPLIANT</span>
+          <span>{t("apiCompliant")}</span>
           <Icon name="verified" className="text-[14px] text-status-upcoming" />
         </div>
       </div>

@@ -19,11 +19,11 @@ export function AuthHeader({ page }: { page: AuthPage }) {
   return (
     <header className="fixed top-0 right-0 left-0 z-50 w-full border-b border-white/10 bg-surface-deep/90 shadow-[0_4px_24px_rgba(0,0,0,0.6)] backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/marketplace" className="group flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-surface-card shadow-inner transition-colors group-hover:border-primary-container/50">
+        <Link href="/marketplace" dir="ltr" className="group flex items-center gap-2.5 text-left select-none">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-surface-card shadow-inner transition-colors group-hover:border-primary-container/50">
             <Icon name="token" className="text-[22px] text-primary-container" />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col text-left">
             <div className="flex items-center gap-1.5">
               <span className="font-display text-lg font-bold tracking-tight text-white uppercase transition-colors group-hover:text-primary-container">
                 Relicto

@@ -1,5 +1,6 @@
 "use client";
 
+import { LanguageToggle } from "@/components/language-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { formatMoney } from "@/lib/format";
 import { useViewer } from "../../state/session-provider";
@@ -42,6 +43,7 @@ export function VaultHeader({ steamId }: { steamId: string }) {
               </div>
             </div>
           )}
+          <LanguageToggle className="rounded-lg border border-border-subtle bg-surface-container-lowest p-2 text-text-secondary hover:bg-surface-container hover:text-text-primary" />
           <ThemeToggle className="rounded-lg border border-border-subtle bg-surface-container-lowest p-2 text-text-secondary hover:bg-surface-container hover:text-text-primary" />
           <NotificationsMenu trigger="vault" />
           <CartButton />

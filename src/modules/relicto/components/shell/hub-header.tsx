@@ -1,3 +1,4 @@
+import { LanguageToggle } from "@/components/language-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserMenu } from "../account/user-menu";
 import { NotificationsMenu } from "../notifications/notifications-menu";
@@ -22,6 +23,7 @@ export function HubHeader() {
           <HubHeaderSearch />
           <WalletChip  />
           <CartButton />
+          <LanguageToggle className="rounded-md border border-border-dark bg-surface-card p-2 text-text-secondary hover:border-surface-bright hover:text-white" />
           <ThemeToggle className="rounded-md border border-border-dark bg-surface-card p-2 text-text-secondary hover:border-surface-bright hover:text-white" iconClassName="text-[16px]" />
           <NotificationsMenu trigger="hub" />
           <UserMenu trigger="hub" />

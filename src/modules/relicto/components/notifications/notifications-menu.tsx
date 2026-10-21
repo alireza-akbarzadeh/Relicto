@@ -10,6 +10,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/cn";
 import { useSession, useViewer } from "../../state/session-provider";
+import { useTranslations } from "next-intl";
 import { NotificationItem } from "./notification-item";
 import { PushToggle } from "./push-toggle";
 
@@ -67,6 +68,7 @@ export type NotificationsTrigger = keyof typeof TRIGGERS;
 /** Inner Content shared between Popover and Drawer */
 function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
   const { notifications, unreadCount, markRead, markAllRead } = useSession();
+  const t = useTranslations("notifications");
 
   const openItem = (id: string) => {
     markRead(id);
@@ -79,11 +81,11 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
       <div className="flex items-center justify-between border-b border-white/5 px-4 py-3 bg-surface-container-low/50">
         <div className="flex items-center gap-2">
           <span className="font-headline-sm text-sm font-bold text-text-primary tracking-tight">
-            Notifications
+            {t("title")}
           </span>
           {unreadCount > 0 && (
             <span className="flex items-center justify-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary border border-primary/20">
-              {unreadCount} new
+              {t("newBadge", { count: unreadCount })}
             </span>
           )}
         </div>
@@ -100,7 +102,7 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
               : "cursor-not-allowed text-text-muted opacity-50"
           )}
         >
-          Mark all read
+          {t("markAllRead")}
         </Button>
       </div>
 
@@ -117,7 +119,7 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high/50 text-text-muted">
               <Icon name="notifications" className="text-[20px]" />
             </div>
-            <span className="text-xs text-text-muted">All caught up! No notifications.</span>
+            <span className="text-xs text-text-muted">{t("empty")}</span>
           </div>
         )}
       </div>
@@ -129,7 +131,7 @@ function NotificationsInnerContent({ onClose }: { onClose?: () => void }) {
           onClick={onClose}
           className="group flex w-full items-center justify-center gap-1.5 rounded-lg bg-surface-container-low px-3 py-2 text-xs font-semibold text-text-secondary transition-all hover:bg-surface-container-high hover:text-text-primary active:scale-[0.98]"
         >
-          <span>Open activity ledger</span>
+          <span>{t("openLedger")}</span>
           <Icon
             name="arrow_forward"
             className="text-[14px] transition-transform duration-200 group-hover:translate-x-0.5"

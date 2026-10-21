@@ -8,6 +8,8 @@ import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import type { LedgerRow, OrderFlow, RowAction } from "../../types";
 
+import { useTranslations } from "next-intl";
+
 const TAG = {
   indigo: "bg-secondary-container text-on-secondary-container",
   amber: "bg-tertiary-container text-on-tertiary",
@@ -28,6 +30,8 @@ const TEXT_ACTION =
 const CELL = "px-space-md py-space-md align-middle";
 
 function RowActions({ row }: { row: LedgerRow }) {
+  const t = useTranslations("orders");
+
   const render: Record<RowAction, React.ReactNode> = {
     track: (
       <LinkButton
@@ -35,7 +39,7 @@ function RowActions({ row }: { row: LedgerRow }) {
         href={`/orders/${row.code.replace("#", "")}`}
         className="gap-space-xs rounded border-0 bg-primary-container px-space-md py-1.5 whitespace-normal font-label-caps text-label-caps font-bold text-on-primary-container shadow-[0_0_12px_rgba(244,63,94,0.3)] transition-colors hover:bg-primary"
       >
-        <span>Track Live</span>
+        <span>{t("trackLive")}</span>
         <Icon name="bolt" className="text-[16px]" />
       </LinkButton>
     ),
@@ -65,7 +69,7 @@ function RowActions({ row }: { row: LedgerRow }) {
         href={`/marketplace?q=${encodeURIComponent(row.itemName)}`}
         className={cn(TEXT_ACTION, "text-text-secondary hover:text-text-primary")}
       >
-        Inspect
+        {t("inspect")}
       </LinkButton>
     ),
     "sell-back": (
@@ -74,7 +78,7 @@ function RowActions({ row }: { row: LedgerRow }) {
         href="/sell"
         className={cn(TEXT_ACTION, "text-tertiary-fixed-dim hover:text-tertiary")}
       >
-        Sell Back
+        {t("sellBack")}
       </LinkButton>
     ),
     fingerprint: (
@@ -85,7 +89,7 @@ function RowActions({ row }: { row: LedgerRow }) {
         size={null}
         onClick={() => {
           navigator.clipboard.writeText(row.code);
-          toast.success("Settlement reference copied", { description: row.code });
+          toast.success(t("copiedRef"), { description: row.code });
         }}
         aria-label="Copy liquidation settlement proof"
         className={ICON_ACTION}

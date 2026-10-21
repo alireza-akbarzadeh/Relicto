@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTranslations } from "next-intl";
 import { formatMoney } from "@/lib/format";
 import { useSession, useViewer } from "../../state/session-provider";
 
@@ -17,6 +18,7 @@ export function WalletChip() {
 
 function SignedInWalletChip() {
   const { user } = useSession();
+  const t = useTranslations("shell");
   const balance = formatMoney(user.walletUsd);
 
   return (
@@ -39,7 +41,7 @@ function SignedInWalletChip() {
 
           <Link
             href="/wallet#deposit"
-            aria-label="Deposit funds"
+            aria-label={t("depositFunds")}
             className="group flex h-6 w-6 items-center justify-center rounded-full bg-tertiary-container text-on-tertiary-container transition-all hover:bg-tertiary hover:text-on-tertiary hover:shadow-[0_0_12px_rgba(245,158,11,0.35)]"
           >
             <Icon
@@ -57,16 +59,16 @@ function SignedInWalletChip() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between border-b border-white/5 pb-2">
               <span className="font-label-badge text-[10px] text-text-muted uppercase">
-                Steam Wallet
+                {t("steamWallet")}
               </span>
               <span className="flex items-center gap-1 rounded-full bg-status-live/10 px-1.5 py-0.5 font-label-badge text-[9px] text-status-live">
                 <span className="h-1.5 w-1.5 rounded-full bg-status-live animate-pulse" />
-                Synced
+                {t("synced")}
               </span>
             </div>
 
             <div className="flex items-baseline justify-between">
-              <span className="text-xs text-text-secondary">Available</span>
+              <span className="text-xs text-text-secondary">{t("available")}</span>
               <b className="font-data-mono-md text-sm text-tertiary font-bold">
                 {balance}
               </b>
@@ -77,7 +79,7 @@ function SignedInWalletChip() {
               className="mt-1 flex items-center justify-center gap-1.5 rounded bg-primary-container py-1.5 font-label-caps text-[10px] text-on-primary-container uppercase transition-opacity hover:opacity-90"
             >
               <Icon name="add_circle" className="text-[14px]" />
-              Top-Up Funds
+              {t("topUpFunds")}
             </Link>
           </div>
         </TooltipContent>

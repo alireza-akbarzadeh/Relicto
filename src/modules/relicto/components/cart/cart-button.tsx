@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useTranslations } from "next-intl";
 import { formatMoney } from "@/lib/format";
 import { quote } from "@/modules/checkout/lib/pricing";
 import { useCart } from "../../state/cart-provider";
@@ -27,6 +28,7 @@ function SignedInCartButton() {
   const router = useRouter();
   const { items, count, promo, setPromo, removeItem, clearCart } = useCart();
   const [open, setOpen] = useState(false);
+  const t = useTranslations("cart");
 
   const pricesUsd = items.map((item) => item.price);
   const due = quote(
@@ -68,7 +70,7 @@ function SignedInCartButton() {
               </span>
               <div className="flex min-w-0 items-center gap-2">
                 <SheetTitle className="truncate font-headline-sm text-base font-bold tracking-tight text-text-primary uppercase">
-                  Trade Basket
+                  {t("title")}
                 </SheetTitle>
                 <span className="shrink-0 rounded-full border border-border-subtle bg-surface-container-high px-2 py-0.5 font-data-mono-md text-xs font-semibold text-tertiary">
                   {count}
@@ -84,12 +86,12 @@ function SignedInCartButton() {
                 className="h-auto shrink-0 gap-1 rounded-md border border-border-subtle bg-surface-container-low px-2.5 py-1 font-label-badge text-xs font-medium text-text-muted transition-all hover:border-primary hover:text-primary active:scale-95"
               >
                 <Icon name="delete_sweep" className="text-[16px]" />
-                <span>Clear</span>
+                <span>{t("clear")}</span>
               </Button>
             )}
           </div>
           <SheetDescription className="mt-1 font-body-sm text-xs text-text-muted">
-            Reserved items ready for instant Steam escrow delivery.
+            {t("description")}
           </SheetDescription>
         </SheetHeader>
 
@@ -117,7 +119,7 @@ function SignedInCartButton() {
               >
                 <span className="flex items-center gap-2">
                   <Icon name="lock" className="text-[18px]" />
-                  <span className="text-xs">Review &amp; settle escrow</span>
+                  <span className="text-xs">{t("settleEscrow")}</span>
                 </span>
                 <span className="flex items-center gap-1 font-data-mono-md text-sm">
                   <span>{formatMoney(due / 100)}</span>
@@ -126,7 +128,7 @@ function SignedInCartButton() {
               </Button>
               <p className="flex items-center justify-center gap-1.5 pt-0.5 text-center font-body-sm text-[10px] font-medium text-text-muted">
                 <Icon name="verified_user" className="text-[13px]" />
-                Protected by Valve OpenID 2.0 &amp; multisig escrow
+                {t("escrowProtection")}
               </p>
             </div>
           </SheetFooter>

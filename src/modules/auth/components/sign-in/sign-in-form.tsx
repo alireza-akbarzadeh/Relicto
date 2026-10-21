@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,6 +23,7 @@ const INPUT =
 export function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("auth");
   const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
@@ -59,8 +61,8 @@ export function SignInForm() {
         id="identity"
         name="identity"
         type="text"
-        label="Account Identity"
-        aside={<span className="font-mono text-[11px] text-text-muted">Email or Handle</span>}
+        label={t("accountIdentity")}
+        aside={<span className="font-mono text-[11px] text-text-muted">{t("emailOrHandle")}</span>}
         icon="badge"
         placeholder="user@domain.com or @handle"
         autoComplete="username"
@@ -72,10 +74,10 @@ export function SignInForm() {
       <AuthField
         id="password"
         name="password"
-        label="Security Key / Password"
+        label={t("securityKey")}
         aside={
           <Link href="/reset-password" className="text-xs font-medium text-primary-container transition-colors hover:text-brand-rose-hover">
-            Forgot password?
+            {t("forgotPassword")}
           </Link>
         }
         icon="key"
@@ -94,11 +96,11 @@ export function SignInForm() {
             onCheckedChange={setRemember}
             className="rounded border-white/20 bg-surface-container-lowest"
           />
-          Remember session for 30 days
+          {t("rememberMe")}
         </Label>
         <div className="inline-flex items-center gap-1 rounded-full border border-status-amber/20 bg-surface-container px-2 py-0.5 text-tertiary">
           <Icon name="security" className="text-[13px]" />
-          <span className="font-mono text-[10px] font-bold tracking-wider uppercase">Trusted Node</span>
+          <span className="font-mono text-[10px] font-bold tracking-wider uppercase">{t("trustedNode")}</span>
         </div>
       </div>
       <Button
@@ -106,7 +108,7 @@ export function SignInForm() {
         disabled={pending}
         className="mt-2 h-auto w-full gap-2 rounded-xl bg-primary-container py-3.5 font-display text-sm font-bold tracking-wider text-white uppercase shadow-[0_0_24px_rgba(244,63,94,0.4)] duration-200 hover:bg-rose-500 hover:shadow-[0_0_32px_rgba(244,63,94,0.6)] active:scale-[0.99] disabled:pointer-events-none disabled:opacity-60"
       >
-        <span>{pending ? "Authenticating..." : "Authenticate Session"}</span>
+        <span>{pending ? t("authenticating") : t("authenticate")}</span>
         <Icon name={pending ? "progress_activity" : "lock_open"} className={pending ? "animate-spin text-[18px]" : "text-[18px]"} />
       </Button>
     </form>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { SegmentedTabs } from "@/components/ui/segmented-tabs";
 import type { ProfileTab } from "../../types";
 
@@ -27,16 +28,18 @@ export function ProfileTabs({
   bidsCount = 0,
   reviewCount,
 }: ProfileTabsProps) {
+  const t = useTranslations("profile");
+
   const tabs = [
-    { value: "showcase" as const, content: `Inventory Showcase (${inventoryCount})` },
-    { value: "purchases" as const, content: `My Purchases (${purchasesCount})` },
-    { value: "transactions" as const, content: `Transactions (${transactionsCount})` },
-    { value: "listings" as const, content: `Active Listings (${listingCount})` },
-    { value: "watchlist" as const, content: `Watchlist (${watchlistCount})` },
-    { value: "bids" as const, content: `My Bids (${bidsCount})` },
-    { value: "reviews" as const, content: `Trade Reputation & Reviews (${reviewCount})` },
-    { value: "linked" as const, content: "Linked Steam & API" },
-    { value: "safeguards" as const, content: "Escrow Safeguards" },
+    { value: "showcase" as const, content: t("tabShowcase", { count: inventoryCount }) },
+    { value: "purchases" as const, content: t("tabPurchases", { count: purchasesCount }) },
+    { value: "transactions" as const, content: t("tabTransactions", { count: transactionsCount }) },
+    { value: "listings" as const, content: t("tabListings", { count: listingCount }) },
+    { value: "watchlist" as const, content: t("tabWatchlist", { count: watchlistCount }) },
+    { value: "bids" as const, content: t("tabBids", { count: bidsCount }) },
+    { value: "reviews" as const, content: t("tabReviews", { count: reviewCount }) },
+    { value: "linked" as const, content: t("tabLinked") },
+    { value: "safeguards" as const, content: t("tabSafeguards") },
   ];
 
   return (

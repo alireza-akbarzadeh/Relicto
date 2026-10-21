@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { ProfileMobile } from "@/modules/profile/components/mobile/profile-mobile";
 import { ProfileView } from "@/modules/profile/components/profile-view";
 import { getProfile } from "@/modules/profile/data/get-profile";
 import { getProfileMobile } from "@/modules/profile/data/get-profile-mobile";
 
-export const metadata: Metadata = {
-  title: "Trader Profile",
-  description: "Portfolio appraisal, prized collectibles, active listings and escrow reputation.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  return {
+    title: t("profileTitle"),
+    description: t("profileDesc"),
+  };
+}
 
 /** Separate mobile and desktop compositions; CSS picks one at `md`. */
 export default async function ProfilePage() {

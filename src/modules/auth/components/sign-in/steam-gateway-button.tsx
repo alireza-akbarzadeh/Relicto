@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { useSteamSignIn } from "../../hooks/use-steam-sign-in";
@@ -8,6 +9,8 @@ import { SteamLogo } from "../ui/steam-logo";
 /** Primary "Sign In via Steam" OpenID call to action with its guarantees. */
 export function SteamGatewayButton() {
   const signIn = useSteamSignIn();
+  const t = useTranslations("auth");
+
   return (
     <div className="flex flex-col gap-2">
       <Button
@@ -23,26 +26,26 @@ export function SteamGatewayButton() {
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="font-display text-base font-bold tracking-tight text-white transition-colors group-hover:text-cyan-200">
-                Sign In via Steam
+                {t("steamButton")}
               </span>
               <span className="inline-flex items-center rounded border border-status-upcoming/30 bg-status-upcoming/20 px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider text-status-upcoming uppercase">
-                VERIFIED GATE
+                {t("verifiedGate")}
               </span>
             </div>
-            <span className="mt-0.5 text-xs font-normal text-slate-300">OpenID 2.0 Auth • Instant Vault Sync • Zero Credential Leak</span>
+            <span className="mt-0.5 text-xs font-normal text-slate-300">{t("steamDesc")}</span>
           </div>
         </div>
         <div className="relative z-10 hidden flex-col items-end pl-2 sm:flex">
           <Icon name="arrow_forward" className="text-[22px] text-status-upcoming transition-transform group-hover:translate-x-1" />
-          <span className="font-mono text-[10px] font-medium text-text-secondary uppercase">12ms Handshake</span>
+          <span className="font-mono text-[10px] font-medium text-text-secondary uppercase">{t("handshake")}</span>
         </div>
       </Button>
       <div className="flex items-center justify-between px-2 pt-0.5 text-xs text-text-secondary">
         <span className="flex items-center gap-1.5 text-[11px] font-medium text-cyan-400">
-          <Icon name="verified_user" className="text-[14px]" /> No credentials shared with Relicto
+          <Icon name="verified_user" className="text-[14px]" /> {t("noCredentialsShared")}
         </span>
         <span className="flex items-center gap-1.5 text-[11px] font-medium text-amber-400">
-          <Icon name="shield_with_heart" className="text-[14px]" /> Steam Guard Protected
+          <Icon name="shield_with_heart" className="text-[14px]" /> {t("steamGuardProtected")}
         </span>
       </div>
     </div>

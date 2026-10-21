@@ -11,11 +11,11 @@ const ASSURANCES: { icon: IconName; label: string }[] = [
 export function FooterBrand({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <Link href="/" className="group inline-flex items-center gap-space-sm">
-        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-container shadow-[0_0_12px_rgba(244,63,94,0.3)]">
+      <Link href="/" dir="ltr" className="group inline-flex items-center gap-space-sm text-left select-none">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-container shadow-[0_0_12px_rgba(244,63,94,0.3)]">
           <Icon name="swords" className="text-[20px] text-on-primary-container" />
         </span>
-        <span className="flex flex-col">
+        <span className="flex flex-col text-left">
           <span className="font-headline-sm text-headline-sm font-bold tracking-tight text-text-primary transition-colors group-hover:text-primary">
             Relicto
           </span>

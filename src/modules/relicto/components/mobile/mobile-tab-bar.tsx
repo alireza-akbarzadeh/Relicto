@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { MOBILE_TABS, type MobileTabFamily } from "../../data/mobile-navigation";
@@ -44,6 +47,22 @@ type MobileTabBarProps = {
 /** Fixed bottom navigation of the mobile screens. */
 export function MobileTabBar({ family, active, filled = false }: MobileTabBarProps) {
   const style = STYLE[family];
+  const tNav = useTranslations("nav");
+  const tShell = useTranslations("shell");
+
+  const getTabLabel = (id: string, fallback: string) => {
+    switch (id) {
+      case "market": return tNav("market");
+      case "tracker": return tNav("priceTracker");
+      case "tournaments": return tNav("tournaments");
+      case "vault": return tNav("inventory");
+      case "inventory": return tNav("inventory");
+      case "wallet": return tNav("walletIncome");
+      case "alerts": return tNav("priceAlerts");
+      case "profile": return tShell("traderProfile");
+      default: return fallback;
+    }
+  };
 
   return (
     <nav className={cn("pb-safe fixed bottom-0 z-50 w-full backdrop-blur-xl", style.nav)}>
@@ -62,7 +81,7 @@ export function MobileTabBar({ family, active, filled = false }: MobileTabBarPro
               )}
             >
               <Icon name={tab.icon} filled={filled && current} className={style.icon} />
-              <span className={style.label}>{tab.label}</span>
+              <span className={style.label}>{getTabLabel(tab.id, tab.label)}</span>
               {"dot" in tab && tab.dot && (
                 <span className="absolute top-1 right-2 h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_6px_var(--color-primary-container)]" />
               )}

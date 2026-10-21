@@ -45,7 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       dir={locale === "fa" ? "rtl" : "ltr"}
       data-theme="dark"
       suppressHydrationWarning
-      className={cn(fontVariables, "font-sans")}
+      className={cn(fontVariables, "font-sans", locale === "fa" && "font-vazirmatn")}
     >
       <body className="min-h-screen bg-canvas-base antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>

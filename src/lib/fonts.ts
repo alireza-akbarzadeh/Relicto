@@ -1,10 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Vazirmatn } from "next/font/google";
 
 /**
- * Relicto's two faces. Geist for everything a person reads — headlines,
- * labels, body copy — and Geist Mono for everything a trader reads as a
- * number: prices, deltas, codes, floats. The type roles in
- * `styles/theme/typography.css` map onto these two variables.
+ * Relicto's fonts:
+ * - Geist for English text / UI copy
+ * - Geist Mono for numbers, codes, prices, floats
+ * - Vazirmatn for Persian text (applied dynamically when locale is Persian)
  */
 export const geist = Geist({
   subsets: ["latin"],
@@ -18,4 +18,10 @@ export const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export const fontVariables = [geist, geistMono].map((f) => f.variable).join(" ");
+export const vazirmatn = Vazirmatn({
+  subsets: ["arabic", "latin"],
+  variable: "--font-vazirmatn",
+  display: "swap",
+});
+
+export const fontVariables = [geist, geistMono, vazirmatn].map((f) => f.variable).join(" ");

@@ -24,6 +24,7 @@
   --font-label-badge: var(--font-geist-mono), ui-monospace, monospace;
   --font-data-mono-md: var(--font-geist-mono), ui-monospace, monospace;
   --font-data-mono-lg: var(--font-geist-mono), ui-monospace, monospace;
+  --font-vazirmatn: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
@@ -119,4 +120,47 @@
   .font-label-badge {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Persian typography: use Vazirmatn for Persian locale while keeping English on Geist */
+  html[lang="fa"],
+  html[dir="rtl"],
+  [dir="rtl"] {
+    --font-sans: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-heading: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-body-sm: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-body-md: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-body-lg: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-label-caps: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-sm: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-md: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-lg: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-xl: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-lg-mobile: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-xl-mobile: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-display-hero: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-display-hero-mobile: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Elements explicitly set to dir="ltr" (e.g. brandmarks, code, tokens) restore Geist typography */
+  [dir="ltr"] {
+    --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-heading: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-body-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-body-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-body-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-label-caps: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-sm: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-md: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-lg: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-xl: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-lg-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-headline-xl-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-display-hero: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    --font-display-hero-mobile: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  }
 }
+

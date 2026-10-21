@@ -1,13 +1,17 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { WalletMobile } from "@/modules/wallet/components/mobile/wallet-mobile";
 import { WalletView } from "@/modules/wallet/components/wallet-view";
 import { getWallet, getWalletMobile } from "@/modules/wallet/data/get-wallet";
 
-export const metadata: Metadata = {
-  title: "Wallet & Income",
-  description: "Manage wallet deposits, cashouts, escrow locks and audited treasury activity.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  return {
+    title: t("walletTitle"),
+    description: t("walletDesc"),
+  };
+}
 
 /** Separate mobile and desktop compositions; CSS picks one at `md`. */
 export default async function WalletPage() {

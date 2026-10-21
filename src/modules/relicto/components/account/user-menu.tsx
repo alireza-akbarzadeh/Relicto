@@ -13,6 +13,7 @@ import { authClient } from "@/lib/auth-client";
 import { formatMoney } from "@/lib/format";
 import { ACCOUNT_LINKS } from "../../data/navigation";
 import { useSession, useViewer } from "../../state/session-provider";
+import { useTranslations } from "next-intl";
 import { AvatarImage } from "./avatar-image";
 import { GuestActions } from "./guest-actions";
 import { USER_TRIGGERS } from "./user-triggers";
@@ -24,12 +25,25 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
   const { user } = useSession();
   const router = useRouter();
   const { theme, toggle } = useTheme();
+  const t = useTranslations("shell");
 
   const signOut = async () => {
     await authClient.signOut();
-    toast.success("Signed out", { description: "Your session was closed on this device." });
+    toast.success(t("signedOutToast"), { description: t("signedOutDesc") });
     router.push("/sign-in");
     router.refresh();
+  };
+
+  const getLinkLabel = (href: string, fallback: string) => {
+    switch (href) {
+      case "/dashboard": return t("dashboard");
+      case "/profile": return t("traderProfile");
+      case "/orders": return t("ordersEscrow");
+      case "/wallet": return t("walletIncome");
+      case "/sell": return t("sellItems");
+      case "/verify": return t("securitySteamGuard");
+      default: return fallback;
+    }
   };
 
   return (
@@ -41,7 +55,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
             <span className="flex h-11 w-11 overflow-hidden rounded-xl ring-1 ring-white/10 border border-white/5">
               <AvatarImage user={user} size={44} />
             </span>
-            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-menu-panel bg-status-live" title="Online" />
+            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-menu-panel bg-status-live" title={t("online")} />
           </div>
 
           <div className="flex flex-col min-w-0">
@@ -50,7 +64,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
             </span>
             <div className="flex items-center gap-2 mt-1">
               <span className="rounded bg-amber-500/10 px-1.5 py-0.5 font-data-mono-md text-[10px] font-bold text-amber-400 border border-amber-500/20 uppercase tracking-wider">
-                LVL {user.level}
+                {t("level", { level: user.level })}
               </span>
               <span className="font-label-badge text-[10px] font-semibold text-text-muted uppercase tracking-wider truncate">
                 {user.role}
@@ -63,7 +77,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
         <div className="mt-3.5 flex items-center justify-between rounded-xl bg-surface-container-high/30 px-3 py-2 border border-white/[0.04]">
           <div className="flex flex-col gap-0.5">
             <span className="font-label-caps text-[9px] font-bold uppercase tracking-widest text-text-muted">
-              Steam Wallet
+              {t("steamWallet")}
             </span>
             <span className="font-data-mono-md text-sm font-bold text-amber-400">
               {formatMoney(user.walletUsd)}
@@ -75,7 +89,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
             className="group flex items-center gap-1.5 rounded-lg bg-amber-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-400 border border-amber-500/20 transition-all hover:bg-amber-400 hover:text-black active:scale-95"
           >
             <Icon name="add" className="text-[12px] transition-transform duration-200 group-hover:rotate-90" />
-            <span>Top-Up</span>
+            <span>{t("topUp")}</span>
           </Link>
         </div>
       </div>
@@ -83,7 +97,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
       {/* Navigation Section */}
       <div className="mt-1.5 px-1">
         <span className="block px-2 py-2 font-label-caps text-[10px] font-bold uppercase tracking-widest text-text-muted">
-          Account Management
+          {t("accountManagement")}
         </span>
         {ACCOUNT_LINKS.filter((link) => (link.href === "/dashboard" ? user.role?.toLowerCase() === "admin" : true)).map((link) => (
           <Link
@@ -103,7 +117,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
                   link.href === "/dashboard" ? "text-primary" : "text-text-muted group-hover:text-amber-400"
                 }`}
               />
-              <span>{link.label}</span>
+              <span>{getLinkLabel(link.href, link.label)}</span>
             </div>
             {link.href === "/dashboard" && (
               <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold uppercase tracking-wider">
@@ -123,7 +137,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
           className="group flex w-full items-center gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2.5 text-xs font-medium text-text-secondary transition-all hover:bg-white/5 hover:text-text-primary active:scale-[0.98]"
         >
           <Icon name={theme === "light" ? "dark_mode" : "light_mode"} className="text-[18px] text-text-muted group-hover:text-amber-400" />
-          <span>{theme === "light" ? "Dark mode" : "Light mode"}</span>
+          <span>{theme === "light" ? t("darkMode") : t("lightMode")}</span>
         </Button>
       </div>
 
@@ -139,7 +153,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
           className="group flex w-full items-center gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2.5 text-xs font-semibold text-status-offline transition-all hover:bg-status-offline/10 hover:text-status-offline active:scale-[0.98]"
         >
           <Icon name="logout" className="text-[18px] text-status-offline transition-transform duration-200 group-hover:-translate-x-0.5" />
-          <span>Sign Out</span>
+          <span>{t("signOut")}</span>
         </Button>
       </div>
     </div>

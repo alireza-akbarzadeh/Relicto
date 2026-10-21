@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import type { WalletData } from "../types";
 import { MetricCard } from "./metric-card";
@@ -39,6 +42,8 @@ export function WalletOverview({
   onToSteam: () => void;
   activeAction?: WalletAction;
 }) {
+  const t = useTranslations("wallet");
+
   return (
     <section className="grid grid-cols-1 gap-space-md lg:grid-cols-12">
       {/* Net equity */}
@@ -56,12 +61,12 @@ export function WalletOverview({
               />
 
               <span className="truncate font-label-caps text-label-caps text-text-secondary uppercase">
-                Total Platform Net Equity
+                {t("netEquityTitle")}
               </span>
             </div>
 
             <span className="shrink-0 rounded-full bg-surface-container-high px-2 py-0.5 font-label-badge text-[10px] text-primary uppercase">
-              Steam Connected
+              {t("steamConnected")}
             </span>
           </div>
 
@@ -99,7 +104,7 @@ export function WalletOverview({
             active={activeAction === "deposit"}
             onClick={onDeposit}
           >
-            Deposit
+            {t("deposit")}
           </WalletActionButton>
 
           <WalletActionButton
@@ -108,7 +113,7 @@ export function WalletOverview({
             active={activeAction === "cashout"}
             onClick={onCashout}
           >
-            Cash Out
+            {t("cashOut")}
           </WalletActionButton>
 
           <WalletActionButton
@@ -117,7 +122,7 @@ export function WalletOverview({
             active={activeAction === "steam"}
             onClick={onToSteam}
           >
-            To Steam
+            {t("toSteam")}
           </WalletActionButton>
         </div>
       </div>

@@ -1,12 +1,17 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 
 export function WalletIntro() {
+  const t = useTranslations("wallet");
+
   const badges = [
-    ["verified_user", "SOLVENCY VAULT", "$1,489,200.00", "text-tertiary"],
-    ["phonelink_ring", "STEAM GUARD 2FA", "Armed · 180d+", "text-primary"],
-    ["lock", "COLD STORAGE", "94.2% secured", "text-status-upcoming"],
-    ["bolt", "DISPATCH SLA", "< 120s auto", "text-primary-container"],
+    ["verified_user", t("solvencyVault"), "$1,489,200.00", "text-tertiary"],
+    ["phonelink_ring", t("steamGuard2fa"), "Armed · 180d+", "text-primary"],
+    ["lock", t("coldStorage"), "94.2% secured", "text-status-upcoming"],
+    ["bolt", t("dispatchSla"), "< 120s auto", "text-primary-container"],
   ] as const;
 
   return (
@@ -18,11 +23,11 @@ export function WalletIntro() {
         {/* Header */}
         <div className="min-w-0">
           <div className="mb-space-sm flex flex-wrap items-center gap-x-space-xs gap-y-1 font-label-badge text-[10px] tracking-[0.12em] text-text-muted uppercase">
-            <span>Portal</span>
+            <span>{t("portal")}</span>
             <span className="text-text-muted/40">/</span>
-            <span>Financial Operations</span>
+            <span>{t("financialOps")}</span>
             <span className="text-text-muted/40">/</span>
-            <span className="text-primary">Escrow Wallet &amp; Treasury</span>
+            <span className="text-primary">{t("escrowWallet")}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-space-sm">
@@ -32,17 +37,17 @@ export function WalletIntro() {
             </span>
 
             <h1 className="font-headline-md text-headline-md tracking-[-0.02em] text-text-primary">
-              Treasury Operations
+              {t("title")}
             </h1>
 
             <span className="hidden text-text-muted/30 sm:inline">—</span>
 
             <span className="font-body-md text-text-secondary">
-              Audited Ledger
+              {t("auditedLedger")}
             </span>
 
             <span className="rounded-md border border-outline-variant/30 bg-surface-container-high px-2 py-1 font-data-mono-md text-[10px] tracking-wide text-text-muted">
-              NODE #US-EAST-BOT-09
+              {t("nodeId")}
             </span>
           </div>
         </div>

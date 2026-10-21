@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -16,6 +17,7 @@ const BASE =
  */
 export function GuestActions() {
   const pathname = usePathname();
+  const t = useTranslations("shell");
 
   return (
     <div className="flex shrink-0 items-center gap-2">
@@ -27,7 +29,7 @@ export function GuestActions() {
         )}
       >
         <Icon name="login" className="text-[16px] text-tertiary" />
-        Sign in
+        {t("signIn")}
       </LinkButton>
       <LinkButton
         href={signInHref(pathname, "/sign-up")}
@@ -37,7 +39,7 @@ export function GuestActions() {
         )}
       >
         <Icon name="person_add" className="text-[16px]" />
-        Create account
+        {t("createAccount")}
       </LinkButton>
     </div>
   );

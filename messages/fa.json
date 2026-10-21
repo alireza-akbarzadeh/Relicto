@@ -980,6 +980,15 @@
     "streamRealDesc": "تمام ارقام داده‌های واقعی بازار هستند؛ فریم‌ها هنگام تغییر در لیست‌ها، سفارش‌ها یا قیمت‌ها ارسال می‌شوند.",
     "sse": "رویدادهای سرور (SSE)",
     "postgresListen": "Postgres LISTEN",
-    "polling5s": "پولینگ هر ۵ ثانیه"
+    "polling5s": "پولینگ هر ۵ ثانیه",
+    "liveDepthBook": "دفترچه عمق زنده",
+    "marketBid": "بازار / پیشنهاد خرید",
+    "askMarket": "پیشنهاد فروش / بازار",
+    "snagLowestAsk": "خرید سریع کمترین قیمت {price}",
+    "limitBid": "سفارش محدود",
+    "activeSpreads": "{count} اسپرد فعال",
+    "viewArb": "مشاهده فرصت آربیتراژ",
+    "buyVenue": "خرید از {venue}",
+    "sellVenue": "فروش در {venue}"
   }
 }

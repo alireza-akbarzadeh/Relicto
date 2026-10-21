@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -15,7 +16,9 @@ const TONE = { primary: "text-primary", cyan: "text-status-upcoming", amber: "te
  * market stream's current quote for it (`now`) is the line's live end point.
  */
 export function LiveTerminal({ live, now, span, setSpan }: { live: TrackerLive; now?: SeriesPoint; span: string; setSpan: (span: string) => void }) {
+  const t = useTranslations("tracker");
   const { focus, book } = live;
+
   return (
     <section className="flex flex-col gap-space-md rounded-xl border border-white/8 bg-surface-card p-space-lg shadow-xl">
       <div className="flex flex-col justify-between gap-space-md lg:flex-row lg:items-center">
@@ -29,7 +32,7 @@ export function LiveTerminal({ live, now, span, setSpan }: { live: TrackerLive; 
           </div>
         </div>
         <div className="text-left lg:text-right">
-          <span className="font-label-badge text-label-badge text-text-muted uppercase">Current Best Ask</span>
+          <span className="font-label-badge text-label-badge text-text-muted uppercase">{t("bestAsk")}</span>
           <div className="font-data-mono-lg text-3xl font-bold text-primary">
             {book.bestAsk !== null ? formatMoney(book.bestAsk) : "—"} <span className="text-sm text-text-muted">USD</span>
           </div>
@@ -61,8 +64,8 @@ export function LiveTerminal({ live, now, span, setSpan }: { live: TrackerLive; 
           ))}
         </div>
         <span className="font-body-sm text-[11px] text-text-muted">
-          {live.simulated ? "SIM daily ask (test mode, no feed history yet)" : "Daily lowest Skinport ask · dots are Relicto sales"}
-          {now && " · live end point"}
+          {live.simulated ? t("simDaily") : t("dailySkinport")}
+          {now && t("liveEndPoint")}
         </span>
       </div>
 

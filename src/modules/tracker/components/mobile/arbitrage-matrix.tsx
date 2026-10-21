@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { LinkButton } from "@/components/ui/link-button";
@@ -34,7 +37,7 @@ function Thumb({ card }: { card: Extract<ArbCard, { image: string }> }) {
   );
 }
 
-function Card({ card }: { card: ArbCard }) {
+function Card({ card, t }: { card: ArbCard; t: ReturnType<typeof useTranslations<"tracker">> }) {
   if (card.kind === "compact") {
     const thumb = (
       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-container-highest">
@@ -79,8 +82,8 @@ function Card({ card }: { card: ArbCard }) {
       <Row thumb={<Thumb card={card} />} title={title} detail={card.detail} spread={spread} net={card.net} />
       <div className="grid grid-cols-2 gap-2 rounded-lg bg-surface-container-low p-2 text-center">
         {[
-          { label: `Buy ${card.buy.venue}`, quote: card.buy, tone: "text-text-primary" },
-          { label: `Sell ${card.sell.venue}`, quote: card.sell, tone: "text-tertiary" },
+          { label: t("buyVenue", { venue: card.buy.venue }), quote: card.buy, tone: "text-text-primary" },
+          { label: t("sellVenue", { venue: card.sell.venue }), quote: card.sell, tone: "text-tertiary" },
         ].map((leg) => (
           <div key={leg.label} className="flex flex-col">
             <span className="font-label-badge text-label-badge text-text-muted uppercase">{leg.label}</span>
@@ -93,7 +96,7 @@ function Card({ card }: { card: ArbCard }) {
         className="h-auto min-h-[44px] w-full justify-center gap-1.5 rounded-lg border-0 bg-surface-container-high px-3 py-2.5 font-label-caps text-label-caps font-bold text-primary uppercase transition-all hover:bg-primary hover:text-on-primary active:scale-[0.98]"
       >
         <Icon name="smart_toy" className="text-[18px]" />
-        <span>View Arb Opportunity</span>
+        <span>{t("viewArb")}</span>
       </LinkButton>
     </div>
   );
@@ -101,6 +104,8 @@ function Card({ card }: { card: ArbCard }) {
 
 /** Cross-market spreads worth flipping right now. */
 export function ArbitrageMatrix({ title, cards }: { title: string; cards: ArbCard[] }) {
+  const t = useTranslations("tracker");
+
   return (
     <div className="flex flex-col gap-3 px-4 pt-2">
       <div className="flex items-center justify-between">
@@ -108,10 +113,10 @@ export function ArbitrageMatrix({ title, cards }: { title: string; cards: ArbCar
           <Icon name="query_stats" className="text-[20px] text-primary" />
           <h3 className="font-headline-sm text-headline-sm text-text-primary">{title}</h3>
         </div>
-        <span className="font-label-badge text-label-badge text-tertiary uppercase">{cards.length} Active Spreads</span>
+        <span className="font-label-badge text-label-badge text-tertiary uppercase">{t("activeSpreads", { count: cards.length })}</span>
       </div>
       {cards.map((card) => (
-        <Card key={card.id} card={card} />
+        <Card key={card.id} card={card} t={t} />
       ))}
     </div>
   );

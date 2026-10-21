@@ -980,6 +980,15 @@
     "streamRealDesc": "Every figure is recorded market data; frames arrive when listings, bids or prices change.",
     "sse": "Server-Sent Events",
     "postgresListen": "Postgres LISTEN",
-    "polling5s": "Polling every 5s"
+    "polling5s": "Polling every 5s",
+    "liveDepthBook": "Live Depth Book",
+    "marketBid": "Market / Bid",
+    "askMarket": "Ask / Market",
+    "snagLowestAsk": "Snag Lowest Ask {price}",
+    "limitBid": "Limit Bid",
+    "activeSpreads": "{count} Active Spreads",
+    "viewArb": "View Arb Opportunity",
+    "buyVenue": "Buy {venue}",
+    "sellVenue": "Sell {venue}"
   }
 }

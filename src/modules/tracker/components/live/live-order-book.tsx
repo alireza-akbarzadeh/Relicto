@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -8,7 +9,7 @@ import { useLiveBook } from "../../hooks/use-live-book";
 import { STREAM_STATE } from "../../lib/terminal-format";
 import type { BookLevel, LiveBook } from "../../types";
 
-function Level({ level, side, widest }: { level: BookLevel; side: "ask" | "bid"; widest: number }) {
+function Level({ level, side, widest, t }: { level: BookLevel; side: "ask" | "bid"; widest: number; t: ReturnType<typeof useTranslations<"tracker">> }) {
   const ask = side === "ask";
   return (
     <div className="relative grid grid-cols-[1fr_auto_1fr] items-center overflow-hidden rounded px-2 py-1.5 font-data-mono-md text-[11px]">
@@ -18,7 +19,7 @@ function Level({ level, side, widest }: { level: BookLevel; side: "ask" | "bid";
         style={{ width: `${Math.max(6, (level.quantity / widest) * 100)}%` }}
       />
       <span className={cn("relative font-bold", ask ? "text-primary" : "text-status-upcoming")}>{formatMoney(level.priceUsd)}</span>
-      <span className="relative text-text-muted">{level.quantity} {ask ? "listed" : level.quantity === 1 ? "bid" : "bids"}</span>
+      <span className="relative text-text-muted">{level.quantity} {ask ? t("listed") : t("bids")}</span>
       <span className="relative text-right text-text-primary">{formatMoney(level.priceUsd * level.quantity)}</span>
     </div>
   );
@@ -29,6 +30,7 @@ function Level({ level, side, widest }: { level: BookLevel; side: "ask" | "bid";
  * open offers below, streamed as they change. The best ask sits nearest the spread.
  */
 export function LiveOrderBook({ initial }: { initial: LiveBook }) {
+  const t = useTranslations("tracker");
   const { book, state, changedAt } = useLiveBook(initial);
   const widest = Math.max(1, ...book.asks.map((l) => l.quantity), ...book.bids.map((l) => l.quantity));
   const status = STREAM_STATE[state];
@@ -38,7 +40,7 @@ export function LiveOrderBook({ initial }: { initial: LiveBook }) {
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 font-headline-sm text-headline-sm text-text-primary">
           <Icon name="view_list" className="text-[18px] text-primary" />
-          Order Book
+          {t("orderBook")}
         </h2>
         <span className={cn("flex items-center gap-1.5 font-label-badge text-[10px] uppercase", status.tone)}>
           <span className={cn("h-1.5 w-1.5 rounded-full", status.dot)} />
@@ -48,24 +50,24 @@ export function LiveOrderBook({ initial }: { initial: LiveBook }) {
 
       <div key={changedAt ?? 0} className="flex flex-col gap-1 animate-in fade-in-50 duration-300">
         <div className="grid grid-cols-[1fr_auto_1fr] px-2 font-label-badge text-[10px] text-text-muted uppercase">
-          <span>Price</span>
-          <span>Size</span>
-          <span className="text-right">Total</span>
+          <span>{t("colPrice")}</span>
+          <span>{t("colSize")}</span>
+          <span className="text-right">{t("colTotal")}</span>
         </div>
-        {[...book.asks].reverse().map((level) => <Level key={`a-${level.priceUsd}`} level={level} side="ask" widest={widest} />)}
-        {book.asks.length === 0 && <span className="px-2 py-2 font-body-sm text-xs text-text-muted">No copies listed.</span>}
+        {[...book.asks].reverse().map((level) => <Level key={`a-${level.priceUsd}`} level={level} side="ask" widest={widest} t={t} />)}
+        {book.asks.length === 0 && <span className="px-2 py-2 font-body-sm text-xs text-text-muted">{t("noAsks")}</span>}
         <div className="my-1 flex items-center justify-between rounded bg-surface-container-lowest px-2 py-1.5 font-data-mono-md text-[11px]">
-          <span className="text-text-muted uppercase">Spread</span>
+          <span className="text-text-muted uppercase">{t("spread")}</span>
           <span className="font-bold text-tertiary">
             {book.spreadUsd !== null ? `${formatMoney(book.spreadUsd)} (${book.spreadPct?.toFixed(2)}%)` : "—"}
           </span>
         </div>
-        {book.bids.map((level) => <Level key={`b-${level.priceUsd}`} level={level} side="bid" widest={widest} />)}
-        {book.bids.length === 0 && <span className="px-2 py-2 font-body-sm text-xs text-text-muted">No open offers yet.</span>}
+        {book.bids.map((level) => <Level key={`b-${level.priceUsd}`} level={level} side="bid" widest={widest} t={t} />)}
+        {book.bids.length === 0 && <span className="px-2 py-2 font-body-sm text-xs text-text-muted">{t("noBids")}</span>}
       </div>
 
       <div className="flex justify-between rounded bg-surface-container-lowest px-2 py-2 font-label-badge text-[10px] text-text-muted uppercase">
-        <span>Listed depth <b className="text-status-upcoming">{formatMoney(book.depthUsd)}</b></span>
+        <span>{t("listedDepth")} <b className="text-status-upcoming">{formatMoney(book.depthUsd)}</b></span>
         <span>{new Date(book.at).toLocaleTimeString("en-US", { hour12: false })}</span>
       </div>
       <LinkButton
@@ -73,7 +75,7 @@ export function LiveOrderBook({ initial }: { initial: LiveBook }) {
         className="h-auto gap-1 rounded bg-primary-container py-2 font-label-caps text-label-caps font-bold text-on-primary-container uppercase"
       >
         <Icon name="bolt" className="text-[16px]" />
-        {book.bestAsk !== null ? `Buy best ask (${formatMoney(book.bestAsk)})` : "Open the item"}
+        {book.bestAsk !== null ? t("buyBestAsk", { price: formatMoney(book.bestAsk) }) : t("openItem")}
       </LinkButton>
     </section>
   );

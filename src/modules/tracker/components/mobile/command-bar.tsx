@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -11,6 +12,7 @@ import type { TrackerMobileData } from "../../mobile.types";
 
 /** Thumb-zone actions: take the lowest ask into checkout, or set a limit bid alert. */
 export function CommandBar({ data }: { data: TrackerMobileData }) {
+  const t = useTranslations("tracker");
   const router = useRouter();
   const { items, addItem } = useCart();
   const { active } = useDopplerPhase(data.phases, data.defaultPhase);
@@ -48,14 +50,14 @@ export function CommandBar({ data }: { data: TrackerMobileData }) {
         className="col-span-2 h-auto min-h-[48px] gap-2 rounded-xl border-0 bg-primary-container px-4 py-3 font-headline-sm text-headline-sm font-bold tracking-wider text-on-primary-container uppercase shadow-lg shadow-primary-container/20 transition-transform active:scale-[0.98]"
       >
         <Icon name="bolt" className="text-[20px]" />
-        <span className="truncate">Snag Lowest Ask {formatMoney(active.priceUsd, { whole: true })}</span>
+        <span className="truncate">{t("snagLowestAsk", { price: formatMoney(active.priceUsd, { whole: true }) })}</span>
       </Button>
       <LinkButton
         href="/alerts"
         className="col-span-1 h-auto min-h-[48px] gap-1 rounded-xl border-0 bg-surface-container-high px-3 py-3 font-label-caps text-label-caps font-bold text-text-primary uppercase transition-transform active:scale-[0.98]"
       >
         <Icon name="add_task" className="text-[18px]" />
-        <span>Limit Bid</span>
+        <span>{t("limitBid")}</span>
       </LinkButton>
     </div>
   );

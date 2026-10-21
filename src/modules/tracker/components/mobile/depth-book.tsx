@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -7,11 +10,13 @@ import type { DepthLevel } from "../../mobile.types";
 type Side = "bid" | "ask";
 
 function Column({ side, levels }: { side: Side; levels: DepthLevel[] }) {
+  const t = useTranslations("tracker");
+
   return (
     <div className="flex flex-col gap-1.5 rounded-lg bg-surface-container-low p-2">
       <div className="flex justify-between font-label-badge text-label-badge text-text-muted uppercase">
-        <span>{side === "bid" ? "Market / Bid" : "Ask / Market"}</span>
-        <span>Price</span>
+        <span>{side === "bid" ? t("marketBid") : t("askMarket")}</span>
+        <span>{t("colPrice")}</span>
       </div>
       {levels.map((level, index) => {
         const best = index === 0;
@@ -43,16 +48,18 @@ function Column({ side, levels }: { side: Side; levels: DepthLevel[] }) {
 
 /** Best three bids and asks across venues, with the live spread. */
 export function DepthBook({ bids, asks }: { bids: DepthLevel[]; asks: DepthLevel[] }) {
+  const t = useTranslations("tracker");
+
   return (
     <div className="px-4">
       <div className="flex flex-col gap-2 rounded-xl bg-surface-container p-3 shadow-lg">
         <div className="flex items-center justify-between pb-1">
           <div className="flex items-center gap-1">
             <Icon name="waterfall_chart" className="text-[16px] text-text-secondary" />
-            <span className="font-label-caps text-label-caps text-text-primary uppercase">Live Depth Book</span>
+            <span className="font-label-caps text-label-caps text-text-primary uppercase">{t("liveDepthBook")}</span>
           </div>
           <div className="rounded bg-surface-container-high px-2 py-0.5 font-label-badge text-label-badge text-tertiary">
-            Spread: <strong>{formatSpread(bids, asks)}</strong>
+            {t("spread")}: <strong>{formatSpread(bids, asks)}</strong>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2">

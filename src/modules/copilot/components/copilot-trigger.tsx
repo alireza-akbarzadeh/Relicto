@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Bot, Sparkles, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CopilotTriggerProps {
   open: boolean;
@@ -9,13 +10,15 @@ interface CopilotTriggerProps {
 }
 
 export function CopilotTrigger({ open, onClick }: CopilotTriggerProps) {
+  const t = useTranslations("copilot.trigger");
+
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label={open ? "Close Sentinel AI Copilot" : "Open Sentinel AI Trader Copilot"}
-      title={open ? "Close Copilot (⌘K)" : "Open Sentinel AI Copilot (⌘K)"}
-      className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-50 group flex items-center gap-2.5 p-3 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-700 text-white shadow-[0_10px_30px_rgba(244,63,94,0.45),0_0_20px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_35px_rgba(244,63,94,0.65),0_0_30px_rgba(244,63,94,0.5)] border border-rose-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
+      aria-label={open ? t("closeLabel") : t("openLabel")}
+      title={open ? t("closeTitle") : t("openTitle")}
+      className="fixed bottom-20 sm:bottom-6 end-4 sm:end-6 z-50 group flex items-center gap-2.5 p-3 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-700 text-white shadow-[0_10px_30px_rgba(244,63,94,0.45),0_0_20px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_35px_rgba(244,63,94,0.65),0_0_30px_rgba(244,63,94,0.5)] border border-rose-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
     >
       {/* Outer ambient glow */}
       <span className="absolute -inset-1 rounded-full bg-rose-500/30 blur-md pointer-events-none group-hover:bg-rose-500/50 transition-colors" />
@@ -37,12 +40,12 @@ export function CopilotTrigger({ open, onClick }: CopilotTriggerProps) {
         </div>
 
         {/* Desktop pill text label */}
-        <span className="hidden sm:flex items-center gap-1.5 pr-1.5 font-display text-xs font-bold tracking-wide select-none">
-          <span>{open ? "Close Copilot" : "Sentinel Copilot"}</span>
+        <span className="hidden sm:flex items-center gap-1.5 pe-1.5 font-display text-xs font-bold tracking-wide select-none">
+          <span>{open ? t("closeBtn") : t("openBtn")}</span>
           {!open && (
             <span className="flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-white/20 text-white font-semibold">
               <Sparkles className="size-2.5 text-amber-300" />
-              AI
+              {t("aiBadge")}
             </span>
           )}
         </span>

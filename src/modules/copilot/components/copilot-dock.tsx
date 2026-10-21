@@ -1,12 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { CopilotTrigger } from "./copilot-trigger";
 import { CopilotWindow } from "./copilot-window";
 
 export function CopilotDock() {
+  const t = useTranslations("copilot.dock");
   const [open, setOpen] = React.useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -43,9 +45,9 @@ export function CopilotDock() {
       {isMobile ? (
         <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
           <DrawerContent className="h-[92vh] max-h-[92vh] bg-[#0e121b] border-t border-rose-500/30 p-0 overflow-hidden flex flex-col">
-            <DrawerTitle className="sr-only">Sentinel AI Trader Copilot</DrawerTitle>
+            <DrawerTitle className="sr-only">{t("drawerTitle")}</DrawerTitle>
             <DrawerDescription className="sr-only">
-              Steam Trade Guardian, Cooldown Advisor, and Escrow Sentinel
+              {t("drawerDesc")}
             </DrawerDescription>
             <CopilotWindow onClose={() => setOpen(false)} isMobile />
           </DrawerContent>
@@ -53,7 +55,7 @@ export function CopilotDock() {
       ) : (
         /* Desktop Experience: Fixed Floating Tactical Window */
         open && (
-          <div className="fixed bottom-24 right-6 z-50 w-[540px] max-w-[calc(100vw-3rem)] h-[780px] max-h-[calc(100vh-7.5rem)] animate-in fade-in slide-in-from-bottom-4 duration-200">
+          <div className="fixed bottom-24 end-6 z-50 w-[540px] max-w-[calc(100vw-3rem)] h-[780px] max-h-[calc(100vh-7.5rem)] animate-in fade-in slide-in-from-bottom-4 duration-200">
             <CopilotWindow onClose={() => setOpen(false)} />
           </div>
         )

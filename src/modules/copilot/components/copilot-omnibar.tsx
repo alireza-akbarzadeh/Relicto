@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Link as LinkIcon, Code2, Mic, Send } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { SLASH_COMMANDS } from "../data/copilot-knowledge";
 
 interface CopilotOmnibarProps {
@@ -11,6 +12,7 @@ interface CopilotOmnibarProps {
 }
 
 export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps) {
+  const t = useTranslations("copilot.omnibar");
   const [input, setInput] = React.useState("");
   const [cooldown, setCooldown] = React.useState(0);
 
@@ -30,15 +32,15 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
 
   const handleCommandClick = (cmd: string) => {
     if (cmd === "/escrow") {
-      onSendMessage("Audit active trade escrow and verify Sentinel tradebot status.");
+      onSendMessage(t("slashEscrow"));
     } else if (cmd === "/cache-guide") {
-      onSendMessage("Ali, how do Collector's Cache gift trades and the 31-day Steam friend hold work? I'm buying for the first time.");
+      onSendMessage(t("slashCache"));
     } else if (cmd === "/float-check") {
-      onSendMessage("What are the CS2 wear float ranges and how does float wear transfer work in trade-ups?");
+      onSendMessage(t("slashFloat"));
     } else if (cmd === "/api-key-audit") {
-      onSendMessage("How do I perform a Steam Web API key audit to verify if my account has been compromised?");
+      onSendMessage(t("slashApiKey"));
     } else if (cmd === "/payout-calc") {
-      onSendMessage("What are the platform fees on Relicto and how is net payout calculated on instant crypto cashouts?");
+      onSendMessage(t("slashPayout"));
     } else {
       setInput(`${cmd} `);
     }
@@ -49,10 +51,10 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
       const text = await navigator.clipboard.readText();
       if (text.includes("steamcommunity.com") || text.includes("tradeoffer")) {
         setInput(text);
-        toast.success("Pasted Steam trade URL into inspector");
+        toast.success(t("toastTradePasted"));
       } else {
         setInput("https://steamcommunity.com/tradeoffer/new/?partner=94821&token=SEC-XXXX");
-        toast.info("Inserted sample Steam trade offer link for inspection");
+        toast.info(t("toastSampleTrade"));
       }
     } catch {
       setInput("https://steamcommunity.com/tradeoffer/new/?partner=94821&token=SEC-XXXX");
@@ -64,7 +66,7 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
       {/* Quick Slash Commands Rail */}
       <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-[10.5px] font-mono text-slate-400 pb-0.5">
         <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold shrink-0">
-          Commands:
+          {t("commandsLabel")}
         </span>
         {SLASH_COMMANDS.map((c) => (
           <button
@@ -89,7 +91,7 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
             value={input}
             disabled={disabled}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Ali anything (e.g. 'How does Collector's Cache gift trade work?', trade URL, or /cmd)..."
+            placeholder={t("placeholder")}
             className="w-full bg-transparent text-slate-100 placeholder-slate-500 text-xs focus:outline-none font-sans"
           />
         </div>
@@ -100,7 +102,7 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
             <button
               type="button"
               onClick={handlePasteTradeUrl}
-              title="Paste Trade URL / Steam Offer link"
+              title={t("tradeUrlTooltip")}
               className="p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
             >
               <LinkIcon className="size-4" />
@@ -109,33 +111,33 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
               type="button"
               onClick={() => {
                 setInput('{"trade_offer_id": "94821", "method": "IEconService/GetTradeOffer"}');
-                toast.info("Loaded sample Steam API telemetry JSON");
+                toast.info(t("toastJsonLoaded"));
               }}
-              title="Paste Steam API debug JSON"
+              title={t("jsonDebugTooltip")}
               className="p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
             >
               <Code2 className="size-4" />
             </button>
             <button
               type="button"
-              onClick={() => toast.info("Voice inquiry mode activated")}
-              title="Voice Query"
+              onClick={() => toast.info(t("toastVoiceActive"))}
+              title={t("voiceTooltip")}
               className="p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
             >
               <Mic className="size-4" />
             </button>
-            <span className="text-[10px] font-mono text-slate-500 hidden sm:inline ml-1.5 bg-[#161c28] px-2 py-0.5 rounded border border-slate-800">
-              ⌘ + K prompt
+            <span className="text-[10px] font-mono text-slate-500 hidden sm:inline ms-1.5 bg-[#161c28] px-2 py-0.5 rounded border border-slate-800">
+              {t("shortcutHint")}
             </span>
           </div>
 
           <button
             type="submit"
             disabled={disabled || !input.trim() || cooldown > 0}
-            title={cooldown > 0 ? `Rate limit cooldown (${cooldown}s)` : "Send message"}
+            title={cooldown > 0 ? t("rateLimit", { seconds: cooldown }) : t("send")}
             className="bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white min-w-[34px] h-[34px] rounded-lg transition-all shadow-md shadow-rose-950/40 active:scale-95 flex items-center justify-center cursor-pointer font-mono text-[11px] font-bold"
           >
-            {cooldown > 0 ? `${cooldown}s` : <Send className="size-3.5" />}
+            {cooldown > 0 ? `${cooldown}s` : <Send className="size-3.5 rtl:rotate-180" />}
           </button>
         </div>
       </form>
@@ -144,9 +146,9 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
       <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-1 pt-0.5">
         <span className="flex items-center gap-1.5 text-slate-400">
           <span className="size-1.5 rounded-full bg-emerald-400" />
-          Escrow Anti-Phishing Shield v4.8
+          {t("shield")}
         </span>
-        <span>Valve Partner Certified</span>
+        <span>{t("certified")}</span>
       </div>
     </div>
   );

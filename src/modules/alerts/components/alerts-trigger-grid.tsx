@@ -1,26 +1,16 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { AlertStatus, PriceAlert } from "../types";
 
-export const ALERT_STATUS_CONFIG: Record<
-  AlertStatus,
-  { label: string; tone: string; dot: string }
-> = {
-  armed: {
-    label: "ARMED / PERSIST",
-    tone: "text-status-upcoming",
-    dot: "bg-status-upcoming",
-  },
-  triggered: {
-    label: "ACTIVE (8/10 UNITS)",
-    tone: "text-primary",
-    dot: "bg-primary",
-  },
-  paused: { label: "PAUSED", tone: "text-text-muted", dot: "bg-text-muted" },
+export const ALERT_STATUS_TONE: Record<AlertStatus, { tone: string; dot: string }> = {
+  armed: { tone: "text-status-upcoming", dot: "bg-status-upcoming" },
+  triggered: { tone: "text-primary", dot: "bg-primary" },
+  paused: { tone: "text-text-muted", dot: "bg-text-muted" },
 };
 
 export function TriggerGrid({
@@ -30,33 +20,43 @@ export function TriggerGrid({
   alerts: PriceAlert[];
   onToggle: (id: string) => void;
 }) {
+  const t = useTranslations("alerts.triggerGrid");
+
+  const statusLabel: Record<AlertStatus, string> = {
+    armed: t("statusArmed"),
+    triggered: t("statusTriggered"),
+    paused: t("statusPaused"),
+  };
+
+  const headers = [
+    t("thName"),
+    t("thLogic"),
+    t("thThreshold"),
+    t("thStatus"),
+    t("thYield"),
+    t("thActions"),
+  ];
+
   return (
     <section className="rounded-xl bg-surface-card p-space-lg shadow-xl">
       <div className="mb-space-md flex items-center justify-between">
         <div>
           <h2 className="font-headline-md text-headline-md text-text-primary">
-            Active Algorithmic Trigger Grid
+            {t("title")}
           </h2>
           <span className="font-label-badge text-[10px] text-text-muted uppercase">
-            Real-time execution state &amp; historical ML ledger
+            {t("subtitle")}
           </span>
         </div>
         <span className="font-label-badge text-[10px] text-status-live uppercase">
-          High Concurrency
+          {t("highConcurrency")}
         </span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-225 text-left">
           <thead className="bg-surface-container-lowest font-label-caps text-[10px] text-text-muted uppercase">
             <tr>
-              {[
-                "Rule Name & Target",
-                "Logic Profile",
-                "Threshold vs Current",
-                "Auto-Execution Status",
-                "Historical ML / Yield",
-                "Actions",
-              ].map((head) => (
+              {headers.map((head) => (
                 <th key={head} className="px-3 py-3">
                   {head}
                 </th>
@@ -74,26 +74,28 @@ export function TriggerGrid({
                   <span className="font-label-badge text-[10px] text-text-muted">{alert.detail}</span>
                 </td>
                 <td className="px-3 py-3 font-data-mono-md text-text-secondary">
-                  Ask &lt; {alert.target} + Float &lt; 0.012
+                  {t("askCondition", { target: alert.target })}
                 </td>
                 <td className="px-3 py-3">
                   <b className="font-data-mono-md text-tertiary">{alert.target}</b>
-                  <span className="block font-label-badge text-[10px] text-text-muted">vs {alert.current}</span>
+                  <span className="block font-label-badge text-[10px] text-text-muted">
+                    {t("vs", { price: alert.current })}
+                  </span>
                 </td>
                 <td className="px-3 py-3">
                   <span
                     className={cn(
                       "flex items-center gap-1 font-label-badge text-[10px] uppercase",
-                      ALERT_STATUS_CONFIG[alert.status].tone,
+                      ALERT_STATUS_TONE[alert.status].tone,
                     )}
                   >
-                    <span className={cn("h-1.5 w-1.5 rounded-full", ALERT_STATUS_CONFIG[alert.status].dot)} />
-                    {ALERT_STATUS_CONFIG[alert.status].label}
+                    <span className={cn("h-1.5 w-1.5 rounded-full", ALERT_STATUS_TONE[alert.status].dot)} />
+                    {statusLabel[alert.status]}
                   </span>
-                  <span className="font-label-badge text-[10px] text-text-muted">6ms websocket latency</span>
+                  <span className="font-label-badge text-[10px] text-text-muted">{t("latency")}</span>
                 </td>
                 <td className="px-3 py-3 font-data-mono-md text-status-upcoming">
-                  +${(alert.id === "a1" ? 1420 : 3250).toLocaleString()} NET
+                  {t("net", { amount: (alert.id === "a1" ? 1420 : 3250).toLocaleString() })}
                 </td>
                 <td className="px-3 py-3 text-right">
                   <div className="flex justify-end gap-1">
@@ -102,19 +104,19 @@ export function TriggerGrid({
                       variant={null}
                       size={null}
                       onClick={() => {
-                        toast.success(`Simulation passed: ${alert.item}`, {
-                          description: "Trigger evaluation passed with 6ms simulated latency.",
+                        toast.success(t("simPassed", { item: alert.item }), {
+                          description: t("simDesc"),
                         });
                       }}
                       className="inline-flex cursor-pointer items-center justify-center rounded bg-surface-container-high px-2 py-1 font-label-caps text-[10px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest"
                     >
-                      Test
+                      {t("test")}
                     </Button>
                     <Button
                       variant={null}
                       size="icon-xs"
                       onClickCapture={() => onToggle(alert.id)}
-                      aria-label={`Toggle ${alert.item}`}
+                      aria-label={t("toggleAria", { item: alert.item })}
                       className="bg-primary-container text-on-primary-container"
                     >
                       <Icon name="sync_alt" className="text-[13px]" />

@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { TONE_TEXT } from "../../lib/mobile";
@@ -5,14 +8,16 @@ import type { DispatchChannel } from "../../mobile.types";
 
 /** Where triggered alerts are delivered, with link health. */
 export function DispatchChannels({ channels }: { channels: DispatchChannel[] }) {
+  const t = useTranslations("alerts.mobile");
+
   return (
     <section className="flex flex-col gap-space-sm rounded-xl bg-surface-container-low p-space-md shadow-md">
       <div className="flex items-center justify-between">
         <h4 className="flex items-center gap-1.5 font-headline-sm text-headline-sm text-text-primary">
-          <Icon name="hub" className="text-[18px] text-tertiary" /> Tactical Dispatch Channels
+          <Icon name="hub" className="text-[18px] text-tertiary" /> {t("channelsTitle")}
         </h4>
         <span className="font-label-badge text-label-badge text-emerald-400 uppercase">
-          {channels.length} / {channels.length} Healthy
+          {t("healthy", { count: channels.length, total: channels.length })}
         </span>
       </div>
       <div className="flex flex-col gap-space-xs">

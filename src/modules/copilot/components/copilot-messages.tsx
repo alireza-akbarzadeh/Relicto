@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Check, CheckCircle2, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import type { CopilotMessage, TradeDiagnostic } from "../types";
 
 interface CopilotMessagesProps {
@@ -12,6 +13,8 @@ interface CopilotMessagesProps {
 
 export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const t = useTranslations("copilot.messages");
+  const tDiag = useTranslations("copilot.diagnostic");
 
   React.useEffect(() => {
     if (scrollRef.current) {
@@ -21,7 +24,7 @@ export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    toast.success(`Copied ${label} to clipboard`);
+    toast.success(tDiag("toastCopied", { label }));
   };
 
   return (
@@ -32,7 +35,7 @@ export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
       {/* Session time marker */}
       <div className="flex justify-center my-1">
         <span className="text-[10px] font-mono text-slate-500 bg-[#141926] px-3.5 py-1 rounded-full border border-slate-800/80">
-          SESSION ENCRYPTED • AES-256 GCM • VALVE GATEWAY ACTIVE
+          {t("sessionEncrypted")}
         </span>
       </div>
 
@@ -42,16 +45,16 @@ export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
         if (!isBot) {
           return (
             <div key={m.id} className="flex gap-3 items-start justify-end">
-              <div className="space-y-1.5 max-w-[85%] text-right">
-                <div className="bg-rose-600 text-white rounded-2xl rounded-tr-sm p-3.5 leading-relaxed shadow-md shadow-rose-950/30 text-left">
+              <div className="space-y-1.5 max-w-[85%] text-end">
+                <div className="bg-rose-600 text-white rounded-2xl rounded-tr-sm p-3.5 leading-relaxed shadow-md shadow-rose-950/30 text-start">
                   <p className="font-medium">{m.content}</p>
                 </div>
-                <span className="text-[10px] font-mono text-slate-500 pr-1">
+                <span className="text-[10px] font-mono text-slate-500 pe-1">
                   {m.timestamp} {m.tag ? `• ${m.tag}` : ""}
                 </span>
               </div>
               <div className="size-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold text-slate-300">
-                U
+                {t("userAvatar")}
               </div>
             </div>
           );
@@ -60,7 +63,7 @@ export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
         return (
           <div key={m.id} className="flex gap-3 items-start">
             <div className="size-8 rounded-lg bg-rose-600/20 border border-rose-500/40 flex items-center justify-center shrink-0 mt-0.5">
-              <span className="text-rose-400 text-xs font-bold font-mono">AI</span>
+              <span className="text-rose-400 text-xs font-bold font-mono">{t("aiAvatar")}</span>
             </div>
             <div className="space-y-2.5 max-w-[90%]">
               <div className="bg-[#161c2b] border border-[#252c3e] rounded-2xl rounded-tl-sm p-4 text-slate-200 space-y-3.5 shadow-md">
@@ -68,8 +71,8 @@ export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
 
                 <p className="text-slate-300 text-xs leading-relaxed whitespace-pre-wrap">{m.content}</p>
               </div>
-              <span className="text-[10px] font-mono text-slate-500 pl-1">
-                {m.timestamp} • Sentinel Neural Safeguard
+              <span className="text-[10px] font-mono text-slate-500 ps-1">
+                {m.timestamp} • {t("botTag")}
               </span>
             </div>
           </div>
@@ -79,13 +82,13 @@ export function CopilotMessages({ messages, loading }: CopilotMessagesProps) {
       {loading && (
         <div className="flex gap-3 items-start">
           <div className="size-8 rounded-lg bg-rose-600/20 border border-rose-500/40 flex items-center justify-center shrink-0 mt-0.5">
-            <span className="text-rose-400 text-xs font-bold font-mono">AI</span>
+            <span className="text-rose-400 text-xs font-bold font-mono">{t("aiAvatar")}</span>
           </div>
           <div className="bg-[#161c2b] border border-[#252c3e] rounded-2xl rounded-tl-sm p-3.5 text-slate-400 flex items-center gap-2">
             <span className="size-1.5 rounded-full bg-rose-500 animate-bounce" />
             <span className="size-1.5 rounded-full bg-rose-500 animate-bounce delay-100" />
             <span className="size-1.5 rounded-full bg-rose-500 animate-bounce delay-200" />
-            <span className="text-[11px] font-mono ml-1">Analyzing Valve Webhook Telemetry...</span>
+            <span className="text-[11px] font-mono ms-1">{t("analyzing")}</span>
           </div>
         </div>
       )}
@@ -100,42 +103,44 @@ function DiagnosticCard({
   diag: TradeDiagnostic;
   onCopy: (text: string, label: string) => void;
 }) {
+  const t = useTranslations("copilot.diagnostic");
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between pb-2.5 border-b border-slate-800">
         <div className="flex items-center gap-2">
           <span className="size-2 rounded-full bg-emerald-400" />
           <span className="font-display font-bold text-white text-xs tracking-wide">
-            TRADE SECURITY DIAGNOSTIC
+            {t("title")}
           </span>
         </div>
         <span className="text-[10.5px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-0.5 rounded font-semibold">
-          100% VERIFIED
+          {t("verified")}
         </span>
       </div>
 
       <div className="bg-[#0d1017] rounded-xl p-3 border border-[#1f2637] font-mono text-[11px] space-y-2">
         <div className="flex items-center justify-between text-slate-400">
-          <span>Inspected Asset:</span>
+          <span>{t("inspectedAsset")}</span>
           <span className="text-white font-semibold">{diag.assetName}</span>
         </div>
         <div className="flex items-center justify-between text-slate-400">
-          <span>Counterparty:</span>
+          <span>{t("counterparty")}</span>
           <span className="text-cyan-400 flex items-center gap-1.5">
             <strong>{diag.counterparty}</strong>
             {diag.counterpartyLevel && (
               <span className="text-[9.5px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                Lvl {diag.counterpartyLevel}
+                {t("lvl", { level: diag.counterpartyLevel })}
               </span>
             )}
           </span>
         </div>
         <div className="flex items-center justify-between text-slate-400">
-          <span>SteamID64:</span>
+          <span>{t("steamId")}</span>
           <span className="text-slate-200 text-[10px] select-all font-mono">{diag.steamId64}</span>
         </div>
         <div className="flex items-center justify-between text-slate-400">
-          <span>Escrow Status:</span>
+          <span>{t("escrowStatus")}</span>
           <span className="text-emerald-400 font-bold flex items-center gap-1">
             <Check className="size-3.5" />
             {diag.escrowStatus}
@@ -145,7 +150,7 @@ function DiagnosticCard({
 
       <div className="space-y-1.5 pt-0.5">
         <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
-          Sentinel Safety Verification:
+          {t("safetyVerif")}
         </span>
         <div className="space-y-1.5 text-[11px] font-mono text-slate-300">
           {diag.checks.map((check, i) => (
@@ -160,11 +165,11 @@ function DiagnosticCard({
       <div className="grid grid-cols-2 gap-2.5 pt-1 font-mono text-xs">
         <button
           type="button"
-          onClick={() => toast.success(`Offer ${diag.tradeId} verified safe to confirm`)}
+          onClick={() => toast.success(t("toastSafe", { tradeId: diag.tradeId }))}
           className="py-2 px-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md shadow-rose-950/40 active:scale-[0.98] transition-all"
         >
           <Check className="size-3.5" />
-          <span>Confirm Offer</span>
+          <span>{t("confirmOffer")}</span>
         </button>
         <button
           type="button"
@@ -172,7 +177,7 @@ function DiagnosticCard({
           className="py-2 px-3 bg-[#1e2536] hover:bg-[#252f44] text-slate-200 font-medium rounded-lg border border-[#2b354d] flex items-center justify-center gap-1.5 transition-colors"
         >
           <Copy className="size-3.5 text-slate-400" />
-          <span>Copy SteamID64</span>
+          <span>{t("copySteamId")}</span>
         </button>
       </div>
     </div>

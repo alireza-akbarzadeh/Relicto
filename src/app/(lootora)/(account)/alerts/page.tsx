@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { AlertsView } from "@/modules/alerts/components/alerts-view";
 import { AlertsMobile } from "@/modules/alerts/components/mobile/alerts-mobile";
 import { getAlerts, getAlertsMobile } from "@/modules/alerts/data/get-alerts";
 
-export const metadata: Metadata = { title: "Price Alerts", description: "Monitor item prices and receive market movement alerts." };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  return {
+    title: t("alertsTitle"),
+    description: t("alertsDesc"),
+  };
+}
 
 /** Separate mobile and desktop compositions; CSS picks one at `md`. */
 export default async function AlertsPage() {

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import type { CommunityTone } from "@/modules/community/types";
@@ -45,11 +46,12 @@ export function Condition({
 }
 
 export function Gate() {
+  const t = useTranslations("alerts.ruleBuilder");
   return (
     <div className="-my-1 flex items-center justify-center gap-2">
       <span className="h-px w-12 bg-surface-container-highest" />
       <span className="rounded bg-surface-container px-2 py-0.5 font-label-badge text-[10px] text-secondary">
-        LOGIC GATE: [AND]
+        {t("logicGate")}
       </span>
       <span className="h-px w-12 bg-surface-container-highest" />
     </div>
@@ -69,6 +71,7 @@ export function Action({
   meta: string;
   tone: CommunityTone;
 }) {
+  const t = useTranslations("alerts.ruleBuilder");
   return (
     <div className="flex flex-col gap-2 rounded-lg bg-surface-container-low p-space-md">
       <div className="flex items-center justify-between">
@@ -76,7 +79,7 @@ export function Action({
           <Icon name={icon} className={cn("text-[20px]", ALERTS_TONE[tone])} />
           {title}
         </span>
-        <span className={cn("font-label-badge text-[10px] uppercase", ALERTS_TONE[tone])}>Enabled</span>
+        <span className={cn("font-label-badge text-[10px] uppercase", ALERTS_TONE[tone])}>{t("enabled")}</span>
       </div>
       <p className="text-xs text-text-secondary">{body}</p>
       <span className="mt-auto font-data-mono-md text-[10px] text-tertiary">{meta}</span>

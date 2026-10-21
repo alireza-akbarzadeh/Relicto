@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { SiteFooter } from "@/modules/relicto/components/shell/site-footer";
 import { StudioHeader } from "@/modules/relicto/components/shell/studio-header";
 import { setAlertArmed } from "../actions/rules";
@@ -12,6 +13,8 @@ import { ExecutionTerminal, Performance } from "./alerts-terminal";
 import { TriggerGrid } from "./alerts-trigger-grid";
 
 export function AlertsView({ alerts: initial }: { alerts: PriceAlert[] }) {
+  const tMobile = useTranslations("alerts.mobile");
+  const tBuilder = useTranslations("alerts.ruleBuilder");
   const [alerts, setAlerts] = useState(initial);
   const [paused, setPaused] = useState(false);
   const setStatus = (id: string, status: AlertStatus) =>
@@ -28,7 +31,7 @@ export function AlertsView({ alerts: initial }: { alerts: PriceAlert[] }) {
       })
       .catch(() => {
         setStatus(id, before);
-        toast.error("Couldn't update the rule", { description: "Check your connection and try again." });
+        toast.error(tMobile("updateError"), { description: tBuilder("checkConnection") });
       });
   };
 

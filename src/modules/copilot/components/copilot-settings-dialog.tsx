@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Settings, Cpu, ShieldCheck, Bell, Volume2, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -34,11 +35,12 @@ export function CopilotSettingsDialog({
   pushEnabled,
   onPushChange,
 }: CopilotSettingsDialogProps) {
+  const t = useTranslations("copilot.settings");
   const [selected, setSelected] = React.useState(activeModel);
 
   const AVAILABLE_MODELS = [
-    { id: "gemini-3.8-flash", label: "Gemini 3.8 Flash (Recommended)", desc: "Ultra-fast multimodal reasoning & trade security" },
-    { id: "gemini-3.5-flash-lite", label: "Gemini 3.5 Flash-Lite", desc: "Highest throughput, ultra-low latency execution" },
+    { id: "gemini-3.8-flash", label: t("modelFlashLabel"), desc: t("modelFlashDesc") },
+    { id: "gemini-3.5-flash-lite", label: t("modelLiteLabel"), desc: t("modelLiteDesc") },
   ];
 
   const handleSave = () => {
@@ -63,10 +65,10 @@ export function CopilotSettingsDialog({
         <DialogHeader>
           <DialogTitle className="text-sm font-display font-bold text-white flex items-center gap-2">
             <Settings className="size-4 text-rose-400" />
-            Sentinel AI Model &amp; Alert Parameters
+            {t("title")}
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-400">
-            Configure Google AI Studio Gemini rails, sound chimes, and push notifications.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -75,7 +77,7 @@ export function CopilotSettingsDialog({
           <div className="space-y-1.5">
             <label className="text-[11px] font-mono text-slate-300 flex items-center gap-1.5">
               <Cpu className="size-3.5 text-cyan-400" />
-              Active Gemini Model
+              {t("activeModelLabel")}
             </label>
             <div className="space-y-1.5">
               {AVAILABLE_MODELS.map((m) => (
@@ -104,7 +106,7 @@ export function CopilotSettingsDialog({
           <div className="space-y-1.5">
             <label className="text-[11px] font-mono text-slate-300 flex items-center gap-1.5">
               <Bell className="size-3.5 text-rose-400" />
-              Response Alerts &amp; Notifications
+              {t("alertsLabel")}
             </label>
             <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
               <button
@@ -118,7 +120,7 @@ export function CopilotSettingsDialog({
               >
                 <span className="flex items-center gap-1.5">
                   <Volume2 className="size-3.5" />
-                  Sound Chime
+                  {t("soundChime")}
                 </span>
                 {soundEnabled && <Check className="size-3 text-emerald-400" />}
               </button>
@@ -134,7 +136,7 @@ export function CopilotSettingsDialog({
               >
                 <span className="flex items-center gap-1.5">
                   <Bell className="size-3.5" />
-                  Push Alerts
+                  {t("pushAlerts")}
                 </span>
                 {pushEnabled && getPushPermissionStatus() === "granted" && (
                   <Check className="size-3 text-cyan-400" />
@@ -146,13 +148,13 @@ export function CopilotSettingsDialog({
           {/* Key & Project telemetry */}
           <div className="p-2.5 rounded-xl bg-[#090c12] border border-[#1d2331] space-y-1 font-mono text-[10px] text-slate-400">
             <div className="flex items-center justify-between">
-              <span>Google Cloud Project:</span>
+              <span>{t("gcpProject")}</span>
               <span className="text-slate-200">projects/305955647874</span>
             </div>
             <div className="flex items-center justify-between">
-              <span>Gemini API Key:</span>
+              <span>{t("apiKey")}</span>
               <span className="text-emerald-400 flex items-center gap-1">
-                <ShieldCheck className="size-3" /> Configured &amp; Verified
+                <ShieldCheck className="size-3" /> {t("keyConfigured")}
               </span>
             </div>
           </div>
@@ -166,7 +168,7 @@ export function CopilotSettingsDialog({
             onClick={() => onOpenChange(false)}
             className="text-xs font-mono"
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             type="button"
@@ -174,7 +176,7 @@ export function CopilotSettingsDialog({
             onClick={handleSave}
             className="bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs shadow-md"
           >
-            Apply Settings
+            {t("apply")}
           </Button>
         </DialogFooter>
       </DialogContent>

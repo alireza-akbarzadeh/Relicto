@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Volume2, VolumeX, RotateCcw, Settings, X, Shield, HelpCircle, MessageSquare, Bell, BellOff } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import type { CopilotMode } from "../types";
 
@@ -28,6 +29,7 @@ export function CopilotHeader({
   onOpenSettings,
   onClose,
 }: CopilotHeaderProps) {
+  const t = useTranslations("copilot.header");
   return (
     <header className="px-5 pt-4 pb-3 bg-[#131724]/90 backdrop-blur-md border-b border-[#23293c] flex flex-col shrink-0 z-10 gap-3">
       <div className="flex items-center justify-between">
@@ -51,17 +53,20 @@ export function CopilotHeader({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-display font-bold text-sm text-white tracking-wide flex items-center gap-1.5">
-                SENTINEL AI <span className="text-rose-400 font-mono text-[10px] px-1.5 py-0.2 rounded bg-rose-500/15 border border-rose-500/30">&quot;ALI&quot;</span>
+                {t("title")}{" "}
+                <span className="text-rose-400 font-mono text-[10px] px-1.5 py-0.2 rounded bg-rose-500/15 border border-rose-500/30">
+                  {t("alias")}
+                </span>
               </h1>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold border border-emerald-500/30 flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                ONLINE
+                {t("online")}
               </span>
             </div>
             <p className="text-[11px] font-mono text-slate-400 flex items-center gap-2 mt-0.5">
-              <span>Ali • Escrow Guardian v4.8</span>
+              <span>{t("subtitleAli")}</span>
               <span className="text-slate-600">•</span>
-              <span className="text-cyan-400 font-medium">Valve Dev Gateway</span>
+              <span className="text-cyan-400 font-medium">{t("subtitleGateway")}</span>
             </p>
           </div>
         </div>
@@ -73,7 +78,7 @@ export function CopilotHeader({
             variant="ghost"
             size="xs"
             onClick={onToggleAudio}
-            title={audioEnabled ? "Mute audio readout" : "Enable audio readout"}
+            title={audioEnabled ? t("muteAudio") : t("enableAudio")}
             className="p-1.5 size-8 hover:bg-white/5 hover:text-white"
           >
             {audioEnabled ? <Volume2 className="size-4 text-rose-400" /> : <VolumeX className="size-4" />}
@@ -85,7 +90,7 @@ export function CopilotHeader({
               variant="ghost"
               size="xs"
               onClick={onTogglePush}
-              title={pushEnabled ? "Push notifications active (Click to mute)" : "Enable desktop push notifications"}
+              title={pushEnabled ? t("pushActive") : t("enablePush")}
               className="p-1.5 size-8 hover:bg-white/5 hover:text-white"
             >
               {pushEnabled ? <Bell className="size-4 text-cyan-400" /> : <BellOff className="size-4 text-slate-500" />}
@@ -97,7 +102,7 @@ export function CopilotHeader({
             variant="ghost"
             size="xs"
             onClick={onClearSession}
-            title="Clear session"
+            title={t("clearSession")}
             className="p-1.5 size-8 hover:bg-white/5 hover:text-white"
           >
             <RotateCcw className="size-4" />
@@ -108,7 +113,7 @@ export function CopilotHeader({
             variant="ghost"
             size="xs"
             onClick={onOpenSettings}
-            title="Settings & API Model"
+            title={t("settings")}
             className="p-1.5 size-8 hover:bg-white/5 hover:text-white"
           >
             <Settings className="size-4" />
@@ -120,7 +125,7 @@ export function CopilotHeader({
               variant="ghost"
               size="xs"
               onClick={onClose}
-              title="Close window"
+              title={t("closeWindow")}
               className="p-1.5 size-8 hover:bg-rose-500/20 hover:text-rose-300"
             >
               <X className="size-4" />
@@ -141,7 +146,7 @@ export function CopilotHeader({
           }`}
         >
           <MessageSquare className="size-3.5" />
-          <span>Copilot</span>
+          <span>{t("tabCopilot")}</span>
         </button>
 
         <button
@@ -154,7 +159,7 @@ export function CopilotHeader({
           }`}
         >
           <Shield className="size-3.5 text-amber-400" />
-          <span>Quick Audit</span>
+          <span>{t("tabAudit")}</span>
         </button>
 
         <button
@@ -167,7 +172,7 @@ export function CopilotHeader({
           }`}
         >
           <HelpCircle className="size-3.5 text-cyan-400" />
-          <span>FAQ & Codex</span>
+          <span>{t("tabCodex")}</span>
         </button>
       </div>
     </header>

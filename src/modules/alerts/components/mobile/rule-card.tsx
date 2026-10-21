@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -13,6 +14,7 @@ import { useAlertRules } from "../../state/alert-rules-provider";
 const LABEL = "font-label-badge text-label-badge text-text-secondary uppercase";
 
 function ArmSwitch({ rule }: { rule: AlertRule }) {
+  const t = useTranslations("alerts.mobile");
   const { toggle } = useAlertRules();
   return (
     <Button
@@ -21,7 +23,7 @@ function ArmSwitch({ rule }: { rule: AlertRule }) {
       role="switch"
       aria-checked={rule.armed}
       aria-label={`Arm ${rule.name}`}
-      onClick={() => toast(toggle(rule.id) ? "Sniper rule armed & live" : "Rule paused", { description: rule.name })}
+      onClick={() => toast(toggle(rule.id) ? t("ruleArmedLive") : t("rulePaused"), { description: rule.name })}
       className={cn(
         "h-6 w-11 shrink-0 rounded-full border-0 p-0.5 shadow-inner transition-colors",
         rule.armed ? "justify-end bg-primary-container" : "justify-start bg-surface-variant",
@@ -33,6 +35,7 @@ function ArmSwitch({ rule }: { rule: AlertRule }) {
 }
 
 function PingButton({ message }: { message: string }) {
+  const t = useTranslations("alerts.mobile");
   const [polling, setPolling] = useState(false);
   const ping = () => {
     setPolling(true);
@@ -50,7 +53,7 @@ function PingButton({ message }: { message: string }) {
       className="h-auto gap-1 rounded-lg border-0 bg-surface-container px-2.5 py-1 font-label-badge text-label-badge font-semibold text-text-primary transition-all hover:bg-surface-variant disabled:opacity-100"
     >
       <Icon name={polling ? "sync" : "cell_tower"} className={cn("text-[13px]", polling ? "animate-spin text-emerald-400" : "text-tertiary")} />
-      {polling ? "Polling..." : "Test Ping"}
+      {polling ? t("polling") : t("testPing")}
     </Button>
   );
 }

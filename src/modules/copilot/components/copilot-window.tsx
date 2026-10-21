@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { CopilotHeader } from "./copilot-header";
 import { CopilotTelemetry } from "./copilot-telemetry";
 import { CopilotQuickCodex } from "./copilot-quick-codex";
@@ -10,7 +11,6 @@ import { CopilotOmnibar } from "./copilot-omnibar";
 import { CopilotSettingsDialog } from "./copilot-settings-dialog";
 import { sendChatMessageAction } from "../actions/copilot-chat";
 import { resolveSentinelLocalKnowledge } from "../data/copilot-resolver";
-import { INITIAL_COPILOT_MESSAGES } from "../data/copilot-initial";
 import { playSentinelChime } from "../utils/copilot-sound";
 import { sendPushNotification, requestPushPermission } from "../utils/copilot-notify";
 import type { CopilotMessage, CopilotMode, TradeDiagnostic } from "../types";
@@ -21,7 +21,34 @@ interface CopilotWindowProps {
 }
 
 export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
-  const [messages, setMessages] = React.useState<CopilotMessage[]>(INITIAL_COPILOT_MESSAGES);
+  const tInit = useTranslations("copilot.initial");
+  const tToasts = useTranslations("copilot.toasts");
+
+  const buildInitialMessages = React.useCallback((): CopilotMessage[] => [
+    {
+      id: "init-welcome",
+      role: "assistant",
+      content: tInit("welcome"),
+      timestamp: tInit("timestamp"),
+      diagnostic: {
+        tradeId: "#94821",
+        assetName: tInit("assetName"),
+        counterparty: "@DendiLover99",
+        counterpartyLevel: 148,
+        steamId64: "76561198034821990",
+        escrowStatus: tInit("escrowStatus"),
+        isVerified: true,
+        floatValue: "0.0821 (Field-Tested)",
+        checks: [
+          tInit("check1"),
+          tInit("check2"),
+          tInit("check3"),
+        ],
+      },
+    },
+  ], [tInit]);
+
+  const [messages, setMessages] = React.useState<CopilotMessage[]>(() => buildInitialMessages());
   const [loading, setLoading] = React.useState(false);
   const [mode, setMode] = React.useState<CopilotMode>("copilot");
   const [model, setModel] = React.useState("gemini-3.8-flash");
@@ -56,7 +83,7 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
         });
         if (fetchRes.ok || fetchRes.status === 429) {
           result = await fetchRes.json();
-          if (fetchRes.status === 429) toast.warning("Rate limit active: cooling down");
+          if (fetchRes.status === 429) toast.warning(tToasts("rateLimit"));
         }
       } catch {
         // Fallback to Tier 2
@@ -135,9 +162,9 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
           setSoundEnabled(!soundEnabled);
           if (!soundEnabled) {
             playSentinelChime();
-            toast.success("Sound alert chime enabled");
+            toast.success(tToasts("soundEnabled"));
           } else {
-            toast.info("Sound alert chime muted");
+            toast.info(tToasts("soundMuted"));
           }
         }}
         pushEnabled={pushEnabled}
@@ -146,18 +173,18 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
             const perm = await requestPushPermission();
             if (perm === "granted") {
               setPushEnabled(true);
-              toast.success("Desktop push notifications enabled");
+              toast.success(tToasts("pushEnabled"));
             } else {
-              toast.error("Browser blocked notifications. Check site permissions.");
+              toast.error(tToasts("pushBlocked"));
             }
           } else {
             setPushEnabled(false);
-            toast.info("Push notifications muted");
+            toast.info(tToasts("pushMuted"));
           }
         }}
         onClearSession={() => {
-          setMessages(INITIAL_COPILOT_MESSAGES);
-          toast.info("Sentinel session cleared");
+          setMessages(buildInitialMessages());
+          toast.info(tToasts("sessionCleared"));
         }}
         onOpenSettings={() => setSettingsOpen(true)}
         onClose={onClose}
@@ -179,7 +206,7 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
         activeModel={model}
         onModelChange={(newModel) => {
           setModel(newModel);
-          toast.success(`Active model updated to ${newModel}`);
+          toast.success(tToasts("modelUpdated", { model: newModel }));
         }}
         soundEnabled={soundEnabled}
         onSoundChange={setSoundEnabled}

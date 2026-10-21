@@ -1,19 +1,27 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
-import { countFor, FILTER_LABEL, matchesFilter, ruleFilterParam } from "../../lib/mobile";
-import { RULE_FILTERS } from "../../mobile.types";
+import { countFor, matchesFilter, ruleFilterParam } from "../../lib/mobile";
+import { RULE_FILTERS, type RuleFilter } from "../../mobile.types";
 import { useAlertRules } from "../../state/alert-rules-provider";
 import { RuleCard } from "./rule-card";
 
 /** Filter chips (`?kind=`, counts from the live rule book) and the trigger cards. */
 export function RuleFeed({ onTune }: { onTune: () => void }) {
+  const t = useTranslations("alerts.mobile");
   const { rules } = useAlertRules();
   const [filter, setFilter] = useQueryState("kind", ruleFilterParam.withOptions({ history: "replace", clearOnDefault: true }));
   const shown = rules.filter((rule) => matchesFilter(rule, filter));
+
+  const filterLabel: Record<RuleFilter, string> = {
+    all: t("filterAll"),
+    snipe: t("filterSnipe"),
+    arb: t("filterArb"),
+  };
 
   return (
     <>
@@ -31,7 +39,7 @@ export function RuleFeed({ onTune }: { onTune: () => void }) {
                 filter === option ? "bg-primary-container text-on-primary-container shadow-xs" : "bg-surface-container-low text-text-secondary hover:text-text-primary",
               )}
             >
-              {FILTER_LABEL[option]} ({countFor(rules, option)})
+              {filterLabel[option]} ({countFor(rules, option)})
             </Button>
           ))}
         </div>

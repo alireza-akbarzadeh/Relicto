@@ -13,7 +13,7 @@ export function MarketMobileHeader() {
     <header className="pt-safe fixed top-0 z-50 w-full bg-surface-deep/80 shadow-[0_4px_24px_rgba(0,0,0,0.5)] backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between gap-space-sm px-space-md">
         <div className="flex items-center gap-space-sm">
-          <Link href="/marketplace" className="flex items-center gap-space-xs">
+          <Link href="/marketplace" dir="ltr" className="flex items-center gap-space-xs text-left select-none">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-card shadow-[0_0_12px_rgba(244,63,94,0.3)]">
               <Icon name="token" className="text-[20px] text-primary" />
             </span>
@@ -40,11 +40,11 @@ export function LinkedMobileHeader() {
   return (
     <header className="pt-safe fixed top-0 z-50 w-full bg-surface-dim/80 shadow-[0_1px_8px_rgba(0,0,0,0.4)] backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between gap-space-sm px-margin">
-        <Link href="/" className="flex min-w-0 items-center gap-space-sm">
+        <Link href="/" dir="ltr" className="flex min-w-0 items-center gap-space-sm text-left select-none">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-container shadow-[inset_0_0_12px_rgba(244,63,94,0.15)]">
             <Icon name="token" className="text-[20px] text-primary-container" />
           </span>
-          <span className="flex min-w-0 flex-col">
+          <span className="flex min-w-0 flex-col text-left">
             <span className="truncate font-headline-sm text-headline-sm leading-none tracking-tight text-text-primary">RELICTO</span>
             <span className="flex items-center gap-1.5 pt-0.5">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
@@ -68,11 +68,11 @@ export function IntelMobileHeader() {
   return (
     <header className="pt-safe fixed top-0 z-50 w-full bg-surface-deep/85 shadow-[0_1px_8px_rgba(0,0,0,0.35)] backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between px-space-md">
-        <Link href="/" className="flex items-center gap-space-sm">
+        <Link href="/" dir="ltr" className="flex items-center gap-space-sm text-left select-none">
           <span className="flex h-9 w-9 items-center justify-center rounded bg-surface-container font-headline-sm font-bold tracking-tighter text-primary">
             RL
           </span>
-          <span className="flex flex-col">
+          <span className="flex flex-col text-left">
             <span className="flex items-center gap-1">
               <span className="font-headline-sm text-headline-sm tracking-tight text-primary-container uppercase">Relicto</span>
               <span className="flex items-center gap-1 rounded bg-surface-container-high px-1.5 py-0.5 font-label-badge text-label-badge text-status-upcoming">

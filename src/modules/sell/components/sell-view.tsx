@@ -17,6 +17,7 @@ import { InventoryList } from "./inventory-list";
 import { ListingFocus } from "./listing-focus";
 import { TradeUpChamber } from "./mobile/trade-up-chamber";
 import { SellGuarantee } from "./sell-guarantee";
+import { SellerGuideBanner } from "./seller-guide-banner";
 import { SellTelemetry } from "./sell-telemetry";
 import { SellerHero } from "./seller-hero";
 
@@ -97,6 +98,8 @@ export function SellView({
           gameCounts={data.gameCounts}
         />
       </main>
+
+      <SellerGuideBanner steam={data.steam} />
 
       <section className="w-full px-margin-desktop py-space-lg">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-start gap-space-lg lg:grid-cols-12">

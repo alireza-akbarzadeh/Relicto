@@ -4,6 +4,7 @@ import { MobileTabBar } from "@/modules/relicto/components/mobile/mobile-tab-bar
 import type { SellMobile as SellMobileData } from "../../mobile.types";
 import { BulkCashout } from "./bulk-cashout";
 import { MobileOffersInbox } from "./mobile-offers-inbox";
+import { SellerGuideBanner } from "../seller-guide-banner";
 import { TradeUpChamber } from "./trade-up-chamber";
 import { VaultStrip } from "./vault-strip";
 
@@ -15,6 +16,7 @@ export function SellMobile({ data, offers = [] }: { data: SellMobileData; offers
       <main className="relative flex min-h-screen w-full flex-col bg-surface pt-16 pb-24">
         <div className="flex w-full flex-col pb-6">
           <VaultStrip vault={data.vault} />
+          <SellerGuideBanner className="px-3 pt-3" />
           <TradeUpChamber contract={data.contract} />
           <BulkCashout cashout={data.cashout} />
           <MobileOffersInbox offers={offers} />

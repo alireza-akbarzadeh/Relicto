@@ -4,14 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { SteamIcon } from "@/components/ui/steam-icon";
@@ -174,6 +167,26 @@ export function SteamConnectModal({
                 Load Demo
               </Button>
             </div>
+          </div>
+
+          <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-[11px]">
+            <a
+              href="https://steamcommunity.com/my/edit/settings"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-tertiary hover:underline"
+            >
+              <span>آموزش عمومی‌سازی استیم</span>
+              <Icon name="open_in_new" className="text-[11px]" />
+            </a>
+            <Link
+              href="/user/kyc"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center gap-1 font-bold text-primary hover:underline"
+            >
+              <Icon name="verified_user" className="text-[12px]" />
+              <span>شروع احراز هویت</span>
+            </Link>
           </div>
         </div>
       </DialogContent>

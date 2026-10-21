@@ -9,6 +9,7 @@ import { SteamIcon } from "@/components/ui/steam-icon";
 import { seedTestInventoryAction, syncSteamInventory } from "../actions/inventory";
 import type { SteamSync } from "../types";
 import { SteamConnectModal } from "./steam-connect-modal";
+import { SteamTutorialModal } from "./steam-tutorial-modal";
 
 /** What the inventory rail says when there's nothing in it to list — and why. */
 export function InventoryEmpty({ steam }: { steam: SteamSync }) {
@@ -84,6 +85,16 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
             <SteamIcon className="h-4 w-4" />
             <span>OpenID Sign-In</span>
           </LinkButton>
+          <SteamTutorialModal />
+          <LinkButton
+            href="/user/kyc"
+            variant="default"
+            size="sm"
+            className="h-auto gap-1.5 rounded-lg bg-primary px-3 py-2 font-headline-sm text-xs font-bold tracking-wider text-white uppercase shadow-md hover:bg-primary/90"
+          >
+            <Icon name="verified_user" className="text-[15px]" />
+            <span>شروع احراز هویت</span>
+          </LinkButton>
           <Button
             variant="secondary"
             size="sm"
@@ -107,20 +118,21 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
       <div className="flex flex-col gap-1">
         <span className="font-headline-sm text-sm font-semibold text-text-primary">
           {privateInventory
-            ? "Your Steam inventory is private"
+            ? "اینونتوری استیم شما خصوصی (Private) است"
             : rateLimited
               ? "Steam rate limit active"
               : "Nothing here to list for this game"}
         </span>
         <span className="max-w-sm font-body-sm text-xs text-text-secondary">
           {privateInventory
-            ? "Set Inventory to Public in Steam › Edit Profile › Privacy Settings, then press Sync."
+            ? "برای نمایش و قیمت‌گذاری آیتم‌ها، در تنظیمات حریم خصوصی استیم گزینه Inventory را روی Public قرار دهید."
             : rateLimited
               ? "Valve is rate-limiting inventory pulls right now. You can retry shortly or test with demo items."
               : "Only marketable items appear. You can sync again or load demo items for immediate testing."}
         </span>
       </div>
       <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
+        {privateInventory && <SteamTutorialModal />}
         <Button
           variant="outline"
           size="sm"
@@ -131,6 +143,15 @@ export function InventoryEmpty({ steam }: { steam: SteamSync }) {
           <Icon name="sync" className="text-[15px]" />
           <span>Sync Now</span>
         </Button>
+        <LinkButton
+          href="/user/kyc"
+          variant="default"
+          size="sm"
+          className="h-auto gap-1.5 rounded-lg bg-primary px-3 py-2 font-headline-sm text-xs font-bold tracking-wider text-white uppercase shadow-md hover:bg-primary/90"
+        >
+          <Icon name="verified_user" className="text-[15px]" />
+          <span>شروع احراز هویت</span>
+        </LinkButton>
         <Button
           variant="secondary"
           size="sm"

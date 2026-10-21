@@ -19,7 +19,7 @@ import { linkSteamAccountAction, seedTestInventoryAction } from "../actions/inve
 import type { SteamSync } from "../types";
 
 export function SteamConnectModal({
-  steam: _steam,
+  steam,
   trigger,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
@@ -109,6 +109,18 @@ export function SteamConnectModal({
         </DialogHeader>
 
         <div className="mt-2 flex flex-col gap-4">
+          {steam?.linked && (
+            <div className="flex items-center justify-between rounded-lg border border-status-live/30 bg-status-live/10 px-3 py-2 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-status-live animate-pulse" />
+                <span className="font-semibold text-text-primary">Steam Account Linked</span>
+              </div>
+              <span className="font-data-mono-md text-[11px] text-text-muted">
+                {steam.itemCount} items · {steam.synced ?? "Synced"}
+              </span>
+            </div>
+          )}
+
           <div className="flex flex-col gap-2 rounded-lg border border-white/[0.08] bg-surface-container-lowest p-3">
             <label htmlFor="steam-id-input" className="font-label-caps text-[10px] font-bold tracking-wider text-text-muted uppercase">
               Enter SteamID64 or Steam Trade URL

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, eq, gt, inArray, isNotNull, lt, notExists, or, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, isNotNull, notExists, or, sql } from "drizzle-orm";
 import { escrowEvents, ledgerEntries, orderItems, orders, tradeOffers, walletAccounts } from "@/lib/db/schema";
 import type { Executor } from "../notifications/notifications.repository";
 

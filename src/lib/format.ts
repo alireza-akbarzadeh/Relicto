@@ -4,14 +4,36 @@ const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD
 const moneyWhole = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 const count = new Intl.NumberFormat("en-US");
 
-/** 118.5 → "$118.50"; `{ whole: true }` → "$119". */
-export function formatMoney(amount: number, { whole = false } = {}) {
-  return (whole ? moneyWhole : money).format(amount);
+const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+
+/** Converts English digits (0-9) to Persian-Indic digits (۰-۹). */
+export function toPersianDigits(value: string | number): string {
+  const str = String(value);
+  return str.replace(/[0-9]/g, (w) => persianDigits[+w] ?? w);
 }
 
-/** 1248 → "1,248" */
-export function formatCount(value: number) {
-  return count.format(value);
+/** 118.5 → "$118.50"; `{ whole: true }` → "$119". Localizes to Persian digits when `locale === "fa"`. */
+export function formatMoney(
+  amount: number,
+  { whole = false, locale = "en" }: { whole?: boolean; locale?: string } = {}
+) {
+  const formatted = (whole ? moneyWhole : money).format(amount);
+  if (locale === "fa") {
+    return toPersianDigits(formatted);
+  }
+  return formatted;
+}
+
+/** 1248 → "1,248". Localizes to Persian digits when `locale === "fa"`. */
+export function formatCount(
+  value: number,
+  { locale = "en" }: { locale?: string } = {}
+) {
+  const formatted = count.format(value);
+  if (locale === "fa") {
+    return toPersianDigits(formatted);
+  }
+  return formatted;
 }
 
 /** 8.6 → "+8.6%", -2.1 → "-2.1%" */

@@ -3,8 +3,9 @@
 import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
-import { orders, profiles, reviews } from "@/lib/db/schema";
+import { orders, profiles, reviews, user } from "@/lib/db/schema";
 import { requireUserId } from "@/modules/relicto/data/get-session";
+import { findOrOpenProfile, findProfile } from "@/server/modules/profile/profile.repository";
 
 export type SubmitVendorReviewInput = {
   code: string;
@@ -58,15 +59,47 @@ export async function submitVendorReview(
     return { success: false, error: "This order was fulfilled by an automated bot node without a vendor profile." };
   }
 
-  // 2. Find seller profile & buyer profile
-  const [[sellerProfile], [buyerProfile]] = await Promise.all([
-    db.select().from(profiles).where(eq(profiles.userId, order.sellerId)).limit(1),
-    db.select().from(profiles).where(eq(profiles.userId, userId)).limit(1),
-  ]);
+  // 2. Find seller profile & buyer profile (bootstrap if missing)
+  let sellerProfile = await findOrOpenProfile(order.sellerId);
+
+  if (!sellerProfile) {
+    const fallbackName = order.sellerId === "seed-seller-relicto" ? "Relicto_Vault" : "Vendor";
+    await db
+      .insert(user)
+      .values({
+        id: order.sellerId,
+        name: fallbackName,
+        email: `${order.sellerId}@relicto.local`,
+        emailVerified: true,
+        image: "/images/lootora/avatar.jpg",
+      })
+      .onConflictDoNothing();
+
+    sellerProfile = await findOrOpenProfile(order.sellerId);
+  }
+
+  if (!sellerProfile) {
+    const fallbackHandle = order.sellerId === "seed-seller-relicto" ? "Relicto_Vault" : "Vendor";
+    const [created] = await db
+      .insert(profiles)
+      .values({
+        id: `profile-${order.sellerId}`,
+        userId: order.sellerId,
+        handle: fallbackHandle,
+        role: "Vendor",
+        avatar: "/images/lootora/avatar.jpg",
+        trustScore: 990,
+      })
+      .onConflictDoNothing()
+      .returning();
+    sellerProfile = created ?? (await findProfile(order.sellerId));
+  }
 
   if (!sellerProfile) {
     return { success: false, error: "Vendor profile not found." };
   }
+
+  const buyerProfile = await findOrOpenProfile(userId);
 
   const tagPrefix = input.tags && input.tags.length > 0 ? `[${input.tags.join(", ")}] ` : "";
   const fullQuote = `${tagPrefix}${quote}`;

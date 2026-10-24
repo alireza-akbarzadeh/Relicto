@@ -140,6 +140,11 @@
     --font-headline-xl-mobile: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
     --font-display-hero: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
     --font-display-hero-mobile: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+    --font-data-mono-md: var(--font-vazirmatn), var(--font-geist-mono), ui-monospace, monospace;
+    --font-data-mono-lg: var(--font-vazirmatn), var(--font-geist-mono), ui-monospace, monospace;
+    --font-label-badge: var(--font-vazirmatn), var(--font-geist-mono), ui-monospace, monospace;
+    --font-mono: var(--font-vazirmatn), var(--font-geist-mono), ui-monospace, monospace;
+    --font-data: var(--font-vazirmatn), var(--font-geist-mono), ui-monospace, monospace;
     font-family: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
   }
 

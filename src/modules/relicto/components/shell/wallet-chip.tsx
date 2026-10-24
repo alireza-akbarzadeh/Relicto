@@ -7,7 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { formatMoney } from "@/lib/format";
 import { useSession, useViewer } from "../../state/session-provider";
 
@@ -19,7 +19,8 @@ export function WalletChip() {
 function SignedInWalletChip() {
   const { user } = useSession();
   const t = useTranslations("shell");
-  const balance = formatMoney(user.walletUsd);
+  const locale = useLocale();
+  const balance = formatMoney(user.walletUsd, { locale });
 
   return (
       <Tooltip>

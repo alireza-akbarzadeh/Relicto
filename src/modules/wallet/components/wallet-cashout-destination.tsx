@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -34,6 +35,7 @@ export function WalletCashoutDestination({
   selectedVaultId,
   onSelectVaultId,
 }: Props) {
+  const t = useTranslations("wallet");
   const currentRail = rail as CashoutRail;
   const vaults = useMemo(
     () => getWhitelistedVaultsForRail(currentRail, currentRail === "usdt" ? network : undefined),
@@ -49,7 +51,7 @@ export function WalletCashoutDestination({
 
   const copyAddress = async (addr: string) => {
     await navigator.clipboard.writeText(addr);
-    toast.success("Destination copied", { description: addr });
+    toast.success(t("destinationCopied"), { description: addr });
   };
 
   const getPlaceholder = () => {
@@ -63,7 +65,7 @@ export function WalletCashoutDestination({
     <div className="flex flex-col gap-space-xs">
       <div className="flex items-center justify-between">
         <span className="font-label-caps text-label-caps text-text-secondary uppercase">
-          {rail === "keys" ? "Steam Trade URL / Escrow Profile" : "Destination Vault / Address"}
+          {rail === "keys" ? "Steam Trade URL / Escrow Profile" : t("recipientAddress")}
         </span>
         <Button
           variant={null}
@@ -71,7 +73,7 @@ export function WalletCashoutDestination({
           onClick={onToggleCustom}
           className="h-auto rounded-none border-0 p-0 font-label-badge text-label-badge text-primary hover:underline"
         >
-          {isCustomAddress ? "Use Whitelist" : "+ Custom Address"}
+          {isCustomAddress ? t("whitelistedVault") : t("customDestination")}
         </Button>
       </div>
 

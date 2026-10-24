@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,7 @@ export function WalletCashout({
   rails: WalletRailType[];
   maxUsd: number;
 }) {
+  const t = useTranslations("wallet");
   const { pending, request } = useCashout();
   const [rail, setRail] = useState("usdt");
   const [network, setNetwork] = useState<CryptoNetwork>("trc20");
@@ -48,16 +50,16 @@ export function WalletCashout({
             </div>
             <div className="flex flex-col">
               <h3 className="font-headline-sm text-headline-sm text-text-primary">
-                Instant Egress &amp; Cashout
+                {t("cashoutTitle")}
               </h3>
               <span className="font-label-badge text-label-badge text-text-muted">
-                AUTOMATED DISPATCH VIA BOT ESCROW CLUSTER
+                {t("cashoutSubtitle")}
               </span>
             </div>
           </div>
           <span className="flex items-center gap-1 rounded bg-surface-container-lowest px-2 py-1 font-data-mono-md text-[11px] text-text-primary">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-status-live" />
-            SLA: &lt; 120s Guarantee
+            {t("slaGuarantee")}
           </span>
         </div>
 
@@ -85,9 +87,9 @@ export function WalletCashout({
 
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
           <span className="flex justify-between">
-            Withdrawal Amount{" "}
+            {t("withdrawalAmount")}{" "}
             <span className="font-data-mono-md text-[11px] normal-case text-text-muted">
-              Max Withdrawable: <strong className="text-text-primary">{formatMoney(maxUsd)}</strong>
+              {t("maxWithdrawable")} <strong className="text-text-primary">{formatMoney(maxUsd)}</strong>
             </span>
           </span>
           <PriceInput
@@ -115,9 +117,9 @@ export function WalletCashout({
           <div className="flex items-center justify-between gap-2 text-text-primary">
             <span className="flex items-center gap-space-xs font-label-caps text-label-caps uppercase">
               <Icon name="security" className="text-[18px] text-primary" />
-              Steam Guard 2FA Authentication
+              {t("steamGuard2faAuth")}
             </span>
-            <span className="font-label-badge text-[10px] text-primary uppercase">Required</span>
+            <span className="font-label-badge text-[10px] text-primary uppercase">{t("required")}</span>
           </div>
           <div className="flex items-center gap-space-sm">
             <Input
@@ -129,7 +131,7 @@ export function WalletCashout({
             />
             <span className="flex items-center gap-space-xs font-data-mono-md text-[11px] text-text-secondary">
               <Icon name="timer" className="text-[16px] text-status-upcoming" />
-              Tokens refresh every 30s
+              {t("tokenRefreshNote")}
             </span>
           </div>
         </div>
@@ -152,7 +154,7 @@ export function WalletCashout({
         className="h-auto w-full gap-space-xs rounded-lg border-0 bg-surface-container-high py-space-md font-headline-sm text-[14px] text-text-primary uppercase shadow-md hover:bg-primary hover:text-on-primary disabled:opacity-50"
       >
         <Icon name="lock_reset" className="text-[18px]" />
-        <span>{pending ? "Dispatching payout…" : maxUsd <= 0 ? "Deposit to enable cashout" : "Authorize Instant Cashout"}</span>
+        <span>{pending ? t("dispatchingPayout") : maxUsd <= 0 ? t("depositToEnable") : t("authorizeCashout")}</span>
       </Button>
     </section>
   );

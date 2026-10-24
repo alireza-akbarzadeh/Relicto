@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -15,6 +16,7 @@ export function WalletDepositNetworkCard({
   selectedNetworkId,
   onNetworkChange,
 }: WalletDepositNetworkCardProps) {
+  const t = useTranslations("wallet");
   const [address, setAddress] = useState("TYDzsYUEpvnYmQk4zGP9sWWcTEd3YiAtW6");
   const [confirmations, setConfirmations] = useState(12);
   const [badge, setBadge] = useState("12 Block Finality");
@@ -44,7 +46,7 @@ export function WalletDepositNetworkCard({
 
   const copyAddress = async () => {
     await navigator.clipboard.writeText(address);
-    toast.success("Deposit address copied", { description: address });
+    toast.success(t("addressCopied"), { description: address });
   };
 
   const activeNetwork = CRYPTO_NETWORKS.find((n) => n.id === selectedNetworkId) || CRYPTO_NETWORKS[0];
@@ -54,7 +56,7 @@ export function WalletDepositNetworkCard({
       {/* Network selection chips */}
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between">
-          <span className="font-label-badge text-[10px] text-text-muted uppercase">Select Deposit Network</span>
+          <span className="font-label-badge text-[10px] text-text-muted uppercase">{t("selectDepositNetwork")}</span>
           <span className="rounded bg-tertiary/15 px-1.5 py-0.5 font-data-mono-md text-[10px] font-bold text-tertiary">
             {badge}
           </span>

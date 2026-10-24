@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useQueryStates } from "nuqs";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -71,6 +72,7 @@ function exportCsv(transactions: WalletTransaction[], range: string) {
 }
 
 export function WalletAuditLedger({ transactions }: { transactions: WalletTransaction[] }) {
+  const t = useTranslations("wallet");
   const [{ q: query, type, range }, setParams] = useQueryStates(walletSearchParams, { history: "replace", clearOnDefault: true });
   const setQuery = (value: string) => void setParams({ q: value });
   const setType = (value: string) => void setParams({ type: value as (typeof walletSearchParams.type)["defaultValue"] });
@@ -108,21 +110,21 @@ export function WalletAuditLedger({ transactions }: { transactions: WalletTransa
             <Icon name="receipt_long" className="text-[20px]" />
           </div>
           <div>
-            <h3 className="font-headline-sm text-headline-sm text-text-primary">Cryptographic Treasury Audit Ledger</h3>
-            <p className="font-body-sm text-body-sm text-text-secondary">Immutable log of deposits, cashouts, and marketplace settlements.</p>
+            <h3 className="font-headline-sm text-headline-sm text-text-primary">{t("auditTitle")}</h3>
+            <p className="font-body-sm text-body-sm text-text-secondary">{t("auditSubtitle")}</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-space-xs">
           <div className="flex items-center gap-space-xs rounded-lg bg-surface-container-lowest px-space-md py-1.5">
-            <span className="font-label-badge text-[10px] text-text-muted">TOTAL DEPOSITED:</span>
+            <span className="font-label-badge text-[10px] text-text-muted">{t("totalDeposited")}</span>
             <span className="font-data-mono-md text-body-sm font-bold text-tertiary">{formatTotal(totals.deposited)}</span>
           </div>
           <div className="flex items-center gap-space-xs rounded-lg bg-surface-container-lowest px-space-md py-1.5">
-            <span className="font-label-badge text-[10px] text-text-muted">TOTAL CASHED OUT:</span>
+            <span className="font-label-badge text-[10px] text-text-muted">{t("totalWithdrawn")}</span>
             <span className="font-data-mono-md text-body-sm font-bold text-primary">{formatTotal(totals.withdrawn)}</span>
           </div>
           <div className="flex items-center gap-space-xs rounded-lg bg-surface-container-lowest px-space-md py-1.5">
-            <span className="font-label-badge text-[10px] text-text-muted">NET FLOW:</span>
+            <span className="font-label-badge text-[10px] text-text-muted">{t("netFlow")}</span>
             <span className="font-data-mono-md text-body-sm font-bold text-status-upcoming">
               {totals.net >= 0 ? "+" : "-"}
               {formatTotal(Math.abs(totals.net))}
@@ -137,7 +139,7 @@ export function WalletAuditLedger({ transactions }: { transactions: WalletTransa
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search by Tx Hash, item, Steam trade ID, or status..."
+            placeholder={t("searchLedger")}
             aria-label="Search treasury transactions"
             className="h-auto border-0 bg-transparent p-0 font-body-sm text-body-sm text-text-primary focus-visible:ring-0"
           />
@@ -167,7 +169,7 @@ export function WalletAuditLedger({ transactions }: { transactions: WalletTransa
             className="inline-flex cursor-pointer items-center gap-1 rounded-lg border-0 bg-surface-container-high px-space-md py-2 font-label-caps text-[11px] text-text-primary uppercase transition-colors hover:bg-surface-container-highest focus-visible:outline-hidden"
           >
             <Icon name="file_download" className="text-[16px]" />
-            <span>CSV / Tax Audit</span>
+            <span>{t("exportCsv")}</span>
           </Button>
         </div>
       </div>

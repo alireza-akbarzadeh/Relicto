@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, type RefObject } from "react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -18,6 +19,7 @@ import { WalletOverview } from "./wallet-overview";
 type WalletAction = "deposit" | "cashout" | "steam";
 
 export function WalletView({ data }: { data: WalletData }) {
+  const t = useTranslations("wallet");
   const searchParams = useSearchParams();
   const [activeAction, setActiveAction] =
     useState<WalletAction>("deposit");
@@ -25,17 +27,15 @@ export function WalletView({ data }: { data: WalletData }) {
   useEffect(() => {
     if (searchParams.get("stripe_deposit_success") === "true") {
       const amount = searchParams.get("amount");
-      toast.success("Deposit Confirmed via Stripe", {
-        description: amount
-          ? `$${amount} USD has been credited to your Relicto Vault.`
-          : "Your deposit has been credited to your Relicto Vault.",
+      toast.success(t("depositSuccess"), {
+        description: t("depositSuccessDesc", { amount: amount ? `$${amount}` : "" }),
       });
     } else if (searchParams.get("stripe_deposit_cancel") === "true") {
-      toast.info("Deposit Cancelled", {
-        description: "No funds were charged to your card.",
+      toast.info(t("depositCancel"), {
+        description: t("depositCancelDesc"),
       });
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   const depositRef = useRef<HTMLDivElement>(null);
   const cashoutRef = useRef<HTMLDivElement>(null);
@@ -67,8 +67,8 @@ export function WalletView({ data }: { data: WalletData }) {
 
   const handleToSteam = () => {
     setActiveAction("steam");
-    toast.info("Steam Wallet Bridge", {
-      description: "Direct P2P Steam Wallet voucher transfer is synchronized with your linked Steam account.",
+    toast.info(t("steamBridgeTitle"), {
+      description: t("steamBridgeDesc"),
     });
   };
 
@@ -88,9 +88,9 @@ export function WalletView({ data }: { data: WalletData }) {
 
           {data.isPreview ? (
             <div className="flex items-center gap-space-sm rounded-xl border border-status-upcoming/30 bg-status-upcoming/10 px-space-md py-space-sm font-body-sm text-body-sm text-status-upcoming">
-              <span className="font-label-badge text-label-badge uppercase">Preview vault</span>
+              <span className="font-label-badge text-label-badge uppercase">{t("previewVault")}</span>
               <span className="text-text-secondary">
-                Balances are at zero until your first deposit. Deposits credit instantly in test mode; cashout unlocks once you have a balance.
+                {t("previewVaultDesc")}
               </span>
             </div>
           ) : null}

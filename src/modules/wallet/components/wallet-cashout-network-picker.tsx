@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import {
@@ -28,6 +29,7 @@ export function WalletCashoutNetworkPicker({
   customAddress,
   isCustomAddress,
 }: Props) {
+  const t = useTranslations("wallet");
   const netConfig = CRYPTO_NETWORK_CONFIGS[network];
   const feeUsd = rail === "usdt" ? netConfig.feeUsd : 0;
   const netUsd = Math.max(0, amountUsd - feeUsd);
@@ -43,10 +45,10 @@ export function WalletCashoutNetworkPicker({
         <div className="flex flex-col gap-1.5 rounded-xl bg-surface-container-lowest p-space-sm">
           <div className="flex items-center justify-between">
             <span className="font-label-caps text-[10px] text-text-secondary uppercase">
-              Select Blockchain Network
+              {t("selectBlockchain")}
             </span>
             <span className="font-data-mono-md text-[10px] text-tertiary">
-              Fee: {formatMoney(feeUsd)} · SLA: {netConfig.eta}
+              {t("fee")} {formatMoney(feeUsd)} · {t("sla")} {netConfig.eta}
             </span>
           </div>
           <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
@@ -90,7 +92,7 @@ export function WalletCashoutNetworkPicker({
                 TF2 Mann Co. Supply Crate Keys
               </span>
               <span className="font-data-mono-md text-[10px] text-text-muted">
-                Rate: ${TF2_KEY_RATE_USD.toFixed(2)} USD / Key · Zero Bot Escrow Fees
+                {t("tf2Rate", { rate: TF2_KEY_RATE_USD.toFixed(2) })}
               </span>
             </div>
           </div>
@@ -98,13 +100,13 @@ export function WalletCashoutNetworkPicker({
             <span className="font-data-mono-lg text-headline-sm font-bold text-primary">
               ~{keysCount} Keys
             </span>
-            <span className="font-label-badge text-[9px] text-status-live uppercase">Instant Bot Offer</span>
+            <span className="font-label-badge text-[9px] text-status-live uppercase">{t("instantBotOffer")}</span>
           </div>
         </div>
       )}
 
       <div className="flex items-center justify-between gap-space-sm rounded-lg bg-surface-container-lowest px-space-md py-2 text-[11px]">
-        <span className="font-label-caps text-text-secondary uppercase">Net Cashout Receivable:</span>
+        <span className="font-label-caps text-text-secondary uppercase">{t("netReceivable")}</span>
         <div className="flex items-center gap-2">
           {rail === "keys" ? (
             <span className="font-data-mono-md font-bold text-primary">

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { WalletAction } from "./wallet-action-button";
 
@@ -8,6 +9,7 @@ type WalletSummaryProps = {
 };
 
 export function WalletSummary(props: WalletSummaryProps) {
+  const t = useTranslations("wallet");
   const { activeAction, numericAmount, skins } = props;
   const credited = (skins ? numericAmount * 1.02 : numericAmount).toFixed(2);
 
@@ -16,19 +18,19 @@ export function WalletSummary(props: WalletSummaryProps) {
       <div className="flex flex-col gap-space-sm p-space-md font-data-mono-md text-body-sm">
         {/* Breakdown */}
         <div className="flex items-center justify-between gap-space-md">
-          <span className="text-text-muted">Subtotal</span>
+          <span className="text-text-muted">{t("subtotal")}</span>
           <span className="text-text-secondary">
             ${numericAmount.toFixed(2)} USD
           </span>
         </div>
 
         <div className="flex items-center justify-between gap-space-md">
-          <span className="text-text-muted">Network Protocol Ingress Fee</span>
-          <span className="text-tertiary">0.00 USD (PROMO)</span>
+          <span className="text-text-muted">{t("ingressFee")}</span>
+          <span className="text-tertiary">{t("zeroPromo")}</span>
         </div>
 
         <div className="flex items-center justify-between gap-space-md">
-          <span className="text-text-muted">Liquidation Booster Tier</span>
+          <span className="text-text-muted">{t("liquidationBooster")}</span>
 
           <span className="text-right text-primary">
             {skins ? (
@@ -39,13 +41,13 @@ export function WalletSummary(props: WalletSummaryProps) {
                 </span>
               </>
             ) : (
-              "Skin rail only"
+              t("skinRailOnly")
             )}
           </span>
         </div>
 
         <div className="flex items-center justify-between gap-space-md">
-          <span className="text-text-muted">Type</span>
+          <span className="text-text-muted">{t("type")}</span>
 
           <span
             className={cn(
@@ -64,10 +66,10 @@ export function WalletSummary(props: WalletSummaryProps) {
         <div className="mt-space-xs flex items-center justify-between gap-space-md border-t border-surface-variant/70 pt-space-md">
           <div className="flex flex-col gap-0.5">
             <span className="font-label-caps text-label-caps text-text-muted">
-              Total Balance Credited
+              {t("estimatedCredit")}
             </span>
             <span className="text-[10px] uppercase tracking-wider text-text-muted">
-              Final settlement
+              {t("zeroLossGuarantee")}
             </span>
           </div>
 

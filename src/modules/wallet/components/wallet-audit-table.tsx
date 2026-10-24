@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
@@ -66,18 +67,20 @@ export function WalletAuditTable({
   totalCount: number;
   range: string;
 }) {
+  const t = useTranslations("wallet");
+
   return (
     <>
       <div className="overflow-x-auto">
         <table className="w-full min-w-225 border-collapse text-left font-body-sm">
           <thead>
             <tr className="bg-surface-container-lowest font-label-caps text-[11px] text-text-muted uppercase">
-              <th className="rounded-l-lg px-space-md py-3">Transaction &amp; Hash</th>
-              <th className="px-space-md py-3">Asset Details / Counterparty</th>
-              <th className="px-space-md py-3">Execution Node</th>
-              <th className="px-space-md py-3">Amount (USD)</th>
-              <th className="px-space-md py-3">Audited Status</th>
-              <th className="rounded-r-lg px-space-md py-3 text-right">Proof / Action</th>
+              <th className="rounded-l-lg px-space-md py-3">{t("thTxHash")}</th>
+              <th className="px-space-md py-3">{t("thAsset")}</th>
+              <th className="px-space-md py-3">{t("thNode")}</th>
+              <th className="px-space-md py-3">{t("thAmount")}</th>
+              <th className="px-space-md py-3">{t("thStatus")}</th>
+              <th className="rounded-r-lg px-space-md py-3 text-right">{t("thProof")}</th>
             </tr>
           </thead>
           <tbody>
@@ -86,9 +89,9 @@ export function WalletAuditTable({
                 <td colSpan={6} className="px-space-md py-space-xl text-center">
                   <div className="mx-auto flex max-w-md flex-col items-center gap-space-sm">
                     <Icon name="inventory_2" className="text-[32px] text-text-muted" />
-                    <p className="font-headline-sm text-headline-sm text-text-primary">No ledger entries yet</p>
+                    <p className="font-headline-sm text-headline-sm text-text-primary">{t("noEntries")}</p>
                     <p className="font-body-sm text-body-sm text-text-secondary">
-                      Deposits and cashouts appear here with live status. Make a test deposit to open your vault history.
+                      {t("noEntriesDesc")}
                     </p>
                   </div>
                 </td>
@@ -142,7 +145,7 @@ export function WalletAuditTable({
 
       <div className="flex flex-col items-center justify-between gap-space-sm pt-space-xs sm:flex-row">
         <span className="font-data-mono-md text-body-sm text-text-muted">
-          Showing {visible.length} of {totalCount} verified {range.toLowerCase()} entries
+          {t("displayingEntries", { visible: visible.length, total: totalCount, range })}
         </span>
       </div>
     </>

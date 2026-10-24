@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 
 export function StationTitle({
@@ -35,13 +36,12 @@ export function StationTitle({
 
 /** Says out loud that nothing is charged here — deposits are simulated until a payment provider is connected. */
 export function TestModeStrip() {
+  const t = useTranslations("wallet");
+
   return (
     <div className="flex items-center gap-space-xs rounded-lg bg-status-upcoming/10 px-space-sm py-2 font-body-sm text-[11px] text-status-upcoming">
       <Icon name="info" className="text-[14px]" />
-      <span>
-        Test mode: deposits are credited instantly and nothing is charged. No
-        payment provider is connected yet.
-      </span>
+      <span>{t("testModeNotice")}</span>
     </div>
   );
 }

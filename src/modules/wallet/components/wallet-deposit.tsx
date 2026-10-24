@@ -1,6 +1,7 @@
 "use client";
 
 import { Ref, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { PriceInput } from "@/components/ui/price-input";
@@ -23,6 +24,7 @@ export function WalletDeposit({
   inputRef?: Ref<HTMLInputElement>;
   activeAction: WalletAction;
 }) {
+  const t = useTranslations("wallet");
   const [rail, setRail] = useState("crypto");
   const [amount, setAmount] = useState("250.00");
   const [cryptoNetwork, setCryptoNetwork] = useState("usdt-trc20");
@@ -36,9 +38,9 @@ export function WalletDeposit({
       <div className="flex flex-col gap-space-md">
         <StationTitle
           icon="account_balance"
-          title="Deposit & Influx Hub"
-          subtitle="ZERO INGRESS FEES ON CRYPTO & STEAM LIQUIDATION"
-          badge="PROMO: +2.0% SKINS"
+          title={t("depositTitle")}
+          subtitle={t("depositSubtitle")}
+          badge={t("promoBadge")}
         />
         <WalletRail rails={rails} value={rail} onChange={setRail} />
 
@@ -55,9 +57,9 @@ export function WalletDeposit({
               <Icon name="credit_card" className="text-[28px]" />
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="font-headline-sm text-xs font-bold text-text-primary">Instant Card & Apple Pay</span>
+              <span className="font-headline-sm text-xs font-bold text-text-primary">{t("cardApplePay")}</span>
               <span className="font-body-sm text-[11px] text-text-secondary">
-                Protected by Stripe 3D-Secure 2.0. Instant settlement directly to your vault.
+                {t("cardApplePayDesc")}
               </span>
             </div>
           </div>
@@ -69,16 +71,16 @@ export function WalletDeposit({
               <Icon name="account_balance" className="text-[28px]" />
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="font-headline-sm text-xs font-bold text-text-primary">SEPA Instant &amp; FedWire ACH</span>
+              <span className="font-headline-sm text-xs font-bold text-text-primary">{t("sepaFedwire")}</span>
               <span className="font-body-sm text-[11px] text-text-secondary">
-                Direct bank wire with zero Relicto platform commission. Settles in 15–30 mins.
+                {t("sepaFedwireDesc")}
               </span>
             </div>
           </div>
         )}
 
         <label className="flex flex-col gap-space-xs font-label-caps text-label-caps text-text-secondary uppercase">
-          Deposit Amount (USD)
+          {t("depositAmount")}
           <PriceInput
             value={numericAmount}
             onChange={(val) => setAmount(val.toString())}
@@ -120,14 +122,14 @@ export function WalletDeposit({
           <Icon name="verified" className="text-[18px]" />
           <span>
             {pending
-              ? "Crediting vault…"
+              ? t("creditingVault")
               : skins
-                ? "Liquidate in Sell Studio"
+                ? t("liquidateStudio")
                 : rail === "cards"
-                  ? `Pay with Card / Stripe ($${numericAmount.toFixed(2)})`
+                  ? t("payCard", { amount: numericAmount.toFixed(2) })
                   : rail === "crypto"
-                    ? `Open Web3 Deposit ($${numericAmount.toFixed(2)})`
-                    : `Confirm & Execute Ingress ($${numericAmount.toFixed(2)})`}
+                    ? t("openWeb3", { amount: numericAmount.toFixed(2) })
+                    : t("confirmIngress", { amount: numericAmount.toFixed(2) })}
           </span>
         </Button>
       </div>

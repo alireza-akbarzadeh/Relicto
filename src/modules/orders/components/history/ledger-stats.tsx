@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
@@ -49,6 +52,8 @@ function StatCard({ stat }: { stat: LedgerStat }) {
 
 /** Three ledger metrics plus the shortcut into the live escrow. */
 export function LedgerStats({ stats, active }: { stats: LedgerStat[]; active: ActiveEscrow }) {
+  const t = useTranslations("orders");
+
   return (
     <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 xl:grid-cols-4">
       {stats.map((stat) => (
@@ -70,7 +75,7 @@ export function LedgerStats({ stats, active }: { stats: LedgerStat[]; active: Ac
           href={active.href}
           className="w-full gap-space-xs rounded border-0 bg-primary-container px-space-sm py-1.5 font-label-caps text-label-caps font-bold text-on-primary-container uppercase shadow-xs transition-colors hover:bg-primary"
         >
-          <span>Track Live Escrow</span>
+          <span>{t("trackLiveEscrow")}</span>
           <Icon name="bolt" className="text-[16px]" />
         </LinkButton>
       </div>

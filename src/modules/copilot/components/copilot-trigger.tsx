@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Bot, Sparkles, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 interface CopilotTriggerProps {
   open: boolean;
@@ -13,12 +14,14 @@ export function CopilotTrigger({ open, onClick }: CopilotTriggerProps) {
   const t = useTranslations("copilot.trigger");
 
   return (
-    <button
+    <Button
       type="button"
+      variant={null}
+      size={null}
       onClick={onClick}
       aria-label={open ? t("closeLabel") : t("openLabel")}
       title={open ? t("closeTitle") : t("openTitle")}
-      className="fixed bottom-20 sm:bottom-6 end-4 sm:end-6 z-50 group flex items-center gap-2.5 p-3 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-700 text-white shadow-[0_10px_30px_rgba(244,63,94,0.45),0_0_20px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_35px_rgba(244,63,94,0.65),0_0_30px_rgba(244,63,94,0.5)] border border-rose-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
+      className="fixed bottom-20 sm:bottom-6 end-4 sm:end-6 z-50 group flex h-auto items-center gap-2.5 p-3 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-rose-700 text-white shadow-[0_10px_30px_rgba(244,63,94,0.45),0_0_20px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_35px_rgba(244,63,94,0.65),0_0_30px_rgba(244,63,94,0.5)] border border-rose-400/50 hover:scale-105 active:scale-95 transition-all duration-300"
     >
       {/* Outer ambient glow */}
       <span className="absolute -inset-1 rounded-full bg-rose-500/30 blur-md pointer-events-none group-hover:bg-rose-500/50 transition-colors" />
@@ -50,6 +53,6 @@ export function CopilotTrigger({ open, onClick }: CopilotTriggerProps) {
           )}
         </span>
       </div>
-    </button>
+    </Button>
   );
 }

@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Info, AlertTriangle, ShieldAlert, CheckCircle2, X, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface BroadcastBannerProps {
   settings?: {
@@ -85,14 +86,16 @@ export function BroadcastBanner({ settings }: BroadcastBannerProps) {
             </Link>
           )}
 
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => setDismissed(true)}
             aria-label="Dismiss announcement"
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="h-auto p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X className="size-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
     </aside>

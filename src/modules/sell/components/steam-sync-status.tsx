@@ -32,15 +32,17 @@ export function SteamSyncStatus({ steam }: { steam: SteamSync }) {
       <SteamConnectModal
         steam={steam}
         trigger={
-          <button
+          <Button
             type="button"
-            className="flex cursor-pointer items-center gap-1.5 font-data-mono-md text-xs text-text-secondary transition-colors hover:text-text-primary"
+            variant={null}
+            size={null}
+            className="flex h-auto cursor-pointer items-center gap-1.5 font-data-mono-md text-xs text-text-secondary transition-colors hover:text-text-primary"
           >
             <span>{t("steamSyncLabel")}</span>
             <span className="rounded border border-tertiary/40 bg-tertiary/15 px-1.5 py-0.5 font-headline-sm text-[10px] font-bold tracking-wider text-tertiary uppercase hover:brightness-110">
               {t("linkSteam")}
             </span>
-          </button>
+          </Button>
         }
       />
     );
@@ -63,13 +65,15 @@ export function SteamSyncStatus({ steam }: { steam: SteamSync }) {
       <SteamConnectModal
         steam={steam}
         trigger={
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             title={t("settingsTitle")}
             className="flex h-5 w-5 cursor-pointer items-center justify-center rounded text-text-muted hover:bg-white/5 hover:text-text-primary"
           >
             <Icon name="settings" className="text-[13px]" />
-          </button>
+          </Button>
         }
       />
     </div>

@@ -110,17 +110,19 @@ export function RuleBuilder() {
             <span className="font-label-badge text-[10px] text-text-muted uppercase">{t("selectPreset")}</span>
             <div className="flex flex-wrap gap-1">
               {PRESETS.map((p, i) => (
-                <button
+                <Button
                   key={p.name}
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={() => handleSelectPreset(i)}
                   className={cn(
-                    "rounded px-2 py-1 font-label-caps text-[10px] uppercase transition-all",
+                    "h-auto rounded px-2 py-1 font-label-caps text-[10px] uppercase transition-all",
                     presetIndex === i ? "bg-primary text-on-primary font-bold shadow-xs" : "bg-surface text-text-secondary hover:text-text-primary",
                   )}
                 >
                   {p.name.split("|")[0].replace("★", "").trim()}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -141,18 +143,31 @@ export function RuleBuilder() {
             <span className="font-label-caps text-[10px] text-text-secondary uppercase">{t("floatCeiling")}</span>
             <div className="grid grid-cols-2 gap-1 pt-0.5">
               {floatPresets.map((fp) => (
-                <button key={fp.label} type="button" onClick={() => setMaxFloat(fp.value)} className={cn("rounded py-1 text-center font-data-mono-md text-[10px]", maxFloat === fp.value ? "bg-secondary text-canvas-base font-bold" : "bg-surface-card text-text-muted hover:text-text-primary")}>
+                <Button
+                  key={fp.label}
+                  type="button"
+                  variant={null}
+                  size={null}
+                  onClick={() => setMaxFloat(fp.value)}
+                  className={cn("h-auto rounded py-1 text-center font-data-mono-md text-[10px]", maxFloat === fp.value ? "bg-secondary text-canvas-base font-bold" : "bg-surface-card text-text-muted hover:text-text-primary")}
+                >
                   {fp.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
           <div className="flex flex-col justify-between gap-1 rounded-xl bg-surface-container-lowest p-space-sm">
             <span className="font-label-caps text-[10px] text-text-secondary uppercase">{t("autoBuy")}</span>
-            <button type="button" onClick={() => setAutoBuy(!autoBuy)} className={cn("flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-all", autoBuy ? "bg-status-live/20 text-status-live border border-status-live/40" : "bg-surface-card text-text-muted border border-border-subtle")}>
+            <Button
+              type="button"
+              variant={null}
+              size={null}
+              onClick={() => setAutoBuy(!autoBuy)}
+              className={cn("flex h-auto items-center justify-between rounded-lg px-2.5 py-1.5 transition-all", autoBuy ? "bg-status-live/20 text-status-live border border-status-live/40" : "bg-surface-card text-text-muted border border-border-subtle")}
+            >
               <span className="font-headline-sm text-[11px] font-bold">{autoBuy ? t("armedAutoBuy") : t("notifyOnly")}</span>
               <Icon name={autoBuy ? "bolt" : "notifications"} className="text-[16px]" />
-            </button>
+            </Button>
           </div>
         </div>
 

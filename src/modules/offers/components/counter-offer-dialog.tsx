@@ -66,11 +66,13 @@ export function CounterOfferDialog({ open, onOpenChange, offer }: CounterOfferDi
           <span className="font-label-badge text-[10px] tracking-wider text-text-secondary uppercase">Quick Counter Targets</span>
           <div className="grid grid-cols-4 gap-1.5">
             {presets.map((p) => (
-              <button
+              <Button
                 key={p.label}
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setAmount(p.val)}
-                className={`rounded border px-2 py-1.5 text-center font-data-mono-md text-[11px] font-semibold transition-all ${
+                className={`h-auto flex-col rounded border px-2 py-1.5 text-center font-data-mono-md text-[11px] font-semibold transition-all ${
                   amount === p.val
                     ? "border-primary bg-primary/20 text-primary"
                     : "border-border-subtle bg-surface-container-lowest text-text-secondary hover:border-border-subtle hover:text-text-primary"
@@ -78,7 +80,7 @@ export function CounterOfferDialog({ open, onOpenChange, offer }: CounterOfferDi
               >
                 <div>{p.label}</div>
                 <div className="text-[10px] text-text-muted">{formatMoney(p.val, { whole: p.val >= 1000 })}</div>
-              </button>
+              </Button>
             ))}
           </div>
         </div>

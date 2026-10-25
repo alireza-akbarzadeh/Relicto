@@ -136,10 +136,12 @@ export function CopilotHeader({
 
       {/* Segmented Mode Switcher Tabs */}
       <div className="grid grid-cols-3 gap-1 bg-[#0b0e15] p-1 rounded-xl border border-[#1e2433] text-xs font-mono font-medium">
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => onModeChange("copilot")}
-          className={`py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+          className={`h-auto py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
             currentMode === "copilot"
               ? "bg-rose-600 text-white font-semibold shadow-sm"
               : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
@@ -147,12 +149,14 @@ export function CopilotHeader({
         >
           <MessageSquare className="size-3.5" />
           <span>{t("tabCopilot")}</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => onModeChange("audit")}
-          className={`py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+          className={`h-auto py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
             currentMode === "audit"
               ? "bg-rose-600 text-white font-semibold shadow-sm"
               : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
@@ -160,12 +164,14 @@ export function CopilotHeader({
         >
           <Shield className="size-3.5 text-amber-400" />
           <span>{t("tabAudit")}</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => onModeChange("codex")}
-          className={`py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+          className={`h-auto py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
             currentMode === "codex"
               ? "bg-rose-600 text-white font-semibold shadow-sm"
               : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
@@ -173,7 +179,7 @@ export function CopilotHeader({
         >
           <HelpCircle className="size-3.5 text-cyan-400" />
           <span>{t("tabCodex")}</span>
-        </button>
+        </Button>
       </div>
     </header>
   );

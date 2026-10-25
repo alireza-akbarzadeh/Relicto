@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { DELIVERY_TONE, type DeliverySla } from "../../types/delivery";
@@ -22,8 +23,10 @@ export function DeliveryBadge({
     return (
       <>
         {sla.friendHoldRequired ? (
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             title="Collector's Cache 31-day Steam friend hold. Click to learn how escrow protects you."
             onClick={(e) => {
               e.preventDefault();
@@ -31,7 +34,7 @@ export function DeliveryBadge({
               setExplainerOpen(true);
             }}
             className={cn(
-              "inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-data-mono-md text-[10px] font-bold border transition-colors cursor-pointer hover:brightness-125",
+              "h-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-data-mono-md text-[10px] font-bold border transition-colors cursor-pointer hover:brightness-125",
               tone.badge,
               className
             )}
@@ -39,7 +42,7 @@ export function DeliveryBadge({
             <Icon name={sla.icon} className="text-[12px]" />
             <span>{sla.shortBadge}</span>
             <Icon name="help" className="text-[11px] opacity-80" />
-          </button>
+          </Button>
         ) : (
           <span
             title={sla.description}
@@ -114,10 +117,12 @@ export function DeliveryBadge({
           )}
 
           {sla.friendHoldRequired && (
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setExplainerOpen(true)}
-              className="flex items-center justify-between rounded-lg border border-pink-500/30 bg-pink-950/30 px-2.5 py-1.5 text-left text-[11px] text-pink-200 transition-all hover:bg-pink-900/40 cursor-pointer"
+              className="flex h-auto w-full items-center justify-between rounded-lg border border-pink-500/30 bg-pink-950/30 px-2.5 py-1.5 text-left text-[11px] text-pink-200 transition-all hover:bg-pink-900/40 cursor-pointer"
             >
               <span className="flex items-center gap-1.5 font-medium">
                 <Icon name="help" className="text-[14px] text-pink-400" />
@@ -126,7 +131,7 @@ export function DeliveryBadge({
               <span className="font-mono text-[10px] font-bold text-pink-300 underline uppercase tracking-wider shrink-0">
                 How It Works →
               </span>
-            </button>
+            </Button>
           )}
 
           <div className="flex items-center justify-between border-t border-white/5 pt-1.5 font-data-mono-md text-[10px] text-text-muted">

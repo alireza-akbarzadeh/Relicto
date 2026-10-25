@@ -1,28 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import type { BalancePoint } from "../../types";
-import { formatByCurrency, type CurrencyMode } from "./currency-utils";
+import { buildSmoothPath, formatByCurrency, type CurrencyMode } from "./currency-utils";
 
 type TrendProps = {
   trend: BalancePoint[];
   currency: CurrencyMode;
 };
-
-/**
- * Builds smooth cubic bezier SVG path across points.
- */
-function buildSmoothPath(pts: { x: number; y: number }[]): string {
-  if (pts.length === 0) return "";
-  let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i];
-    const p1 = pts[i + 1];
-    const dx = (p1.x - p0.x) * 0.5;
-    d += ` C ${(p0.x + dx).toFixed(1)} ${p0.y.toFixed(1)}, ${(p1.x - dx).toFixed(1)} ${p1.y.toFixed(1)}, ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}`;
-  }
-  return d;
-}
 
 export function BalanceTrendChart({ trend, currency }: TrendProps) {
   const [activeIdx, setActiveIdx] = useState<number>(trend.length - 1);
@@ -209,19 +195,21 @@ export function BalanceTrendChart({ trend, currency }: TrendProps) {
         {trend.map((t, idx) => {
           const isActive = activeIdx === idx;
           return (
-            <button
+            <Button
               key={t.day}
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setActiveIdx(idx)}
               onMouseEnter={() => setActiveIdx(idx)}
-              className={`rounded px-2 py-0.5 transition-all ${
+              className={`h-auto rounded px-2 py-0.5 transition-all ${
                 isActive
                   ? "bg-primary/20 font-bold text-primary shadow-sm"
                   : "text-text-secondary hover:text-text-primary"
               }`}
             >
               {t.day}
-            </button>
+            </Button>
           );
         })}
       </div>

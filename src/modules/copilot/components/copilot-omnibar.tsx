@@ -4,6 +4,7 @@ import * as React from "react";
 import { Link as LinkIcon, Code2, Mic, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import { SLASH_COMMANDS } from "../data/copilot-knowledge";
 
 interface CopilotOmnibarProps {
@@ -69,14 +70,16 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
           {t("commandsLabel")}
         </span>
         {SLASH_COMMANDS.map((c) => (
-          <button
+          <Button
             key={c.cmd}
             type="button"
+            variant={null}
+            size={null}
             onClick={() => handleCommandClick(c.cmd)}
-            className="px-2.5 py-1 rounded-md bg-[#1a2131] hover:bg-rose-500/20 text-slate-300 hover:text-white border border-[#27324b] transition-colors whitespace-nowrap"
+            className="h-auto px-2.5 py-1 rounded-md bg-[#1a2131] hover:bg-rose-500/20 text-slate-300 hover:text-white border border-[#27324b] transition-colors whitespace-nowrap"
           >
             {c.cmd}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -99,46 +102,54 @@ export function CopilotOmnibar({ onSendMessage, disabled }: CopilotOmnibarProps)
         {/* Utility Tray */}
         <div className="flex items-center justify-between px-1 pt-1 border-t border-slate-800/80">
           <div className="flex items-center gap-1 text-slate-400">
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={handlePasteTradeUrl}
               title={t("tradeUrlTooltip")}
-              className="p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
+              className="h-auto p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
             >
               <LinkIcon className="size-4" />
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => {
                 setInput('{"trade_offer_id": "94821", "method": "IEconService/GetTradeOffer"}');
                 toast.info(t("toastJsonLoaded"));
               }}
               title={t("jsonDebugTooltip")}
-              className="p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
+              className="h-auto p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
             >
               <Code2 className="size-4" />
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => toast.info(t("toastVoiceActive"))}
               title={t("voiceTooltip")}
-              className="p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
+              className="h-auto p-1.5 hover:text-white hover:bg-white/5 rounded-md transition-colors text-slate-400"
             >
               <Mic className="size-4" />
-            </button>
+            </Button>
             <span className="text-[10px] font-mono text-slate-500 hidden sm:inline ms-1.5 bg-[#161c28] px-2 py-0.5 rounded border border-slate-800">
               {t("shortcutHint")}
             </span>
           </div>
 
-          <button
+          <Button
             type="submit"
+            variant={null}
+            size={null}
             disabled={disabled || !input.trim() || cooldown > 0}
             title={cooldown > 0 ? t("rateLimit", { seconds: cooldown }) : t("send")}
             className="bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white min-w-[34px] h-[34px] rounded-lg transition-all shadow-md shadow-rose-950/40 active:scale-95 flex items-center justify-center cursor-pointer font-mono text-[11px] font-bold"
           >
             {cooldown > 0 ? `${cooldown}s` : <Send className="size-3.5 rtl:rotate-180" />}
-          </button>
+          </Button>
         </div>
       </form>
 

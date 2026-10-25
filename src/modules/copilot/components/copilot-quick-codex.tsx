@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 interface CopilotQuickCodexProps {
   onSelectPrompt: (query: string) => void;
@@ -61,15 +62,17 @@ export function CopilotQuickCodex({ onSelectPrompt }: CopilotQuickCodexProps) {
 
       <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
         {prompts.map((prompt) => (
-          <button
+          <Button
             key={prompt.id}
             type="button"
+            variant={null}
+            size={null}
             onClick={() => onSelectPrompt(prompt.query)}
-            className="px-2.5 py-1.5 rounded-lg bg-[#161c28] hover:bg-rose-500/15 text-slate-300 hover:text-rose-200 border border-[#23293c] hover:border-rose-500/40 transition-colors flex items-center gap-2 text-start"
+            className="h-auto px-2.5 py-1.5 rounded-lg bg-[#161c28] hover:bg-rose-500/15 text-slate-300 hover:text-rose-200 border border-[#23293c] hover:border-rose-500/40 transition-colors flex items-center gap-2 text-start"
           >
             <span className="text-xs shrink-0">{prompt.icon}</span>
             <span className="truncate">{prompt.title}</span>
-          </button>
+          </Button>
         ))}
       </div>
     </div>

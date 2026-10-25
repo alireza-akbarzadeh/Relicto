@@ -4,6 +4,7 @@ import * as React from "react";
 import { Check, CheckCircle2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import type { CopilotMessage, TradeDiagnostic } from "../types";
 
 interface CopilotMessagesProps {
@@ -163,22 +164,26 @@ function DiagnosticCard({
       </div>
 
       <div className="grid grid-cols-2 gap-2.5 pt-1 font-mono text-xs">
-        <button
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => toast.success(t("toastSafe", { tradeId: diag.tradeId }))}
-          className="py-2 px-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md shadow-rose-950/40 active:scale-[0.98] transition-all"
+          className="h-auto py-2 px-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-semibold rounded-lg flex items-center justify-center gap-1.5 shadow-md shadow-rose-950/40 active:scale-[0.98] transition-all"
         >
           <Check className="size-3.5" />
           <span>{t("confirmOffer")}</span>
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant={null}
+          size={null}
           onClick={() => onCopy(diag.steamId64, "SteamID64")}
-          className="py-2 px-3 bg-[#1e2536] hover:bg-[#252f44] text-slate-200 font-medium rounded-lg border border-[#2b354d] flex items-center justify-center gap-1.5 transition-colors"
+          className="h-auto py-2 px-3 bg-[#1e2536] hover:bg-[#252f44] text-slate-200 font-medium rounded-lg border border-[#2b354d] flex items-center justify-center gap-1.5 transition-colors"
         >
           <Copy className="size-3.5 text-slate-400" />
           <span>{t("copySteamId")}</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

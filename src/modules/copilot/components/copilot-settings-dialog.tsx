@@ -109,10 +109,12 @@ export function CopilotSettingsDialog({
               {t("alertsLabel")}
             </label>
             <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
-              <button
+              <Button
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => onSoundChange(!soundEnabled)}
-                className={`p-2 rounded-xl border flex items-center justify-between transition-colors ${
+                className={`h-auto p-2 rounded-xl border flex items-center justify-between transition-colors ${
                   soundEnabled
                     ? "bg-[#161c29] border-emerald-500/40 text-emerald-300"
                     : "bg-[#10141e] border-[#1d2331] text-slate-400"
@@ -123,12 +125,14 @@ export function CopilotSettingsDialog({
                   {t("soundChime")}
                 </span>
                 {soundEnabled && <Check className="size-3 text-emerald-400" />}
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
+                variant={null}
+                size={null}
                 onClick={handleTogglePush}
-                className={`p-2 rounded-xl border flex items-center justify-between transition-colors ${
+                className={`h-auto p-2 rounded-xl border flex items-center justify-between transition-colors ${
                   pushEnabled && getPushPermissionStatus() === "granted"
                     ? "bg-[#161c29] border-cyan-500/40 text-cyan-300"
                     : "bg-[#10141e] border-[#1d2331] text-slate-400"
@@ -141,7 +145,7 @@ export function CopilotSettingsDialog({
                 {pushEnabled && getPushPermissionStatus() === "granted" && (
                   <Check className="size-3 text-cyan-400" />
                 )}
-              </button>
+              </Button>
             </div>
           </div>
 

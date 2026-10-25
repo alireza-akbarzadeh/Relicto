@@ -4,6 +4,7 @@ import * as React from "react";
 import { ArrowDownLeft, ArrowUpRight, Copy, Check, Receipt } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import type { DashboardTransaction } from "../types";
 import { TransactionsFilterBar, type TransactionsFilterState } from "./transactions-filter-bar";
 import { GridPagination } from "./grid-pagination";
@@ -133,10 +134,12 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
                       </td>
                       <td className="py-3 font-mono text-[11px] text-text-muted">
                         {tx.hash ? (
-                          <button
+                          <Button
                             type="button"
+                            variant={null}
+                            size={null}
                             onClick={() => copyToClipboard(tx.hash!)}
-                            className="flex items-center gap-1 hover:text-text-primary transition-colors cursor-pointer"
+                            className="flex h-auto items-center gap-1 hover:text-text-primary transition-colors cursor-pointer"
                           >
                             <span>
                               {tx.hash.length > 20 ? `${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}` : tx.hash}
@@ -146,7 +149,7 @@ export function DashboardTransactions({ transactions }: { transactions: Dashboar
                             ) : (
                               <Copy className="size-3" />
                             )}
-                          </button>
+                          </Button>
                         ) : (
                           "Internal Ledger"
                         )}

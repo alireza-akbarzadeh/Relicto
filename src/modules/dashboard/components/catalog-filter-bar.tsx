@@ -43,13 +43,15 @@ export function CatalogFilterBar({
             className="pl-8 pr-8 h-8 text-xs bg-surface-container border-border-subtle"
           />
           {filters.search && (
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => onFilterChange("search", "")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary h-auto"
             >
               <X className="size-3.5" />
-            </button>
+            </Button>
           )}
         </div>
 
@@ -77,18 +79,20 @@ export function CatalogFilterBar({
             { id: "dota2", label: "Dota 2" },
             { id: "tf2", label: "TF2" },
           ].map((g) => (
-            <button
+            <Button
               key={g.id}
               type="button"
+              variant={null}
+              size={null}
               onClick={() => onFilterChange("game", g.id)}
-              className={`px-2 py-1 rounded text-[11px] font-mono transition-colors ${
+              className={`h-auto px-2 py-1 rounded text-[11px] font-mono transition-colors ${
                 filters.game === g.id
                   ? "bg-primary/20 text-primary font-semibold"
                   : "text-text-muted hover:text-text-primary"
               }`}
             >
               {g.label}
-            </button>
+            </Button>
           ))}
         </div>
 

@@ -82,14 +82,16 @@ export function UserDetailSheet({
               <SheetDescription className="text-xs text-text-muted font-mono flex items-center gap-2">
                 <span>@{user.handle}</span>
                 <span>•</span>
-                <button
+                <Button
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={handleCopyId}
-                  className="flex items-center gap-1 hover:text-text-primary transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 hover:text-text-primary transition-colors cursor-pointer"
                 >
                   <span>{user.id.slice(0, 10)}...</span>
                   {copied ? <Check className="size-3 text-emerald-400" /> : <Copy className="size-3" />}
-                </button>
+                </Button>
               </SheetDescription>
             </div>
           </div>

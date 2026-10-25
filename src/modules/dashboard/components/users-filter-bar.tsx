@@ -75,13 +75,15 @@ export function UsersFilterBar({
             className="pl-8 pr-8 h-8 text-xs bg-surface-container border-border-subtle focus-visible:ring-1 focus-visible:ring-primary w-full"
           />
           {filters.search && (
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => onFilterChange("search", "")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary p-0.5"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary p-0.5 cursor-pointer"
             >
               <X className="size-3" />
-            </button>
+            </Button>
           )}
         </div>
 

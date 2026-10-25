@@ -105,11 +105,13 @@ export function ChargeWalletDialog({
               const Icon = r.icon;
               const active = rail === r.id;
               return (
-                <button
+                <Button
                   key={r.id}
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={() => setRail(r.id)}
-                  className={`flex flex-col items-center justify-center p-3 rounded-lg border text-center transition-all ${
+                  className={`flex h-auto flex-col items-center justify-center p-3 rounded-lg border text-center transition-all ${
                     active
                       ? "border-primary bg-primary/10 text-primary font-medium"
                       : "border-border-subtle bg-surface-container/60 hover:bg-surface-container text-text-secondary"
@@ -118,7 +120,7 @@ export function ChargeWalletDialog({
                   <Icon className="size-5 mb-1.5" />
                   <span className="text-xs font-semibold">{r.label}</span>
                   <span className="text-[10px] text-text-muted mt-0.5 line-clamp-1">{r.detail}</span>
-                </button>
+                </Button>
               );
             })}
           </div>

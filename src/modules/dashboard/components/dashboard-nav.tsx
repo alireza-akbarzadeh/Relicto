@@ -55,14 +55,16 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
       <SidebarHeader>
         <div className="flex items-center justify-between px-2 py-1.5 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
           <div className="flex items-center gap-2 group">
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => { if (state === "collapsed") toggleSidebar(); }}
               title={state === "collapsed" ? "Expand sidebar" : "Relicto Ops"}
               className="size-8 rounded bg-primary/10 border border-primary/30 flex items-center justify-center text-primary font-heading font-black text-sm tracking-wider hover:bg-primary/20 transition-colors shrink-0 group-data-[collapsible=icon]:mx-auto cursor-pointer"
             >
               R
-            </button>
+            </Button>
             <Link href="/dashboard" className="group-data-[collapsible=icon]:hidden overflow-hidden">
               <span className="font-heading font-bold text-sm tracking-wide text-text-primary block leading-none hover:text-primary transition-colors">
                 RELICTO

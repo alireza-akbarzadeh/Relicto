@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Bell, Scale, Receipt, ShieldAlert, Check, Server, ExternalLink } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import type { DashboardData, DashboardTab } from "../types";
 
 interface DashboardAlertsFeedProps {
@@ -58,14 +59,16 @@ export function DashboardAlertsFeed({ data, onNavigateTab }: DashboardAlertsFeed
               </span>
             )}
           </div>
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={() => setDismissed(true)}
-            className="text-[11px] text-text-muted hover:text-text-primary flex items-center gap-1 cursor-pointer transition-colors"
+            className="h-auto text-[11px] text-text-muted hover:text-text-primary flex items-center gap-1 cursor-pointer transition-colors"
           >
             <Check className="size-3 text-emerald-400" />
             Clear
-          </button>
+          </Button>
         </div>
 
         <div className="divide-y divide-border-subtle/40 max-h-72 overflow-y-auto no-scrollbar">

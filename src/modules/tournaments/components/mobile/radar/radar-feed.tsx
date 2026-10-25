@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { PingDot } from "@/components/ui/dot";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -94,19 +95,21 @@ export function RadarFeed({ section, matches }: RadarFeedProps) {
               { id: "completed", label: `Results (${counts.completed})` },
             ] as const
           ).map((tab) => (
-            <button
+            <Button
               key={tab.id}
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "whitespace-nowrap rounded-full px-3 py-1 font-label-caps text-xs transition-colors",
+                "h-auto whitespace-nowrap rounded-full px-3 py-1 font-label-caps text-xs transition-colors",
                 activeTab === tab.id
                   ? "bg-surface-container-highest text-primary font-bold shadow-xs"
                   : "bg-surface-container-low text-text-muted hover:text-text-primary",
               )}
             >
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -118,19 +121,21 @@ export function RadarFeed({ section, matches }: RadarFeedProps) {
               { id: "cs2", label: "CS2" },
             ] as const
           ).map((g) => (
-            <button
+            <Button
               key={g.id}
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setGameFilter(g.id)}
               className={cn(
-                "rounded-md px-2.5 py-0.5 text-[11px] font-medium transition-colors",
+                "h-auto rounded-md px-2.5 py-0.5 text-[11px] font-medium transition-colors",
                 gameFilter === g.id
                   ? "bg-primary/20 text-primary border border-primary/40 font-semibold"
                   : "bg-surface-container-low/60 text-text-secondary border border-transparent",
               )}
             >
               {g.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

@@ -104,29 +104,33 @@ export function MatchSpectatorChat({ matchId, teamTags }: MatchSpectatorChatProp
       {/* Cheer chips */}
       <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
         {teamTags.map((tag) => (
-          <button
+          <Button
             key={tag}
             type="button"
+            variant={null}
+            size={null}
             onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
             className={cn(
-              "rounded px-2 py-0.5 text-[10px] font-label-caps transition-colors shrink-0",
+              "h-auto rounded px-2 py-0.5 text-[10px] font-label-caps transition-colors shrink-0",
               selectedTag === tag
                 ? "bg-primary text-on-primary font-bold"
                 : "bg-surface-container-high/60 text-text-muted hover:text-text-primary",
             )}
           >
             Cheer {tag}
-          </button>
+          </Button>
         ))}
         {CHEER_SNIPPETS.map((snip) => (
-          <button
+          <Button
             key={snip}
             type="button"
+            variant={null}
+            size={null}
             onClick={() => handleSend(snip)}
-            className="rounded bg-surface-container-low px-2 py-0.5 text-[10px] text-text-secondary hover:text-text-primary transition-colors shrink-0 border border-white/5"
+            className="h-auto rounded bg-surface-container-low px-2 py-0.5 text-[10px] text-text-secondary hover:text-text-primary transition-colors shrink-0 border border-white/5"
           >
             {snip}
-          </button>
+          </Button>
         ))}
       </div>
 

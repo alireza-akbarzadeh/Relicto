@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Dot } from "@/components/ui/dot";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -122,13 +123,15 @@ export function FeedMatchCard({
       ))}
       {onSelect && (
         <div className="flex justify-end pt-1">
-          <button
+          <Button
             type="button"
+            variant={null}
+            size={null}
             onClick={onSelect}
-            className="flex items-center gap-1 text-[11px] font-label-caps text-text-muted hover:text-primary transition-colors cursor-pointer"
+            className="flex h-auto items-center gap-1 text-[11px] font-label-caps text-text-muted hover:text-primary transition-colors cursor-pointer"
           >
             Inspect Match & Odds <Icon name="chevron_right" className="text-[14px]" />
-          </button>
+          </Button>
         </div>
       )}
     </article>

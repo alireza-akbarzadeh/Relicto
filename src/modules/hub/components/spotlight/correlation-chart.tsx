@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Area, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Button } from "@/components/ui/button";
 import type { SpotlightChart, SpotlightChartPoint } from "../../types";
 
 const TIME_WINDOWS = ["24H", "7D", "30D"] as const;
@@ -63,18 +64,20 @@ export function CorrelationChart({ chart }: { chart: SpotlightChart }) {
           {TIME_WINDOWS.map((win) => {
             const active = win === windowKey;
             return (
-              <button
+              <Button
                 key={win}
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setWindowKey(win)}
-                className={`rounded px-2 py-0.5 font-mono text-[10px] font-bold transition-all ${
+                className={`h-auto rounded px-2 py-0.5 font-mono text-[10px] font-bold transition-all ${
                   active
                     ? "bg-tertiary/20 text-tertiary shadow-xs"
                     : "text-text-muted hover:text-text-primary"
                 }`}
               >
                 {win === "7D" ? "7-DAY LIVE" : win}
-              </button>
+              </Button>
             );
           })}
         </div>

@@ -41,19 +41,21 @@ export function SeedPatternAnalyzer() {
           <span className="font-label-caps text-xs text-text-muted uppercase">Select Weapon Matrix</span>
           <div className="flex flex-wrap gap-1">
             {WEAPONS.map((w) => (
-              <button
+              <Button
                 key={w}
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => setWeapon(w)}
                 className={cn(
-                  "rounded px-2 py-0.5 font-label-badge text-[11px] transition-colors",
+                  "h-auto rounded px-2 py-0.5 font-label-badge text-[11px] transition-colors",
                   weapon === w
                     ? "bg-primary text-white font-bold"
                     : "bg-surface-container-high text-text-muted hover:text-text-primary"
                 )}
               >
                 {w}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

@@ -23,14 +23,16 @@ export function SlotDeck({ slots, fillable, onToggle, onSmartFill, onClear }: Sl
         <span className="font-label-caps text-label-caps text-text-secondary uppercase">Committed Arsenal</span>
         <div className="flex items-center gap-2">
           {anyFilled && onClear && (
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={onClear}
-              className="flex items-center gap-0.5 font-label-badge text-[10px] text-text-muted transition-colors hover:text-error"
+              className="flex h-auto items-center gap-0.5 font-label-badge text-[10px] text-text-muted transition-colors hover:text-error"
             >
               <Icon name="close" className="text-[12px]" />
               Clear
-            </button>
+            </Button>
           )}
           <Button
             variant={null}

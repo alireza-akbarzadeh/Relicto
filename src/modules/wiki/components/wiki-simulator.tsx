@@ -46,11 +46,13 @@ export function WikiSimulator({
 
           {/* Mode Switcher Tabs */}
           <div className="flex items-center gap-1 rounded-lg bg-surface-card p-1 border border-border-dark self-start md:self-auto">
-            <button
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setActiveTab("float")}
               className={cn(
-                "rounded-md px-3 py-1.5 font-headline-sm text-xs uppercase font-bold transition-all flex items-center gap-1.5",
+                "h-auto rounded-md px-3 py-1.5 font-headline-sm text-xs uppercase font-bold transition-all flex items-center gap-1.5",
                 activeTab === "float"
                   ? "bg-primary text-white shadow-md"
                   : "text-text-muted hover:text-text-primary"
@@ -58,12 +60,14 @@ export function WikiSimulator({
             >
               <Icon name="equalizer" className="text-sm" />
               <span>Float Engine</span>
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant={null}
+              size={null}
               onClick={() => setActiveTab("seed")}
               className={cn(
-                "rounded-md px-3 py-1.5 font-headline-sm text-xs uppercase font-bold transition-all flex items-center gap-1.5",
+                "h-auto rounded-md px-3 py-1.5 font-headline-sm text-xs uppercase font-bold transition-all flex items-center gap-1.5",
                 activeTab === "seed"
                   ? "bg-status-upcoming text-surface-container-lowest font-bold shadow-md"
                   : "text-text-muted hover:text-text-primary"
@@ -71,7 +75,7 @@ export function WikiSimulator({
             >
               <Icon name="gps_fixed" className="text-sm" />
               <span>Seed &amp; Blue Gem Lab</span>
-            </button>
+            </Button>
           </div>
         </div>
 

@@ -65,14 +65,16 @@ export function WalletDepositNetworkCard({
           {CRYPTO_NETWORKS.map((n) => {
             const active = n.id === selectedNetworkId;
             return (
-              <button
+              <Button
                 key={n.id}
                 type="button"
+                variant={null}
+                size={null}
                 onClick={() => {
                   setLoading(true);
                   onNetworkChange(n.id);
                 }}
-                className={`flex flex-col items-center justify-center rounded-lg border px-2 py-1.5 text-center transition-all ${
+                className={`flex h-auto flex-col items-center justify-center rounded-lg border px-2 py-1.5 text-center transition-all ${
                   active
                     ? "border-primary bg-primary/20 text-text-primary shadow-xs"
                     : "border-border-subtle bg-surface-card text-text-secondary hover:border-border-subtle hover:text-text-primary"
@@ -80,7 +82,7 @@ export function WalletDepositNetworkCard({
               >
                 <span className="font-data-mono-md text-[11px] font-bold text-text-primary">{n.symbol}</span>
                 <span className="truncate text-[9px] text-text-muted">{n.name.split(" ")[0]}</span>
-              </button>
+              </Button>
             );
           })}
         </div>

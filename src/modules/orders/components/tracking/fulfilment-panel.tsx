@@ -11,7 +11,7 @@ type Headline = { icon: IconName; tone: string; title: string; body: string };
 
 /** What the viewer is waiting for or has to do, by side and stage. */
 function getHeadline(
-  t: (key: any, params?: any) => string,
+  t: ReturnType<typeof useTranslations<"orderTracking">>,
   { role, stage, counterparty }: Fulfilment,
 ): Headline {
   const seller = role === "seller";

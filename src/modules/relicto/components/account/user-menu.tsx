@@ -40,7 +40,7 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
     router.refresh();
   };
 
-  const linkKeys: Record<string, string> = {
+  const linkKeys: Record<string, "dashboard" | "traderProfile" | "ordersEscrow" | "walletIncome" | "sellItems" | "securitySteamGuard"> = {
     "/dashboard": "dashboard",
     "/profile": "traderProfile",
     "/orders": "ordersEscrow",
@@ -48,7 +48,10 @@ function UserMenuInnerContent({ onClose }: { onClose?: () => void }) {
     "/sell": "sellItems",
     "/verify": "securitySteamGuard",
   };
-  const getLinkLabel = (href: string, fallback: string) => linkKeys[href] ? t(linkKeys[href] as any) : fallback;
+  const getLinkLabel = (href: string, fallback: string) => {
+    const key = linkKeys[href];
+    return key ? t(key) : fallback;
+  };
 
   return (
     <div className="flex flex-col gap-1.5 p-2">

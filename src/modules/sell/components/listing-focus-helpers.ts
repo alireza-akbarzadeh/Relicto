@@ -1,3 +1,4 @@
+import type { useTranslations } from "next-intl";
 import type { IconName } from "@/components/ui/icon";
 import type { InventoryItem } from "../types";
 
@@ -25,7 +26,7 @@ export function getActionDetails(
   pending: boolean,
   proceeds: number,
   numPrice: number,
-  t?: (key: any, values?: any) => string,
+  t?: ReturnType<typeof useTranslations<"listingFocus">>,
 ): { icon: IconName; label: string; notice: string } {
   if (mode === "Instant Bot") {
     return {

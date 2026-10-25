@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { formatMoney } from "@/lib/format";
 import {
@@ -56,11 +57,13 @@ export function WalletCashoutNetworkPicker({
               const cfg = CRYPTO_NETWORK_CONFIGS[id];
               const isSelected = network === id;
               return (
-                <button
+                <Button
                   key={id}
                   type="button"
+                  variant={null}
+                  size={null}
                   onClick={() => onNetworkChange(id)}
-                  className={`flex flex-col items-center justify-center rounded-lg border py-1.5 px-1 transition-all ${
+                  className={`flex h-auto flex-col items-center justify-center rounded-lg border py-1.5 px-1 transition-all ${
                     isSelected
                       ? "border-primary bg-primary/10 text-primary shadow-xs"
                       : "border-border-subtle/50 bg-surface-card text-text-muted hover:border-border-subtle hover:text-text-primary"
@@ -68,7 +71,7 @@ export function WalletCashoutNetworkPicker({
                 >
                   <span className="font-headline-sm text-[11px] font-bold">{cfg.chain}</span>
                   <span className="font-data-mono-md text-[9px] opacity-80">${cfg.feeUsd.toFixed(2)}</span>
-                </button>
+                </Button>
               );
             })}
           </div>

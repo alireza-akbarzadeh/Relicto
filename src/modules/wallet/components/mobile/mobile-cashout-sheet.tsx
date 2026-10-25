@@ -82,9 +82,19 @@ export function MobileCashoutSheet({ open, onOpenChange, availableUsd }: Props) 
           {rail === "usdt" && (
             <div className="grid grid-cols-4 gap-1 rounded-xl bg-surface-container-lowest p-1.5">
               {MOBILE_NETWORKS.map((id) => (
-                <button key={id} type="button" onClick={() => setNetwork(id)} className={cn("rounded-lg py-1 text-center font-headline-sm text-[10px]", network === id ? "bg-primary text-on-primary font-bold" : "text-text-muted hover:text-text-primary")}>
+                <Button
+                  key={id}
+                  type="button"
+                  variant={null}
+                  size={null}
+                  onClick={() => setNetwork(id)}
+                  className={cn(
+                    "h-auto rounded-lg py-1 text-center font-headline-sm text-[10px]",
+                    network === id ? "bg-primary text-on-primary font-bold" : "text-text-muted hover:text-text-primary"
+                  )}
+                >
                   {CRYPTO_NETWORK_CONFIGS[id].chain}
-                </button>
+                </Button>
               ))}
             </div>
           )}

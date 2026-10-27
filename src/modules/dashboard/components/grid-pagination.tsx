@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 
 interface GridPaginationProps {
   page: number;
@@ -41,20 +42,17 @@ export function GridPagination({
         {onPageSizeChange && (
           <div className="flex items-center gap-1.5 ml-2">
             <span className="text-[11px] text-text-muted">Rows:</span>
-            <select
-              value={pageSize}
-              onChange={(e) => {
-                onPageSizeChange(Number(e.target.value));
+            <Select
+              label="Rows per page"
+              value={String(pageSize)}
+              onValueChange={(val) => {
+                onPageSizeChange(Number(val));
                 onPageChange(1);
               }}
-              className="h-7 bg-surface-container border border-border-subtle rounded px-1.5 text-xs font-mono text-text-primary outline-none focus:border-primary cursor-pointer"
-            >
-              {pageSizeOptions.map((sz) => (
-                <option key={sz} value={sz}>
-                  {sz}
-                </option>
-              ))}
-            </select>
+              options={pageSizeOptions.map((sz) => ({ value: String(sz), label: String(sz) }))}
+              triggerClassName="h-7 bg-surface-container border border-border-subtle rounded px-1.5 text-xs font-mono text-text-primary flex items-center justify-between cursor-pointer gap-1"
+              iconClassName="size-3 text-text-muted"
+            />
           </div>
         )}
       </div>

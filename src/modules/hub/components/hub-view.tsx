@@ -6,6 +6,7 @@ import { LoadoutShowcase } from "./loadouts/loadout-showcase";
 import { MetaIndex } from "./meta-index/meta-index";
 import { PatchDeltaTable } from "./patch-delta/patch-delta-table";
 import { GameStage } from "./stage/game-stage";
+import { HubChestsShowcase } from "./chests/hub-chests-showcase";
 
 /** Stitch: "Relicto PRO - Game Hub & Meta Intel" — the home page. */
 export function HubView({ hub }: { hub: HubData }) {
@@ -14,6 +15,8 @@ export function HubView({ hub }: { hub: HubData }) {
       <StudioHeader />
       <main className="min-h-screen w-full bg-surface pt-20">
         <GameStage pulse={hub.pulse} games={hub.games} spotlights={hub.spotlights}>
+          {/* Dotaboom.gg Featured Chests & Live Drops Showcase */}
+          <HubChestsShowcase initialChests={hub.chests} />
           <MetaIndex cards={hub.metaCards} />
           <PatchDeltaTable rows={hub.patchDelta} markets={hub.scrapedMarkets} />
           <LoadoutShowcase loadouts={hub.loadouts} />

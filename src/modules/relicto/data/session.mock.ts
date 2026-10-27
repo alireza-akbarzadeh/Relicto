@@ -9,6 +9,7 @@ export const sessionUser: SessionUser = {
   verified: true,
   steamSynced: true,
   walletUsd: 142.5,
+  coins: 2500,
 };
 
 export const notifications: AppNotification[] = [

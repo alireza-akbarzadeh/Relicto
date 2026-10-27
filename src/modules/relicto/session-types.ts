@@ -10,6 +10,7 @@ export type SessionUser = {
   verified: boolean;
   steamSynced: boolean;
   walletUsd: number;
+  coins: number;
 };
 
 export type NotificationTone = "success" | "warning" | "info" | "alert";

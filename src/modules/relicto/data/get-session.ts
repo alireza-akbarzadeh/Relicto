@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
 import { findOrOpenProfile } from "@/server/modules/profile/profile.repository";
 import { walletService } from "@/server/modules/wallet/wallet.service";
+import { chestsService } from "@/server/modules/chests/chests.service";
 import { rethrowNextSignals } from "@/lib/next-signals";
 import type { AppNotification, SessionUser } from "../session-types";
 
@@ -49,6 +50,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
       verified: result?.user.emailVerified ?? true,
       steamSynced: !!profile?.steamId,
       walletUsd: walletCents / 100,
+      coins: chestsService.getUserCoins(userId),
     };
 
     return { user, notifications };
@@ -65,6 +67,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
         verified: result?.user.emailVerified ?? true,
         steamSynced: false,
         walletUsd: 0,
+        coins: 1500,
       },
       notifications: [],
     };

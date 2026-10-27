@@ -7,6 +7,7 @@ export const DASHBOARD_TABS = [
   "transactions",
   "listings",
   "catalog",
+  "chests",
   "tournaments",
   "wiki",
   "community",

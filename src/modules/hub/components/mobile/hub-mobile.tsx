@@ -6,6 +6,7 @@ import { BattleCarousel } from "./battle-carousel";
 import { EventPills } from "./event-pills";
 import { MetaIntel } from "./meta-intel";
 import { SurgeIndex } from "./surge-index";
+import { MobileChestsSection } from "../chests/mobile-chests-section";
 
 /** Mobile game hub (Stitch: "Lootora Mobile — Esports & Meta Intel Hub"). */
 export function HubMobile({ data }: { data: HubMobileData }) {
@@ -16,6 +17,7 @@ export function HubMobile({ data }: { data: HubMobileData }) {
         <div className="flex w-full flex-col gap-4 pb-6">
           <EventPills events={data.events} />
           <ArenaCard matches={data.matches} />
+          <MobileChestsSection />
           <BattleCarousel battles={data.battles} />
           <SurgeIndex surge={data.surge} />
           <MetaIntel heroes={data.heroes} />

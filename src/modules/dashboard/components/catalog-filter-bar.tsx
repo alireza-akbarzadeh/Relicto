@@ -4,6 +4,7 @@ import * as React from "react";
 import { Search, X, RotateCcw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, type SelectOption } from "@/components/ui/select";
 
 export interface CatalogFilterState {
   search: string;
@@ -11,6 +12,22 @@ export interface CatalogFilterState {
   rarity: string;
   sortBy: "name_asc" | "name_desc" | "listings_desc" | "floor_desc";
 }
+
+const RARITY_OPTIONS: readonly SelectOption<string>[] = [
+  { value: "all", label: "All Rarities" },
+  { value: "covert", label: "Covert / Immortal" },
+  { value: "classified", label: "Classified / Ancient" },
+  { value: "restricted", label: "Restricted / Mythical" },
+  { value: "mil-spec", label: "Mil-Spec / Rare" },
+  { value: "melee", label: "Knives & Gloves" },
+];
+
+const SORT_OPTIONS: readonly SelectOption<CatalogFilterState["sortBy"]>[] = [
+  { value: "name_asc", label: "Name: A to Z" },
+  { value: "name_desc", label: "Name: Z to A" },
+  { value: "listings_desc", label: "Most Active Offers" },
+  { value: "floor_desc", label: "Highest Floor Price" },
+];
 
 interface CatalogFilterBarProps {
   filters: CatalogFilterState;
@@ -97,30 +114,24 @@ export function CatalogFilterBar({
         </div>
 
         {/* Rarity filter */}
-        <select
+        <Select
+          label="Catalog Rarity"
           value={filters.rarity}
-          onChange={(e) => onFilterChange("rarity", e.target.value)}
-          className="h-7 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
-        >
-          <option value="all">All Rarities</option>
-          <option value="covert">Covert / Immortal</option>
-          <option value="classified">Classified / Ancient</option>
-          <option value="restricted">Restricted / Mythical</option>
-          <option value="mil-spec">Mil-Spec / Rare</option>
-          <option value="melee">Knives & Gloves</option>
-        </select>
+          onValueChange={(val) => onFilterChange("rarity", val)}
+          options={RARITY_OPTIONS}
+          triggerClassName="h-7 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary flex items-center justify-between cursor-pointer gap-2"
+          iconClassName="size-3 text-text-muted"
+        />
 
         {/* Sort Order */}
-        <select
+        <Select
+          label="Catalog Sort"
           value={filters.sortBy}
-          onChange={(e) => onFilterChange("sortBy", e.target.value as CatalogFilterState["sortBy"])}
-          className="h-7 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
-        >
-          <option value="name_asc">Name: A to Z</option>
-          <option value="name_desc">Name: Z to A</option>
-          <option value="listings_desc">Most Active Offers</option>
-          <option value="floor_desc">Highest Floor Price</option>
-        </select>
+          onValueChange={(val) => onFilterChange("sortBy", val)}
+          options={SORT_OPTIONS}
+          triggerClassName="h-7 px-2 text-xs font-mono rounded bg-surface-container border border-border-subtle text-text-secondary flex items-center justify-between cursor-pointer gap-2"
+          iconClassName="size-3 text-text-muted"
+        />
 
         <span className="ml-auto font-mono text-[11px] text-text-muted">
           Matching Items: <strong className="text-text-primary">{filteredCount}</strong>

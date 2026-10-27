@@ -15,6 +15,7 @@ import { getAdminWiki } from "./get-admin-wiki";
 import { getAdminCommunity } from "./get-admin-community";
 import { getAdminPromos } from "./get-admin-promos";
 import { settingsService } from "@/server/modules/settings/settings.service";
+import { chestsService } from "@/server/modules/chests/chests.service";
 
 export async function getDashboardData(): Promise<DashboardData> {
   const [session, authedUserId] = await Promise.all([getSession(), getUserId()]);
@@ -163,6 +164,7 @@ export async function getDashboardData(): Promise<DashboardData> {
     users: mappedUsers,
     listings: listingsData,
     catalog: catalogData,
+    chests: await chestsService.listChests(true),
     tournamentsList: tournamentsData.tournamentsList,
     matchesList: tournamentsData.matchesList,
     wikiGuides: wikiData,

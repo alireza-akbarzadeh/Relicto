@@ -40,6 +40,22 @@ function SignedInWalletChip() {
           </TooltipTrigger>
           <div className="h-3 w-px bg-white/10" />
 
+          {/* Relicto Coins Chip */}
+          <Link
+            href="/chests"
+            title="Chests & Relicto Coins"
+            className="group flex items-center gap-1.5 rounded-full px-2 py-1 transition-colors hover:bg-surface-container-high"
+          >
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-primary transition-transform group-hover:scale-110">
+              <Icon name="token" className="text-[13px]" />
+            </div>
+            <span className="font-data-mono-md text-xs font-bold tracking-tight text-text-primary">
+              {(user.coins ?? 1500).toLocaleString()} <span className="text-[10px] text-primary">RC</span>
+            </span>
+          </Link>
+
+          <div className="h-3 w-px bg-white/10" />
+
           <Link
             href="/wallet#deposit"
             aria-label={t("depositFunds")}

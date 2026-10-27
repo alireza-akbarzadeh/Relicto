@@ -31,6 +31,13 @@ export const MAIN_NAV: MainNavSection[] = [
         icon: "storefront",
       },
       {
+        href: "/chests",
+        label: "Gaming Chests",
+        description:
+          "Unbox rare skins with Dota 2 escalating odds and Relicto Coins.",
+        icon: "inventory_2",
+      },
+      {
         href: "/tracker",
         label: "Price Tracker",
         description: "Order books, spreads and your watched items.",

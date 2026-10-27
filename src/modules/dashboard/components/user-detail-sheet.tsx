@@ -5,6 +5,7 @@ import { Lock, Unlock, CheckCircle2, DollarSign, Copy, Check, Save } from "lucid
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { toast } from "sonner";
 import type { DashboardUser } from "../types";
 import { adjustUserBalanceAction } from "../actions/admin-users";
@@ -105,13 +106,14 @@ export function UserDetailSheet({
             </span>
             <div className="flex items-center justify-between gap-2">
               <span className="text-text-secondary">Assigned Role:</span>
-              <select
+              <Select
+                label="Assigned Role"
                 value={user.role}
-                onChange={(e) => onRoleChange(user.id, e.target.value)}
-                className="bg-surface-card border border-border-subtle text-text-primary rounded px-2 py-1 text-xs font-mono outline-none focus:border-primary cursor-pointer"
-              >
-                {DASHBOARD_ROLES.map((r) => (<option key={r} value={r}>{r}</option>))}
-              </select>
+                onValueChange={(val) => onRoleChange(user.id, val)}
+                options={DASHBOARD_ROLES.map((r) => ({ value: r, label: r }))}
+                triggerClassName="bg-surface-card border border-border-subtle text-text-primary rounded px-2 py-1 text-xs font-mono flex items-center justify-between cursor-pointer gap-2"
+                iconClassName="size-3 text-text-muted"
+              />
             </div>
 
             <div className="flex items-center justify-between pt-1 border-t border-border-subtle/40">

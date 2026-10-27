@@ -2,13 +2,10 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { LanguageToggle } from "@/components/language-toggle";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { STUDIO_NAV } from "../../data/navigation";
 import { UserMenu } from "../account/user-menu";
-import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
 import { CartButton } from "../cart/cart-button";
 import { StudioHeaderSearch } from "./header-search";
@@ -74,18 +71,6 @@ export function StudioHeader() {
                       </Link>
                     ))}
                   </nav>
-
-                  <hr className="border-white/5" />
-
-                  {/* Mobile Quick Actions */}
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-xs text-text-muted">{t("language")}</span>
-                    <LanguageToggle />
-                  </div>
-                  <div className="flex items-center justify-between px-1">
-                    <span className="text-xs text-text-muted">{t("appearance")}</span>
-                    <ThemeToggle className="bg-surface-container-low p-2 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface" />
-                  </div>
                 </div>
               </SheetContent>
             </Sheet>
@@ -105,14 +90,12 @@ export function StudioHeader() {
             <StudioHeaderSearch />
           </div>
 
-          <LanguageToggle className="hidden sm:inline-flex" />
           <WalletChip />
 
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <CartButton />
           </div>
 
-          <NotificationsMenu trigger="square" />
           <UserMenu trigger="mobile" />
         </div>
       </div>

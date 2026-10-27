@@ -1,9 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Sliders, Gamepad2 } from "lucide-react";
+import { Sliders, Gamepad2, Coins } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import type { DashboardSettings } from "../types";
 
 export function SettingsEconomicsCard({
@@ -144,6 +145,83 @@ export function SettingsEconomicsCard({
               </span>
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      {/* Relicto Coin Economics & Currency Converter */}
+      <Card className="bg-surface-card border-border-subtle">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-heading font-bold text-text-primary flex items-center gap-2">
+            <Coins className="size-4 text-tertiary" />
+            Relicto Coin Economics & Currency Valuation
+          </CardTitle>
+          <CardDescription className="text-xs text-text-muted mt-0.5">
+            Configure exchange ratios between Coins, US Dollars ($), and Toman (تومان), plus drop rewards
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono text-text-secondary">Coins Per $1.00 USD (e.g. 100 RC = $1)</label>
+            <Input
+              type="number"
+              min="1"
+              max="10000"
+              value={settings.coinRatePerUsd ?? 100}
+              onChange={(e) => onChange((s) => ({ ...s, coinRatePerUsd: Number(e.target.value) }))}
+              className="h-8 text-xs font-mono bg-surface-container border-border-subtle"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono text-text-secondary">USD to Toman Rate (1 USD in Toman)</label>
+            <Input
+              type="number"
+              min="1000"
+              step="500"
+              value={settings.tomanRatePerUsd ?? 95000}
+              onChange={(e) => onChange((s) => ({ ...s, tomanRatePerUsd: Number(e.target.value) }))}
+              className="h-8 text-xs font-mono bg-surface-container border-border-subtle"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono text-text-secondary">Daily Login Bonus (Relicto Coins)</label>
+            <Input
+              type="number"
+              min="10"
+              max="5000"
+              value={settings.dailyBonusCoins ?? 100}
+              onChange={(e) => onChange((s) => ({ ...s, dailyBonusCoins: Number(e.target.value) }))}
+              className="h-8 text-xs font-mono bg-surface-container border-border-subtle"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono text-text-secondary">Skin Recycle Rate (Bps: 8500 = 85%)</label>
+            <Input
+              type="number"
+              min="1000"
+              max="10000"
+              value={settings.chestRecycleRateBps ?? 8500}
+              onChange={(e) => onChange((s) => ({ ...s, chestRecycleRateBps: Number(e.target.value) }))}
+              className="h-8 text-xs font-mono bg-surface-container border-border-subtle"
+            />
+          </div>
+
+          <div className="space-y-1.5 sm:col-span-2 flex items-center justify-between rounded-lg border border-border-subtle bg-surface-container p-3">
+            <div>
+              <span className="text-xs font-mono font-bold text-text-primary block">
+                Enable Split / Combination Payment
+              </span>
+              <span className="text-[10px] text-text-muted">
+                Allow traders to use available coins and pay difference in USD or Toman
+              </span>
+            </div>
+            <Switch
+              checked={settings.enableCombinationPayment ?? true}
+              onCheckedChange={(checked) => onChange((s) => ({ ...s, enableCombinationPayment: checked }))}
+            />
+          </div>
         </CardContent>
       </Card>
     </div>

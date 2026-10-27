@@ -138,4 +138,5 @@ export type HubData = {
   threads: Thread[];
   newThreads: number;
   incentive: SellerIncentive;
+  chests?: import("@/modules/chests/types").ChestDefinition[];
 };

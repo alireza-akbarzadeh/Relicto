@@ -16,6 +16,15 @@ export const PAYMENT_RAILS = (balanceCents: number): PaymentRail[] => [
     tone: "cyan",
   },
   {
+    id: "coins",
+    title: "Relicto Coins & Combination Pay",
+    detail: "Pay with RC or Split with Toman/USD",
+    note: "100 RC = $1.00 USD",
+    icon: "token",
+    badge: "Split Pay",
+    tone: "primary",
+  },
+  {
     id: "crypto",
     title: "Web3 Crypto / Steam Pay",
     detail: "USDT • BTC • SOL • ETH",

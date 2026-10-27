@@ -4,6 +4,7 @@ import * as React from "react";
 import { Search, X, RotateCcw, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, type SelectOption } from "@/components/ui/select";
 import { toast } from "sonner";
 import type { DashboardDispute } from "../types";
 
@@ -12,6 +13,19 @@ export interface DisputesFilterState {
   status: "all" | "open" | "under_review" | "resolved_buyer" | "resolved_seller";
   sortBy: "amount_desc" | "newest";
 }
+
+const STATUS_OPTIONS: readonly SelectOption<DisputesFilterState["status"]>[] = [
+  { value: "all", label: "All Disputes" },
+  { value: "open", label: "Open Cases" },
+  { value: "under_review", label: "Under Review" },
+  { value: "resolved_buyer", label: "Resolved (Buyer Refund)" },
+  { value: "resolved_seller", label: "Resolved (Seller Payout)" },
+];
+
+const SORT_OPTIONS: readonly SelectOption<DisputesFilterState["sortBy"]>[] = [
+  { value: "newest", label: "Newest First" },
+  { value: "amount_desc", label: "Amount: High → Low" },
+];
 
 interface DisputesFilterBarProps {
   filters: DisputesFilterState;
@@ -100,29 +114,26 @@ export function DisputesFilterBar({
       <div className="grid grid-cols-2 gap-2 pt-1 border-t border-border-subtle/50 text-xs">
         <div className="flex flex-col gap-1">
           <label className="text-[10px] font-mono uppercase tracking-wider text-text-muted">Status</label>
-          <select
+          <Select
+            label="Dispute Status"
             value={filters.status}
-            onChange={(e) => onFilterChange("status", e.target.value as DisputesFilterState["status"])}
-            className="h-8 bg-surface-container border border-border-subtle rounded-md px-2 text-xs font-mono text-text-primary outline-none cursor-pointer"
-          >
-            <option value="all">All Disputes</option>
-            <option value="open">Open Cases</option>
-            <option value="under_review">Under Review</option>
-            <option value="resolved_buyer">Resolved (Buyer Refund)</option>
-            <option value="resolved_seller">Resolved (Seller Payout)</option>
-          </select>
+            onValueChange={(val) => onFilterChange("status", val)}
+            options={STATUS_OPTIONS}
+            triggerClassName="h-8 bg-surface-container border border-border-subtle rounded-md px-2 text-xs font-mono text-text-primary flex items-center justify-between cursor-pointer w-full"
+            iconClassName="size-3.5 text-text-muted ml-1"
+          />
         </div>
 
         <div className="flex flex-col gap-1">
           <label className="text-[10px] font-mono uppercase tracking-wider text-text-muted">Sort By</label>
-          <select
+          <Select
+            label="Dispute Sort"
             value={filters.sortBy}
-            onChange={(e) => onFilterChange("sortBy", e.target.value as DisputesFilterState["sortBy"])}
-            className="h-8 bg-surface-container border border-border-subtle rounded-md px-2 text-xs font-mono text-text-primary outline-none cursor-pointer"
-          >
-            <option value="newest">Newest First</option>
-            <option value="amount_desc">Amount: High → Low</option>
-          </select>
+            onValueChange={(val) => onFilterChange("sortBy", val)}
+            options={SORT_OPTIONS}
+            triggerClassName="h-8 bg-surface-container border border-border-subtle rounded-md px-2 text-xs font-mono text-text-primary flex items-center justify-between cursor-pointer w-full"
+            iconClassName="size-3.5 text-text-muted ml-1"
+          />
         </div>
       </div>
     </div>

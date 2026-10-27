@@ -23,6 +23,7 @@ import { useQueryState } from "nuqs";
 import { dashboardTabParam } from "../lib/search-params";
 import { DashboardListings } from "./dashboard-listings";
 import { DashboardCatalog } from "./dashboard-catalog";
+import { DashboardChests } from "./dashboard-chests";
 import { DashboardTournaments } from "./dashboard-tournaments";
 import { DashboardWiki } from "./dashboard-wiki";
 import { DashboardCommunity } from "./dashboard-community";
@@ -44,6 +45,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
     transactions: { title: "Treasury Ledger", desc: "Audited cryptographic transaction receipts and vault balance after" },
     listings: { title: "Market Listings & Inventory", desc: "Live peer-to-peer inventory, price floors, wear validation, and moderation" },
     catalog: { title: "Catalog & Weapons Directory", desc: "Canonical weapon models, rarity tiers, CS2 collections, float ranges, and market floor monitoring" },
+    chests: { title: "Chests & Case Drop Odds", desc: "Configure skin pools, Dota 2 escalating odds, and simulate empirical drop rates" },
     tournaments: { title: "Esports & Tournament Operations", desc: "Manage tournament rosters, match schedules, live broadcast states, and bracket scoring" },
     wiki: { title: "Wiki Knowledge Base CMS", desc: "Publish authored guides, float formulas, seed tier lists, and economic mechanics" },
     community: { title: "Community Moderation Feed", desc: "Inspect discussion threads, review reported user comments, and moderate trading feed" },
@@ -137,6 +139,7 @@ export function DashboardShell({ data }: { data: DashboardData }) {
             {tab === "listings" && <DashboardListings listings={data.listings} />}
 
             {tab === "catalog" && <DashboardCatalog catalog={data.catalog} />}
+            {tab === "chests" && <DashboardChests initialChests={data.chests} />}
 
             {tab === "tournaments" && (
               <DashboardTournaments tournaments={data.tournamentsList} matches={data.matchesList} />

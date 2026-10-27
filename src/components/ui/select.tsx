@@ -19,6 +19,7 @@ type SelectProps<T extends string> = {
   /** Custom chevron element (e.g. a Lucide icon); replaces the default icon. */
   indicator?: ReactNode;
   label: string;
+  disabled?: boolean;
 };
 
 /**
@@ -34,9 +35,10 @@ export function Select<T extends string>({
   icon = true,
   indicator,
   label,
+  disabled,
 }: SelectProps<T>) {
   return (
-    <SelectPrimitive.Root value={value} onValueChange={(v) => onValueChange(v as T)}>
+    <SelectPrimitive.Root value={value} onValueChange={(v) => onValueChange(v as T)} disabled={disabled}>
       <SelectPrimitive.Trigger aria-label={label} className={cn("relative text-left outline-hidden", triggerClassName)}>
         <SelectPrimitive.Value />
         {icon && (

@@ -5,6 +5,7 @@ export type DashboardTab =
   | "transactions"
   | "listings"
   | "catalog"
+  | "chests"
   | "tournaments"
   | "wiki"
   | "community"
@@ -242,6 +243,13 @@ export type DashboardSettings = {
   announcementSeverity: "info" | "warning" | "critical" | "success";
   announcementLink?: string | null;
 
+  // Gaming Coins & Currency Converter Settings
+  coinRatePerUsd: number;
+  tomanRatePerUsd: number;
+  dailyBonusCoins: number;
+  enableCombinationPayment: boolean;
+  chestRecycleRateBps: number;
+
   // Identity & Support
   platformName: string;
   supportEmail: string;
@@ -274,6 +282,7 @@ export type DashboardData = {
   users: DashboardUser[];
   listings: DashboardListing[];
   catalog: DashboardCatalogItem[];
+  chests: import("@/modules/chests/types").ChestDefinition[];
   tournamentsList: DashboardTournament[];
   matchesList: DashboardMatch[];
   wikiGuides: DashboardWikiGuide[];

@@ -1,6 +1,7 @@
 import "server-only";
 import { rethrowNextSignals } from "@/lib/next-signals";
 import { listingService } from "@/server/modules/listings/listings.service";
+import { chestsService } from "@/server/modules/chests/chests.service";
 import type { HubMobileData } from "../mobile.types";
 import type { HubData } from "../types";
 import { hubMobile } from "./hub-mobile.mock";
@@ -20,7 +21,10 @@ const money = (usd: number) => `$${usd.toLocaleString("en-US", { minimumFraction
  */
 export async function getHub(): Promise<HubData> {
   try {
-    const { liquidityUsd, floorsBySlug } = await listingService.marketStats(Object.values(SPOTLIGHT_FLOORS));
+    const [{ liquidityUsd, floorsBySlug }, chests] = await Promise.all([
+      listingService.marketStats(Object.values(SPOTLIGHT_FLOORS)),
+      chestsService.listChests(false).catch(() => []),
+    ]);
 
     const dotaFloor = floorsBySlug.get(SPOTLIGHT_FLOORS.dota);
     const cs2Floor = floorsBySlug.get(SPOTLIGHT_FLOORS.cs2);
@@ -50,6 +54,7 @@ export async function getHub(): Promise<HubData> {
       threads,
       newThreads,
       incentive,
+      chests,
     };
   } catch (error) {
     rethrowNextSignals(error);

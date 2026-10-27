@@ -30,6 +30,13 @@ export const DEFAULT_PLATFORM_SETTINGS: DashboardSettings = {
   announcementSeverity: "info",
   announcementLink: null,
 
+  // Gaming Coins & Currency Converter Defaults
+  coinRatePerUsd: 100,
+  tomanRatePerUsd: 95000,
+  dailyBonusCoins: 100,
+  enableCombinationPayment: true,
+  chestRecycleRateBps: 8500,
+
   platformName: "Relicto",
   supportEmail: "support@relicto.gg",
   discordUrl: "https://discord.gg/relicto",

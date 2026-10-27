@@ -1,12 +1,9 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { LanguageToggle } from "@/components/language-toggle";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Icon } from "@/components/ui/icon";
 import { toPersianDigits } from "@/lib/format";
 import { UserMenu } from "../account/user-menu";
-import { NotificationsMenu } from "../notifications/notifications-menu";
 import { MarketBrand } from "./brand";
 import { MarketHeaderSearch } from "./header-search";
 import { MainNav } from "./main-nav";
@@ -45,9 +42,6 @@ export function MarketHeader() {
           </div>
           <WalletChip />
           <CartButton />
-          <LanguageToggle className="rounded bg-surface-container p-2 text-text-secondary hover:bg-surface-container-high hover:text-text-primary" />
-          <ThemeToggle className="rounded bg-surface-container p-2 text-text-secondary hover:bg-surface-container-high hover:text-text-primary" />
-          <NotificationsMenu trigger="count" />
           <UserMenu trigger="market" />
         </div>
       </div>

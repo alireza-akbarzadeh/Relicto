@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 import { submitVendorReview } from "../../actions/review";
@@ -139,7 +140,7 @@ export function ReviewVendorCard({ code, vendorHandle }: ReviewVendorCardProps) 
 
       {/* Feedback Text Input */}
       <div className="flex flex-col gap-1.5">
-        <input
+        <Input
           type="text"
           value={quote}
           onChange={(e) => setQuote(e.target.value)}

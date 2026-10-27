@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Icon } from "@/components/ui/icon";
 import { syncSteamAvatarAction, uploadProfileMedia } from "../../actions/media";
 import { AVATAR_PRESETS } from "./profile-avatar-picker";
@@ -167,7 +168,7 @@ export function ProfileMediaUpload({
             <Icon name={uploadingVideo ? "progress_activity" : "videocam"} className={`text-[13px] ${uploadingVideo ? "animate-spin" : ""}`} />
             <span>{uploadingVideo ? "Uploading Video..." : "Upload MP4 / WebM"}</span>
           </Button>
-          <input
+          <Input
             type="text"
             value={highlightVideo}
             onChange={(e) => setHighlightVideo(e.target.value)}

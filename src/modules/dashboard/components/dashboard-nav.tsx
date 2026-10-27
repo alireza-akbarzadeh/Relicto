@@ -36,6 +36,7 @@ export function DashboardNav({ currentTab, onTabChange, kpis, user, usersCount }
   const MANAGEMENT_NAV = [
     { tab: "listings" as const, label: "Market Listings", icon: Tag },
     { tab: "catalog" as const, label: "Catalog & Weapons", icon: Package },
+    { tab: "chests" as const, label: "Chests & Case Odds", icon: Package },
     { tab: "tournaments" as const, label: "Tournaments & Esports", icon: Trophy },
     { tab: "wiki" as const, label: "Wiki Codex CMS", icon: BookOpen },
     { tab: "community" as const, label: "Community Moderation", icon: MessageSquare },

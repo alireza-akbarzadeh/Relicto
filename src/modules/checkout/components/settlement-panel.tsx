@@ -47,6 +47,7 @@ export function SettlementPanel({
     if (pending) return t("ctaDispatching");
     if (payment === "card") return t("ctaCard", { total: formatMoney(total) });
     if (payment === "crypto") return t("ctaCrypto", { total: formatMoney(total) });
+    if (payment === "coins") return `Pay with Coins (${Math.round(total * 100).toLocaleString()} RC)`;
     if (payment === "steam") return t("ctaSteam", { total: formatMoney(total) });
     return t("ctaAuthorize", { total: formatMoney(total) });
   };

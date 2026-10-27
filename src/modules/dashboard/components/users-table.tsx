@@ -3,9 +3,11 @@
 import * as React from "react";
 import { Shield, Lock, Unlock, CheckCircle2, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import type { DashboardUser } from "../types";
 
 export const DASHBOARD_ROLES = ["Admin", "Operator", "Trader", "VIP Trader", "Moderator", "Suspended"] as const;
+const ROLE_OPTIONS = DASHBOARD_ROLES.map((r) => ({ value: r, label: r }));
 
 interface UsersTableProps {
   users: DashboardUser[];
@@ -56,18 +58,15 @@ export function UsersTable({ users, loadingId, onRoleChange, onToggleFreeze, onI
                 </div>
               </td>
               <td className="py-3">
-                <select
+                <Select
+                  label="User Role"
                   value={u.role}
                   disabled={loadingId === u.id}
-                  onChange={(e) => onRoleChange(u.id, e.target.value)}
-                  className="bg-surface-container border border-border-subtle text-text-primary rounded px-2 py-1 text-xs font-mono font-medium outline-none focus:border-primary cursor-pointer"
-                >
-                  {DASHBOARD_ROLES.map((r) => (
-                    <option key={r} value={r}>
-                      {r}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(val) => onRoleChange(u.id, val)}
+                  options={ROLE_OPTIONS}
+                  triggerClassName="bg-surface-container border border-border-subtle text-text-primary rounded px-2 py-1 text-xs font-mono font-medium flex items-center justify-between cursor-pointer gap-2 disabled:opacity-50"
+                  iconClassName="size-3 text-text-muted"
+                />
               </td>
               <td className="py-3 font-mono font-bold text-text-primary">{formatUsd(u.balanceCents)}</td>
               <td className="py-3">

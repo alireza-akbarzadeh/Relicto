@@ -20,12 +20,19 @@ const STREAKS_FILE_PATH = path.join(process.cwd(), ".chest-streaks-runtime.json"
 const USER_COINS_FILE_PATH = path.join(process.cwd(), ".user-coins-runtime.json");
 const LIVE_DROPS_FILE_PATH = path.join(process.cwd(), ".live-drops-runtime.json");
 const UNBOX_RECORDS_FILE_PATH = path.join(process.cwd(), ".unbox-records-runtime.json");
+const DAILY_BONUS_FILE_PATH = path.join(process.cwd(), ".daily-bonus-runtime.json");
+
+export type DailyBonusRecord = {
+  lastClaimAt: number;
+  streak: number;
+};
 
 let memoryChests: ChestDefinition[] | null = null;
 let memoryStreaks: Record<string, number> | null = null; // key: `${userId}:${chestId}`
 let memoryCoins: Record<string, number> | null = null; // key: userId -> coin balance
 let memoryLiveDrops: LiveDropItem[] | null = null;
 let memoryUnboxRecords: Record<string, UnboxRecord> | null = null;
+let memoryDailyBonus: Record<string, DailyBonusRecord> | null = null;
 
 function readJsonSafe<T>(filePath: string, fallback: T): T {
   try {
@@ -188,5 +195,20 @@ export const chestsRepository = {
       return true;
     }
     return false;
+  },
+
+  getDailyBonusRecord(userId: string): DailyBonusRecord | null {
+    if (!memoryDailyBonus) {
+      memoryDailyBonus = readJsonSafe<Record<string, DailyBonusRecord>>(DAILY_BONUS_FILE_PATH, {});
+    }
+    return memoryDailyBonus[userId] ?? null;
+  },
+
+  saveDailyBonusRecord(userId: string, record: DailyBonusRecord) {
+    if (!memoryDailyBonus) {
+      memoryDailyBonus = readJsonSafe<Record<string, DailyBonusRecord>>(DAILY_BONUS_FILE_PATH, {});
+    }
+    memoryDailyBonus[userId] = record;
+    writeJsonSafe(DAILY_BONUS_FILE_PATH, memoryDailyBonus);
   },
 };

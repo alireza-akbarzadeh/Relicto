@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { profiles } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { getUserId } from "@/modules/relicto/data/get-session";
+import { securityLog } from "@/server/modules/security/security-logger";
 
 export type RoleCheckResult =
   | { authorized: true; userId: string; role: string }
@@ -26,6 +27,10 @@ export async function requireAdminRole(): Promise<RoleCheckResult> {
     .limit(1);
 
   if (!profile || profile.role?.toLowerCase() !== "admin") {
+    securityLog.warn("AUTHZ_FAILURE", `User ${userId} attempted administrative action without admin role`, {
+      userId,
+      metadata: { currentRole: profile?.role || "none" },
+    });
     return { authorized: false, status: 403, error: "Administrative privileges required" };
   }
 

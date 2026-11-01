@@ -206,17 +206,73 @@ export class ChestsService {
     };
   }
 
-  claimDailyBonus(userId: string): DailyBonusState {
-    const currentCoins = chestsRepository.getUserCoins(userId);
-    const bonusAmount = 100;
-    chestsRepository.setUserCoins(userId, currentCoins + bonusAmount);
+  getDailyBonusState(userId: string): DailyBonusState {
+    const record = chestsRepository.getDailyBonusRecord(userId);
+    const DAY_MS = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+
+    if (!record) {
+      return {
+        canClaim: true,
+        currentStreak: 0,
+        bonusCoins: 100,
+        nextBonusCoins: 125,
+        timeUntilNextClaimSec: 0,
+      };
+    }
+
+    const elapsed = now - record.lastClaimAt;
+    if (elapsed < DAY_MS) {
+      const timeUntilNextClaimSec = Math.ceil((DAY_MS - elapsed) / 1000);
+      return {
+        canClaim: false,
+        currentStreak: record.streak,
+        bonusCoins: 100 + Math.max(0, record.streak - 1) * 25,
+        nextBonusCoins: 100 + record.streak * 25,
+        timeUntilNextClaimSec,
+      };
+    }
+
+    const isStreakAlive = elapsed < 2 * DAY_MS;
+    const activeStreak = isStreakAlive ? record.streak : 0;
+    return {
+      canClaim: true,
+      currentStreak: activeStreak,
+      bonusCoins: 100 + activeStreak * 25,
+      nextBonusCoins: 100 + (activeStreak + 1) * 25,
+      timeUntilNextClaimSec: 0,
+    };
+  }
+
+  claimDailyBonus(userId: string): { success: boolean; error?: string; bonusState: DailyBonusState } {
+    const state = this.getDailyBonusState(userId);
+    if (!state.canClaim) {
+      const waitHours = Math.ceil(state.timeUntilNextClaimSec / 3600);
+      return {
+        success: false,
+        error: `Daily bonus already claimed. Please wait ${waitHours}h before next drop.`,
+        bonusState: state,
+      };
+    }
+
+    const newStreak = state.currentStreak + 1;
+    this.addCoins(userId, state.bonusCoins, "Daily Loyalty Reward");
+    chestsRepository.saveDailyBonusRecord(userId, {
+      lastClaimAt: Date.now(),
+      streak: newStreak,
+    });
+
+    const updatedState: DailyBonusState = {
+      canClaim: false,
+      currentStreak: newStreak,
+      bonusCoins: state.bonusCoins,
+      nextBonusCoins: 100 + newStreak * 25,
+      timeUntilNextClaimSec: 86400,
+    };
 
     return {
-      canClaim: false,
-      currentStreak: 1,
-      bonusCoins: bonusAmount,
-      nextBonusCoins: 150,
-      timeUntilNextClaimSec: 86400,
+      success: true,
+      bonusState: updatedState,
     };
   }
 

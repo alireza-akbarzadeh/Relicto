@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { watchItem } from "@/server/realtime/market-listener";
@@ -23,7 +22,12 @@ const DEBOUNCE_MS = 250;
  * and the book only ever flows server → browser.
  */
 export async function GET(request: NextRequest) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const secFetchSite = request.headers.get("sec-fetch-site");
+  if (secFetchSite === "cross-site") {
+    return new Response("Forbidden: Cross-site real-time connection rejected", { status: 403 });
+  }
+
+  const session = await auth.api.getSession({ headers: request.headers });
   if (!session) return new Response("Unauthorized", { status: 401 });
 
   const slug = request.nextUrl.searchParams.get("item") ?? "";

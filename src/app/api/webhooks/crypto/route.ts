@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { bearerMatches } from "@/server/modules/shared/bearer";
 import { verifyAndSettleCryptoDeposit } from "@/server/modules/crypto/crypto-gateway.service";
 import { cryptoWebhookInputSchema } from "@/server/modules/crypto/crypto.schema";
+import { securityLog } from "@/server/modules/security/security-logger";
 
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
@@ -12,6 +13,9 @@ export async function POST(req: NextRequest) {
   }
 
   if (!bearerMatches(authHeader, secret)) {
+    securityLog.warn("AUTH_FAILURE", "Crypto webhook authentication failure", {
+      endpoint: "/api/webhooks/crypto",
+    });
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

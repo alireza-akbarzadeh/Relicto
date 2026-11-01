@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { securityLog } from "@/server/modules/security/security-logger";
 
 export function getTrustedOrigins(): string[] {
   const vercelOrigin = process.env.VERCEL_URL
@@ -22,6 +23,7 @@ export function verifyCsrf(req: Request): { valid: true } | { valid: false; resp
   // 1. Fetch Metadata check (Sec-Fetch-Site)
   const secFetchSite = req.headers.get("sec-fetch-site");
   if (secFetchSite === "cross-site") {
+    securityLog.warn("CSRF_VIOLATION", "Cross-site mutating request rejected via Sec-Fetch-Site");
     return {
       valid: false,
       response: NextResponse.json(
@@ -44,6 +46,7 @@ export function verifyCsrf(req: Request): { valid: true } | { valid: false; resp
         (host && originUrl.host.toLowerCase() === host.toLowerCase());
 
       if (!isTrusted) {
+        securityLog.warn("CSRF_VIOLATION", `Origin verification failed: untrusted origin ${origin}`);
         return {
           valid: false,
           response: NextResponse.json(

@@ -76,6 +76,8 @@ export const escrowService = {
   delivered(code: string) {
     return transition(code, async (tx, locked) => {
       const { order, line } = locked;
+      if (!(await repo.hasDispatchedOffer(tx, order.id))) return "unchanged";
+
       const now = new Date();
       // Basket discounts are Relicto's promotion, so the seller is paid the listed price.
       const payoutCents = order.subtotalCents;

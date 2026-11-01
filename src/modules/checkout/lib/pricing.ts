@@ -8,6 +8,8 @@ export const COMBO_THRESHOLD = 3;
 export const COMBO_DISCOUNT_CENTS = 2500;
 /** The tournament code the settlement panel offers (`TI14-MAJOR-VIP`). */
 export const PROMO_DISCOUNT_CENTS = 1500;
+/** Minimum basket subtotal required to activate promotional tournament relief ($20.00). */
+export const PROMO_MIN_SUBTOTAL_CENTS = 2000;
 
 export type Quote = {
   subtotalCents: number;
@@ -23,7 +25,8 @@ export function quote(priceCents: number[], promo: boolean): Quote {
   const subtotalCents = sum(priceCents);
   const comboCents =
     priceCents.length >= COMBO_THRESHOLD ? COMBO_DISCOUNT_CENTS : 0;
-  const promoCents = promo ? PROMO_DISCOUNT_CENTS : 0;
+  const promoCents =
+    promo && subtotalCents >= PROMO_MIN_SUBTOTAL_CENTS ? PROMO_DISCOUNT_CENTS : 0;
 
   return {
     subtotalCents,

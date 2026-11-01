@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { securityLog } from "./security-logger";
 
 export interface RateLimitConfig {
   windowMs: number;
@@ -161,6 +162,10 @@ export function applyRateLimit(
   };
 
   if (!result.allowed) {
+    securityLog.warn("RATE_LIMIT_EXCEEDED", `Rate limit triggered on '${limiter.name}'`, {
+      clientIp: getClientIp(req),
+      metadata: { limiter: limiter.name, retryAfter: result.retryAfterSeconds },
+    });
     headers["Retry-After"] = String(result.retryAfterSeconds);
     return {
       allowed: false,

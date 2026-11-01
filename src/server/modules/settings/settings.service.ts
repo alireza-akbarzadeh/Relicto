@@ -71,8 +71,10 @@ export class SettingsService {
     const current = await this.getSettings();
     const merged: DashboardSettings = { ...current };
 
+    const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
     for (const [key, value] of Object.entries(updates)) {
-      if (value !== undefined) {
+      if (FORBIDDEN_KEYS.has(key)) continue;
+      if (value !== undefined && Object.prototype.hasOwnProperty.call(DEFAULT_PLATFORM_SETTINGS, key)) {
         (merged as unknown as Record<string, unknown>)[key] = value;
       }
     }

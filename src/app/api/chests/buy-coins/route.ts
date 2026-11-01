@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { buyCoinsInput } from "@/server/modules/chests/chests.schema";
 
 export async function POST(req: Request) {
   try {
@@ -9,13 +10,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Please sign in to buy coins" }, { status: 401 });
     }
 
-    const { packageId, currency = "usd" } = await req.json();
-    const res = chestsService.buyCoinPackage(userId, packageId);
+    const body = await req.json().catch(() => null);
+    const parsed = buyCoinsInput.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid coin purchase parameters", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
+
+    const res = chestsService.buyCoinPackage(userId, parsed.data.packageId);
 
     return NextResponse.json({
       success: true,
       newBalance: res.newBalance,
-      currency,
+      currency: parsed.data.currency,
     });
   } catch (err) {
     console.error("[api/chests/buy-coins] Error:", err);

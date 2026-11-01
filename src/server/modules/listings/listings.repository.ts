@@ -2,6 +2,7 @@ import "server-only";
 
 import { and, asc, count, desc, eq, gte, ilike, inArray, lt, lte, min, or, sql, sum, type SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { containsPattern } from "@/lib/db/sql-sanitize";
 import { heroes, items, listings, watchlist } from "@/lib/db/schema";
 import type { CreateListingInput, ListListingsInput } from "./listings.schema";
 
@@ -9,9 +10,9 @@ import type { CreateListingInput, ListListingsInput } from "./listings.schema";
 export function buildFilters(input: ListListingsInput): SQL[] {
   const filters: SQL[] = [eq(listings.status, "active")];
 
-  if (input.query) {
-    /* The sidebar's box searches the item and its hero, as the client did. */
-    const like = `%${input.query}%`;
+  if (input.query?.trim()) {
+    /* The sidebar's box searches the item and its hero, with wildcards safely escaped. */
+    const like = containsPattern(input.query.trim());
     filters.push(or(ilike(items.name, like), ilike(heroes.name, like))!);
   }
   if (input.gameId) filters.push(eq(items.gameId, input.gameId));

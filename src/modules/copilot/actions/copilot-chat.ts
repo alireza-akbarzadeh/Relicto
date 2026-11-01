@@ -9,13 +9,10 @@ import {
   getCachedAiResponse,
   setCachedAiResponse,
 } from "../lib/copilot-rate-limit";
+import { copilotChatInputSchema, type CopilotChatInput } from "../copilot.schema";
 import type { TradeDiagnostic } from "../types";
 
-export interface SendChatMessageInput {
-  message: string;
-  history?: Array<{ role: "user" | "assistant"; content: string }>;
-  modelOverride?: string;
-}
+export type SendChatMessageInput = CopilotChatInput;
 
 export interface SendChatMessageOutput {
   success: boolean;
@@ -45,8 +42,20 @@ export async function sendChatMessageAction(
 ): Promise<SendChatMessageOutput> {
   const startTime = Date.now();
 
+  const parsed = copilotChatInputSchema.safeParse(input);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Invalid input parameters",
+      reply: "Diagnostic input rejected: Please check message length and parameters.",
+      modelUsed: "security-filter",
+      latencyMs: 0,
+    };
+  }
+  const valid = parsed.data;
+
   // 1. Check response cache first to eliminate duplicate API costs
-  const cached = getCachedAiResponse(input.message);
+  const cached = getCachedAiResponse(valid.message);
   if (cached) {
     return {
       success: true,
@@ -64,7 +73,7 @@ export async function sendChatMessageAction(
     const rate = checkAiRateLimit(ip);
 
     if (!rate.allowed) {
-      const fallback = resolveSentinelLocalKnowledge(input.message);
+      const fallback = resolveSentinelLocalKnowledge(valid.message);
       return {
         success: true,
         reply: `⚠️ Rate limit: ${rate.reason}\n\n${fallback.reply}`,
@@ -79,7 +88,7 @@ export async function sendChatMessageAction(
   }
 
   const apiKey = process.env.GEMINI_API_KEY || process.env.GEMENI_API_KEY || "";
-  let model = input.modelOverride || process.env.GEMINI_MODEL || "gemini-3.8-flash";
+  let model = valid.modelOverride || process.env.GEMINI_MODEL || "gemini-3.8-flash";
   if (model.includes("2.5") || model.includes("2.0") || model.includes("1.5")) {
     model = "gemini-3.8-flash";
   }
@@ -87,14 +96,14 @@ export async function sendChatMessageAction(
   try {
     const ai = new GoogleGenAI({ apiKey });
 
-    const contents = (input.history ?? []).slice(-8).map((m) => ({
+    const contents = (valid.history ?? []).slice(-8).map((m) => ({
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.content }],
     }));
 
     contents.push({
       role: "user",
-      parts: [{ text: input.message }],
+      parts: [{ text: valid.message }],
     });
 
     const timeoutPromise = new Promise<never>((_, reject) =>

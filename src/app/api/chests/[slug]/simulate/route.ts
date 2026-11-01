@@ -1,20 +1,35 @@
 import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { chestSlugSchema, simulateChestInput } from "@/server/modules/chests/chests.schema";
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
+    const rawParams = await params;
+    const slugParsed = chestSlugSchema.safeParse(rawParams.slug);
+    if (!slugParsed.success) {
+      return NextResponse.json({ error: "Invalid chest identifier" }, { status: 400 });
+    }
+    const slug = slugParsed.data;
+
     const userId = await getUserId();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { count = 1000 } = await req.json();
-    const stats = chestsService.simulateRolls(slug, Math.min(10000, Math.max(10, count)));
+    const body = await req.json().catch(() => ({}));
+    const parsed = simulateChestInput.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid simulation parameters", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
+
+    const stats = chestsService.simulateRolls(slug, parsed.data.count);
 
     return NextResponse.json({
       success: true,

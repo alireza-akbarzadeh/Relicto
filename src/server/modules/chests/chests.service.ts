@@ -140,6 +140,17 @@ export class ChestsService {
       recycleCoinsValue,
     };
 
+    // Persist unbox provenance record to prevent forgeable client recycling
+    chestsRepository.saveUnboxRecord({
+      id: result.id,
+      userId,
+      chestId: chest.id,
+      wonItem: roll.wonItem,
+      recycleCoinsValue,
+      recycled: false,
+      createdAt: Date.now(),
+    });
+
     // Register live drop ticker
     chestsRepository.addLiveDrop({
       id: result.id,
@@ -158,8 +169,40 @@ export class ChestsService {
     };
   }
 
-  recycleWonItem(userId: string, coinsValue: number): number {
-    return this.addCoins(userId, coinsValue, "Recycled unboxed item");
+  recycleWonItem(
+    userId: string,
+    unboxId: string
+  ): { success: boolean; error?: string; newBalance?: number; creditedCoins?: number } {
+    const unbox = chestsRepository.getUnboxRecord(unboxId);
+    if (!unbox) {
+      return { success: false, error: "Unbox record not found or expired" };
+    }
+
+    if (unbox.userId !== userId) {
+      return { success: false, error: "Unauthorized: You do not own this unboxed asset" };
+    }
+
+    if (unbox.recycled) {
+      return { success: false, error: "This item has already been recycled" };
+    }
+
+    const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+    if (Date.now() - unbox.createdAt > MAX_AGE_MS) {
+      return { success: false, error: "Recycle window for this drop has expired" };
+    }
+
+    const marked = chestsRepository.markUnboxRecycled(unboxId);
+    if (!marked) {
+      return { success: false, error: "Failed to mark item as recycled" };
+    }
+
+    const newBalance = this.addCoins(userId, unbox.recycleCoinsValue, `Recycled ${unbox.wonItem.name}`);
+
+    return {
+      success: true,
+      newBalance,
+      creditedCoins: unbox.recycleCoinsValue,
+    };
   }
 
   claimDailyBonus(userId: string): DailyBonusState {

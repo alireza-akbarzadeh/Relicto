@@ -11,3 +11,11 @@ export const placeOrderInput = z.object({
   cartIds: z.array(z.string().min(1).max(64)).min(1).max(50),
   txHash: z.string().trim().max(128).optional(),
 });
+
+export const createCheckoutStripeSessionInput = z
+  .object({
+    promo: z.boolean().optional().default(false),
+    cartIds: z.array(z.string().trim().min(1).max(64)).min(1).max(50),
+  })
+  .strict();
+export type CreateCheckoutStripeSessionInput = z.infer<typeof createCheckoutStripeSessionInput>;

@@ -1,26 +1,38 @@
 import { NextResponse } from "next/server";
 import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { chestSlugSchema, openChestInput } from "@/server/modules/chests/chests.schema";
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
-    const [userId, session] = await Promise.all([getUserId(), getSession()]);
+    const rawParams = await params;
+    const slugParsed = chestSlugSchema.safeParse(rawParams.slug);
+    if (!slugParsed.success) {
+      return NextResponse.json({ error: "Invalid chest identifier" }, { status: 400 });
+    }
+    const slug = slugParsed.data;
 
+    const [userId, session] = await Promise.all([getUserId(), getSession()]);
     if (!userId) {
       return NextResponse.json({ error: "Please sign in to open chests" }, { status: 401 });
     }
 
-    const body = await req.json();
-    const { paymentMethod = "coins", splitCoinAmount = 0, clientSeed } = body;
+    const body = await req.json().catch(() => ({}));
+    const parsed = openChestInput.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid unboxing parameters", issues: parsed.error.issues },
+        { status: 400 }
+      );
+    }
 
     const res = await chestsService.openChest(userId, slug, {
-      paymentMethod,
-      splitCoinAmount,
-      clientSeed,
+      paymentMethod: parsed.data.paymentMethod,
+      splitCoinAmount: parsed.data.splitCoinAmount,
+      clientSeed: parsed.data.clientSeed,
       traderHandle: session?.user?.handle,
     });
 

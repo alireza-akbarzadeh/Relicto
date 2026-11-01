@@ -3,17 +3,23 @@ import { requireUserId } from "@/modules/relicto/data/get-session";
 import { verifyTronTransactionOnChain } from "@/server/modules/crypto/tron-verifier";
 import { deposit } from "@/server/modules/wallet/wallet.deposit";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
+import { tronVerifyInputSchema } from "@/server/modules/crypto/crypto.schema";
 import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
     const userId = await requireUserId();
-    const body = await req.json();
+    const body = await req.json().catch(() => null);
 
-    const { txHash, amountUsd, expectedRecipient } = body || {};
-    if (!txHash || typeof amountUsd !== "number" || amountUsd <= 0) {
-      return NextResponse.json({ error: "missing_fields" }, { status: 400 });
+    const parsed = tronVerifyInputSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "invalid_input", issues: parsed.error.issues },
+        { status: 400 }
+      );
     }
+
+    const { txHash, amountUsd, expectedRecipient } = parsed.data;
 
     // 1. Verify transaction on-chain via TronGrid
     const verifyResult = await verifyTronTransactionOnChain({

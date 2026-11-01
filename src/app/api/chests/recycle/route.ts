@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { recycleChestItemInput } from "@/server/modules/chests/chests.schema";
 
 export async function POST(req: Request) {
   try {
@@ -9,13 +10,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { coinsValue } = await req.json();
-    if (typeof coinsValue !== "number" || coinsValue <= 0) {
-      return NextResponse.json({ error: "Invalid coin amount" }, { status: 400 });
+    const body = await req.json().catch(() => null);
+    const parsed = recycleChestItemInput.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid recycle payload", issues: parsed.error.issues },
+        { status: 400 }
+      );
     }
 
-    const newBalance = chestsService.recycleWonItem(userId, coinsValue);
-    return NextResponse.json({ success: true, newBalance });
+    const res = chestsService.recycleWonItem(userId, parsed.data.unboxId);
+    if (!res.success) {
+      return NextResponse.json({ error: res.error }, { status: 400 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      newBalance: res.newBalance,
+      creditedCoins: res.creditedCoins,
+    });
   } catch (err) {
     console.error("[api/chests/recycle] Error:", err);
     return NextResponse.json({ error: "Failed to recycle item" }, { status: 500 });

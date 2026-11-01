@@ -26,7 +26,15 @@ export type UploadActionResult =
 export async function uploadProfileMedia(formData: FormData): Promise<UploadActionResult> {
   try {
     const file = formData.get("file") as File | null;
-    const kind = ((formData.get("kind") as string) || "avatar") as "avatars" | "banners" | "videos";
+    const rawKind = (formData.get("kind") as string) || "avatars";
+    const kind = (rawKind === "avatar" ? "avatars" : rawKind === "banner" ? "banners" : rawKind === "video" ? "videos" : rawKind) as
+      | "avatars"
+      | "banners"
+      | "videos";
+
+    if (!["avatars", "banners", "videos"].includes(kind)) {
+      return { success: false, error: "Invalid media upload category" };
+    }
 
     if (!file || file.size === 0) {
       return { success: false, error: "No file was provided for upload" };

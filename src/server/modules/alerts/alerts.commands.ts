@@ -2,6 +2,7 @@ import "server-only";
 
 import { and, eq, ilike } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { containsPattern, escapeLike } from "@/lib/db/sql-sanitize";
 import { alertRules, items } from "@/lib/db/schema";
 import type { z } from "zod";
 import type { createRuleInput } from "./alerts.schema";
@@ -11,13 +12,26 @@ import type { createRuleInput } from "./alerts.schema";
  * contains it. Ambiguous names ("AK") stay a custom watch rather than guess.
  */
 async function resolveItem(name: string) {
-  const [exact] = await db.select({ id: items.id, name: items.name }).from(items).where(ilike(items.name, name)).limit(1);
+  const clean = name.trim();
+  if (!clean) return null;
+  const [exact] = await db
+    .select({ id: items.id, name: items.name })
+    .from(items)
+    .where(ilike(items.name, escapeLike(clean)))
+    .limit(1);
   if (exact) return exact;
-  const partial = await db.select({ id: items.id, name: items.name }).from(items).where(ilike(items.name, `%${name}%`)).limit(2);
+  const partial = await db
+    .select({ id: items.id, name: items.name })
+    .from(items)
+    .where(ilike(items.name, containsPattern(clean)))
+    .limit(2);
   return partial.length === 1 ? partial[0] : null;
 }
 
-export async function createRule(userId: string, input: z.infer<typeof createRuleInput>) {
+export async function createRule(
+  userId: string,
+  input: z.infer<typeof createRuleInput>,
+) {
   const item = await resolveItem(input.name);
   const [rule] = await db
     .insert(alertRules)

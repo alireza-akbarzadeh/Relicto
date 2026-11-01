@@ -27,7 +27,7 @@ export function WinCelebrationDialog({
   onOpenChange: (open: boolean) => void;
   result: UnboxResult | null;
   conversion: CurrencyConversion;
-  onRecycleItem: (coinsValue: number) => void;
+  onRecycleItem: (unboxId: string, coinsValue: number) => void;
   onOpenAgain: () => void;
 }) {
   const [recycled, setRecycled] = React.useState(false);
@@ -61,7 +61,7 @@ export function WinCelebrationDialog({
   const handleRecycle = () => {
     soundEffects.playCoin();
     setRecycled(true);
-    onRecycleItem(coinsValue);
+    onRecycleItem(result.id, coinsValue);
   };
 
   return (

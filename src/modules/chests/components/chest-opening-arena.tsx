@@ -81,17 +81,20 @@ export function ChestOpeningArena({
     setWinModalOpen(true);
   };
 
-  const handleRecycleItem = async (coinsValue: number) => {
+  const handleRecycleItem = async (unboxId: string, coinsValue: number) => {
     try {
       const res = await fetch("/api/chests/recycle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ coinsValue }),
+        body: JSON.stringify({ unboxId }),
       });
       const data = await res.json();
       if (res.ok && typeof data.newBalance === "number") {
         setUserCoins(data.newBalance);
-        toast.success(`Recycled for +${coinsValue} RC!`);
+        const credited = data.creditedCoins ?? coinsValue;
+        toast.success(`Recycled for +${credited} RC!`);
+      } else {
+        toast.error(data.error || "Failed to recycle item");
       }
     } catch {
       toast.error("Failed to recycle item");

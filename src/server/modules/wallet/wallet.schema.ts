@@ -134,7 +134,7 @@ export function getWhitelistedVaultsForRail(rail: CashoutRail, network?: CryptoN
 export const cashoutInput = z.object({
   rail: z.enum(CASHOUT_RAILS),
   network: z.enum(CRYPTO_NETWORKS).optional(),
-  amountUsd: z.number().positive().max(20_000),
+  amountUsd: z.number().finite().positive().max(20_000),
   destinationAddress: z.string().trim().max(256).optional(),
   steamGuardCode: z.string().trim().max(16).optional(),
 });
@@ -150,9 +150,16 @@ export type DepositRail = (typeof DEPOSIT_RAILS)[number];
 export const depositInput = z.object({
   rail: z.enum(DEPOSIT_RAILS),
   network: z.enum(CRYPTO_NETWORKS).optional(),
-  amountUsd: z.number().positive().max(10_000),
+  amountUsd: z.number().finite().positive().max(10_000),
   txHash: z.string().trim().max(128).optional(),
 });
 export type DepositInput = z.infer<typeof depositInput>;
+
+export const createWalletStripeSessionInput = z
+  .object({
+    amountUsd: z.number().finite().positive().min(10).max(10_000),
+  })
+  .strict();
+export type CreateWalletStripeSessionInput = z.infer<typeof createWalletStripeSessionInput>;
 
 

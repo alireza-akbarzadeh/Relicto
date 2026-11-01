@@ -7,6 +7,7 @@ import {
   getCachedAiResponse,
   setCachedAiResponse,
 } from "@/modules/copilot/lib/copilot-rate-limit";
+import { copilotChatInputSchema } from "@/modules/copilot/copilot.schema";
 import type { TradeDiagnostic } from "@/modules/copilot/types";
 
 export const runtime = "nodejs";
@@ -30,15 +31,19 @@ export async function POST(req: NextRequest) {
   const startTime = Date.now();
   let userMessage = "";
 
+  const body = await req.json().catch(() => null);
+  const parsed = copilotChatInputSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid request payload", issues: parsed.error.issues },
+      { status: 400 }
+    );
+  }
+
+  const { message, history, modelOverride } = parsed.data;
+  userMessage = message;
+
   try {
-    const body = await req.json();
-    const { message, history = [], modelOverride } = body;
-    userMessage = typeof message === "string" ? message : "";
-
-    if (!userMessage.trim()) {
-      return NextResponse.json({ error: "Message is required" }, { status: 400 });
-    }
-
     // 1. Check TTL cache first (0 Gemini API cost!)
     const cached = getCachedAiResponse(userMessage);
     if (cached) {

@@ -2,18 +2,30 @@ import "server-only";
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { ChestDefinition, LiveDropItem, UnboxResult } from "@/modules/chests/types";
+import type { ChestDefinition, ChestSkinItem, LiveDropItem, UnboxResult } from "@/modules/chests/types";
 import { DEFAULT_CHESTS } from "./chests.presets";
+
+export type UnboxRecord = {
+  id: string;
+  userId: string;
+  chestId: string;
+  wonItem: ChestSkinItem;
+  recycleCoinsValue: number;
+  recycled: boolean;
+  createdAt: number;
+};
 
 const CHESTS_FILE_PATH = path.join(process.cwd(), ".chests-runtime.json");
 const STREAKS_FILE_PATH = path.join(process.cwd(), ".chest-streaks-runtime.json");
 const USER_COINS_FILE_PATH = path.join(process.cwd(), ".user-coins-runtime.json");
 const LIVE_DROPS_FILE_PATH = path.join(process.cwd(), ".live-drops-runtime.json");
+const UNBOX_RECORDS_FILE_PATH = path.join(process.cwd(), ".unbox-records-runtime.json");
 
 let memoryChests: ChestDefinition[] | null = null;
 let memoryStreaks: Record<string, number> | null = null; // key: `${userId}:${chestId}`
 let memoryCoins: Record<string, number> | null = null; // key: userId -> coin balance
 let memoryLiveDrops: LiveDropItem[] | null = null;
+let memoryUnboxRecords: Record<string, UnboxRecord> | null = null;
 
 function readJsonSafe<T>(filePath: string, fallback: T): T {
   try {
@@ -148,5 +160,33 @@ export const chestsRepository = {
     drops.unshift(drop);
     memoryLiveDrops = drops.slice(0, 50);
     writeJsonSafe(LIVE_DROPS_FILE_PATH, memoryLiveDrops);
+  },
+
+  saveUnboxRecord(record: UnboxRecord) {
+    if (!memoryUnboxRecords) {
+      memoryUnboxRecords = readJsonSafe<Record<string, UnboxRecord>>(UNBOX_RECORDS_FILE_PATH, {});
+    }
+    memoryUnboxRecords[record.id] = record;
+    writeJsonSafe(UNBOX_RECORDS_FILE_PATH, memoryUnboxRecords);
+  },
+
+  getUnboxRecord(id: string): UnboxRecord | null {
+    if (!memoryUnboxRecords) {
+      memoryUnboxRecords = readJsonSafe<Record<string, UnboxRecord>>(UNBOX_RECORDS_FILE_PATH, {});
+    }
+    return memoryUnboxRecords[id] ?? null;
+  },
+
+  markUnboxRecycled(id: string): boolean {
+    if (!memoryUnboxRecords) {
+      memoryUnboxRecords = readJsonSafe<Record<string, UnboxRecord>>(UNBOX_RECORDS_FILE_PATH, {});
+    }
+    const record = memoryUnboxRecords[id];
+    if (record && !record.recycled) {
+      record.recycled = true;
+      writeJsonSafe(UNBOX_RECORDS_FILE_PATH, memoryUnboxRecords);
+      return true;
+    }
+    return false;
   },
 };

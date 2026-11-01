@@ -1,5 +1,5 @@
 import * as crypto from "node:crypto";
-import type { ChestSkinItem, EscalatingTier, UnboxResult } from "@/modules/chests/types";
+import type { ChestSkinItem, EscalatingTier } from "@/modules/chests/types";
 
 /**
  * Dota 2 authentic escalating odds calculation.
@@ -22,14 +22,30 @@ export function calculateEscalatingOdds(
   };
 
   const factor = tierFactors[tier] || tierFactors.rare;
-  // Non-linear escalation after threshold
   const boost = Math.pow(streak, 1.25) * factor.slope;
   return Math.min(factor.maxPct, Number((baseOddsPct + boost).toFixed(2)));
 }
 
 /**
- * Executes a Dota 2 style chest roll:
- * 1. Draws a guaranteed standard item from the normalized base pool.
+ * Computes a deterministic provably fair roll fraction (0.0 to 1.0)
+ * from server seed and client seed using HMAC-SHA256.
+ */
+export function calculateProvablyFairFraction(
+  serverSeed: string,
+  clientSeed: string,
+  nonce: string | number = 0
+): number {
+  const hmac = crypto.createHmac("sha256", serverSeed);
+  hmac.update(`${clientSeed}:${nonce}`);
+  const hash = hmac.digest("hex");
+  const hex32 = hash.slice(0, 8);
+  const intVal = parseInt(hex32, 16);
+  return intVal / 0xffffffff;
+}
+
+/**
+ * Executes a Dota 2 style chest roll using cryptographically secure provably fair RNG:
+ * 1. Draws guaranteed standard item using HMAC-SHA256 roll fraction.
  * 2. Checks independent escalating rolls for any bonus items (Rare, Very Rare, Ultra Rare).
  */
 export function executeChestRoll(
@@ -43,12 +59,13 @@ export function executeChestRoll(
   newStreak: number;
   rollSeed: string;
   rollHash: string;
+  serverSeed: string;
   reelItems: ChestSkinItem[];
   winningIndex: number;
 } {
-  const serverSeed = crypto.randomBytes(16).toString("hex");
-  const seed = clientSeed || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-  const rollHash = crypto.createHash("sha256").update(`${serverSeed}:${seed}`).digest("hex");
+  const serverSeed = crypto.randomBytes(32).toString("hex");
+  const seed = clientSeed?.trim() || crypto.randomBytes(16).toString("hex");
+  const rollHash = crypto.createHmac("sha256", serverSeed).update(seed).digest("hex");
 
   // Separate regular items from escalating bonus items
   const regularItems = items.filter((item) => !item.isEscalatingBonus);
@@ -56,7 +73,8 @@ export function executeChestRoll(
 
   // Normalize regular item weights
   const totalWeight = regularItems.reduce((acc, it) => acc + (it.baseOddsPct || 1), 0);
-  const randomVal = Math.random() * totalWeight;
+  const fairFraction = calculateProvablyFairFraction(serverSeed, seed, "base");
+  const randomVal = fairFraction * totalWeight;
 
   let cumulative = 0;
   let wonItem = regularItems[0] || items[0];
@@ -68,23 +86,25 @@ export function executeChestRoll(
     }
   }
 
-  // Check bonus escalating drops
+  // Check bonus escalating drops using deterministic nonce derivation
   let bonusWon: ChestSkinItem | null = null;
   let newStreak = currentStreak + 1;
 
-  for (const bonus of bonusItems) {
+  for (let bIdx = 0; bIdx < bonusItems.length; bIdx++) {
+    const bonus = bonusItems[bIdx];
     const tier = bonus.escalatingTier || "rare";
     const currentOddsPct = calculateEscalatingOdds(bonus.baseOddsPct, currentStreak, tier);
-    const roll = Math.random() * 100;
+    const bonusFraction = calculateProvablyFairFraction(serverSeed, seed, `bonus:${bIdx}:${currentStreak}`);
+    const rollPct = bonusFraction * 100;
 
-    if (roll <= currentOddsPct) {
+    if (rollPct <= currentOddsPct) {
       bonusWon = bonus;
       newStreak = 0; // Reset streak on bonus win
       break;
     }
   }
 
-  // Construct a 55-item horizontal roulette reel
+  // Construct a 55-item horizontal roulette reel with cryptographically secure visual cards
   const reelLength = 55;
   const winningIndex = 44; // Center card at stopping point
   const reelItems: ChestSkinItem[] = [];
@@ -93,8 +113,7 @@ export function executeChestRoll(
     if (i === winningIndex) {
       reelItems.push(wonItem);
     } else {
-      // Pick random items for reel visual suspense
-      const randomIdx = Math.floor(Math.random() * items.length);
+      const randomIdx = crypto.randomInt(0, items.length);
       reelItems.push(items[randomIdx]);
     }
   }
@@ -105,6 +124,7 @@ export function executeChestRoll(
     newStreak,
     rollSeed: seed,
     rollHash,
+    serverSeed,
     reelItems,
     winningIndex,
   };

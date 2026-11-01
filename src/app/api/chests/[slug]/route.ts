@@ -6,7 +6,7 @@ import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
     const { slug } = await params;
@@ -33,7 +33,7 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const csrf = verifyCsrf(req);
   if (!csrf.valid) return csrf.response;
@@ -50,13 +50,16 @@ export async function PUT(
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[api/chests/[slug]] Admin update error:", err);
-    return NextResponse.json({ error: "Failed to update chest" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to update chest" },
+      { status: 500 },
+    );
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const csrf = verifyCsrf(req);
   if (!csrf.valid) return csrf.response;
@@ -72,6 +75,9 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[api/chests/[slug]] Admin delete error:", err);
-    return NextResponse.json({ error: "Failed to delete chest" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to delete chest" },
+      { status: 500 },
+    );
   }
 }

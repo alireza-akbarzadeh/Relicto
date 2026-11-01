@@ -1,4 +1,5 @@
 import "server-only";
+import * as crypto from "node:crypto";
 import {
   COIN_PACKAGES,
   type ChestDefinition,
@@ -127,7 +128,7 @@ export class ChestsService {
     const recycleCoinsValue = Math.round(roll.wonItem.valueUsd * conversion.coinRatePerUsd * 0.85);
 
     const result: UnboxResult = {
-      id: `unbox-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      id: `unbox-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`,
       chestId: chest.id,
       wonItem: roll.wonItem,
       bonusItem: roll.bonusItem,

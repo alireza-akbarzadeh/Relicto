@@ -9,14 +9,23 @@ import { deposit, type DepositResult } from "../wallet/wallet.deposit";
 import { notificationService } from "../notifications/notifications.service";
 import { verifyTronTransactionOnChain } from "./tron-verifier";
 
-const MASTER_VAULT_SEED = process.env.CRYPTO_VAULT_SEED || "relicto-institutional-cold-vault-2026";
+function getMasterVaultSeed(): string {
+  const seed = process.env.CRYPTO_VAULT_SEED;
+  if (!seed) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SECURITY_ALERT: CRYPTO_VAULT_SEED environment variable must be configured in production");
+    }
+    return "relicto-dev-cold-vault-seed-local-only";
+  }
+  return seed;
+}
 
 /**
  * Derives a deterministic dedicated deposit address for a given user on a target network.
  * This guarantees each trader receives a consistent, dedicated ingress address without cross-talk.
  */
 export function deriveUserDepositAddress(userId: string, network: CryptoNetwork): string {
-  const hash = createHmac("sha256", MASTER_VAULT_SEED)
+  const hash = createHmac("sha256", getMasterVaultSeed())
     .update(`${network.id}:${userId}`)
     .digest("hex");
 

@@ -1,8 +1,17 @@
-import { timingSafeEqual } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 
-/** Constant-time check of an `Authorization: Bearer <secret>` header. */
-export function bearerMatches(header: string | null, secret: string | undefined) {
-  const given = header?.replace(/^Bearer\s+/i, "") ?? "";
-  if (!secret || given.length !== secret.length) return false;
-  return timingSafeEqual(Buffer.from(given), Buffer.from(secret));
+/**
+ * Constant-time check of an `Authorization: Bearer <secret>` header.
+ * Hashes both the received token and secret with SHA-256 before comparing,
+ * preventing any timing attacks or secret length leakage.
+ */
+export function bearerMatches(header: string | null, secret: string | undefined): boolean {
+  if (!header || !secret) return false;
+  const given = header.replace(/^Bearer\s+/i, "").trim();
+  if (!given) return false;
+
+  const hashGiven = createHash("sha256").update(given).digest();
+  const hashSecret = createHash("sha256").update(secret).digest();
+
+  return timingSafeEqual(hashGiven, hashSecret);
 }

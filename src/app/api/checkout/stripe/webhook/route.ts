@@ -7,6 +7,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing stripe-signature" }, { status: 400 });
   }
 
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!secret) {
+    return NextResponse.json({ error: "stripe_webhook_unconfigured" }, { status: 503 });
+  }
+
   try {
     const rawBody = await req.text();
     const result = await processStripeWebhook(rawBody, signature);

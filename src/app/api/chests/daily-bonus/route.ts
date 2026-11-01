@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 
-export async function POST() {
+export async function POST(req: Request) {
   try {
+    const csrf = verifyCsrf(req);
+    if (!csrf.valid) return csrf.response;
+
     const userId = await getUserId();
     if (!userId) {
       return NextResponse.json({ error: "Please sign in to claim daily bonus" }, { status: 401 });

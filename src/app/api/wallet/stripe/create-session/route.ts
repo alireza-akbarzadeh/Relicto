@@ -3,9 +3,13 @@ import { getStripe, isStripeConfigured } from "@/lib/stripe/client";
 import { requireUserId } from "@/modules/relicto/data/get-session";
 import { deposit } from "@/server/modules/wallet/wallet.deposit";
 import { createWalletStripeSessionInput } from "@/server/modules/wallet/wallet.schema";
+import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 
 export async function POST(req: NextRequest) {
   try {
+    const csrf = verifyCsrf(req);
+    if (!csrf.valid) return csrf.response;
+
     const userId = await requireUserId();
     const body = await req.json().catch(() => null);
     const parsed = createWalletStripeSessionInput.safeParse(body);

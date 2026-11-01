@@ -4,10 +4,14 @@ import { verifyTronTransactionOnChain } from "@/server/modules/crypto/tron-verif
 import { deposit } from "@/server/modules/wallet/wallet.deposit";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
 import { tronVerifyInputSchema } from "@/server/modules/crypto/crypto.schema";
+import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
+    const csrf = verifyCsrf(req);
+    if (!csrf.valid) return csrf.response;
+
     const userId = await requireUserId();
     const body = await req.json().catch(() => null);
 

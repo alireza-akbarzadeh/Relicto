@@ -2,12 +2,16 @@ import { NextResponse } from "next/server";
 import { getSession, getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
 import { chestSlugSchema, openChestInput } from "@/server/modules/chests/chests.schema";
+import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const csrf = verifyCsrf(req);
+    if (!csrf.valid) return csrf.response;
+
     const rawParams = await params;
     const slugParsed = chestSlugSchema.safeParse(rawParams.slug);
     if (!slugParsed.success) {

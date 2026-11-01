@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
 import { requireAdminRole } from "@/server/modules/auth/auth.guard";
+import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 
 export async function GET(
   _req: Request,
@@ -34,6 +35,9 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  const csrf = verifyCsrf(req);
+  if (!csrf.valid) return csrf.response;
+
   const guard = await requireAdminRole();
   if (!guard.authorized) {
     return NextResponse.json({ error: guard.error }, { status: guard.status });
@@ -51,9 +55,12 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  const csrf = verifyCsrf(req);
+  if (!csrf.valid) return csrf.response;
+
   const guard = await requireAdminRole();
   if (!guard.authorized) {
     return NextResponse.json({ error: guard.error }, { status: guard.status });

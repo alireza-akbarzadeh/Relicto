@@ -30,6 +30,19 @@ export const auth = betterAuth({
     ...(vercelOrigin ? [vercelOrigin] : []),
   ],
   secret: process.env.BETTER_AUTH_SECRET,
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days session lifetime
+    updateAge: 60 * 60 * 24, // Refresh active session token once every 24 hours
+  },
+  advanced: {
+    useSecureCookies: process.env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      sameSite: "lax",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    },
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,

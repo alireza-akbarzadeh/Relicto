@@ -16,7 +16,8 @@
     "db:studio": "drizzle-kit studio",
     "db:check": "drizzle-kit check",
     "daemon:steam": "tsx scripts/steam-bot-daemon.ts",
-    "test:e2e": "tsx --env-file=.env.local --conditions=react-server scripts/verify-e2e.mts"
+    "test:e2e": "tsx --env-file=.env.local --conditions=react-server scripts/verify-e2e.mts",
+    "test:security": "tsx scripts/test-full-regression.mts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1152.0",

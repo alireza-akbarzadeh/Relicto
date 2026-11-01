@@ -10,9 +10,13 @@ import { CopilotMessages } from "./copilot-messages";
 import { CopilotOmnibar } from "./copilot-omnibar";
 import { CopilotSettingsDialog } from "./copilot-settings-dialog";
 import { sendChatMessageAction } from "../actions/copilot-chat";
+import { ALLOWED_COPILOT_MODELS } from "../copilot.schema";
 import { resolveSentinelLocalKnowledge } from "../data/copilot-resolver";
 import { playSentinelChime } from "../utils/copilot-sound";
-import { sendPushNotification, requestPushPermission } from "../utils/copilot-notify";
+import {
+  sendPushNotification,
+  requestPushPermission,
+} from "../utils/copilot-notify";
 import type { CopilotMessage, CopilotMode, TradeDiagnostic } from "../types";
 
 interface CopilotWindowProps {
@@ -24,34 +28,36 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
   const tInit = useTranslations("copilot.initial");
   const tToasts = useTranslations("copilot.toasts");
 
-  const buildInitialMessages = React.useCallback((): CopilotMessage[] => [
-    {
-      id: "init-welcome",
-      role: "assistant",
-      content: tInit("welcome"),
-      timestamp: tInit("timestamp"),
-      diagnostic: {
-        tradeId: "#94821",
-        assetName: tInit("assetName"),
-        counterparty: "@DendiLover99",
-        counterpartyLevel: 148,
-        steamId64: "76561198034821990",
-        escrowStatus: tInit("escrowStatus"),
-        isVerified: true,
-        floatValue: "0.0821 (Field-Tested)",
-        checks: [
-          tInit("check1"),
-          tInit("check2"),
-          tInit("check3"),
-        ],
+  const buildInitialMessages = React.useCallback(
+    (): CopilotMessage[] => [
+      {
+        id: "init-welcome",
+        role: "assistant",
+        content: tInit("welcome"),
+        timestamp: tInit("timestamp"),
+        diagnostic: {
+          tradeId: "#94821",
+          assetName: tInit("assetName"),
+          counterparty: "@DendiLover99",
+          counterpartyLevel: 148,
+          steamId64: "76561198034821990",
+          escrowStatus: tInit("escrowStatus"),
+          isVerified: true,
+          floatValue: "0.0821 (Field-Tested)",
+          checks: [tInit("check1"), tInit("check2"), tInit("check3")],
+        },
       },
-    },
-  ], [tInit]);
+    ],
+    [tInit],
+  );
 
-  const [messages, setMessages] = React.useState<CopilotMessage[]>(() => buildInitialMessages());
+  const [messages, setMessages] = React.useState<CopilotMessage[]>(() =>
+    buildInitialMessages(),
+  );
   const [loading, setLoading] = React.useState(false);
   const [mode, setMode] = React.useState<CopilotMode>("copilot");
-  const [model, setModel] = React.useState("gemini-3.8-flash");
+  const [model, setModel] =
+    React.useState<(typeof ALLOWED_COPILOT_MODELS)[number]>("gemini-3.8-flash");
   const [latencyMs, setLatencyMs] = React.useState(11);
   const [soundEnabled, setSoundEnabled] = React.useState(true);
   const [pushEnabled, setPushEnabled] = React.useState(true);
@@ -64,22 +70,36 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
       id: `u-${Date.now()}`,
       role: "user",
       content: text,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
 
     try {
-      const history = messages.slice(-6).map((m) => ({ role: m.role, content: m.content }));
-      let result: { reply: string; diagnostic?: TradeDiagnostic; latencyMs?: number; modelUsed?: string } | null = null;
+      const history = messages
+        .slice(-6)
+        .map((m) => ({ role: m.role, content: m.content }));
+      let result: {
+        reply: string;
+        diagnostic?: TradeDiagnostic;
+        latencyMs?: number;
+        modelUsed?: string;
+      } | null = null;
 
       // Tier 1: Dedicated Node.js API Route with 8.5s timeout
       try {
         const fetchRes = await fetch("/api/copilot/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text, history, modelOverride: model }),
+          body: JSON.stringify({
+            message: text,
+            history,
+            modelOverride: model,
+          }),
         });
         if (fetchRes.ok || fetchRes.status === 429) {
           result = await fetchRes.json();
@@ -91,7 +111,11 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
 
       // Tier 2: Next.js Server Action with built-in resolver
       if (!result?.reply) {
-        result = await sendChatMessageAction({ message: text, history, modelOverride: model });
+        result = await sendChatMessageAction({
+          message: text,
+          history,
+          modelOverride: model,
+        });
       }
 
       if (result) {
@@ -99,7 +123,10 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
           id: `bot-${Date.now()}`,
           role: "assistant",
           content: result.reply,
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           diagnostic: result.diagnostic,
         };
 
@@ -118,7 +145,10 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
           id: `bot-${Date.now()}`,
           role: "assistant",
           content: offline.reply,
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           diagnostic: offline.diagnostic,
         },
       ]);
@@ -141,7 +171,8 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
       }
     };
     window.addEventListener("relicto:open-copilot-query", handleQuery);
-    return () => window.removeEventListener("relicto:open-copilot-query", handleQuery);
+    return () =>
+      window.removeEventListener("relicto:open-copilot-query", handleQuery);
   }, []);
 
   return (
@@ -205,7 +236,7 @@ export function CopilotWindow({ onClose, isMobile }: CopilotWindowProps) {
         onOpenChange={setSettingsOpen}
         activeModel={model}
         onModelChange={(newModel) => {
-          setModel(newModel);
+          setModel(newModel as (typeof ALLOWED_COPILOT_MODELS)[number]);
           toast.success(tToasts("modelUpdated", { model: newModel }));
         }}
         soundEnabled={soundEnabled}

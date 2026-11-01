@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { bearerMatches } from "@/server/modules/shared/bearer";
 import { verifyAndSettleCryptoDeposit } from "@/server/modules/crypto/crypto-gateway.service";
+import { cryptoWebhookInputSchema } from "@/server/modules/crypto/crypto.schema";
 
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
@@ -15,12 +16,16 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const body = await req.json();
-    const { userId, networkId, txHash, amountUsd } = body || {};
-
-    if (!userId || !networkId || !txHash || typeof amountUsd !== "number") {
-      return NextResponse.json({ error: "missing_fields" }, { status: 400 });
+    const body = await req.json().catch(() => null);
+    const parsed = cryptoWebhookInputSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "invalid_payload", issues: parsed.error.issues },
+        { status: 400 }
+      );
     }
+
+    const { userId, networkId, txHash, amountUsd } = parsed.data;
 
     const result = await verifyAndSettleCryptoDeposit(userId, {
       networkId,

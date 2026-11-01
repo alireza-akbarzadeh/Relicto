@@ -73,6 +73,10 @@ export async function fetchSteamInventory(
   steamId: string,
   appId: number,
 ): Promise<InventoryFetch> {
+  if (!/^\d{17}$/.test(steamId) || !Number.isInteger(appId) || appId <= 0) {
+    return { status: "unavailable" };
+  }
+
   const items: SteamItem[] = [];
   let start: string | undefined;
 

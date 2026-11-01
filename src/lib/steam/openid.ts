@@ -66,6 +66,9 @@ export type SteamPersona = { name: string; avatar: string | null };
 /** Public persona name and avatar; falls back to a neutral name if the Web API key or call fails. */
 export async function fetchSteamPersona(steamId: string): Promise<SteamPersona> {
   const fallback = { name: `Steam trader ${steamId.slice(-4)}`, avatar: null };
+  if (!/^\d{17}$/.test(steamId)) {
+    return { name: "Steam trader", avatar: null };
+  }
   const key = process.env.STEAM_API_KEY;
   if (!key) return fallback;
 

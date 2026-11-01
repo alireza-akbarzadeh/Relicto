@@ -99,6 +99,9 @@ export async function syncSteamAvatarAction(): Promise<{ success: boolean; avata
 
     // Use linked Steam ID, or fallback to the sample trader identity
     const steamId = profile?.steamId || "76561198082348819";
+    if (!/^\d{17}$/.test(steamId)) {
+      return { success: false, error: "Invalid Steam ID format (must be 17-digit numeric SteamID64)" };
+    }
     let persona = await fetchSteamPersona(steamId);
 
     // Direct fallback from Steam community public XML if API key is not configured

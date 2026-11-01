@@ -31,6 +31,7 @@ const cents = (usd: number | null) =>
 export async function fetchSkinportQuotes(
   appId: number,
 ): Promise<Map<string, SkinportQuote> | null> {
+  if (!Number.isInteger(appId) || appId <= 0) return null;
   try {
     const response = await fetch(
       `https://api.skinport.com/v1/items?app_id=${appId}&currency=USD`,

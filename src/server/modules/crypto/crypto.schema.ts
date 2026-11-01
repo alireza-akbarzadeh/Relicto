@@ -19,6 +19,17 @@ export const cryptoVerifyInputSchema = z
 
 export type CryptoVerifyInput = z.infer<typeof cryptoVerifyInputSchema>;
 
+export const cryptoWebhookInputSchema = z
+  .object({
+    userId: z.string().trim().min(1).max(64),
+    networkId: z.enum(ALLOWED_CRYPTO_NETWORK_IDS),
+    txHash: z.string().trim().min(24).max(128).regex(/^[a-zA-Z0-9_-]+$/, "Invalid transaction hash format"),
+    amountUsd: z.number().finite().positive().min(1, "Minimum deposit is $1 USD").max(100_000, "Maximum deposit is $100,000 USD"),
+  })
+  .strict();
+
+export type CryptoWebhookInput = z.infer<typeof cryptoWebhookInputSchema>;
+
 export const tronVerifyInputSchema = z
   .object({
     txHash: z

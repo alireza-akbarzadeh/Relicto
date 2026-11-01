@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUserId } from "@/modules/relicto/data/get-session";
 import { getDepositAddressForUser } from "@/server/modules/crypto/crypto-gateway.service";
+import { applyRateLimit, financialRateLimiter } from "@/server/modules/security/rate-limiter";
 
 export async function GET(req: NextRequest) {
   try {
     const userId = await requireUserId();
+
+    const rateLimit = applyRateLimit(req, financialRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
+
     const networkId = req.nextUrl.searchParams.get("network") || "usdt-trc20";
 
     const data = getDepositAddressForUser(userId, networkId);

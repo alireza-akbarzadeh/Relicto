@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
 import { chestSlugSchema, simulateChestInput } from "@/server/modules/chests/chests.schema";
+import { applyRateLimit, simulationRateLimiter } from "@/server/modules/security/rate-limiter";
 
 export async function POST(
   req: Request,
@@ -20,6 +21,9 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const rateLimit = applyRateLimit(req, simulationRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
+
     const body = await req.json().catch(() => ({}));
     const parsed = simulateChestInput.safeParse(body);
     if (!parsed.success) {
@@ -31,10 +35,13 @@ export async function POST(
 
     const stats = chestsService.simulateRolls(slug, parsed.data.count);
 
-    return NextResponse.json({
-      success: true,
-      stats,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        stats,
+      },
+      { headers: rateLimit.headers }
+    );
   } catch (err) {
     console.error("[api/chests/[slug]/simulate] Error:", err);
     return NextResponse.json({ error: "Failed to simulate rolls" }, { status: 500 });

@@ -4,6 +4,7 @@ import { requireUserId } from "@/modules/relicto/data/get-session";
 import { deposit } from "@/server/modules/wallet/wallet.deposit";
 import { createWalletStripeSessionInput } from "@/server/modules/wallet/wallet.schema";
 import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
+import { applyRateLimit, financialRateLimiter } from "@/server/modules/security/rate-limiter";
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,6 +12,10 @@ export async function POST(req: NextRequest) {
     if (!csrf.valid) return csrf.response;
 
     const userId = await requireUserId();
+
+    const rateLimit = applyRateLimit(req, financialRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
+
     const body = await req.json().catch(() => null);
     const parsed = createWalletStripeSessionInput.safeParse(body);
 

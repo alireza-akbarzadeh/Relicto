@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { requireAdminRole } from "@/server/modules/auth/auth.guard";
+import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
 
 export async function GET() {
   try {
@@ -22,12 +23,15 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  try {
-    const userId = await getUserId();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const csrf = verifyCsrf(req);
+  if (!csrf.valid) return csrf.response;
 
+  const guard = await requireAdminRole();
+  if (!guard.authorized) {
+    return NextResponse.json({ error: guard.error }, { status: guard.status });
+  }
+
+  try {
     const body = await req.json();
     chestsService.adminCreateChest(body);
     return NextResponse.json({ success: true });

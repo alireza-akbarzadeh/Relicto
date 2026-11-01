@@ -3,6 +3,7 @@ import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
 import { buyCoinsInput } from "@/server/modules/chests/chests.schema";
 import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
+import { applyRateLimit, economyRateLimiter } from "@/server/modules/security/rate-limiter";
 
 export async function POST(req: Request) {
   try {
@@ -13,6 +14,9 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json({ error: "Please sign in to buy coins" }, { status: 401 });
     }
+
+    const rateLimit = applyRateLimit(req, economyRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
 
     const body = await req.json().catch(() => null);
     const parsed = buyCoinsInput.safeParse(body);

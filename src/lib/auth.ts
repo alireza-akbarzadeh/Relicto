@@ -34,6 +34,12 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days session lifetime
     updateAge: 60 * 60 * 24, // Refresh active session token once every 24 hours
   },
+  rateLimit: {
+    enabled: true,
+    window: 60, // 60 seconds
+    max: 30, // 30 requests per minute
+    storage: "memory",
+  },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
     defaultCookieAttributes: {

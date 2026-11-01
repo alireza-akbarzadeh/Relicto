@@ -3,6 +3,7 @@ import { requireUserId } from "@/modules/relicto/data/get-session";
 import { createStripeSession } from "@/server/modules/checkout/checkout.stripe";
 import { createCheckoutStripeSessionInput } from "@/server/modules/checkout/checkout.schema";
 import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
+import { applyRateLimit, financialRateLimiter } from "@/server/modules/security/rate-limiter";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,6 +11,10 @@ export async function POST(req: NextRequest) {
     if (!csrf.valid) return csrf.response;
 
     const userId = await requireUserId();
+
+    const rateLimit = applyRateLimit(req, financialRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
+
     const body = await req.json().catch(() => null);
     const parsed = createCheckoutStripeSessionInput.safeParse(body);
     if (!parsed.success) {

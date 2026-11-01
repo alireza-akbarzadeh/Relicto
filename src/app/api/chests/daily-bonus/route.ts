@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
 import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
+import { applyRateLimit, economyRateLimiter } from "@/server/modules/security/rate-limiter";
 
 export async function POST(req: Request) {
   try {
@@ -12,6 +13,9 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json({ error: "Please sign in to claim daily bonus" }, { status: 401 });
     }
+
+    const rateLimit = applyRateLimit(req, economyRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
 
     const bonusState = chestsService.claimDailyBonus(userId);
     const newBalance = chestsService.getUserCoins(userId);

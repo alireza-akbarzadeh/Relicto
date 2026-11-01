@@ -5,6 +5,7 @@ import { deposit } from "@/server/modules/wallet/wallet.deposit";
 import { notificationService } from "@/server/modules/notifications/notifications.service";
 import { tronVerifyInputSchema } from "@/server/modules/crypto/crypto.schema";
 import { verifyCsrf } from "@/server/modules/auth/csrf.guard";
+import { applyRateLimit, financialRateLimiter } from "@/server/modules/security/rate-limiter";
 import { db } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
@@ -13,6 +14,10 @@ export async function POST(req: NextRequest) {
     if (!csrf.valid) return csrf.response;
 
     const userId = await requireUserId();
+
+    const rateLimit = applyRateLimit(req, financialRateLimiter, userId);
+    if (!rateLimit.allowed) return rateLimit.response;
+
     const body = await req.json().catch(() => null);
 
     const parsed = tronVerifyInputSchema.safeParse(body);

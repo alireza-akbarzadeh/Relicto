@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUserId } from "@/modules/relicto/data/get-session";
 import { chestsService } from "@/server/modules/chests/chests.service";
+import { requireAdminRole } from "@/server/modules/auth/auth.guard";
 
 export async function GET(
   _req: Request,
@@ -33,6 +34,11 @@ export async function PUT(
   req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  const guard = await requireAdminRole();
+  if (!guard.authorized) {
+    return NextResponse.json({ error: guard.error }, { status: guard.status });
+  }
+
   try {
     const { slug } = await params;
     const body = await req.json();
@@ -48,6 +54,11 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  const guard = await requireAdminRole();
+  if (!guard.authorized) {
+    return NextResponse.json({ error: guard.error }, { status: guard.status });
+  }
+
   try {
     const { slug } = await params;
     chestsService.adminDeleteChest(slug);

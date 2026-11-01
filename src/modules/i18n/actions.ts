@@ -4,6 +4,10 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 export async function setLocaleAction(locale: "en" | "fa") {
+  if (locale !== "en" && locale !== "fa") {
+    return { ok: false, error: "invalid_locale" };
+  }
+
   const cookieStore = await cookies();
   cookieStore.set("NEXT_LOCALE", locale, {
     path: "/",

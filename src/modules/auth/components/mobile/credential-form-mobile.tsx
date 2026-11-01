@@ -11,7 +11,7 @@ import { authClient } from "@/lib/auth-client";
 import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { cn } from "@/lib/cn";
 
-import { resolveAccountEmail } from "@/server/modules/auth/auth.identity";
+import { signInWithIdentityAction } from "@/server/modules/auth/auth.identity";
 
 const LABEL = "font-label-badge text-label-badge tracking-wider text-text-secondary uppercase";
 const FIELD =
@@ -35,16 +35,15 @@ export function CredentialFormMobile({ uid }: { uid: string }) {
     }
 
     setPending(true);
-    const resolvedEmail = await resolveAccountEmail(identity);
-    const { error } = await authClient.signIn.email({
-      email: resolvedEmail,
+    const result = await signInWithIdentityAction({
+      identity,
       password: secret,
       rememberMe: remember,
     });
     setPending(false);
 
-    if (error) {
-      toast.error("Sign-in failed", { description: error.message ?? "Check your email/handle and password." });
+    if (!result.success) {
+      toast.error("Sign-in failed", { description: result.error ?? "Check your email/handle and password." });
       return;
     }
 

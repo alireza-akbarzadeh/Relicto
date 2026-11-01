@@ -36,13 +36,21 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({ user, url, token }) => {
-      console.log(`[auth] Reset password for ${user.email}: url=${url} token=${token}`);
+    sendResetPassword: async ({ user, url }) => {
+      if (process.env.NODE_ENV === "development") {
+        console.log(`[auth] Dev password reset URL generated for ${user.email}: ${url}`);
+      } else {
+        console.log(`[auth] Password reset requested for user ${user.id}`);
+      }
     },
   },
   emailVerification: {
-    sendVerificationEmail: async ({ user, url, token }) => {
-      console.log(`[auth] Verification email for ${user.email}: url=${url} token=${token}`);
+    sendVerificationEmail: async ({ user, url }) => {
+      if (process.env.NODE_ENV === "development") {
+        console.log(`[auth] Dev verification email URL generated for ${user.email}: ${url}`);
+      } else {
+        console.log(`[auth] Verification email requested for user ${user.id}`);
+      }
     },
   },
   databaseHooks: {

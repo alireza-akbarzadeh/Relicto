@@ -5,7 +5,12 @@ import { createAuthEndpoint } from "better-auth/api";
 import { setSessionCookie } from "better-auth/cookies";
 import { handleOAuthUserInfo } from "better-auth/oauth2";
 import { z } from "zod";
-import { fetchSteamPersona, safeCallback, steamLoginUrl, verifySteamAssertion } from "./openid";
+import {
+  fetchSteamPersona,
+  safeCallback,
+  steamLoginUrl,
+  verifySteamAssertion,
+} from "./openid";
 
 /**
  * "Sign in through Steam" for Better Auth. Steam has no email, so a new trader
@@ -22,15 +27,27 @@ export const steamAuth = () =>
     endpoints: {
       steamSignIn: createAuthEndpoint(
         "/steam/sign-in",
-        { method: "GET", query: z.object({ callbackURL: z.string().optional(), mock: z.string().optional() }) },
+        {
+          method: "GET",
+          query: z.object({
+            callbackURL: z.string().optional(),
+            mock: z.string().optional(),
+          }),
+        },
         async (ctx) => {
           const callback = safeCallback(ctx.query.callbackURL);
           const originUrl = new URL(ctx.context.baseURL);
-          const isDev = process.env.NODE_ENV !== "production";
-          const isLocal = originUrl.hostname === "localhost" || originUrl.hostname === "127.0.0.1";
+          const isDev = process.env.NODE_ENV === "development";
+          const isLocal =
+            originUrl.hostname === "localhost" ||
+            originUrl.hostname === "127.0.0.1";
+          const allowMock =
+            isDev && isLocal && process.env.ALLOW_MOCK_STEAM_AUTH === "true";
 
-          if (isDev && isLocal && ctx.query.mock !== "false") {
-            throw ctx.redirect(`${ctx.context.baseURL}/steam/callback?callbackURL=${encodeURIComponent(callback)}&mock_steam_id=76561198082348819`);
+          if (allowMock && ctx.query.mock === "true") {
+            throw ctx.redirect(
+              `${ctx.context.baseURL}/steam/callback?callbackURL=${encodeURIComponent(callback)}&mock_steam_id=76561198082348819`,
+            );
           }
 
           const returnTo = `${ctx.context.baseURL}/steam/callback?callbackURL=${encodeURIComponent(callback)}`;
@@ -43,11 +60,29 @@ export const steamAuth = () =>
         { method: "GET", query: z.record(z.string(), z.string()) },
         async (ctx) => {
           const callback = safeCallback(ctx.query.callbackURL);
-          const failed = (reason: string) => ctx.redirect(`/sign-in?error=${reason}&next=${encodeURIComponent(callback)}`);
+          const failed = (reason: string) =>
+            ctx.redirect(
+              `/sign-in?error=${reason}&next=${encodeURIComponent(callback)}`,
+            );
 
-          const isDev = process.env.NODE_ENV !== "production";
-          const mockId = isDev && ctx.query.mock_steam_id ? ctx.query.mock_steam_id : null;
-          const steamId = mockId ?? (await verifySteamAssertion(ctx.query, `${ctx.context.baseURL}/steam/callback`).catch(() => null));
+          const originUrl = new URL(ctx.context.baseURL);
+          const isDev = process.env.NODE_ENV === "development";
+          const isLocal =
+            originUrl.hostname === "localhost" ||
+            originUrl.hostname === "127.0.0.1";
+          const allowMock =
+            isDev && isLocal && process.env.ALLOW_MOCK_STEAM_AUTH === "true";
+
+          const mockId =
+            allowMock && ctx.query.mock_steam_id === "76561198082348819"
+              ? "76561198082348819"
+              : null;
+          const steamId =
+            mockId ??
+            (await verifySteamAssertion(
+              ctx.query,
+              `${ctx.context.baseURL}/steam/callback`,
+            ).catch(() => null));
           if (!steamId) throw failed("steam_unverified");
 
           const persona = await fetchSteamPersona(steamId);

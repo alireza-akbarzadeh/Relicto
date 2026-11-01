@@ -72,7 +72,7 @@ export function WinCelebrationDialog({
       description="You have drawn a certified Steam marketplace asset"
       contentClassName="sm:max-w-[600px]! p-2"
     >
-      <div className="flex flex-col items-center space-y-4 pt-1 text-center">
+      <div className="flex flex-col items-center space-y-4 pt-1 text-center w-[600px]!">
         {/* Celebration Aura & Item Display */}
         <div className="relative size-44 overflow-hidden rounded-2xl border-2 border-primary bg-surface-container shadow-[0_0_35px_rgba(255,178,183,0.3)]">
           <Image

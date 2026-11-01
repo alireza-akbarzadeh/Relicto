@@ -4,7 +4,7 @@
  */
 
 const STEAM_TRADE_URL_REGEX =
-  /^https?:\/\/steamcommunity\.com\/tradeoffer\/new\/\?partner=(\d+)&token=([a-zA-Z0-9_-]+)$/;
+  /^https:\/\/steamcommunity\.com\/tradeoffer\/new\/\?partner=(\d+)&token=([a-zA-Z0-9_-]+)$/;
 
 export type ParsedTradeUrl = {
   valid: boolean;

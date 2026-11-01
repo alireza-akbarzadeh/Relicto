@@ -13,7 +13,7 @@ import { authClient } from "@/lib/auth-client";
 import { safeNext } from "@/modules/relicto/lib/sign-in-href";
 import { AuthField } from "../ui/auth-field";
 
-import { resolveAccountEmail } from "@/server/modules/auth/auth.identity";
+import { signInWithIdentityAction } from "@/server/modules/auth/auth.identity";
 
 const LABEL = "font-mono text-xs font-semibold tracking-wider text-slate-300 uppercase";
 const INPUT =
@@ -37,16 +37,15 @@ export function SignInForm() {
     }
 
     setPending(true);
-    const resolvedEmail = await resolveAccountEmail(identity);
-    const { error } = await authClient.signIn.email({
-      email: resolvedEmail,
+    const result = await signInWithIdentityAction({
+      identity,
       password,
       rememberMe: remember,
     });
     setPending(false);
 
-    if (error) {
-      toast.error("Sign-in failed", { description: error.message ?? "Check your email and password." });
+    if (!result.success) {
+      toast.error("Sign-in failed", { description: result.error ?? "Check your email and password." });
       return;
     }
 

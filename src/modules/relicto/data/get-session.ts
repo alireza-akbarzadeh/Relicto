@@ -29,10 +29,18 @@ const readSession = cache(async () => {
   }
 });
 
+/**
+ * Dev fallback flag: strictly requires opt-in environment flag and local development mode.
+ * Never active in production or without explicit opt-in.
+ */
+const allowDevAnonymousFallback =
+  process.env.NODE_ENV === "development" &&
+  process.env.ALLOW_DEV_ANONYMOUS_IMPERSONATION === "true";
+
 /** The signed-in trader, or null when there's no session. */
 export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
   const result = await readSession();
-  const userId = result?.user.id ?? (process.env.NODE_ENV === "development" ? "seed-trader-relicto" : null);
+  const userId = result?.user.id ?? (allowDevAnonymousFallback ? "seed-trader-relicto" : null);
   if (!userId) return null;
   try {
     const [notifications, walletCents, profile] = await Promise.all([
@@ -80,7 +88,7 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
  */
 export async function getUserId(): Promise<string | null> {
   const result = await readSession();
-  return result?.user.id ?? (process.env.NODE_ENV === "development" ? "seed-trader-relicto" : null);
+  return result?.user.id ?? (allowDevAnonymousFallback ? "seed-trader-relicto" : null);
 }
 
 /** As `getUserId`, for pages the proxy already guarantees are signed in. */

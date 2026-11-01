@@ -4,9 +4,25 @@ const HOME = "/marketplace";
  * Where to go after signing in. Only same-site paths: `//evil.com` and
  * absolute URLs would turn `?next=` into an open redirect.
  */
-export function safeNext(next: string | null | undefined) {
-  if (!next || !next.startsWith("/") || next.startsWith("//") || next.startsWith("/\\")) return HOME;
-  return next;
+export function safeNext(next: string | null | undefined): string {
+  if (!next || typeof next !== "string") return HOME;
+
+  if (next.includes("\\") || next.startsWith("//") || !next.startsWith("/")) {
+    return HOME;
+  }
+
+  try {
+    const dummyOrigin = "http://localhost";
+    const parsed = new URL(next, dummyOrigin);
+
+    if (parsed.origin !== dummyOrigin || !parsed.pathname.startsWith("/") || parsed.pathname.includes("\\")) {
+      return HOME;
+    }
+
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return HOME;
+  }
 }
 
 /**

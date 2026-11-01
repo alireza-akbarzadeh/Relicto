@@ -33,7 +33,16 @@ export function steamLoginUrl(returnTo: string, realm: string) {
 export async function verifySteamAssertion(query: Record<string, string>, expectedReturnTo: string) {
   if (query["openid.mode"] !== "id_res") return null;
   if (query["openid.op_endpoint"] !== OP_ENDPOINT) return null;
-  if (!query["openid.return_to"]?.startsWith(expectedReturnTo)) return null;
+
+  try {
+    const returnToUrl = new URL(query["openid.return_to"] || "");
+    const expectedUrl = new URL(expectedReturnTo);
+    if (returnToUrl.origin !== expectedUrl.origin || returnToUrl.pathname !== expectedUrl.pathname) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
 
   const claimed = query["openid.claimed_id"]?.match(CLAIMED_ID);
   if (!claimed || query["openid.identity"] !== query["openid.claimed_id"]) return null;
@@ -71,6 +80,24 @@ export async function fetchSteamPersona(steamId: string): Promise<SteamPersona> 
 }
 
 /** Only same-site paths survive the round trip through Steam — no open redirects. */
-export function safeCallback(value: string | undefined, fallback = "/marketplace") {
-  return value && value.startsWith("/") && !value.startsWith("//") ? value : fallback;
+export function safeCallback(value: string | undefined, fallback = "/marketplace"): string {
+  if (!value || typeof value !== "string") return fallback;
+
+  // Reject paths with backslashes, protocol-relative prefixes, or non-slash prefixes
+  if (value.includes("\\") || value.startsWith("//") || !value.startsWith("/")) {
+    return fallback;
+  }
+
+  try {
+    const dummyOrigin = "http://localhost";
+    const parsed = new URL(value, dummyOrigin);
+
+    if (parsed.origin !== dummyOrigin || !parsed.pathname.startsWith("/") || parsed.pathname.includes("\\")) {
+      return fallback;
+    }
+
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return fallback;
+  }
 }

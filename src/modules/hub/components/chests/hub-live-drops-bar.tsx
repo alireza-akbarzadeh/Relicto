@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Volume2, VolumeX, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { soundEffects } from "@/lib/sound-effects";
-import type { LiveDrop } from "@/modules/chests/types";
+import type { LiveDropItem } from "@/modules/chests/types";
 
 const RARITY_BORDERS: Record<string, string> = {
   common: "border-slate-500/40 shadow-slate-500/10",
@@ -18,11 +18,13 @@ const RARITY_BORDERS: Record<string, string> = {
   cosmic: "border-fuchsia-400/90 shadow-fuchsia-500/40",
 };
 
-export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop[] }) {
-  const [drops, setDrops] = React.useState<LiveDrop[]>(initialDrops);
-  const [muted, setMuted] = React.useState(soundEffects.isMuted());
+export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDropItem[] }) {
+  const [drops, setDrops] = React.useState<LiveDropItem[]>(initialDrops);
+  const [muted, setMuted] = React.useState(false);
 
   React.useEffect(() => {
+    setMuted(soundEffects.getMuted());
+
     // If no initial drops, fetch from live ticker API
     if (drops.length === 0) {
       fetch("/api/chests")
@@ -92,7 +94,7 @@ export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop
       {/* Horizontal Live Drops Scroller */}
       <div className="flex items-center gap-2.5 overflow-x-auto pt-2 pb-1 [scrollbar-width:none] [-ms-overflow-style:none]">
         {drops.slice(0, 10).map((drop) => {
-          const borderClass = RARITY_BORDERS[drop.rarity] ?? "border-white/20";
+          const borderClass = RARITY_BORDERS[drop.item.rarity] ?? "border-white/20";
           return (
             <Link
               key={drop.id}
@@ -101,8 +103,8 @@ export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop
             >
               <div className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-surface-container">
                 <Image
-                  src={drop.itemImageUrl || "/images/lootora/hub-01.jpg"}
-                  alt={drop.itemName}
+                  src={drop.item.imageUrl || "/images/lootora/hub-01.jpg"}
+                  alt={drop.item.name}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-300"
                   sizes="40px"
@@ -111,11 +113,11 @@ export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop
 
               <div className="flex flex-col min-w-0 pr-1">
                 <span className="truncate max-w-[120px] text-xs font-bold text-text-primary group-hover:text-amber-400 transition-colors">
-                  {drop.itemName}
+                  {drop.item.name}
                 </span>
                 <div className="flex items-center gap-2 text-[10px] font-mono">
-                  <span className="text-amber-400 font-bold">${drop.valueUsd.toFixed(2)}</span>
-                  <span className="text-text-muted truncate max-w-[65px]">@{drop.userHandle}</span>
+                  <span className="text-amber-400 font-bold">${drop.item.valueUsd.toFixed(2)}</span>
+                  <span className="text-text-muted truncate max-w-[65px]">@{drop.traderHandle}</span>
                 </div>
               </div>
             </Link>

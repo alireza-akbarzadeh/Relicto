@@ -6,8 +6,11 @@ export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
   const secret = process.env.CRYPTO_WEBHOOK_SECRET;
 
-  // In production, ensure bearer matches the secret if configured
-  if (secret && !bearerMatches(authHeader, secret)) {
+  if (!secret) {
+    return NextResponse.json({ error: "crypto_webhook_unconfigured" }, { status: 503 });
+  }
+
+  if (!bearerMatches(authHeader, secret)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

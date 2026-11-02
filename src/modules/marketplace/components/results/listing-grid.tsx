@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
-import { ItemQuickPickDialog } from "@/modules/items/components/quick-pick/item-quick-pick-dialog";
 import { useMarketplace } from "../../state/marketplace-provider";
 import type { Listing } from "../../types";
 import { ListingCard } from "./listing-card";
+
+const ItemQuickPickDialog = dynamic(
+  () => import("@/modules/items/components/quick-pick/item-quick-pick-dialog").then((m) => m.ItemQuickPickDialog),
+  { ssr: false }
+);
 
 /** Grid view: four columns; compact view: two (per the design's view switch). */
 const LAYOUT = {
@@ -53,14 +58,16 @@ export function ListingGrid() {
         ))}
       </div>
 
-      <ItemQuickPickDialog
-        open={Boolean(selectedListing)}
-        onOpenChange={(open) => {
-          if (!open) setSelectedListing(null);
-        }}
-        slug={selectedListing?.id ?? null}
-        initialListing={selectedListing}
-      />
+      {selectedListing && (
+        <ItemQuickPickDialog
+          open={Boolean(selectedListing)}
+          onOpenChange={(open) => {
+            if (!open) setSelectedListing(null);
+          }}
+          slug={selectedListing.id}
+          initialListing={selectedListing}
+        />
+      )}
     </>
   );
 }

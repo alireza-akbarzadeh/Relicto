@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { rethrowNextSignals } from "@/lib/next-signals";
 import { requireSettledViewer } from "@/modules/orders/data/expire-escrows";
 import { checkoutService } from "@/server/modules/checkout/checkout.service";
@@ -22,8 +23,8 @@ export async function getCheckout(): Promise<CheckoutData> {
   }
 }
 
-/** The basket lines the header cart starts from on every signed-in page. */
-export async function getCartLines(): Promise<CheckoutItem[]> {
+/** The basket lines the header cart starts from — request-memoized so layout and checkout share one read. */
+export const getCartLines = cache(async (): Promise<CheckoutItem[]> => {
   const viewerId = await requireSettledViewer();
   try {
     return (await checkoutService.lines(viewerId)) ?? checkout.items;
@@ -32,7 +33,7 @@ export async function getCartLines(): Promise<CheckoutItem[]> {
     console.error("[getCartLines] Fallback to mock:", err);
     return checkout.items;
   }
-}
+});
 
 /**
  * Mobile checkout: the same spendable vault balance the desktop rail quotes;

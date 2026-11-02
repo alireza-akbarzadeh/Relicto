@@ -27,7 +27,7 @@ export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop
 
     // If no initial drops, fetch from live ticker API
     if (drops.length === 0) {
-      fetch("/api/chests")
+      fetch("/api/chests", { priority: "low" })
         .then((r) => r.json())
         .then((data) => {
           if (data.liveDrops && data.liveDrops.length > 0) {
@@ -37,8 +37,9 @@ export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop
         .catch(() => {});
     }
 
-    const interval = setInterval(() => {
-      fetch("/api/chests")
+    const fetchDrops = () => {
+      if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
+      fetch("/api/chests", { priority: "low" })
         .then((r) => r.json())
         .then((data) => {
           if (data.liveDrops && data.liveDrops.length > 0) {
@@ -46,9 +47,15 @@ export function HubLiveDropsBar({ initialDrops = [] }: { initialDrops?: LiveDrop
           }
         })
         .catch(() => {});
-    }, 12000);
+    };
 
-    return () => clearInterval(interval);
+    const interval = setInterval(fetchDrops, 12000);
+    document.addEventListener("visibilitychange", fetchDrops);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", fetchDrops);
+    };
   }, [drops.length]);
 
   return (

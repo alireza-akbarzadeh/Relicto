@@ -11,7 +11,7 @@ export function MobileChestsSection({ initialChests = [] }: { initialChests?: Ch
 
   React.useEffect(() => {
     if (chests.length === 0) {
-      fetch("/api/chests")
+      fetch("/api/chests", { priority: "low" })
         .then((r) => r.json())
         .then((data) => {
           if (data.chests) setChests(data.chests);

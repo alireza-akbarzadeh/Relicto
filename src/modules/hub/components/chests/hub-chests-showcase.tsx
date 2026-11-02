@@ -1,13 +1,18 @@
 "use client";
 
 import * as React from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Sparkles, ArrowRight, Flame } from "lucide-react";
 import { HubLiveDropsBar } from "./hub-live-drops-bar";
 import { HubChestsHero } from "./hub-chests-hero";
 import { HubChestPreviewCard } from "./hub-chest-preview-card";
-import { DailyBonusDialog } from "@/modules/chests/components/daily-bonus-dialog";
 import type { ChestDefinition } from "@/modules/chests/types";
+
+const DailyBonusDialog = dynamic(
+  () => import("@/modules/chests/components/daily-bonus-dialog").then((m) => m.DailyBonusDialog),
+  { ssr: false }
+);
 
 type CategoryFilter = "all" | "dota2" | "cs2" | "high_roller" | "budget";
 
@@ -18,7 +23,7 @@ export function HubChestsShowcase({ initialChests = [] }: { initialChests?: Ches
 
   React.useEffect(() => {
     if (chests.length === 0) {
-      fetch("/api/chests")
+      fetch("/api/chests", { priority: "low" })
         .then((r) => r.json())
         .then((data) => {
           if (data.chests && data.chests.length > 0) {
@@ -105,10 +110,12 @@ export function HubChestsShowcase({ initialChests = [] }: { initialChests?: Ches
       </div>
 
       {/* Daily Bonus Dialog */}
-      <DailyBonusDialog
-        open={dailyBonusOpen}
-        onOpenChange={setDailyBonusOpen}
-      />
+      {dailyBonusOpen && (
+        <DailyBonusDialog
+          open={dailyBonusOpen}
+          onOpenChange={setDailyBonusOpen}
+        />
+      )}
     </section>
   );
 }

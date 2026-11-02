@@ -15,12 +15,22 @@ export function HubView({ hub }: { hub: HubData }) {
       <StudioHeader />
       <main className="min-h-screen w-full bg-surface pt-20">
         <GameStage pulse={hub.pulse} games={hub.games} spotlights={hub.spotlights}>
-          {/* Dotaboom.gg Featured Chests & Live Drops Showcase */}
-          <HubChestsShowcase initialChests={hub.chests} />
-          <MetaIndex cards={hub.metaCards} />
-          <PatchDeltaTable rows={hub.patchDelta} markets={hub.scrapedMarkets} />
-          <LoadoutShowcase loadouts={hub.loadouts} />
-          <CommunityBoard threads={hub.threads} newThreads={hub.newThreads} incentive={hub.incentive} />
+          {/* Below-the-fold content: defer layout & paint off-screen */}
+          <div className="content-auto">
+            <HubChestsShowcase initialChests={hub.chests} />
+          </div>
+          <div className="content-auto">
+            <MetaIndex cards={hub.metaCards} />
+          </div>
+          <div className="content-auto">
+            <PatchDeltaTable rows={hub.patchDelta} markets={hub.scrapedMarkets} />
+          </div>
+          <div className="content-auto">
+            <LoadoutShowcase loadouts={hub.loadouts} />
+          </div>
+          <div className="content-auto">
+            <CommunityBoard threads={hub.threads} newThreads={hub.newThreads} incentive={hub.incentive} />
+          </div>
         </GameStage>
       </main>
       <SiteFooter />

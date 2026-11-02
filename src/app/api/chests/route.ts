@@ -11,11 +11,18 @@ export async function GET() {
       chestsService.getLiveDrops(12),
     ]);
 
-    return NextResponse.json({
-      chests,
-      conversion,
-      liveDrops,
-    });
+    return NextResponse.json(
+      {
+        chests,
+        conversion,
+        liveDrops,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=10, stale-while-revalidate=30",
+        },
+      }
+    );
   } catch (err) {
     console.error("[api/chests] Error:", err);
     return NextResponse.json({ error: "Failed to load chests" }, { status: 500 });

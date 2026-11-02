@@ -16,7 +16,7 @@ export function useNotificationFeed(initial: AppNotification[], enabled = true) 
 
   const refresh = useCallback(async () => {
     try {
-      const response = await fetch("/api/notifications", { cache: "no-store" });
+      const response = await fetch("/api/notifications", { cache: "no-store", priority: "low" });
       if (response.ok) setNotifications((await response.json()).notifications);
     } catch {
       // Offline: keep what we have; the next tick or push tries again.

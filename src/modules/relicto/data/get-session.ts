@@ -37,8 +37,8 @@ const allowDevAnonymousFallback =
   process.env.NODE_ENV === "development" &&
   process.env.ALLOW_DEV_ANONYMOUS_IMPERSONATION === "true";
 
-/** The signed-in trader, or null when there's no session. */
-export async function getSession(): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> {
+/** The signed-in trader, or null when there's no session. Request-memoized so multiple loaders share one fetch. */
+export const getSession = cache(async (): Promise<{ user: SessionUser; notifications: AppNotification[] } | null> => {
   const result = await readSession();
   const userId = result?.user.id ?? (allowDevAnonymousFallback ? "seed-trader-relicto" : null);
   if (!userId) return null;
@@ -80,16 +80,16 @@ export async function getSession(): Promise<{ user: SessionUser; notifications: 
       notifications: [],
     };
   }
-}
+});
 
 /**
  * The account id domain queries key on. `SessionUser` is a view-model and
  * deliberately doesn't carry it, so data loaders ask for it separately.
  */
-export async function getUserId(): Promise<string | null> {
+export const getUserId = cache(async (): Promise<string | null> => {
   const result = await readSession();
   return result?.user.id ?? (allowDevAnonymousFallback ? "seed-trader-relicto" : null);
-}
+});
 
 /** As `getUserId`, for pages the proxy already guarantees are signed in. */
 export async function requireUserId(): Promise<string> {

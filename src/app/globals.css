@@ -118,3 +118,9 @@
 @utility signup-area-perks {
   grid-area: perks;
 }
+
+/* Defer rendering of heavy below-the-fold blocks per Modern Web Guidance */
+@utility content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 500px;
+}

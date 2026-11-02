@@ -1,9 +1,24 @@
+import dynamic from "next/dynamic";
 import { ChartLine, Gem } from "lucide-react";
 import { LinkButton } from "@/components/ui/link-button";
 import { cn } from "@/lib/cn";
 import { SPOTLIGHT_BADGE, TONE_TEXT } from "../../lib/tones";
 import type { Spotlight, SpotlightMetric } from "../../types";
-import { CorrelationChart } from "./correlation-chart";
+
+const CorrelationChart = dynamic(
+  () => import("./correlation-chart").then((mod) => mod.CorrelationChart),
+  {
+    loading: () => (
+      <div className="flex h-64 w-full flex-col justify-between rounded-xl border border-border-subtle bg-surface-card/60 p-4 animate-pulse">
+        <div className="flex items-center justify-between">
+          <div className="h-4 w-32 rounded bg-surface-bright/40" />
+          <div className="h-4 w-20 rounded bg-surface-bright/30" />
+        </div>
+        <div className="h-40 w-full rounded bg-surface-bright/20" />
+      </div>
+    ),
+  }
+);
 
 function MetricTile({ metric }: { metric: SpotlightMetric }) {
   return (

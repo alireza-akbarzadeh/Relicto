@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { and, asc, count, desc, eq, gte, ilike, inArray, lt, lte, min, or, sql, sum, type SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { containsPattern } from "@/lib/db/sql-sanitize";
@@ -91,18 +93,22 @@ export async function findListings(input: ListListingsInput) {
   return { rows, total };
 }
 
-/** Total value of everything currently listed — the hub's liquidity figure. */
-export async function sumActiveLiquidityCents() {
-  const [row] = await db
-    .select({ total: sum(listings.priceCents) })
-    .from(listings)
-    .where(eq(listings.status, "active"));
+/** Total value of everything currently listed — cached for 30s across requests. */
+export const sumActiveLiquidityCents = unstable_cache(
+  async () => {
+    const [row] = await db
+      .select({ total: sum(listings.priceCents) })
+      .from(listings)
+      .where(eq(listings.status, "active"));
 
-  return Number(row?.total ?? 0);
-}
+    return Number(row?.total ?? 0);
+  },
+  ["active-liquidity-cents"],
+  { revalidate: 30, tags: ["listings-liquidity"] }
+);
 
-/** Cheapest active listing per item slug, for headline "floor" copy. */
-export async function findFloorCentsBySlug(slugs: string[]) {
+const getCachedFloors = cache(async (sortedKey: string) => {
+  const slugs = sortedKey.split(",").filter(Boolean);
   if (!slugs.length) return new Map<string, number>();
 
   const rows = await db
@@ -113,6 +119,13 @@ export async function findFloorCentsBySlug(slugs: string[]) {
     .groupBy(items.slug);
 
   return new Map(rows.map((row) => [row.slug, Number(row.floorCents ?? 0)]));
+});
+
+/** Cheapest active listing per item slug, request-memoized across concurrent calls. */
+export async function findFloorCentsBySlug(slugs: string[]) {
+  if (!slugs.length) return new Map<string, number>();
+  const key = [...slugs].sort().join(",");
+  return getCachedFloors(key);
 }
 
 export async function findListingById(id: string) {

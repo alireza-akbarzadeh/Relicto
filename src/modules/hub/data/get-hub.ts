@@ -81,16 +81,14 @@ export async function getHub(): Promise<HubData> {
  */
 export async function getHubMobile(): Promise<HubMobileData> {
   try {
-    const catalog = await listingService.catalog({ sort: "recent" });
-    const floor = new Map<string, (typeof catalog)[number]>();
-    for (const listing of catalog) {
-      const best = floor.get(listing.id);
-      if (!best || listing.priceUsd < best.priceUsd) floor.set(listing.id, listing);
-    }
+    const surgeSlugs = hubMobile.surge.items.map((item) => item.slug);
+    const { floorsBySlug } = await listingService.marketStats(surgeSlugs);
 
     const items = hubMobile.surge.items.map((item) => {
-      const live = floor.get(item.slug);
-      return live ? { ...item, price: money(live.priceUsd), changePct: live.change.percent } : item;
+      const liveFloorCents = floorsBySlug.get(item.slug);
+      return liveFloorCents != null
+        ? { ...item, price: money(liveFloorCents / 100) }
+        : item;
     });
 
     return { ...hubMobile, surge: { ...hubMobile.surge, items } };

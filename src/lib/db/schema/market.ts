@@ -85,6 +85,9 @@ export const listings = pgTable(
     index("listings_price_idx").on(t.priceCents),
     index("listings_listed_at_idx").on(t.listedAt),
     index("listings_wear_idx").on(t.wear),
+    index("listings_status_price_idx").on(t.status, t.priceCents),
+    index("listings_status_item_price_idx").on(t.status, t.itemId, t.priceCents),
+    index("listings_status_listed_at_idx").on(t.status, t.listedAt),
   ],
 );
 

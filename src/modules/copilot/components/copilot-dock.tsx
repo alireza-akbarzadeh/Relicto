@@ -2,10 +2,15 @@
 
 import * as React from "react";
 import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { CopilotTrigger } from "./copilot-trigger";
-import { CopilotWindow } from "./copilot-window";
+
+const CopilotWindow = dynamic(
+  () => import("./copilot-window").then((mod) => mod.CopilotWindow),
+  { ssr: false }
+);
 
 export function CopilotDock() {
   const t = useTranslations("copilot.dock");
@@ -49,7 +54,7 @@ export function CopilotDock() {
             <DrawerDescription className="sr-only">
               {t("drawerDesc")}
             </DrawerDescription>
-            <CopilotWindow onClose={() => setOpen(false)} isMobile />
+            {open && <CopilotWindow onClose={() => setOpen(false)} isMobile />}
           </DrawerContent>
         </Drawer>
       ) : (

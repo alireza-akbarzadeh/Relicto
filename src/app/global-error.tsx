@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import {useCallback, useEffect} from "react";
 
 export default function GlobalError({
   error,
@@ -13,6 +13,7 @@ export default function GlobalError({
     // Log the error digest, avoiding full stack traces in client console
     console.error("[GlobalError]", error.digest || "An unexpected error occurred");
   }, [error]);
+
 
   return (
     <html lang="en">

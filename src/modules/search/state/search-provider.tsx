@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import {
   createContext,
   useCallback,
@@ -9,7 +10,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { SearchDialog } from "../components/search-dialog";
+
+const SearchDialog = dynamic(
+  () => import("../components/search-dialog").then((mod) => mod.SearchDialog),
+  { ssr: false }
+);
 
 type SearchPalette = { open: (query?: string) => void };
 
@@ -57,12 +62,14 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   return (
     <SearchContext.Provider value={value}>
       {children}
-      <SearchDialog
-        open={isOpen}
-        session={session}
-        initialQuery={initialQuery}
-        onOpenChange={setOpen}
-      />
+      {isOpen && (
+        <SearchDialog
+          open={isOpen}
+          session={session}
+          initialQuery={initialQuery}
+          onOpenChange={setOpen}
+        />
+      )}
     </SearchContext.Provider>
   );
 }

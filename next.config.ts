@@ -55,6 +55,8 @@ const nextConfig: NextConfig = {
    * that aren't listed here.
    */
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2592000,
     remotePatterns: [
       { protocol: "https", hostname: "avatars.steamstatic.com" },
       { protocol: "https", hostname: "avatars.akamai.steamstatic.com" },
@@ -62,6 +64,20 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "community.akamai.steamstatic.com" },
       { protocol: "https", hostname: "community.cloudflare.steamstatic.com" },
       { protocol: "https", hostname: "steamcommunity-a.akamaihd.net" },
+    ],
+  },
+
+  /**
+   * Optimize package imports to eliminate dead weight from heavy barrel packages.
+   */
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "recharts",
+      "radix-ui",
+      "@base-ui/react",
+      "@shadcn/react",
+      "sonner",
     ],
   },
 
@@ -74,6 +90,34 @@ const nextConfig: NextConfig = {
           { key: "Content-Type", value: "application/javascript; charset=utf-8" },
           { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
           { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" },
+        ],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          ...securityHeaders,
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/icons/:path*",
+        headers: [
+          ...securityHeaders,
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/fonts/:path*",
+        headers: [
+          ...securityHeaders,
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/media/:path*",
+        headers: [
+          ...securityHeaders,
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
       {
